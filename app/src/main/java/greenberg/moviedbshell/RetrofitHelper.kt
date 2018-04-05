@@ -13,7 +13,6 @@ class RetrofitHelper {
         return retrofit.create(MovieService::class.java)
     }
 
-    // com.matthiasbruns.rxretrofit.network.RetrofitHelper
     private fun createOkHttpClient(): OkHttpClient {
         val httpClient: OkHttpClient.Builder = OkHttpClient.Builder()
         httpClient.addInterceptor { chain ->
@@ -27,7 +26,6 @@ class RetrofitHelper {
                 val request = requestBuilder.build()
                  chain.proceed(request)
         }
-
         return httpClient.build()
     }
 
