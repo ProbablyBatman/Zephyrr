@@ -1,13 +1,10 @@
 package greenberg.moviedbshell
 
-import android.app.PictureInPictureParams
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.widget.NestedScrollView
 import android.util.Log
-import android.util.Rational
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -16,6 +13,9 @@ import greenberg.moviedbshell.Models.MovieResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import android.support.design.widget.AppBarLayout
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private lateinit var outputTextView: TextView
     private lateinit var posterImageView: ImageView
+    private lateinit var backdropImageView: ImageView
+    private lateinit var appBar: AppBarLayout
     private lateinit var collapsingToolbarLayout: CollapsingToolbarLayout
     private lateinit var scrollView: NestedScrollView
 
@@ -31,15 +33,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //outputTextView = findViewById(R.id.output)
-        //posterImageView = findViewById(R.id.poster)
 
         movieService = RetrofitHelper().getMovieService()
 
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar)
-        collapsingToolbarLayout.title = "Testing"
-        collapsingToolbarLayout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
+        appBar = findViewById(R.id.app_bar_layout)
+        //collapsingToolbarLayout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
 
-        posterImageView = findViewById(R.id.image)
+        appBar.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
+            posterImageView.alpha = 1.0f - Math.abs(verticalOffset / appBarLayout.totalScrollRange.toFloat())
+        })
+
+        posterImageView = findViewById(R.id.posterImage)
+        backdropImageView = findViewById(R.id.backdropImage)
         scrollView = findViewById(R.id.scroll)
         outputTextView = findViewById(R.id.output)
 
@@ -56,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ it ->
-                    fetchPoster(it)
+                    fetchPosters(it)
                     displayInfo(it)
                 })
         )
@@ -64,29 +70,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayInfo(movieResponse: MovieResponse) {
         Log.d("Hmm", movieResponse.let { "${it.originalTitle}" })
+        collapsingToolbarLayout.title = movieResponse.let { it.originalTitle }
         //outputTextView.text = movieResponse.originalTitle
-        outputTextView.text = movieResponse.let { "${it.overview}" }
-
+        outputTextView.text = movieResponse.let {
+            "${it.overview} ${it.overview} ${it.overview} ${it.overview} ${it.overview} ${it.overview}" +
+                    " ${it.overview}\n ${it.overview} ${it.overview}\n ${it.overview} ${it.overview} ${it.overview}" +
+                    " ${it.overview}\n ${it.overview} ${it.overview}\n ${it.overview} ${it.overview} ${it.overview}"
+        }
     }
 
-    private fun fetchPoster(movieResponse: MovieResponse) {
+    private fun fetchPosters(movieResponse: MovieResponse) {
         Log.d("Hmm", movieResponse.let { "${it.backdropPath}" })
+        //Load backdrop image
         movieResponse.backdropPath?.let {
             Glide.with(this)
-                    .load(buildPosterURL(it))
-                    .apply { RequestOptions().centerInside() }
-                    .into(posterImageView)
+                    .load(buildImageURL(it))
+                    .into(backdropImageView)
         }
-        /*movieResponse.posterPath?.let {
+
+        //Load poster art
+        movieResponse.posterPath?.let {
             Glide.with(this)
-                    .load(buildPosterURL(it))
+                    .load(buildImageURL(it))
                     .apply { RequestOptions().centerCrop() }
                     .into(posterImageView)
-        }*/
+        }
     }
 
     //TODO: replace this with string resources
-    private fun buildPosterURL(endurl: String) = "https://image.tmdb.org/t/p/original$endurl"
-
-    private fun buildBackgroundPosterURL(endurl: String) = "https://image.tmdb.org/t/p/original$endurl"
+    private fun buildImageURL(endurl: String) = "https://image.tmdb.org/t/p/original$endurl"
 }

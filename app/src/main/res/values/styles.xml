@@ -8,6 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="PosterArtStyle">
+        <item name="android:layout_width">130dp</item>
+        <item name="android:layout_height">195dp</item>
+        <item name="android:layout_margin">@dimen/spacing_large</item>
+        <item name="borderWidth">0dp</item>
+        <item name="elevation">6dp</item>
+    </style>
+
     <style name="FabStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
