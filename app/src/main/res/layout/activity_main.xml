@@ -14,14 +14,15 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:fitsSystemWindows="true">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleGravity="right|bottom"
-            app:contentScrim="?attr/colorPrimary"
-            android:fitsSystemWindows="true">
+            app:contentScrim="@color/colorPrimary"
+            android:fitsSystemWindows="true"
+            app:maxLines="3">
 
             <ImageView
                 android:id="@+id/backdropImage"
@@ -41,19 +42,19 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="@dimen/action_bar_size"
                 app:layout_collapseMode="pin"/>
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+        </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/posterImage"
         app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|left|start"
         style="@style/PosterArtStyle"
-        android:contentDescription="poster" />
+        android:contentDescription="poster" />-->
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll"
@@ -62,10 +63,151 @@
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
+        <!--<TextView
             android:id="@+id/output"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" />-->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/imageWrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <!--
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"-->
+
+                <ImageView
+                    android:id="@+id/posterImage"
+                    android:layout_width="130dp"
+                    android:layout_height="195dp" />
+                <!--style="@style/PosterArtStyle"-->
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/release_date_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TopInfoStyle"
+                app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/release_date_bold"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/release_date"
+                style="@style/TopInfoStyle"
+                app:layout_constraintLeft_toRightOf="@id/release_date_bold"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/user_rating_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TopInfoStyle"
+                app:layout_constraintTop_toBottomOf="@id/release_date_bold"
+                app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                android:text="@string/user_rating_bold"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/user_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TopInfoStyle"
+                app:layout_constraintTop_toBottomOf="@id/release_date"
+                app:layout_constraintLeft_toRightOf="@id/user_rating_bold"
+                android:maxLines="2"/>
+
+            <TextView
+                android:id="@+id/status_bold"
+                style="@style/TopInfoStyle"
+                app:layout_constraintTop_toBottomOf="@id/user_rating_bold"
+                app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                android:text="@string/status_bold"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/status"
+                style="@style/TopInfoStyle"
+                app:layout_constraintTop_toBottomOf="@id/user_rating"
+                app:layout_constraintLeft_toRightOf="@id/status_bold"
+                android:maxLines="2"/>
+
+            <TextView
+                android:id="@+id/runtime_bold"
+                style="@style/TopInfoStyle"
+                app:layout_constraintTop_toBottomOf="@id/status_bold"
+                app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                android:text="@string/runtime_bold"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/runtime"
+                style="@style/TopInfoStyle"
+                app:layout_constraintTop_toBottomOf="@id/status"
+                app:layout_constraintLeft_toRightOf="@id/runtime_bold"/>
+
+            <TextView
+                android:id="@+id/genres_bold"
+                style="@style/TopInfoStyle"
+                app:layout_constraintTop_toBottomOf="@id/runtime_bold"
+                app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/genres"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toRightOf="@id/genres_bold"
+                app:layout_constraintTop_toBottomOf="@id/runtime"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--
+                TODO: can probably put ratings symbols/images, other buttons on top of that or something
+            -->
+
+            <TextView
+                android:id="@+id/overview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/imageWrapper"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="14sp"/>
+            <!--
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+            -->
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

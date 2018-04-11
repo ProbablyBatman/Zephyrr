@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MovieDBShell</string>
+
+    <!-- Movie Detail Layout -->
+    <string name="release_date_bold">Release Date</string>
+    <string name="user_rating_bold">User Rating</string>
+    <string name="status_bold">Status</string>
+    <string name="runtime_bold">Runtime</string>
+    <plurals name="genres_bold">
+        <item quantity="one">Genre</item>
+        <item quantity="other">Genres</item>
+    </plurals>
+    <string name="user_rating_substitution">%1$s by %2$d users</string>
+    <string name="runtime_substitution">%1$d minutes</string>
 </resources>
