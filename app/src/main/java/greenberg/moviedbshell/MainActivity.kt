@@ -39,17 +39,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //overviewTextView = findViewById(R.id.output)
 
         movieService = RetrofitHelper().getMovieService()
 
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar)
         appBar = findViewById(R.id.app_bar_layout)
-        //collapsingToolbarLayout.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
-
-        appBar.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
-            //posterImageView.alpha = 1.0f - Math.abs(verticalOffset / appBarLayout.totalScrollRange.toFloat())
-        })
 
         posterImageView = findViewById(R.id.posterImage)
         backdropImageView = findViewById(R.id.backdropImage)
@@ -83,20 +77,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayInfo(movieResponse: MovieResponse) {
-        Log.d("Hmm", movieResponse.let { "${it.originalTitle}" })
-        collapsingToolbarLayout.title = movieResponse.let { it.originalTitle }
-        //overviewTextView.text = movieResponse.originalTitle
-        overviewTextView.text = movieResponse.let {
-            "Overview: ${it.overview} ${it.overview} ${it.overview} ${it.overview} ${it.overview} ${it.overview}" +
-                    " ${it.overview}\n ${it.overview} ${it.overview}\n ${it.overview} ${it.overview} ${it.overview}" +
-                    " ${it.overview}\n ${it.overview} ${it.overview}\n ${it.overview} ${it.overview} ${it.overview}"
-        }
+        Log.d("Hmm", movieResponse.originalTitle)
+        collapsingToolbarLayout.title = movieResponse.originalTitle
+        overviewTextView.text = movieResponse.overview
 
         //todo: process output
-        releaseDateTextView.text = movieResponse.let { "${it.releaseDate}" }
+        releaseDateTextView.text = movieResponse.releaseDate?.let { processReleaseDate(it) }
+
         val doubleFormat: NumberFormat = DecimalFormat("##.##")
         ratingTextView.text = movieResponse.let { resources.getString(R.string.user_rating_substitution, doubleFormat.format(it.voteAverage), it.voteCount) }
-        statusTextView.text = movieResponse.let { "${it.status}" }
+        statusTextView.text = movieResponse.status
         runtimeTextView.text = movieResponse.let { resources.getString(R.string.runtime_substitution, it.runtime) }
         //Default to One
         genresTitleTextView.text = resources.getQuantityString(R.plurals.genres_bold, movieResponse.genres?.size ?: 1)
@@ -130,4 +120,11 @@ class MainActivity : AppCompatActivity() {
 
     //TODO: replace this with string resources
     private fun buildImageURL(endurl: String) = "https://image.tmdb.org/t/p/original$endurl"
+
+    //TODO: probably make sure every date is like this?
+    //there has to be a better way to do this
+    private fun processReleaseDate(releaseDate: String): String {
+        val splitDate = releaseDate.split("-")
+        return "${splitDate[1]}/${splitDate[2]}/${splitDate[0]}"
+    }
 }

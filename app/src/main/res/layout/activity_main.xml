@@ -49,13 +49,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<ImageView
-        android:id="@+id/posterImage"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|left|start"
-        style="@style/PosterArtStyle"
-        android:contentDescription="poster" />-->
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
@@ -63,10 +56,6 @@
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!--<TextView
-            android:id="@+id/output"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />-->
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraint"
             android:layout_width="match_parent"
@@ -84,19 +73,11 @@
                 android:layout_marginStart="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-                <!--
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:paddingTop="10dp"
-                android:paddingLeft="10dp"
-                android:paddingStart="10dp"-->
 
                 <ImageView
                     android:id="@+id/posterImage"
                     android:layout_width="130dp"
                     android:layout_height="195dp" />
-                <!--style="@style/PosterArtStyle"-->
 
             </android.support.v7.widget.CardView>
 
@@ -199,13 +180,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textSize="14sp"/>
-            <!--
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginEnd="10dp"
-            -->
 
         </android.support.constraint.ConstraintLayout>
 
@@ -218,46 +192,3 @@
         style="@style/FabStyle"/>-->
 
 </android.support.design.widget.CoordinatorLayout>
-<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <ImageView
-        android:id="@+id/backgroundposter"
-        android:layout_width="140dp"
-        android:layout_height="210dp"
-        android:contentDescription="Poster"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
-    <ImageView
-        android:id="@+id/poster"
-        android:layout_width="140dp"
-        android:layout_height="210dp"
-        android:contentDescription="Poster"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
-    <TextView
-        android:id="@+id/output"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.625"
-        app:layout_constraintLeft_toLeftOf="@id/poster"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.00" />
-
-</android.support.constraint.ConstraintLayout>-->
