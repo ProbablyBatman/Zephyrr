@@ -13,6 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
+//TODO: probably going to have to handle overall font sizing for the app in terms of accessibility and such.
 class PopularMoviesActivity: AppCompatActivity() {
     private lateinit var TMDBService: TMDBService
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -38,6 +39,11 @@ class PopularMoviesActivity: AppCompatActivity() {
         popularMovieRecycler.layoutManager = linearLayoutManager
 
         requestPopularMovies()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 
     private fun requestPopularMovies() {

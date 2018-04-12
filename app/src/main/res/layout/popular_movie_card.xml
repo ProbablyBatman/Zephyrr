@@ -9,7 +9,8 @@
         android:id="@+id/popularMovieCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
+        android:layout_margin="5dp"
+        app:cardCornerRadius="5dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -26,25 +27,38 @@
                 android:id="@+id/cardItemTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/cardItemPosterImage"/>
+                app:layout_constraintLeft_toRightOf="@id/cardItemPosterImage"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/cardItemReleaseDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 app:layout_constraintTop_toBottomOf="@id/cardItemTitle"
-                app:layout_constraintLeft_toRightOf="@id/cardItemPosterImage"/>
+                app:layout_constraintLeft_toRightOf="@id/cardItemPosterImage"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/cardItemOverview"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 app:layout_constraintLeft_toRightOf="@id/cardItemPosterImage"
+                app:layout_constraintStart_toEndOf="@id/cardItemPosterImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardItemReleaseDate"
                 app:layout_constraintBottom_toBottomOf="@id/cardItemPosterImage"
-                android:ellipsize="end"/>
+                android:maxLines="4"
+                android:ellipsize="end"
+                android:textSize="16sp"/>
 
         </android.support.constraint.ConstraintLayout>
 
