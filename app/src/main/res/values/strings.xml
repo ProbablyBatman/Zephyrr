@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MovieDBShell</string>
+    <string name="app_name">Zephyrr</string>
 
     <!-- Movie Detail Layout -->
     <string name="release_date_bold">Release Date</string>

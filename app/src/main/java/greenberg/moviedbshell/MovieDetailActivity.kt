@@ -8,18 +8,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import greenberg.moviedbshell.Models.MovieResponse
+import greenberg.moviedbshell.Models.MovieDetailModels.MovieDetailResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import android.support.design.widget.AppBarLayout
+import greenberg.moviedbshell.RetrofitHelpers.TMDBService
+import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
 
-class MainActivity : AppCompatActivity() {
+class MovieDetailActivity : AppCompatActivity() {
 
-    private lateinit var movieService: MovieService
+    private lateinit var TMDBService: TMDBService
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private lateinit var posterImageView: ImageView
     private lateinit var backdropImageView: ImageView
@@ -37,10 +39,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.movie_detail_activity)
 
+        val movieID = intent.getIntExtra("MovieID", -1)
 
-        movieService = RetrofitHelper().getMovieService()
+        TMDBService = RetrofitHelper().getTMDBService()
 
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar)
         appBar = findViewById(R.id.app_bar_layout)
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         genresTitleTextView = findViewById(R.id.genres_bold)
         genresTextView = findViewById(R.id.genres)
 
-        requestMovie()
+        requestMovie(movieID)
         //TODO: look into image and video response
     }
 
@@ -65,8 +68,8 @@ class MainActivity : AppCompatActivity() {
         compositeDisposable.clear()
     }
 
-    private fun requestMovie() {
-        compositeDisposable.add(movieService.queryMovies(11576)//338970)
+    private fun requestMovie(movieID: Int) {
+        compositeDisposable.add(TMDBService.queryMovies(movieID)//11576)//338970)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ it ->
@@ -76,21 +79,21 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun displayInfo(movieResponse: MovieResponse) {
-        Log.d("Hmm", movieResponse.originalTitle)
-        collapsingToolbarLayout.title = movieResponse.originalTitle
-        overviewTextView.text = movieResponse.overview
+    private fun displayInfo(movieDetailResponse: MovieDetailResponse) {
+        Log.d("Hmm", movieDetailResponse.originalTitle)
+        collapsingToolbarLayout.title = movieDetailResponse.originalTitle
+        overviewTextView.text = movieDetailResponse.overview
 
         //todo: process output
-        releaseDateTextView.text = movieResponse.releaseDate?.let { processReleaseDate(it) }
+        releaseDateTextView.text = movieDetailResponse.releaseDate?.let { processReleaseDate(it) }
 
         val doubleFormat: NumberFormat = DecimalFormat("##.##")
-        ratingTextView.text = movieResponse.let { resources.getString(R.string.user_rating_substitution, doubleFormat.format(it.voteAverage), it.voteCount) }
-        statusTextView.text = movieResponse.status
-        runtimeTextView.text = movieResponse.let { resources.getString(R.string.runtime_substitution, it.runtime) }
+        ratingTextView.text = movieDetailResponse.let { resources.getString(R.string.user_rating_substitution, doubleFormat.format(it.voteAverage), it.voteCount) }
+        statusTextView.text = movieDetailResponse.status
+        runtimeTextView.text = movieDetailResponse.let { resources.getString(R.string.runtime_substitution, it.runtime) }
         //Default to One
-        genresTitleTextView.text = resources.getQuantityString(R.plurals.genres_bold, movieResponse.genres?.size ?: 1)
-        genresTextView.text = movieResponse.let { "${it.genres
+        genresTitleTextView.text = resources.getQuantityString(R.plurals.genres_bold, movieDetailResponse.genres?.size ?: 1)
+        genresTextView.text = movieDetailResponse.let { "${it.genres
                 ?.map { it?.name }
                 ?.joinToString(", ")
             }"
@@ -100,17 +103,17 @@ class MainActivity : AppCompatActivity() {
         //TODO: potentially scrape other rating information
     }
 
-    private fun fetchPosters(movieResponse: MovieResponse) {
-        Log.d("Hmm", movieResponse.let { "${it.backdropPath}" })
+    private fun fetchPosters(movieDetailResponse: MovieDetailResponse) {
+        Log.d("Hmm", movieDetailResponse.backdropPath)
         //Load backdrop image
-        movieResponse.backdropPath?.let {
+        movieDetailResponse.backdropPath?.let {
             Glide.with(this)
                     .load(buildImageURL(it))
                     .into(backdropImageView)
         }
 
         //Load poster art
-        movieResponse.posterPath?.let {
+        movieDetailResponse.posterPath?.let {
             Glide.with(this)
                     .load(buildImageURL(it))
                     .apply { RequestOptions().centerCrop() }

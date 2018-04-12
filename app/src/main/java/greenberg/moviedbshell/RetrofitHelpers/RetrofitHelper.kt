@@ -1,16 +1,17 @@
-package greenberg.moviedbshell
+package greenberg.moviedbshell.RetrofitHelpers
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-
+//TODO: I'm not entirely sure of the architecture or intention of this as a class, I suppose it's purpose
+//is to kind of keep like a singleton pattern around.
 class RetrofitHelper {
 
-    fun getMovieService(): MovieService {
+    fun getTMDBService(): TMDBService {
         val retrofit = createRetrofit()
-        return retrofit.create(MovieService::class.java)
+        return retrofit.create(TMDBService::class.java)
     }
 
     private fun createOkHttpClient(): OkHttpClient {

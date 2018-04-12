@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.Models
+package greenberg.moviedbshell.Models.MovieDetailModels
 
 import com.google.gson.annotations.SerializedName
 
