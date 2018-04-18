@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.widget.ImageView
-import android.widget.TextView
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResponse
 import greenberg.moviedbshell.RetrofitHelpers.TMDBService
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
@@ -18,10 +16,6 @@ class PopularMoviesActivity: AppCompatActivity() {
     private lateinit var TMDBService: TMDBService
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    private lateinit var cardItemPosterImage: ImageView
-    private lateinit var cardItemTitle: TextView
-    private lateinit var cardItemReleaseDate: TextView
-    private lateinit var cardItemOverview: TextView
     private lateinit var popularMovieRecycler: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var popularMovieAdapter: PopularMovieAdapter
