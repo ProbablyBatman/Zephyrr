@@ -1,7 +1,6 @@
 package greenberg.moviedbshell
 
 import android.content.Intent
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -13,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 
-class PopularMovieAdapter(private val popularMovieList: List<PopularMovieResultsItem?>?) : RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
+class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?>?) : RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
 
     override fun onBindViewHolder(holder: PopularMovieViewHolder, position: Int) {
         //todo: load posters and have like, placeholders

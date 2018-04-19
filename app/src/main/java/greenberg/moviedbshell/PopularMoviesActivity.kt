@@ -1,9 +1,11 @@
 package greenberg.moviedbshell
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResponse
 import greenberg.moviedbshell.RetrofitHelpers.TMDBService
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
@@ -19,6 +21,7 @@ class PopularMoviesActivity: AppCompatActivity() {
     private lateinit var popularMovieRecycler: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var popularMovieAdapter: PopularMovieAdapter
+    private lateinit var popularMovieRefresher: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,17 +30,26 @@ class PopularMoviesActivity: AppCompatActivity() {
         TMDBService = RetrofitHelper().getTMDBService()
 
         popularMovieRecycler = findViewById(R.id.popularMovieRecycler)
+        popularMovieRefresher = findViewById(R.id.popularMovieRefresher)
 
         //TODO: look into proper context for this; i.e. application or base
         linearLayoutManager = LinearLayoutManager(this)
         popularMovieRecycler.layoutManager = linearLayoutManager
 
+        setRefreshListener()
         requestPopularMovies()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
+    }
+
+    private fun setRefreshListener() {
+        popularMovieRefresher.setOnRefreshListener {
+            requestPopularMovies()
+            popularMovieRefresher.isRefreshing = false
+        }
     }
 
     private fun requestPopularMovies() {
@@ -48,8 +60,17 @@ class PopularMoviesActivity: AppCompatActivity() {
     }
 
     private fun createAdapter(response: PopularMovieResponse) {
-        popularMovieAdapter = PopularMovieAdapter(response.results)
-        popularMovieRecycler.adapter = popularMovieAdapter
+        if (popularMovieRecycler.adapter == null) {
+            Log.w("Testing", "New List")
+            popularMovieAdapter = PopularMovieAdapter(response.results)
+            popularMovieRecycler.adapter = popularMovieAdapter
+            popularMovieAdapter.notifyDataSetChanged()
+        } else {
+            Log.w("Testing", "Reset the list")
+            popularMovieAdapter.popularMovieList?.clear()
+            popularMovieAdapter.popularMovieList = response.results
+            popularMovieAdapter.notifyDataSetChanged()
+        }
     }
 
 }
