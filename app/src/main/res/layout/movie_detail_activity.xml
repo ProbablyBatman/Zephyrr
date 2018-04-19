@@ -86,6 +86,7 @@
                 android:layout_height="wrap_content"
                 style="@style/TopInfoStyle"
                 app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                app:layout_constraintStart_toEndOf="@id/imageWrapper"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/release_date_bold"
                 android:textStyle="bold"/>
@@ -94,6 +95,7 @@
                 android:id="@+id/release_date"
                 style="@style/TopInfoStyle"
                 app:layout_constraintLeft_toRightOf="@id/release_date_bold"
+                app:layout_constraintStart_toEndOf="@id/release_date_bold"
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
@@ -103,6 +105,7 @@
                 style="@style/TopInfoStyle"
                 app:layout_constraintTop_toBottomOf="@id/release_date_bold"
                 app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                app:layout_constraintStart_toEndOf="@id/imageWrapper"
                 android:text="@string/user_rating_bold"
                 android:textStyle="bold"/>
 
@@ -113,6 +116,7 @@
                 style="@style/TopInfoStyle"
                 app:layout_constraintTop_toBottomOf="@id/release_date"
                 app:layout_constraintLeft_toRightOf="@id/user_rating_bold"
+                app:layout_constraintStart_toEndOf="@id/user_rating_bold"
                 android:maxLines="2"/>
 
             <TextView
@@ -120,6 +124,7 @@
                 style="@style/TopInfoStyle"
                 app:layout_constraintTop_toBottomOf="@id/user_rating_bold"
                 app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                app:layout_constraintStart_toEndOf="@id/imageWrapper"
                 android:text="@string/status_bold"
                 android:textStyle="bold"/>
 
@@ -128,6 +133,7 @@
                 style="@style/TopInfoStyle"
                 app:layout_constraintTop_toBottomOf="@id/user_rating"
                 app:layout_constraintLeft_toRightOf="@id/status_bold"
+                app:layout_constraintStart_toEndOf="@id/status_bold"
                 android:maxLines="2"/>
 
             <TextView
@@ -135,6 +141,7 @@
                 style="@style/TopInfoStyle"
                 app:layout_constraintTop_toBottomOf="@id/status_bold"
                 app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                app:layout_constraintStart_toEndOf="@id/imageWrapper"
                 android:text="@string/runtime_bold"
                 android:textStyle="bold"/>
 
@@ -142,13 +149,15 @@
                 android:id="@+id/runtime"
                 style="@style/TopInfoStyle"
                 app:layout_constraintTop_toBottomOf="@id/status"
-                app:layout_constraintLeft_toRightOf="@id/runtime_bold"/>
+                app:layout_constraintLeft_toRightOf="@id/runtime_bold"
+                app:layout_constraintStart_toEndOf="@id/runtime_bold"/>
 
             <TextView
                 android:id="@+id/genres_bold"
                 style="@style/TopInfoStyle"
                 app:layout_constraintTop_toBottomOf="@id/runtime_bold"
                 app:layout_constraintLeft_toRightOf="@id/imageWrapper"
+                app:layout_constraintStart_toEndOf="@id/imageWrapper"
                 android:textStyle="bold"/>
 
             <TextView
@@ -159,6 +168,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toRightOf="@id/genres_bold"
+                app:layout_constraintStart_toEndOf="@id/genres_bold"
                 app:layout_constraintTop_toBottomOf="@id/runtime"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/imageWrapper"/>
