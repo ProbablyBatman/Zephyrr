@@ -1,6 +1,9 @@
 package greenberg.moviedbshell.RetrofitHelpers
 
+import TMDB_API_KEY
+import android.util.Log
 import okhttp3.OkHttpClient
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,12 +23,12 @@ class RetrofitHelper {
                 val original = chain.request()
                 val originalHttpUrl = original.url()
                 val url = originalHttpUrl.newBuilder()
-                    .addQueryParameter("api_key", "4abfb5ed425359a75aa7af8228e5c191")
+                    .addQueryParameter("api_key", TMDB_API_KEY)
                     .build()
                 val requestBuilder = original.newBuilder()
                         .url(url)
                 val request = requestBuilder.build()
-                 chain.proceed(request)
+                chain.proceed(request)
         }
         return httpClient.build()
     }
