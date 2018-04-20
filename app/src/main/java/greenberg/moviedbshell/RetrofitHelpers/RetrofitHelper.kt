@@ -2,6 +2,7 @@ package greenberg.moviedbshell.RetrofitHelpers
 
 import TMDB_API_KEY
 import android.util.Log
+import okhttp3.CacheControl
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -26,6 +27,7 @@ class RetrofitHelper {
                     .addQueryParameter("api_key", TMDB_API_KEY)
                     .build()
                 val requestBuilder = original.newBuilder()
+                        .cacheControl(CacheControl.Builder().noCache().build())
                         .url(url)
                 val request = requestBuilder.build()
                 chain.proceed(request)
