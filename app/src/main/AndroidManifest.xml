@@ -15,7 +15,7 @@
         android:name=".ZephyrrApplication">
         <activity
             android:name=".MovieDetailActivity"
-            android:parentActivityName=".PopularMoviesActivity"
+            android:parentActivityName=".BaseActivity"
             android:theme="@style/NoActionBarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
