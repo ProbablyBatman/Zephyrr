@@ -16,7 +16,6 @@ import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?>?) : RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
 
     override fun onBindViewHolder(holder: PopularMovieViewHolder, position: Int) {
-        Log.w("Testing", "Binding popular movie cards")
         //todo: load posters and have like, placeholders
         holder.cardItemTitle.text = popularMovieList?.get(position)?.title
         holder.cardItemReleaseDate.text = popularMovieList?.get(position)?.releaseDate?.let { processReleaseDate(it) }

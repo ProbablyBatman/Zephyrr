@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,9 +24,7 @@ class PopularMoviesFragment :
     private var popularMovieRefresher: SwipeRefreshLayout? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.popular_movies_activity, container, false)
-
-        return v
+        return inflater.inflate(R.layout.popular_movies_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,6 +36,8 @@ class PopularMoviesFragment :
         //TODO: look into proper context for this; i.e. application or base
         linearLayoutManager = LinearLayoutManager(activity)
         popularMovieRecycler?.layoutManager = linearLayoutManager
+        //TODO: revisit this initialization
+        popularMovieAdapter = PopularMovieAdapter(null)
         popularMovieRecycler?.adapter = popularMovieAdapter
 
         showLoading(false)
@@ -45,23 +46,28 @@ class PopularMoviesFragment :
     override fun createPresenter(): PopularMoviesPresenter = PopularMoviesPresenter()
 
     override fun showLoading(pullToRefresh: Boolean) {
+        Log.w("Testing", "Show Loading")
         presenter.loadPopularMovies(pullToRefresh)
     }
 
     override fun setMovies(response: PopularMovieResponse) {
+        Log.w("Testing", "Setting Movies")
         popularMovieAdapter?.popularMovieList = response.results
         popularMovieAdapter?.notifyDataSetChanged()
     }
 
     override fun showMovies() {
+        Log.w("Testing", "Showing Movies")
         popularMovieRefresher?.isRefreshing = false
     }
 
     override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
+        Log.w("Testing", "Showing Error")
         popularMovieRefresher?.isRefreshing = false
     }
 
     override fun onRefresh() {
+        Log.w("Testing", "On Refresh")
         showLoading(true)
     }
 

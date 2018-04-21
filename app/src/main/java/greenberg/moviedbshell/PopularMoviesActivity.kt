@@ -25,7 +25,7 @@ class PopularMoviesActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.popular_movies_activity)
+        setContentView(R.layout.popular_movies_layout)
 
         TMDBService = RetrofitHelper().getTMDBService()
 

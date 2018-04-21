@@ -19,11 +19,7 @@
             android:theme="@style/NoActionBarTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PopularMoviesActivity" />
-        </activity>
-        <activity
-            android:name=".PopularMoviesActivity"
-            android:theme="@style/AppTheme">
+                android:value=".BaseActivity" />
         </activity>
         <activity android:name=".BaseActivity"
             android:theme="@style/AppTheme">
