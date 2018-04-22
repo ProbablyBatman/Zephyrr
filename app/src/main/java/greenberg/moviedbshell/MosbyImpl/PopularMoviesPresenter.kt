@@ -29,10 +29,6 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                 })
     }
 
-    fun showError(throwable: Throwable, pullToRefresh: Boolean) {
-
-    }
-
     override fun detachView() {
         super.detachView()
         //TODO: cancel anything going on here, though press x to doubt

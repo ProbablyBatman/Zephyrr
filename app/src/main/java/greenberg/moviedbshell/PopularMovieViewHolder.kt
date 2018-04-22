@@ -1,9 +1,10 @@
 package greenberg.moviedbshell
 
 import android.content.Intent
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
+import greenberg.moviedbshell.MosbyImpl.MovieDetailFragment
 
 class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?>?) : RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
 
@@ -23,10 +25,13 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
         popularMovieList?.get(position)?.let { fetchPoster(holder.cardItemPosterImage, it) }
         //TODO: probably move this to the activity
         holder.cardItem.setOnClickListener {
-            val intent = Intent(it.context, MovieDetailActivity::class.java).apply {
-                putExtra("MovieID", popularMovieList?.get(position)?.id)
-            }
-            it.context.startActivity(intent)
+            val fragment = MovieDetailFragment()
+            val bundle = Bundle()
+            bundle.putInt("MovieID", popularMovieList?.get(position)?.id ?: -1)
+            fragment.arguments = bundle
+            (it.context as AppCompatActivity).supportFragmentManager.beginTransaction()
+                    .add(fragment, MovieDetailFragment().tag)
+                    .commit()
         }
     }
 
@@ -37,19 +42,16 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
 
     override fun getItemCount() = popularMovieList?.size ?: 0
 
+    //TODO: is this context check ok
     private fun fetchPoster(cardItemPosterView: ImageView, item: PopularMovieResultsItem) {
         //Load poster art
         item.posterPath?.let {
             Glide.with(cardItemPosterView)
-                    .load(buildImageURL(it))
+                    .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, it))
                     .apply { RequestOptions().centerCrop() }
                     .into(cardItemPosterView)
         }
     }
-
-    //TODO: look into fixing this utility functions issue
-    //TODO: replace this with string resources
-    private fun buildImageURL(endurl: String) = "https://image.tmdb.org/t/p/original$endurl"
 
     //TODO: probably make sure every date is like this?
     //there has to be a better way to do this

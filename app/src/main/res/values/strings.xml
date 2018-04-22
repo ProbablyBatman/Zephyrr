@@ -12,4 +12,5 @@
     </plurals>
     <string name="user_rating_substitution">%1$s by %2$d users</string>
     <string name="runtime_substitution">%1$d minutes</string>
+    <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>
 </resources>
