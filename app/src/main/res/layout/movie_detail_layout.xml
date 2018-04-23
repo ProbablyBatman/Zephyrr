@@ -39,7 +39,7 @@
                 android:background="@drawable/scrim"/>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/movie_detail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/action_bar_size"
                 app:layout_collapseMode="pin"/>

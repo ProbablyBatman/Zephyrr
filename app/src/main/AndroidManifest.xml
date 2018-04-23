@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:name=".ZephyrrApplication">
         <activity android:name=".BaseActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>

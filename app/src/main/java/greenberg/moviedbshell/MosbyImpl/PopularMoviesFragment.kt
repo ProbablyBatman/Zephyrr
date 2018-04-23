@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ class PopularMoviesFragment :
         PopularMoviesView,
         SwipeRefreshLayout.OnRefreshListener {
 
+    private var popularMovieActionBar: Toolbar? = null
     private var popularMovieRecycler: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var popularMovieAdapter: PopularMovieAdapter? = null
@@ -43,6 +45,9 @@ class PopularMoviesFragment :
         //TODO: revisit this initialization
         popularMovieAdapter = PopularMovieAdapter(null)
         popularMovieRecycler?.adapter = popularMovieAdapter
+
+        popularMovieActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
+        popularMovieActionBar?.title = getString(R.string.app_name)
 
         showLoading(false)
     }
