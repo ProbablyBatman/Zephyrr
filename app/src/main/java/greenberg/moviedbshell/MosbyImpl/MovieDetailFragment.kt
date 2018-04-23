@@ -37,8 +37,8 @@ class MovieDetailFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState != null) {
-            movieId = savedInstanceState["MovieID"] as Int
+        if (arguments != null) {
+            movieId = arguments?.get("MovieID") as Int
         }
     }
 
@@ -75,6 +75,7 @@ class MovieDetailFragment :
 
     override fun showError(throwable: Throwable) {
         Log.w("Testing", "Showing Error")
+        Log.w("Throwable", throwable)
     }
 
     override fun showMovieDetails(movieDetailResponse: MovieDetailResponse) {
@@ -102,5 +103,9 @@ class MovieDetailFragment :
                 ?.joinToString(", ")}"
         }
         //TODO: potentially scrape other rating information
+    }
+
+    companion object {
+        @JvmField val TAG: String = MovieDetailFragment::class.java.simpleName
     }
 }

@@ -1,10 +1,9 @@
 package greenberg.moviedbshell.RetrofitHelpers
 
 import TMDB_API_KEY
-import android.util.Log
 import okhttp3.CacheControl
 import okhttp3.OkHttpClient
-import retrofit2.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,6 +19,9 @@ class RetrofitHelper {
 
     private fun createOkHttpClient(): OkHttpClient {
         val httpClient: OkHttpClient.Builder = OkHttpClient.Builder()
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        httpClient.addInterceptor(loggingInterceptor)
         httpClient.addInterceptor { chain ->
                 val original = chain.request()
                 val originalHttpUrl = original.url()

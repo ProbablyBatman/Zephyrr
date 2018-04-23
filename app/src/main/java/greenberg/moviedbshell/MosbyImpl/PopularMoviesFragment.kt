@@ -83,4 +83,8 @@ class PopularMoviesFragment :
         popularMovieAdapter?.notifyDataSetChanged()
     }
 
+    companion object {
+        @JvmField val TAG: String = PopularMoviesFragment::class.java.simpleName
+    }
+
 }

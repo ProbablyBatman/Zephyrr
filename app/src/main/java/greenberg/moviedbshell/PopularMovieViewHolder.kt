@@ -1,6 +1,5 @@
 package greenberg.moviedbshell
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.CardView
@@ -14,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.MosbyImpl.MovieDetailFragment
+import greenberg.moviedbshell.MosbyImpl.PopularMoviesFragment
 
 class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?>?) : RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
 
@@ -30,7 +30,9 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
             bundle.putInt("MovieID", popularMovieList?.get(position)?.id ?: -1)
             fragment.arguments = bundle
             (it.context as AppCompatActivity).supportFragmentManager.beginTransaction()
-                    .add(fragment, MovieDetailFragment().tag)
+                    .replace(R.id.fragment_container, fragment)
+                    //TODO: is this for the best?
+                    .addToBackStack(PopularMoviesFragment.TAG)
                     .commit()
         }
     }
