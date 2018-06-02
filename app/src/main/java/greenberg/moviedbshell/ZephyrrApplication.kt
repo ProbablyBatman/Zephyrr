@@ -6,8 +6,6 @@ import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.AppCenter
 
-
-
 class ZephyrrApplication: Application() {
 
     override fun onCreate() {
