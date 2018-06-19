@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -17,9 +16,6 @@ import greenberg.moviedbshell.MosbyImpl.MovieDetailFragment
 import greenberg.moviedbshell.MosbyImpl.PopularMoviesFragment
 
 class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private enum class ViewTypes{ MOVIE, LOADING }
-    private var isLoadingAdded = false
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is PopularMovieViewHolder) {
@@ -40,46 +36,14 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
                         .addToBackStack(PopularMoviesFragment.TAG)
                         .commit()
             }
-        } else if (holder is PopularMoviePaginationViewHolder) {
-            holder.paginationProgressBar.isIndeterminate = true
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val viewHolder: RecyclerView.ViewHolder
-        viewHolder = if (viewType == ViewTypes.MOVIE.ordinal) {
-            val v = LayoutInflater.from(parent.context).inflate(R.layout.popular_movie_card, parent, false)
-            PopularMovieViewHolder(v)
-        } else {
-            val v = LayoutInflater.from(parent.context).inflate(R.layout.pagination_loading, parent, false)
-            PopularMoviePaginationViewHolder(v)
-        }
-        return viewHolder
+        return PopularMovieViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.popular_movie_card, parent, false))
     }
 
     override fun getItemCount() = popularMovieList?.size ?: 0
-
-    override fun getItemViewType(position: Int) = if (position == popularMovieList?.size?.minus(1) && isLoadingAdded) {
-        ViewTypes.LOADING.ordinal
-    } else {
-        ViewTypes.MOVIE.ordinal
-    }
-
-    fun addLoading() {
-        isLoadingAdded = true
-        popularMovieList?.apply {
-            add(PopularMovieResultsItem())
-            notifyItemInserted(this.size - 1)
-        }
-    }
-
-    fun removeLoading() {
-        isLoadingAdded = false
-        popularMovieList?.apply {
-            removeAt(this.size - 1)
-            notifyItemRemoved(this.size)
-        }
-    }
 
     //TODO: is this context check ok
     private fun fetchPoster(cardItemPosterView: ImageView, item: PopularMovieResultsItem) {
@@ -105,9 +69,5 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
         var cardItemReleaseDate: TextView = view.findViewById(R.id.cardItemReleaseDate)
         var cardItemOverview: TextView = view.findViewById(R.id.cardItemOverview)
         var cardItem: CardView = view.findViewById(R.id.popularMovieCard)
-    }
-
-    class PopularMoviePaginationViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        var paginationProgressBar: ProgressBar = view.findViewById(R.id.paginationProgressBar)
     }
 }

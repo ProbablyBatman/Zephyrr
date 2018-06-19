@@ -50,8 +50,10 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                     if (!isRecyclerLoading
                             && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                             && firstVisibleItemPosition >= 0) {
-                        adapter?.addLoading()
-                        fetchNextPage()
+                        ifViewAttached { view: PopularMoviesView ->
+                            view.showPageLoad()
+                            fetchNextPage()
+                        }
                     }
                 }
             })

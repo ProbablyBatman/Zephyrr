@@ -9,4 +9,7 @@ interface PopularMoviesView : MvpView {
     fun setMovies(response: PopularMovieResponse)
     fun addMovies(response: PopularMovieResponse)
     fun showMovies()
+    //TODO: this is a temporary solution to pagination.  Instead of fronting a lot of effort which
+    //is subject to change with the change of this app, just pop a snackbar for now.
+    fun showPageLoad()
 }
