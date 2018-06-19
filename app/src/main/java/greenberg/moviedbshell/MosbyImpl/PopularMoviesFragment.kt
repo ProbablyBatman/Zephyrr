@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.MosbyImpl
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResponse
+import greenberg.moviedbshell.PaginationScrollListener
 import greenberg.moviedbshell.PopularMovieAdapter
 import greenberg.moviedbshell.R
 
@@ -46,6 +48,8 @@ class PopularMoviesFragment :
         popularMovieAdapter = PopularMovieAdapter(null)
         popularMovieRecycler?.adapter = popularMovieAdapter
 
+        presenter.initRecyclerPagination(popularMovieRecycler, popularMovieAdapter)
+
         popularMovieActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
         popularMovieActionBar?.title = getString(R.string.app_name)
 
@@ -66,6 +70,14 @@ class PopularMoviesFragment :
         Log.w("Testing", "Setting Movies")
         popularMovieAdapter?.popularMovieList = response.results
         popularMovieAdapter?.notifyDataSetChanged()
+    }
+
+    override fun addMovies(response: PopularMovieResponse) {
+        Log.w("Testing", "Adding movies")
+        popularMovieAdapter?.removeLoading()
+        response.results?.map {
+            popularMovieAdapter?.popularMovieList?.add(it)
+        }
     }
 
     override fun showMovies() {
