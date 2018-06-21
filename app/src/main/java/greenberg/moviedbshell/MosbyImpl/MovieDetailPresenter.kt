@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
 
 class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
 
-    private var TMDBService: TMDBService = RetrofitHelper().getTMDBService()
+    private var TMDBService = RetrofitHelper().getTMDBService()
 
     fun loadMovieDetails(movieId: Int) {
         TMDBService.queryMovies(movieId)

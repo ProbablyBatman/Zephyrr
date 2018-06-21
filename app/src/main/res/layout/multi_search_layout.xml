@@ -14,7 +14,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ProgressBar
-            android:id="@+id/popularMovieProgressBar"
+            android:id="@+id/search_results_progress_bar"
             style="?android:attr/progressBarStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -22,12 +22,12 @@
             android:layout_gravity="center" />
 
         <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/popularMovieRefresher"
+            android:id="@+id/search_results_refresher"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/popularMovieRecycler"
+                android:id="@+id/search_results_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

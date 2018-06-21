@@ -7,29 +7,31 @@ import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
+class SearchPresenter : MvpBasePresenter<MultiSearchView>() {
 
-    //TODO: revisit this stupid thing
     private var TMDBService = RetrofitHelper().getTMDBService()
     private var isRecyclerLoading = false
     //Default to getting the first page
-    private var popularMoviePageNumber = 1
+    private var searchResultsPageNumber = 1
+    //It is enforced that this string is at least not null and blank
+    private var lastQuery: String? = null
 
-    fun loadPopularMovies(pullToRefresh: Boolean) {
-        popularMoviePageNumber = 1
-        TMDBService.queryPopularMovies(popularMoviePageNumber)
+    fun performSearch(query: String) {
+        lastQuery = query
+        searchResultsPageNumber = 1
+        TMDBService.querySearchMulti(lastQuery!!, searchResultsPageNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     response -> ifViewAttached {
-                        view: PopularMoviesView ->
-                            view.setMovies(response)
-                            view.showMovies()
+                        view: MultiSearchView ->
+                            view.setResults(response)
+                            view.showResults()
                     }
                 }, {
                     throwable -> ifViewAttached {
-                        view: PopularMoviesView ->
-                            view.showError(throwable, pullToRefresh)
+                        view: MultiSearchView ->
+                            view.showError(throwable, false)
                     }
                 })
     }
@@ -48,10 +50,9 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                     if (!isRecyclerLoading
                             && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                             && firstVisibleItemPosition >= 0) {
-                        ifViewAttached {
-                            view: PopularMoviesView ->
-                                view.showPageLoad()
-                                fetchNextPage()
+                        ifViewAttached { view: MultiSearchView ->
+                            view.showPageLoad()
+                            fetchNextPage(lastQuery!!)
                         }
                     }
                 }
@@ -59,29 +60,24 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         }
     }
 
-    //Gets next page of popular movies call
-    private fun fetchNextPage() {
-        TMDBService.queryPopularMovies(++popularMoviePageNumber)
+    //Gets next page of search/multi movies call
+    private fun fetchNextPage(query: String) {
+        TMDBService.querySearchMulti(query, ++searchResultsPageNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     response -> ifViewAttached {
-                        view: PopularMoviesView ->
+                        view: MultiSearchView ->
                             isRecyclerLoading = true
-                            view.addMovies(response)
+                            view.addResults(response)
                             isRecyclerLoading = false
                     }
                 }, {
                     throwable -> ifViewAttached {
-                        view: PopularMoviesView ->
+                        view: MultiSearchView ->
                             //todo: revisit erroring the whole page on this.  Just error bottom
                             view.showError(throwable, false)
                     }
                 })
-    }
-
-    override fun detachView() {
-        super.detachView()
-        //TODO: cancel anything going on here, though press x to doubt
     }
 }

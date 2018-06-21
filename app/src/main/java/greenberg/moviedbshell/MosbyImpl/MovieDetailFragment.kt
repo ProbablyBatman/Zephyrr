@@ -37,6 +37,7 @@ class MovieDetailFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         if (arguments != null) {
             movieId = arguments?.get("MovieID") as Int
         }
@@ -62,6 +63,8 @@ class MovieDetailFragment :
         runtimeTextView = activity?.findViewById(R.id.runtime)
         genresTitleTextView = activity?.findViewById(R.id.genres_bold)
         genresTextView = activity?.findViewById(R.id.genres)
+
+        //activity?.setActionBar(collapsingToolbarLayout)
 
         showLoading(movieId)
     }

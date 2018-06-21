@@ -1,8 +1,8 @@
-package greenberg.moviedbshell.Models.PopularMoviesModels
+package greenberg.moviedbshell.Models.SearchModels
 
 import com.google.gson.annotations.SerializedName
 
-data class PopularMovieResponse(
+data class SearchResponse(
 	@field:SerializedName("page")
 	val page: Int? = null,
 
@@ -10,7 +10,7 @@ data class PopularMovieResponse(
 	val totalPages: Int? = null,
 
 	@field:SerializedName("results")
-	val results: MutableList<PopularMovieResultsItem?>? = null,
+	val results: MutableList<SearchResultsItem?>? = null,
 
 	@field:SerializedName("total_results")
 	val totalResults: Int? = null

@@ -13,5 +13,7 @@
     <string name="user_rating_substitution">%1$s by %2$d users</string>
     <string name="runtime_substitution">%1$d minutes</string>
     <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>
-    <string name="generic_loading_text">Loading more results...</string>
+    <string name="generic_loading_text">Loading more results…</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search for actors and movies here…</string>
 </resources>

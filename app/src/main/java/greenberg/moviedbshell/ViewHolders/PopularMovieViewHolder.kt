@@ -1,4 +1,4 @@
-package greenberg.moviedbshell
+package greenberg.moviedbshell.ViewHolders
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.MosbyImpl.MovieDetailFragment
 import greenberg.moviedbshell.MosbyImpl.PopularMoviesFragment
+import greenberg.moviedbshell.R
 
 class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -30,20 +31,21 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
                 val bundle = Bundle()
                 bundle.putInt("MovieID", popularMovieList?.get(position)?.id ?: -1)
                 fragment.arguments = bundle
+                //Perhaps move into setting an onclick listener somewhere else and having the adapter just set it.
                 (it.context as AppCompatActivity).supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, fragment)
                         //TODO: is this for the best?
-                        .addToBackStack(PopularMoviesFragment.TAG)
+                        .addToBackStack(MovieDetailFragment.TAG)
                         .commit()
             }
         }
     }
 
+    override fun getItemCount() = popularMovieList?.size ?: 0
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PopularMovieViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.popular_movie_card, parent, false))
     }
-
-    override fun getItemCount() = popularMovieList?.size ?: 0
 
     //TODO: is this context check ok
     private fun fetchPoster(cardItemPosterView: ImageView, item: PopularMovieResultsItem) {

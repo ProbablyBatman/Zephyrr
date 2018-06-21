@@ -7,13 +7,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ProgressBar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResponse
-import greenberg.moviedbshell.PopularMovieAdapter
+import greenberg.moviedbshell.ViewHolders.PopularMovieAdapter
 import greenberg.moviedbshell.R
 
 class PopularMoviesFragment :
@@ -28,6 +26,11 @@ class PopularMoviesFragment :
     private var popularMovieRefresher: SwipeRefreshLayout? = null
     private var popularMovieLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.popular_movies_layout, container, false)
@@ -48,10 +51,10 @@ class PopularMoviesFragment :
         popularMovieAdapter = PopularMovieAdapter(null)
         popularMovieRecycler?.adapter = popularMovieAdapter
 
-        presenter.initRecyclerPagination(popularMovieRecycler, popularMovieAdapter)
+        presenter.initRecyclerPagination(popularMovieRecycler)
 
-        popularMovieActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
-        popularMovieActionBar?.title = getString(R.string.app_name)
+        /*popularMovieActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
+        popularMovieActionBar?.title = getString(R.string.app_name)*/
 
         showLoading(false)
     }
@@ -75,9 +78,7 @@ class PopularMoviesFragment :
     override fun addMovies(response: PopularMovieResponse) {
         Log.w("Testing", "Adding movies")
         hidePageLoad()
-        response.results?.map {
-            popularMovieAdapter?.popularMovieList?.add(it)
-        }
+        response.results?.map { popularMovieAdapter?.popularMovieList?.add(it) }
     }
 
     override fun showMovies() {
@@ -103,7 +104,7 @@ class PopularMoviesFragment :
     override fun showPageLoad() {
         Log.w("Testing", "showing page load")
         loadingSnackbar = popularMovieRecycler?.let {
-            Snackbar.make(popularMovieRecycler!!, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(it, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
         }
         loadingSnackbar?.show()
     }
