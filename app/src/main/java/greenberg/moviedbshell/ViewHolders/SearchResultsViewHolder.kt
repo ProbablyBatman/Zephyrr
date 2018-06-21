@@ -19,13 +19,13 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?>?) 
             when (currentItem?.mediaType) {
                 MEDIA_TYPE_MOVIE -> {
                     holder.searchItemTitle.text = currentItem.title
-                    holder.searchItemSubInfo.text = currentItem.releaseDate
+                    holder.searchItemSubInfo.text = currentItem.releaseDate?.let { processReleaseDate(it) }
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPoster(holder.searchItemPosterImage, currentItem)
                 }
                 MEDIA_TYPE_TV -> {
                     holder.searchItemTitle.text = currentItem.title
-                    holder.searchItemSubInfo.text = currentItem.firstAirDate
+                    holder.searchItemSubInfo.text = currentItem.firstAirDate?.let { processReleaseDate(it) }
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPoster(holder.searchItemPosterImage, currentItem)
                 }
@@ -74,6 +74,14 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?>?) 
                     .into(cardItemPosterView)
         }
     }
+
+    //TODO: probably make sure every date is like this?
+    //there has to be a better way to do this
+    private fun processReleaseDate(releaseDate: String): String {
+        val splitDate = releaseDate.split("-")
+        return "${splitDate[1]}/${splitDate[2]}/${splitDate[0]}"
+    }
+
 
     class SearchResultsViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         var searchItemPosterImage: ImageView = view.findViewById(R.id.search_item_poster_image)

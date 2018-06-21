@@ -13,23 +13,23 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.MosbyImpl.MovieDetailFragment
-import greenberg.moviedbshell.MosbyImpl.PopularMoviesFragment
 import greenberg.moviedbshell.R
 
 class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is PopularMovieViewHolder) {
+            val currentItem = popularMovieList?.get(position)
             //todo: load posters and have like, placeholders
-            holder.cardItemTitle.text = popularMovieList?.get(position)?.title
-            holder.cardItemReleaseDate.text = popularMovieList?.get(position)?.releaseDate?.let { processReleaseDate(it) }
-            holder.cardItemOverview.text = popularMovieList?.get(position)?.overview
+            holder.cardItemTitle.text = currentItem?.title
+            holder.cardItemReleaseDate.text = currentItem?.releaseDate?.let { processReleaseDate(it) }
+            holder.cardItemOverview.text = currentItem?.overview
             popularMovieList?.get(position)?.let { fetchPoster(holder.cardItemPosterImage, it) }
             //TODO: probably move this to the activity
             holder.cardItem.setOnClickListener {
                 val fragment = MovieDetailFragment()
                 val bundle = Bundle()
-                bundle.putInt("MovieID", popularMovieList?.get(position)?.id ?: -1)
+                bundle.putInt("MovieID", currentItem?.id ?: -1)
                 fragment.arguments = bundle
                 //Perhaps move into setting an onclick listener somewhere else and having the adapter just set it.
                 (it.context as AppCompatActivity).supportFragmentManager.beginTransaction()
