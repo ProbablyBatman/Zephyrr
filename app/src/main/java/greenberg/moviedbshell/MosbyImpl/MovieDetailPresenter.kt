@@ -7,9 +7,9 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
-import greenberg.moviedbshell.RetrofitHelpers.TMDBService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.text.SimpleDateFormat
 
 class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
 
@@ -50,7 +50,13 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
     //TODO: probably make sure every date is like this?
     //there has to be a better way to do this
     fun processReleaseDate(releaseDate: String): String {
-        val splitDate = releaseDate.split("-")
-        return "${splitDate[1]}/${splitDate[2]}/${splitDate[0]}"
+        return if (releaseDate.isNotBlank()) {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd")
+            val date = inputFormat.parse(releaseDate)
+            val outputFormat = SimpleDateFormat("MM/dd/yyyy")
+            outputFormat.format(date)
+        } else {
+            return ""
+        }
     }
 }

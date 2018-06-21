@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.Models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.R
+import java.text.SimpleDateFormat
 
 class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -78,8 +79,14 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?>?) 
     //TODO: probably make sure every date is like this?
     //there has to be a better way to do this
     private fun processReleaseDate(releaseDate: String): String {
-        val splitDate = releaseDate.split("-")
-        return "${splitDate[1]}/${splitDate[2]}/${splitDate[0]}"
+        return if (releaseDate.isNotBlank()) {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd")
+            val date = inputFormat.parse(releaseDate)
+            val outputFormat = SimpleDateFormat("MM/dd/yyyy")
+            outputFormat.format(date)
+        } else {
+            return ""
+        }
     }
 
 
