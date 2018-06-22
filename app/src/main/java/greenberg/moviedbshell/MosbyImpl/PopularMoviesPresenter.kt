@@ -2,6 +2,7 @@ package greenberg.moviedbshell.MosbyImpl
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,6 +15,11 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     private var isRecyclerLoading = false
     //Default to getting the first page
     private var popularMoviePageNumber = 1
+
+    override fun attachView(view: PopularMoviesView) {
+        super.attachView(view)
+        initView()
+    }
 
     fun loadPopularMovies(pullToRefresh: Boolean) {
         popularMoviePageNumber = 1
@@ -56,6 +62,20 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                     }
                 }
             })
+        }
+    }
+
+    private fun initView() {
+        ifViewAttached {
+            view: PopularMoviesView ->
+                view.showLoading(false)
+        }
+    }
+
+    fun refreshPage() {
+        ifViewAttached {
+            view: PopularMoviesView ->
+                view.showLoading(true)
         }
     }
 

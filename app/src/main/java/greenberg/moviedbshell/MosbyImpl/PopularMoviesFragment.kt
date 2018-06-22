@@ -52,14 +52,15 @@ class PopularMoviesFragment :
         popularMovieRecycler?.adapter = popularMovieAdapter
 
         presenter.initRecyclerPagination(popularMovieRecycler)
-
-        /*popularMovieActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
-        popularMovieActionBar?.title = getString(R.string.app_name)*/
-
-        showLoading(false)
     }
 
-    override fun createPresenter(): PopularMoviesPresenter = PopularMoviesPresenter()
+    override fun createPresenter(): PopularMoviesPresenter {
+        if (presenter == null) {
+            presenter = PopularMoviesPresenter()
+        }
+
+        return presenter
+    }
 
     override fun showLoading(pullToRefresh: Boolean) {
         Log.w("Testing", "Show Loading")
@@ -96,7 +97,7 @@ class PopularMoviesFragment :
 
     override fun onRefresh() {
         Log.w("Testing", "On Refresh")
-        showLoading(true)
+        presenter.refreshPage()
         popularMovieAdapter?.popularMovieList = null
         popularMovieAdapter?.notifyDataSetChanged()
     }
