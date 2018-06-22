@@ -53,6 +53,9 @@ class MovieDetailFragment :
         collapsingToolbarLayout = activity?.findViewById(R.id.collapsing_toolbar)
         appBar = activity?.findViewById(R.id.app_bar_layout)
 
+        // FIXME These should be view.findViewById() using activity using activity will search
+        // the entire view hierarchy which is expensive. you can limit the search for the views
+        // ID by calling the localized view passed here. This View is from onViewCreated(view)
         posterImageView = activity?.findViewById(R.id.posterImage)
         backdropImageView = activity?.findViewById(R.id.backdropImage)
         scrollView = activity?.findViewById(R.id.scroll)
@@ -85,6 +88,7 @@ class MovieDetailFragment :
         Log.w("Testing", "Showing Movie Details")
 
         //TODO: require context, is this good?
+        //FIXME You can inject Glide to prevent this I believe
         presenter.fetchPoster(requireContext(), posterImageView!!,  movieDetailResponse.posterPath)
         presenter.fetchPoster(requireContext(), backdropImageView!!, movieDetailResponse.backdropPath)
 
@@ -94,7 +98,7 @@ class MovieDetailFragment :
         //todo: process output
         releaseDateTextView?.text = movieDetailResponse.releaseDate?.let { presenter.processReleaseDate(it) }
 
-        val doubleFormat: NumberFormat = DecimalFormat("##.##")
+        val doubleFormat: NumberFormat = DecimalFormat("##.##") // FIXME we can format this in the presenter
         ratingTextView?.text = movieDetailResponse.let { resources.getString(R.string.user_rating_substitution, doubleFormat.format(it.voteAverage), it.voteCount) }
         statusTextView?.text = movieDetailResponse.status
         runtimeTextView?.text = movieDetailResponse.let { resources.getString(R.string.runtime_substitution, it.runtime) }

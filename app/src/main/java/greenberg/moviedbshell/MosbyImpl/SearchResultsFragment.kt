@@ -49,6 +49,7 @@ class SearchResultsFragment :
         //searchActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
         //searchActionBar?.title = getString(R.string.app_name)
 
+        //FIXME view over activity
         searchResultsRecycler = activity?.findViewById(R.id.search_results_recycler)
         searchResultsRefresher = activity?.findViewById(R.id.search_results_refresher)
         searchLoadingBar = activity?.findViewById(R.id.search_results_progress_bar)
@@ -71,7 +72,7 @@ class SearchResultsFragment :
         searchResultsRefresher?.visibility = View.GONE
         searchResultsRecycler?.visibility = View.GONE
         searchLoadingBar?.visibility = View.VISIBLE
-        presenter.performSearch(query)
+        presenter.performSearch(query) // Nice!
     }
 
     override fun setResults(response: SearchResponse) {
@@ -82,7 +83,7 @@ class SearchResultsFragment :
 
     override fun addResults(response: SearchResponse) {
         Log.w("Testing", "Adding results")
-        hidePageLoad()
+        hidePageLoad() // FIXME make this call from the presenter
         response.results?.map { searchResultsAdapter?.searchResults?.add(it) }
     }
 
