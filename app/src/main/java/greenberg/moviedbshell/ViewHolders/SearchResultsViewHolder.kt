@@ -25,7 +25,7 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?>?) 
                     fetchPoster(holder.searchItemPosterImage, currentItem)
                 }
                 MEDIA_TYPE_TV -> {
-                    holder.searchItemTitle.text = currentItem.title
+                    holder.searchItemTitle.text = currentItem.name
                     holder.searchItemSubInfo.text = currentItem.firstAirDate?.let { processReleaseDate(it) }
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPoster(holder.searchItemPosterImage, currentItem)
