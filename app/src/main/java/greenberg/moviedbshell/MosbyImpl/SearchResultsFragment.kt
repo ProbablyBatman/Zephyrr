@@ -13,12 +13,13 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.Models.SearchModels.SearchResponse
+import greenberg.moviedbshell.Models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ViewHolders.SearchResultsAdapter
 
 class SearchResultsFragment :
-        MvpFragment<MultiSearchView, SearchPresenter>(),
-        MultiSearchView,
+        MvpFragment<ZephyrrSearchView, SearchPresenter>(),
+        ZephyrrSearchView,
         SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var query: String
@@ -49,15 +50,14 @@ class SearchResultsFragment :
         //searchActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
         //searchActionBar?.title = getString(R.string.app_name)
 
-        //FIXME view over activity
-        searchResultsRecycler = activity?.findViewById(R.id.search_results_recycler)
-        searchResultsRefresher = activity?.findViewById(R.id.search_results_refresher)
-        searchLoadingBar = activity?.findViewById(R.id.search_results_progress_bar)
+        searchResultsRecycler = view.findViewById(R.id.search_results_recycler)
+        searchResultsRefresher = view.findViewById(R.id.search_results_refresher)
+        searchLoadingBar = view.findViewById(R.id.search_results_progress_bar)
         searchResultsRefresher?.setOnRefreshListener(this)
 
         linearLayoutManager = LinearLayoutManager(activity)
         searchResultsRecycler?.layoutManager = linearLayoutManager
-        searchResultsAdapter = SearchResultsAdapter(null)
+        searchResultsAdapter = SearchResultsAdapter()
         searchResultsRecycler?.adapter = searchResultsAdapter
 
         presenter.initRecyclerPagination(searchResultsRecycler)
@@ -81,16 +81,16 @@ class SearchResultsFragment :
         presenter.performSearch(query) // Nice!
     }
 
-    override fun setResults(response: SearchResponse) {
+    override fun setResults(items: List<SearchResultsItem?>) {
         Log.w("Testing", "Setting results")
-        searchResultsAdapter?.searchResults = response.results
+        searchResultsAdapter?.searchResults = items.toMutableList()
         searchResultsAdapter?.notifyDataSetChanged()
     }
 
-    override fun addResults(response: SearchResponse) {
+    override fun addResults(items: List<SearchResultsItem?>) {
         Log.w("Testing", "Adding results")
-        hidePageLoad() // FIXME make this call from the presenter
-        response.results?.map { searchResultsAdapter?.searchResults?.add(it) }
+        items.map { searchResultsAdapter?.searchResults?.add(it) }
+        searchResultsAdapter?.notifyDataSetChanged()
     }
 
     override fun showResults() {
@@ -110,7 +110,7 @@ class SearchResultsFragment :
         Log.w("Testing", "On Refresh")
         //TODO: perhaps revisit how this is doen and make the presenter do it instead
         showLoading(true)
-        searchResultsAdapter?.searchResults = null
+        searchResultsAdapter?.searchResults?.clear()
         searchResultsAdapter?.notifyDataSetChanged()
     }
 
@@ -122,7 +122,7 @@ class SearchResultsFragment :
         loadingSnackbar?.show()
     }
 
-    private fun hidePageLoad() {
+    override fun hidePageLoad() {
         loadingSnackbar?.dismiss()
     }
 

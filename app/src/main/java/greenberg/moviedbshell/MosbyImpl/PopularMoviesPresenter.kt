@@ -1,9 +1,10 @@
 package greenberg.moviedbshell.MosbyImpl
 
+import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
+import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -15,6 +16,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     private var isRecyclerLoading = false
     //Default to getting the first page
     private var popularMoviePageNumber = 1
+    private var popularMoviesList = mutableListOf<PopularMovieResultsItem?>()
 
     override fun attachView(view: PopularMoviesView) {
         super.attachView(view)
@@ -29,10 +31,11 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                 .subscribe({
                     response -> ifViewAttached {
                         view: PopularMoviesView ->
-                            view.setMovies(response)
+                            response.results?.map { popularMoviesList.add(it) }
+                            view.setMovies(popularMoviesList)
                             view.showMovies()
                     }
-                }, {
+                },  {
                     throwable -> ifViewAttached {
                         view: PopularMoviesView ->
                             view.showError(throwable, pullToRefresh)
@@ -56,6 +59,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                             && firstVisibleItemPosition >= 0) {
                         ifViewAttached {
                             view: PopularMoviesView ->
+                                isRecyclerLoading = true
                                 view.showPageLoad()
                                 fetchNextPage()
                         }
@@ -73,9 +77,20 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     }
 
     fun refreshPage() {
+        ifViewAttached { view: PopularMoviesView ->
+            view.showLoading(true)
+        }
+    }
+
+    fun onCardSelected(position: Int) {
+        val fragment = MovieDetailFragment()
+        val bundle = Bundle().apply {
+            putInt("MovieID", position)
+        }
+        fragment.arguments = bundle
         ifViewAttached {
             view: PopularMoviesView ->
-                view.showLoading(true)
+                view.showDetail(fragment)
         }
     }
 
@@ -87,8 +102,9 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                 .subscribe({
                     response -> ifViewAttached {
                         view: PopularMoviesView ->
-                            isRecyclerLoading = true
-                            view.addMovies(response)
+                            response.results?.map { popularMoviesList.add(it) }
+                            view.addMovies(popularMoviesList)
+                            view.hidePageLoad()
                             isRecyclerLoading = false
                     }
                 }, {

@@ -3,11 +3,12 @@ package greenberg.moviedbshell.MosbyImpl
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
+import greenberg.moviedbshell.Models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class SearchPresenter : MvpBasePresenter<MultiSearchView>() {
+class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
 
     private var TMDBService = RetrofitHelper().getTMDBService()
     private var isRecyclerLoading = false
@@ -15,6 +16,7 @@ class SearchPresenter : MvpBasePresenter<MultiSearchView>() {
     private var searchResultsPageNumber = 1
     //It is enforced that this string is at least not null and blank
     private var lastQuery: String? = null
+    private var searchResultsList = mutableListOf<SearchResultsItem?>()
 
     fun performSearch(query: String) {
         lastQuery = query
@@ -24,13 +26,14 @@ class SearchPresenter : MvpBasePresenter<MultiSearchView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     response -> ifViewAttached {
-                        view: MultiSearchView ->
-                            view.setResults(response)
+                        view: ZephyrrSearchView ->
+                            response.results?.map { searchResultsList.add(it) }
+                            view.setResults(searchResultsList)
                             view.showResults()
                     }
                 }, {
                     throwable -> ifViewAttached {
-                        view: MultiSearchView ->
+                        view: ZephyrrSearchView ->
                             view.showError(throwable, false)
                     }
                 })
@@ -50,7 +53,8 @@ class SearchPresenter : MvpBasePresenter<MultiSearchView>() {
                     if (!isRecyclerLoading
                             && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                             && firstVisibleItemPosition >= 0) {
-                        ifViewAttached { view: MultiSearchView ->
+                        ifViewAttached { view: ZephyrrSearchView ->
+                            isRecyclerLoading = true
                             view.showPageLoad()
                             fetchNextPage(lastQuery!!)
                         }
@@ -67,14 +71,15 @@ class SearchPresenter : MvpBasePresenter<MultiSearchView>() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     response -> ifViewAttached {
-                        view: MultiSearchView ->
-                            isRecyclerLoading = true
-                            view.addResults(response)
+                        view: ZephyrrSearchView ->
+                            response.results?.map { searchResultsList.add(it) }
+                            view.addResults(searchResultsList)
+                            view.hidePageLoad()
                             isRecyclerLoading = false
                     }
                 }, {
                     throwable -> ifViewAttached {
-                        view: MultiSearchView ->
+                        view: ZephyrrSearchView ->
                             //todo: revisit erroring the whole page on this.  Just error bottom
                             view.showError(throwable, false)
                     }

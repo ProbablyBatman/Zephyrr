@@ -1,6 +1,5 @@
 package greenberg.moviedbshell.MosbyImpl
 
-import android.app.FragmentManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
@@ -11,7 +10,7 @@ import android.util.Log
 import android.view.*
 import android.widget.ProgressBar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
-import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResponse
+import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.ViewHolders.PopularMovieAdapter
 import greenberg.moviedbshell.R
 
@@ -40,17 +39,16 @@ class PopularMoviesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // FIXME Use view over activity
-        popularMovieRecycler = activity?.findViewById(R.id.popularMovieRecycler)
-        popularMovieRefresher = activity?.findViewById(R.id.popularMovieRefresher)
-        popularMovieLoadingBar = activity?.findViewById(R.id.popularMovieProgressBar)
+        popularMovieRecycler = view.findViewById(R.id.popularMovieRecycler)
+        popularMovieRefresher = view.findViewById(R.id.popularMovieRefresher)
+        popularMovieLoadingBar = view.findViewById(R.id.popularMovieProgressBar)
         popularMovieRefresher?.setOnRefreshListener(this)
 
         //TODO: look into proper context for this; i.e. application or base
         linearLayoutManager = LinearLayoutManager(activity)
         popularMovieRecycler?.layoutManager = linearLayoutManager
         //TODO: revisit this initialization
-        popularMovieAdapter = PopularMovieAdapter(null) // FIXME don't make this nullable it can cause issues use emptyList() then you don't need to handle the null case ever
+        popularMovieAdapter = PopularMovieAdapter(popularMoviesPresenter = presenter)
         popularMovieRecycler?.adapter = popularMovieAdapter
 
         presenter.initRecyclerPagination(popularMovieRecycler)
@@ -72,16 +70,16 @@ class PopularMoviesFragment :
         presenter.loadPopularMovies(pullToRefresh)
     }
 
-    override fun setMovies(response: PopularMovieResponse) {
+    override fun setMovies(items: List<PopularMovieResultsItem?>) {
         Log.w("Testing", "Setting Movies")
-        popularMovieAdapter?.popularMovieList = response.results
+        popularMovieAdapter?.popularMovieList = items.toMutableList()
         popularMovieAdapter?.notifyDataSetChanged()
     }
 
-    override fun addMovies(response: PopularMovieResponse) {
+    override fun addMovies(items: List<PopularMovieResultsItem?>) {
         Log.w("Testing", "Adding movies")
-        hidePageLoad() // FIXME This should probably be called from the presenter. That way `addMovies` doesn't also hide things.
-        response.results?.map { popularMovieAdapter?.popularMovieList?.add(it) }
+        items.map { popularMovieAdapter?.popularMovieList?.add(it) }
+        popularMovieAdapter?.notifyDataSetChanged()
     }
 
     override fun showMovies() {
@@ -100,8 +98,6 @@ class PopularMoviesFragment :
     override fun onRefresh() {
         Log.w("Testing", "On Refresh")
         presenter.refreshPage()
-        popularMovieAdapter?.popularMovieList = null
-        popularMovieAdapter?.notifyDataSetChanged()
     }
 
     override fun showPageLoad() {
@@ -112,8 +108,16 @@ class PopularMoviesFragment :
         loadingSnackbar?.show()
     }
 
-    private fun hidePageLoad() {
+    override fun hidePageLoad() {
+        Log.w("Hiding", "showing page load")
         loadingSnackbar?.dismiss()
+    }
+
+    override fun showDetail(fragment: MovieDetailFragment) {
+        activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container, fragment)
+                ?.addToBackStack(MovieDetailFragment.TAG)
+                ?.commit()
     }
 
     companion object {
