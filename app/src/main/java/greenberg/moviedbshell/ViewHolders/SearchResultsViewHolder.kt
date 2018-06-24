@@ -12,11 +12,11 @@ import greenberg.moviedbshell.Models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.R
 import java.text.SimpleDateFormat
 
-class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = mutableListOf()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SearchResultsViewHolder) {
-            val currentItem = searchResults?.get(position)
+            val currentItem = searchResults[position]
             when (currentItem?.mediaType) {
                 MEDIA_TYPE_MOVIE -> {
                     holder.searchItemTitle.text = currentItem.title
@@ -47,7 +47,7 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?>?) 
         }
     }
 
-    override fun getItemCount() = searchResults?.size ?: 0
+    override fun getItemCount() = searchResults.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return SearchResultsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.search_card_layout, parent, false))

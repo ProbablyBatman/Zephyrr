@@ -36,42 +36,45 @@ class BaseActivity : AppCompatActivity() {
         Log.w("Testing", "onOptionsItemSelected")
         when (item?.itemId) {
             R.id.base_search -> {
-                // FIXME Cleanup Oof this needs a function
-                val searchView = item.actionView as? SearchView
-                searchView?.apply {
-                    queryHint = resources.getString(R.string.search_hint)
-                    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                        override fun onQueryTextChange(newText: String?): Boolean {
-                            return true
-                        }
-
-                        override fun onQueryTextSubmit(query: String?): Boolean {
-                            if (query?.isNotBlank() == true) {
-                                if (supportFragmentManager.findFragmentByTag(SearchResultsFragment.TAG) != null) {
-                                    supportFragmentManager.popBackStack(SearchResultsFragment.TAG, 0)
-                                    supportFragmentManager.findFragmentByTag(SearchResultsFragment.TAG)
-                                } else {
-                                    val searchFragment = SearchResultsFragment()
-                                    val bundle = Bundle().apply {
-                                        putString("Query", query.toString())
-                                    }
-                                    searchFragment.arguments = bundle
-                                    supportFragmentManager.beginTransaction()
-                                            .replace(R.id.fragment_container, searchFragment)
-                                            .addToBackStack(SearchResultsFragment.TAG)
-                                            .commit()
-                                }
-                            }
-                            //Close keyboard and collapse search
-                            //TODO: figure out how to just close keyboard and stay in search view?
-                            this@apply.clearFocus()
-                            item.collapseActionView()
-                            return true
-                        }
-                    })
-                }
+                setUpSearchListener(item)
             }
         }
         return true
+    }
+
+    private fun setUpSearchListener(item: MenuItem) {
+        val searchView = item.actionView as? SearchView
+        searchView?.apply {
+            queryHint = resources.getString(R.string.search_hint)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return true
+                }
+
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (query?.isNotBlank() == true) {
+                        if (supportFragmentManager.findFragmentByTag(SearchResultsFragment.TAG) != null) {
+                            supportFragmentManager.popBackStack(SearchResultsFragment.TAG, 0)
+                            supportFragmentManager.findFragmentByTag(SearchResultsFragment.TAG)
+                        } else {
+                            val searchFragment = SearchResultsFragment()
+                            val bundle = Bundle().apply {
+                                putString("Query", query.toString())
+                            }
+                            searchFragment.arguments = bundle
+                            supportFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_container, searchFragment)
+                                    .addToBackStack(SearchResultsFragment.TAG)
+                                    .commit()
+                        }
+                    }
+                    //Close keyboard and collapse search
+                    //TODO: figure out how to just close keyboard and stay in search view?
+                    this@apply.clearFocus()
+                    item.collapseActionView()
+                    return true
+                }
+            })
+        }
     }
 }

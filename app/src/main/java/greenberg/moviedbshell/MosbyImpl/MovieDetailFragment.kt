@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.Models.MovieDetailModels.MovieDetailResponse
 import greenberg.moviedbshell.R
@@ -50,22 +51,19 @@ class MovieDetailFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        collapsingToolbarLayout = activity?.findViewById(R.id.collapsing_toolbar)
-        appBar = activity?.findViewById(R.id.app_bar_layout)
+        collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar)
+        appBar = view.findViewById(R.id.app_bar_layout)
 
-        // FIXME These should be view.findViewById() using activity using activity will search
-        // the entire view hierarchy which is expensive. you can limit the search for the views
-        // ID by calling the localized view passed here. This View is from onViewCreated(view)
-        posterImageView = activity?.findViewById(R.id.posterImage)
-        backdropImageView = activity?.findViewById(R.id.backdropImage)
-        scrollView = activity?.findViewById(R.id.scroll)
-        overviewTextView = activity?.findViewById(R.id.overview)
-        releaseDateTextView = activity?.findViewById(R.id.release_date)
-        ratingTextView = activity?.findViewById(R.id.user_rating)
-        statusTextView = activity?.findViewById(R.id.status)
-        runtimeTextView = activity?.findViewById(R.id.runtime)
-        genresTitleTextView = activity?.findViewById(R.id.genres_bold)
-        genresTextView = activity?.findViewById(R.id.genres)
+        posterImageView = view.findViewById(R.id.posterImage)
+        backdropImageView = view.findViewById(R.id.backdropImage)
+        scrollView = view.findViewById(R.id.scroll)
+        overviewTextView = view.findViewById(R.id.overview)
+        releaseDateTextView = view.findViewById(R.id.release_date)
+        ratingTextView = view.findViewById(R.id.user_rating)
+        statusTextView = view.findViewById(R.id.status)
+        runtimeTextView = view.findViewById(R.id.runtime)
+        genresTitleTextView = view.findViewById(R.id.genres_bold)
+        genresTextView = view.findViewById(R.id.genres)
 
         //activity?.setActionBar(collapsingToolbarLayout)
 
@@ -87,10 +85,10 @@ class MovieDetailFragment :
     override fun showMovieDetails(movieDetailResponse: MovieDetailResponse) {
         Log.w("Testing", "Showing Movie Details")
 
-        //TODO: require context, is this good?
-        //FIXME You can inject Glide to prevent this I believe
-        presenter.fetchPoster(requireContext(), posterImageView!!,  movieDetailResponse.posterPath)
-        presenter.fetchPoster(requireContext(), backdropImageView!!, movieDetailResponse.backdropPath)
+        presenter.fetchPoster(Glide.with(this), posterImageView!!,
+                movieDetailResponse.posterPath?.let { resources.getString(R.string.poster_url_substitution, it) })
+        presenter.fetchPoster(Glide.with(this), backdropImageView!!,
+                movieDetailResponse.backdropPath?.let { resources.getString(R.string.poster_url_substitution, it) })
 
         collapsingToolbarLayout?.title = movieDetailResponse.originalTitle
         overviewTextView?.text = movieDetailResponse.overview
@@ -98,8 +96,7 @@ class MovieDetailFragment :
         //todo: process output
         releaseDateTextView?.text = movieDetailResponse.releaseDate?.let { presenter.processReleaseDate(it) }
 
-        val doubleFormat: NumberFormat = DecimalFormat("##.##") // FIXME we can format this in the presenter
-        ratingTextView?.text = movieDetailResponse.let { resources.getString(R.string.user_rating_substitution, doubleFormat.format(it.voteAverage), it.voteCount) }
+        ratingTextView?.text = movieDetailResponse.let { resources.getString(R.string.user_rating_substitution, presenter.processRatings(it.voteAverage), it.voteCount) }
         statusTextView?.text = movieDetailResponse.status
         runtimeTextView?.text = movieDetailResponse.let { resources.getString(R.string.runtime_substitution, it.runtime) }
         //Default to One

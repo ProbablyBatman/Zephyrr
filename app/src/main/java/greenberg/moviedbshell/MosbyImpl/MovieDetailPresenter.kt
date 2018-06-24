@@ -1,14 +1,14 @@
 package greenberg.moviedbshell.MosbyImpl
 
-import android.content.Context
 import android.util.Log
 import android.widget.ImageView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import greenberg.moviedbshell.R
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
 class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
@@ -22,7 +22,7 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
                 .subscribe({
                         response -> ifViewAttached {
                             view: MovieDetailView ->
-                                view.showMovieDetails(response) // FIXME Process the response here?
+                                view.showMovieDetails(response)
                         }
                     }, {
                         throwable -> ifViewAttached {
@@ -34,13 +34,11 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
 
     /*TODO: Utility functions are bad, but idk what to do with these */
     //TODO: is this a good way to get context
-    fun fetchPoster(context: Context, view: ImageView, posterURL: String?) {
+    fun fetchPoster(glide: RequestManager, view: ImageView, posterURL: String?) {
         Log.d("Poster url", posterURL)
         if (posterURL != null) {
             //Load image into view
-            Glide.with(context)
-                    .load(context.getString(R.string.poster_url_substitution, posterURL))
-                    .into(view)
+            glide.load(posterURL).into(view)
         } else {
             Log.d("Testing", "Poster url is null for ${view.id}")
             //TODO: look into placeholders
@@ -58,5 +56,11 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
         } else {
             return ""
         }
+    }
+
+    //TODO: handle case where data like this is missing
+    fun processRatings(voteAverage: Double?): String? {
+        val doubleFormat: NumberFormat = DecimalFormat("##.##")
+        return doubleFormat.format(voteAverage)
     }
 }
