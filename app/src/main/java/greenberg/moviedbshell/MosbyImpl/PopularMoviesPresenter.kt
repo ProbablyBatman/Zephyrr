@@ -3,11 +3,16 @@ package greenberg.moviedbshell.MosbyImpl
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
+import greenberg.moviedbshell.R
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.text.SimpleDateFormat
 
 class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
@@ -64,6 +69,28 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         }
     }
 
+    //Gets next page of popular movies call
+    private fun fetchNextPage() {
+        TMDBService.queryPopularMovies(++popularMoviePageNumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    response -> ifViewAttached {
+                    view: PopularMoviesView ->
+                    response.results?.map { popularMoviesList.add(it) }
+                    view.addMovies(popularMoviesList)
+                    view.hidePageLoad()
+                    isRecyclerLoading = false
+                }
+                }, {
+                    throwable -> ifViewAttached {
+                    view: PopularMoviesView ->
+                    //todo: revisit erroring the whole page on this.  Just error bottom
+                    view.showError(throwable, false)
+                }
+                })
+    }
+
     fun onCardSelected(position: Int) {
         val fragment = MovieDetailFragment()
         val bundle = Bundle().apply {
@@ -76,26 +103,25 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         }
     }
 
-    //Gets next page of popular movies call
-    private fun fetchNextPage() {
-        TMDBService.queryPopularMovies(++popularMoviePageNumber)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    response -> ifViewAttached {
-                        view: PopularMoviesView ->
-                            response.results?.map { popularMoviesList.add(it) }
-                            view.addMovies(popularMoviesList)
-                            view.hidePageLoad()
-                            isRecyclerLoading = false
-                    }
-                }, {
-                    throwable -> ifViewAttached {
-                        view: PopularMoviesView ->
-                            //todo: revisit erroring the whole page on this.  Just error bottom
-                            view.showError(throwable, false)
-                    }
-                })
+    fun fetchPoster(cardItemPosterView: ImageView, item: PopularMovieResultsItem) {
+        //Load poster art
+        item.posterPath?.let {
+            Glide.with(cardItemPosterView)
+                    .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, it))
+                    .apply { RequestOptions().centerCrop() }
+                    .into(cardItemPosterView)
+        }
+    }
+
+    fun processReleaseDate(releaseDate: String): String {
+        return if (releaseDate.isNotBlank()) {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd")
+            val date = inputFormat.parse(releaseDate)
+            val outputFormat = SimpleDateFormat("MM/dd/yyyy")
+            outputFormat.format(date)
+        } else {
+            return ""
+        }
     }
 
     override fun detachView() {
