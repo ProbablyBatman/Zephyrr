@@ -36,6 +36,7 @@ class BaseActivity : AppCompatActivity() {
         Log.w("Testing", "onOptionsItemSelected")
         when (item?.itemId) {
             R.id.base_search -> {
+                // FIXME Cleanup Oof this needs a function
                 val searchView = item.actionView as? SearchView
                 searchView?.apply {
                     queryHint = resources.getString(R.string.search_hint)

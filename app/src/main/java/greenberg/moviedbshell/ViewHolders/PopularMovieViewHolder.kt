@@ -16,6 +16,7 @@ import greenberg.moviedbshell.MosbyImpl.MovieDetailFragment
 import greenberg.moviedbshell.R
 import java.text.SimpleDateFormat
 
+//FIXME don't make this param nullable, default to emptyList()
 class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -27,6 +28,7 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
             holder.cardItemOverview.text = currentItem?.overview
             popularMovieList?.get(position)?.let { fetchPoster(holder.cardItemPosterImage, it) }
             //TODO: probably move this to the activity
+            //FIXME or give this a presenter to make a call to the view
             holder.cardItem.setOnClickListener {
                 val fragment = MovieDetailFragment()
                 val bundle = Bundle()
@@ -42,7 +44,7 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
         }
     }
 
-    override fun getItemCount() = popularMovieList?.size ?: 0
+    override fun getItemCount() = popularMovieList?.size ?: 0 //FIXME with default emptyList this elvis isn't needed
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PopularMovieViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.popular_movie_card, parent, false))

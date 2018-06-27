@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.MosbyImpl
 
+import android.app.FragmentManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
@@ -39,6 +40,7 @@ class PopularMoviesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // FIXME Use view over activity
         popularMovieRecycler = activity?.findViewById(R.id.popularMovieRecycler)
         popularMovieRefresher = activity?.findViewById(R.id.popularMovieRefresher)
         popularMovieLoadingBar = activity?.findViewById(R.id.popularMovieProgressBar)
@@ -48,7 +50,7 @@ class PopularMoviesFragment :
         linearLayoutManager = LinearLayoutManager(activity)
         popularMovieRecycler?.layoutManager = linearLayoutManager
         //TODO: revisit this initialization
-        popularMovieAdapter = PopularMovieAdapter(null)
+        popularMovieAdapter = PopularMovieAdapter(null) // FIXME don't make this nullable it can cause issues use emptyList() then you don't need to handle the null case ever
         popularMovieRecycler?.adapter = popularMovieAdapter
 
         presenter.initRecyclerPagination(popularMovieRecycler)
@@ -59,7 +61,7 @@ class PopularMoviesFragment :
         showLoading(false)
     }
 
-    override fun createPresenter(): PopularMoviesPresenter = PopularMoviesPresenter()
+    override fun createPresenter(): PopularMoviesPresenter = PopularMoviesPresenter() //FIXME MOAR INSTANCES
 
     override fun showLoading(pullToRefresh: Boolean) {
         Log.w("Testing", "Show Loading")
@@ -77,7 +79,7 @@ class PopularMoviesFragment :
 
     override fun addMovies(response: PopularMovieResponse) {
         Log.w("Testing", "Adding movies")
-        hidePageLoad()
+        hidePageLoad() // FIXME This should probably be called from the presenter. That way `addMovies` doesn't also hide things.
         response.results?.map { popularMovieAdapter?.popularMovieList?.add(it) }
     }
 

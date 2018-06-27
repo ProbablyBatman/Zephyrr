@@ -22,7 +22,7 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
                 .subscribe({
                         response -> ifViewAttached {
                             view: MovieDetailView ->
-                                view.showMovieDetails(response)
+                                view.showMovieDetails(response) // FIXME Process the response here?
                         }
                     }, {
                         throwable -> ifViewAttached {
