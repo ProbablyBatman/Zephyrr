@@ -70,6 +70,11 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
         }
     }
 
+    fun refreshView(adapter: SearchResultsAdapter?) {
+        adapter?.searchResults?.clear()
+        adapter?.notifyDataSetChanged()
+    }
+
     //Gets next page of search/multi movies call
     private fun fetchNextPage(query: String) {
         TMDBService.querySearchMulti(query, ++searchResultsPageNumber)
@@ -92,7 +97,7 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
                 })
     }
 
-    fun fetchPoster(cardItemPosterView: ImageView, item: SearchResultsItem) {
+    fun fetchPosterArt(cardItemPosterView: ImageView, item: SearchResultsItem) {
         //Load poster art
         when (item.mediaType) {
             SearchResultsAdapter.MEDIA_TYPE_MOVIE, SearchResultsAdapter.MEDIA_TYPE_TV -> {

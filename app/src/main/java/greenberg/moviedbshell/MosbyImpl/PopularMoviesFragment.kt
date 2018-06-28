@@ -48,19 +48,13 @@ class PopularMoviesFragment :
         linearLayoutManager = LinearLayoutManager(activity)
         popularMovieRecycler?.layoutManager = linearLayoutManager
         //TODO: revisit this initialization
-        popularMovieAdapter = PopularMovieAdapter(popularMoviesPresenter = presenter)
+        popularMovieAdapter = PopularMovieAdapter(presenter = presenter)
         popularMovieRecycler?.adapter = popularMovieAdapter
 
         presenter.initRecyclerPagination(popularMovieRecycler)
     }
 
-    override fun createPresenter(): PopularMoviesPresenter {
-        if (presenter == null) {
-            presenter = PopularMoviesPresenter()
-        }
-
-        return presenter
-    }
+    override fun createPresenter(): PopularMoviesPresenter = presenter ?: PopularMoviesPresenter()
 
     override fun showLoading(pullToRefresh: Boolean) {
         Log.w("Testing", "Show Loading")
@@ -97,7 +91,7 @@ class PopularMoviesFragment :
 
     override fun onRefresh() {
         Log.w("Testing", "On Refresh")
-        presenter.refreshPage()
+        presenter.refreshPage(popularMovieAdapter)
     }
 
     override fun showPageLoad() {

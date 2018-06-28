@@ -10,6 +10,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
+import greenberg.moviedbshell.ViewHolders.PopularMovieAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
@@ -81,9 +82,12 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         }
     }
 
-    fun refreshPage() {
-        ifViewAttached { view: PopularMoviesView ->
-            view.showLoading(true)
+    fun refreshPage(adapter: PopularMovieAdapter?) {
+        ifViewAttached {
+            view: PopularMoviesView ->
+                view.showLoading(true)
+                adapter?.popularMovieList?.clear()
+                adapter?.notifyDataSetChanged()
         }
     }
 
@@ -121,10 +125,11 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         }
     }
 
-    fun fetchPoster(cardItemPosterView: ImageView, item: PopularMovieResultsItem) {
+    fun fetchPosterArt(cardItemPosterView: ImageView, item: PopularMovieResultsItem) {
         //Load poster art
         item.posterPath?.let {
             Glide.with(cardItemPosterView)
+                    //TODO: potentially hacky way to get context
                     .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, it))
                     .apply { RequestOptions().centerCrop() }
                     .into(cardItemPosterView)

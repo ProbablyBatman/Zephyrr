@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
-import greenberg.moviedbshell.Models.SearchModels.SearchResponse
 import greenberg.moviedbshell.Models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ViewHolders.SearchResultsAdapter
@@ -57,7 +56,7 @@ class SearchResultsFragment :
 
         linearLayoutManager = LinearLayoutManager(activity)
         searchResultsRecycler?.layoutManager = linearLayoutManager
-        searchResultsAdapter = SearchResultsAdapter()
+        searchResultsAdapter = SearchResultsAdapter(presenter = presenter)
         searchResultsRecycler?.adapter = searchResultsAdapter
 
         presenter.initRecyclerPagination(searchResultsRecycler)
@@ -65,20 +64,14 @@ class SearchResultsFragment :
         showLoading(false)
     }
 
-    override fun createPresenter(): SearchPresenter {
-        if (presenter == null) {
-            presenter = SearchPresenter()
-        }
-
-        return presenter
-    }
+    override fun createPresenter(): SearchPresenter = presenter ?: SearchPresenter()
 
     override fun showLoading(pullToRefresh: Boolean) {
         Log.w("Testing", "Show Loading")
         searchResultsRefresher?.visibility = View.GONE
         searchResultsRecycler?.visibility = View.GONE
         searchLoadingBar?.visibility = View.VISIBLE
-        presenter.performSearch(query) // Nice!
+        presenter.performSearch(query)
     }
 
     override fun setResults(items: List<SearchResultsItem?>) {
@@ -108,10 +101,9 @@ class SearchResultsFragment :
 
     override fun onRefresh() {
         Log.w("Testing", "On Refresh")
-        //TODO: perhaps revisit how this is doen and make the presenter do it instead
+        //TODO: perhaps revisit how this is done and make the presenter do it instead
         showLoading(true)
-        searchResultsAdapter?.searchResults?.clear()
-        searchResultsAdapter?.notifyDataSetChanged()
+        presenter.refreshView(searchResultsAdapter)
     }
 
     override fun showPageLoad() {

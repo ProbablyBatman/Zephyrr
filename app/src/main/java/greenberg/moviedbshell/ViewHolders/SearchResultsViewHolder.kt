@@ -21,13 +21,13 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = 
                     holder.searchItemTitle.text = currentItem.title
                     holder.searchItemSubInfo.text = currentItem.releaseDate?.let { presenter.processReleaseDate(it) }
                     holder.searchItemOverview.text = currentItem.overview
-                    presenter.fetchPoster(holder.searchItemPosterImage, currentItem)
+                    presenter.fetchPosterArt(holder.searchItemPosterImage, currentItem)
                 }
                 MEDIA_TYPE_TV -> {
                     holder.searchItemTitle.text = currentItem.name
                     holder.searchItemSubInfo.text = currentItem.firstAirDate?.let { presenter.processReleaseDate(it) }
                     holder.searchItemOverview.text = currentItem.overview
-                    presenter.fetchPoster(holder.searchItemPosterImage, currentItem)
+                    presenter.fetchPosterArt(holder.searchItemPosterImage, currentItem)
                 }
                 MEDIA_TYPE_PERSON -> {
                     //One of the problems with people is their limited fields.  Currently they only have:
@@ -36,7 +36,7 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = 
                     //todo: find better way to do these
                     holder.searchItemSubInfo.text = ""
                     holder.searchItemOverview.text = ""
-                    presenter.fetchPoster(holder.searchItemPosterImage, currentItem)
+                    presenter.fetchPosterArt(holder.searchItemPosterImage, currentItem)
                 }
                 else -> {
                     //TODO: handle unknown type?

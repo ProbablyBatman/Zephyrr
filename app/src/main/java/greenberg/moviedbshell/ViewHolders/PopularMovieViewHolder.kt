@@ -21,7 +21,7 @@ class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsI
             holder.cardItemTitle.text = currentItem?.title
             holder.cardItemReleaseDate.text = currentItem?.releaseDate?.let { presenter.processReleaseDate(it) }
             holder.cardItemOverview.text = currentItem?.overview
-            popularMovieList[position]?.let { presenter.fetchPoster(holder.cardItemPosterImage, it) }
+            popularMovieList[position]?.let { presenter.fetchPosterArt(holder.cardItemPosterImage, it) }
             holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem?.id ?: -1) }
         }
     }

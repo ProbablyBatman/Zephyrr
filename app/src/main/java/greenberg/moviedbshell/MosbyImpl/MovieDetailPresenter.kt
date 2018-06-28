@@ -33,8 +33,7 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
     }
 
     /*TODO: Utility functions are bad, but idk what to do with these */
-    //TODO: is this a good way to get context
-    fun fetchPoster(glide: RequestManager, view: ImageView, posterURL: String?) {
+    fun fetchPosterArt(glide: RequestManager, view: ImageView, posterURL: String?) {
         Log.d("Poster url", posterURL)
         if (posterURL != null) {
             //Load image into view

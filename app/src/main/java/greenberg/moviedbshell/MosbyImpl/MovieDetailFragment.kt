@@ -13,8 +13,6 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.Models.MovieDetailModels.MovieDetailResponse
 import greenberg.moviedbshell.R
-import java.text.DecimalFormat
-import java.text.NumberFormat
 
 class MovieDetailFragment :
         MvpFragment<MovieDetailView, MovieDetailPresenter>(),
@@ -70,13 +68,7 @@ class MovieDetailFragment :
         showLoading(movieId)
     }
 
-    override fun createPresenter(): MovieDetailPresenter {
-        if (presenter == null) {
-            presenter = MovieDetailPresenter()
-        }
-
-        return presenter
-    }
+    override fun createPresenter(): MovieDetailPresenter = presenter ?: MovieDetailPresenter()
 
     override fun showLoading(movieId: Int) {
         Log.w("Testing", "Show Loading")
@@ -91,9 +83,9 @@ class MovieDetailFragment :
     override fun showMovieDetails(movieDetailResponse: MovieDetailResponse) {
         Log.w("Testing", "Showing Movie Details")
 
-        presenter.fetchPoster(Glide.with(this), posterImageView!!,
+        presenter.fetchPosterArt(Glide.with(this), posterImageView!!,
                 movieDetailResponse.posterPath?.let { resources.getString(R.string.poster_url_substitution, it) })
-        presenter.fetchPoster(Glide.with(this), backdropImageView!!,
+        presenter.fetchPosterArt(Glide.with(this), backdropImageView!!,
                 movieDetailResponse.backdropPath?.let { resources.getString(R.string.poster_url_substitution, it) })
 
         collapsingToolbarLayout?.title = movieDetailResponse.originalTitle
