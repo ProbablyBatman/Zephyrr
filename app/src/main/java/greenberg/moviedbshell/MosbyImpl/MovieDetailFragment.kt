@@ -72,7 +72,13 @@ class MovieDetailFragment :
         showLoading(movieId)
     }
 
-    override fun createPresenter(): MovieDetailPresenter = MovieDetailPresenter()
+    override fun createPresenter(): MovieDetailPresenter {
+        if (presenter == null) {
+            presenter = MovieDetailPresenter()
+        }
+
+        return presenter
+    }
 
     override fun showLoading(movieId: Int) {
         Log.w("Testing", "Show Loading")

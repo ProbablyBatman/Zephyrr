@@ -65,7 +65,13 @@ class SearchResultsFragment :
         showLoading(false)
     }
 
-    override fun createPresenter(): SearchPresenter = SearchPresenter()
+    override fun createPresenter(): SearchPresenter {
+        if (presenter == null) {
+            presenter = SearchPresenter()
+        }
+
+        return presenter
+    }
 
     override fun showLoading(pullToRefresh: Boolean) {
         Log.w("Testing", "Show Loading")

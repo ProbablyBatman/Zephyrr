@@ -17,11 +17,13 @@ class BaseActivity : AppCompatActivity() {
         setContentView(R.layout.base_activity_layout)
 
         if (findViewById<FrameLayout>(R.id.fragment_container) != null) {
-            val popularMoviesFragment = PopularMoviesFragment()
+            if (supportFragmentManager.findFragmentByTag(PopularMoviesFragment.TAG) == null) {
+                val popularMoviesFragment = PopularMoviesFragment()
 
-            supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, popularMoviesFragment)
-                    .commit()
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, popularMoviesFragment, PopularMoviesFragment.TAG)
+                        .commit()
+            }
         }
     }
 
