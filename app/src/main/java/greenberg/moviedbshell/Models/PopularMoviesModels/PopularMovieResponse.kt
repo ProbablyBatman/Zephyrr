@@ -10,7 +10,7 @@ data class PopularMovieResponse(
 	val totalPages: Int? = null,
 
 	@field:SerializedName("results")
-	val results: MutableList<PopularMovieResultsItem?>? = null,
+	val results: List<PopularMovieResultsItem?>? = null,
 
 	@field:SerializedName("total_results")
 	val totalResults: Int? = null

@@ -12,13 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
-import greenberg.moviedbshell.Models.SearchModels.SearchResponse
+import greenberg.moviedbshell.Models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ViewHolders.SearchResultsAdapter
 
 class SearchResultsFragment :
-        MvpFragment<MultiSearchView, SearchPresenter>(),
-        MultiSearchView,
+        MvpFragment<ZephyrrSearchView, SearchPresenter>(),
+        ZephyrrSearchView,
         SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var query: String
@@ -49,15 +49,14 @@ class SearchResultsFragment :
         //searchActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
         //searchActionBar?.title = getString(R.string.app_name)
 
-        //FIXME view over activity
-        searchResultsRecycler = activity?.findViewById(R.id.search_results_recycler)
-        searchResultsRefresher = activity?.findViewById(R.id.search_results_refresher)
-        searchLoadingBar = activity?.findViewById(R.id.search_results_progress_bar)
+        searchResultsRecycler = view.findViewById(R.id.search_results_recycler)
+        searchResultsRefresher = view.findViewById(R.id.search_results_refresher)
+        searchLoadingBar = view.findViewById(R.id.search_results_progress_bar)
         searchResultsRefresher?.setOnRefreshListener(this)
 
         linearLayoutManager = LinearLayoutManager(activity)
         searchResultsRecycler?.layoutManager = linearLayoutManager
-        searchResultsAdapter = SearchResultsAdapter(null)
+        searchResultsAdapter = SearchResultsAdapter(presenter = presenter)
         searchResultsRecycler?.adapter = searchResultsAdapter
 
         presenter.initRecyclerPagination(searchResultsRecycler)
@@ -65,32 +64,26 @@ class SearchResultsFragment :
         showLoading(false)
     }
 
-    override fun createPresenter(): SearchPresenter {
-        if (presenter == null) {
-            presenter = SearchPresenter()
-        }
-
-        return presenter
-    }
+    override fun createPresenter(): SearchPresenter = presenter ?: SearchPresenter()
 
     override fun showLoading(pullToRefresh: Boolean) {
         Log.w("Testing", "Show Loading")
         searchResultsRefresher?.visibility = View.GONE
         searchResultsRecycler?.visibility = View.GONE
         searchLoadingBar?.visibility = View.VISIBLE
-        presenter.performSearch(query) // Nice!
+        presenter.performSearch(query)
     }
 
-    override fun setResults(response: SearchResponse) {
+    override fun setResults(items: List<SearchResultsItem?>) {
         Log.w("Testing", "Setting results")
-        searchResultsAdapter?.searchResults = response.results
+        searchResultsAdapter?.searchResults = items.toMutableList()
         searchResultsAdapter?.notifyDataSetChanged()
     }
 
-    override fun addResults(response: SearchResponse) {
+    override fun addResults(items: List<SearchResultsItem?>) {
         Log.w("Testing", "Adding results")
-        hidePageLoad() // FIXME make this call from the presenter
-        response.results?.map { searchResultsAdapter?.searchResults?.add(it) }
+        items.map { searchResultsAdapter?.searchResults?.add(it) }
+        searchResultsAdapter?.notifyDataSetChanged()
     }
 
     override fun showResults() {
@@ -108,10 +101,9 @@ class SearchResultsFragment :
 
     override fun onRefresh() {
         Log.w("Testing", "On Refresh")
-        //TODO: perhaps revisit how this is doen and make the presenter do it instead
+        //TODO: perhaps revisit how this is done and make the presenter do it instead
         showLoading(true)
-        searchResultsAdapter?.searchResults = null
-        searchResultsAdapter?.notifyDataSetChanged()
+        presenter.refreshView(searchResultsAdapter)
     }
 
     override fun showPageLoad() {
@@ -122,7 +114,7 @@ class SearchResultsFragment :
         loadingSnackbar?.show()
     }
 
-    private fun hidePageLoad() {
+    override fun hidePageLoad() {
         loadingSnackbar?.dismiss()
     }
 

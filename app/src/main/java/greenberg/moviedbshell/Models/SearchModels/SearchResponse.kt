@@ -10,7 +10,7 @@ data class SearchResponse(
 	val totalPages: Int? = null,
 
 	@field:SerializedName("results")
-	val results: MutableList<SearchResultsItem?>? = null,
+	val results: List<SearchResultsItem?>? = null,
 
 	@field:SerializedName("total_results")
 	val totalResults: Int? = null
