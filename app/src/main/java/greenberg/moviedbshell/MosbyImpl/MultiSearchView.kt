@@ -4,6 +4,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpView
 import greenberg.moviedbshell.Models.SearchModels.SearchResponse
 
 //TODO: Find better naming scheme.  This is only named this because android has one.
+// FIXME Why not ZephyrrSearchView?
 interface MultiSearchView : MvpView {
     fun showLoading(pullToRefresh: Boolean)
     fun showError(throwable: Throwable, pullToRefresh: Boolean)
