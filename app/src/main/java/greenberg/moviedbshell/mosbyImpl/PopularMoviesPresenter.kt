@@ -99,10 +99,10 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                 .subscribe({
                     response -> ifViewAttached {
                         view: PopularMoviesView ->
-                        response.results?.map { popularMoviesList.add(it) }
-                        view.addMovies(popularMoviesList)
-                        view.hidePageLoad()
-                        isRecyclerLoading = false
+                            response.results?.map { popularMoviesList.add(it) }
+                            view.setMovies(popularMoviesList)
+                            view.hidePageLoad()
+                            isRecyclerLoading = false
                     }
                 }, {
                     throwable -> ifViewAttached {

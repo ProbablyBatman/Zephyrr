@@ -84,7 +84,10 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
                     response -> ifViewAttached {
                         view: ZephyrrSearchView ->
                             response.results?.map { searchResultsList.add(it) }
-                            view.addResults(searchResultsList)
+                            //TODO: here and in the [PopularMoviePresenter], I changed this to set results for a bug fix.
+                            //Instead, see about using add.  I lef it in in case there's another way it can work.
+                            //If it can't, remove it from the interface view.
+                            view.setResults(searchResultsList)
                             view.hidePageLoad()
                             isRecyclerLoading = false
                     }
