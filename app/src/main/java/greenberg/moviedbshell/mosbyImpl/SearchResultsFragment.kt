@@ -129,18 +129,18 @@ class SearchResultsFragment :
     }
 
     override fun onPause() {
-        super.onPause()
         Timber.d("onPause")
+        super.onPause()
     }
 
     override fun onStop() {
-        super.onStop()
         Timber.d("onStop")
+        super.onStop()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         Timber.d("onDestroy")
+        super.onDestroy()
     }
 
     companion object {
