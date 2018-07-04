@@ -1,5 +1,7 @@
 package greenberg.moviedbshell.mosbyImpl
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -97,6 +99,7 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     }
 
     fun fetchPosterArt(cardItemPosterView: ImageView, item: SearchResultsItem) {
+        Glide.with(cardItemPosterView).clear(cardItemPosterView)
         //Load poster art
         when (item.mediaType) {
             SearchResultsAdapter.MEDIA_TYPE_MOVIE, SearchResultsAdapter.MEDIA_TYPE_TV -> {
@@ -113,7 +116,12 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
             Glide.with(cardItemPosterView)
                     //TODO: potentially hacky way to get context
                     .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, it))
-                    .apply { RequestOptions().centerCrop() }
+                    .apply {
+                        RequestOptions()
+                            .placeholder(ColorDrawable(Color.DKGRAY))
+                            .fallback(ColorDrawable(Color.DKGRAY))
+                            .centerCrop()
+                    }
                     .into(cardItemPosterView)
         }
     }

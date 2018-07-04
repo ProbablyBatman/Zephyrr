@@ -115,6 +115,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     }
 
     fun fetchPosterArt(cardItemPosterView: ImageView, item: PopularMovieResultsItem) {
+        Glide.with(cardItemPosterView).clear(cardItemPosterView)
         //Load poster art
         item.posterPath?.let {
             Glide.with(cardItemPosterView)
