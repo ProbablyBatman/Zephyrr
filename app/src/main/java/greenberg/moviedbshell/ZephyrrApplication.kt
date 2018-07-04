@@ -11,6 +11,8 @@ class ZephyrrApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
+
+
         AppCenter.start(this,
                 MS_APPCENTER_KEY,
                 Analytics::class.java,
