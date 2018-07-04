@@ -3,7 +3,6 @@ package greenberg.moviedbshell.MosbyImpl
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.widget.NestedScrollView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.Models.MovieDetailModels.MovieDetailResponse
 import greenberg.moviedbshell.R
+import timber.log.Timber
 
 class MovieDetailFragment :
         MvpFragment<MovieDetailView, MovieDetailPresenter>(),
@@ -71,17 +71,17 @@ class MovieDetailFragment :
     override fun createPresenter(): MovieDetailPresenter = presenter ?: MovieDetailPresenter()
 
     override fun showLoading(movieId: Int) {
-        Log.w("Testing", "Show Loading")
+        Timber.d("Show Loading")
         presenter.loadMovieDetails(movieId)
     }
 
     override fun showError(throwable: Throwable) {
-        Log.w("Testing", "Showing Error")
-        Log.w("Throwable", throwable)
+        Timber.d("Showing Error")
+        Timber.d(throwable)
     }
 
     override fun showMovieDetails(movieDetailResponse: MovieDetailResponse) {
-        Log.w("Testing", "Showing Movie Details")
+        Timber.d("Showing Movie Details")
 
         presenter.fetchPosterArt(Glide.with(this), posterImageView!!,
                 movieDetailResponse.posterPath?.let { resources.getString(R.string.poster_url_substitution, it) })

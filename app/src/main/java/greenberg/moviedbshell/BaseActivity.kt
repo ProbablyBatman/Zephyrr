@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.widget.FrameLayout
 import greenberg.moviedbshell.MosbyImpl.PopularMoviesFragment
 import greenberg.moviedbshell.MosbyImpl.SearchResultsFragment
+import timber.log.Timber
 
 class BaseActivity : AppCompatActivity() {
     //TODO: probably only inherit from this.  For now, this isn't an issue
@@ -28,14 +29,14 @@ class BaseActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        Log.w("Testing", "Oncreateoptionsmenu")
+        Timber.d("onCreateOptionsMenu")
         menu?.clear()
         menuInflater?.inflate(R.menu.base_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        Log.w("Testing", "onOptionsItemSelected")
+        Timber.d("onOptionsItemSelected")
         when (item?.itemId) {
             R.id.base_search -> {
                 setUpSearchListener(item)

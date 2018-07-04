@@ -6,13 +6,13 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.*
 import android.widget.ProgressBar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.Models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.ViewHolders.PopularMovieAdapter
 import greenberg.moviedbshell.R
+import timber.log.Timber
 
 class PopularMoviesFragment :
         MvpFragment<PopularMoviesView, PopularMoviesPresenter>(),
@@ -57,7 +57,7 @@ class PopularMoviesFragment :
     override fun createPresenter(): PopularMoviesPresenter = presenter ?: PopularMoviesPresenter()
 
     override fun showLoading(pullToRefresh: Boolean) {
-        Log.w("Testing", "Show Loading")
+        Timber.d("Show Loading")
         popularMovieRefresher?.visibility = View.GONE
         popularMovieRecycler?.visibility = View.GONE
         popularMovieLoadingBar?.visibility = View.VISIBLE
@@ -65,19 +65,19 @@ class PopularMoviesFragment :
     }
 
     override fun setMovies(items: List<PopularMovieResultsItem?>) {
-        Log.w("Testing", "Setting Movies")
+        Timber.d("Setting Movies")
         popularMovieAdapter?.popularMovieList = items.toMutableList()
         popularMovieAdapter?.notifyDataSetChanged()
     }
 
     override fun addMovies(items: List<PopularMovieResultsItem?>) {
-        Log.w("Testing", "Adding movies")
+        Timber.d("Adding movies")
         items.map { popularMovieAdapter?.popularMovieList?.add(it) }
         popularMovieAdapter?.notifyDataSetChanged()
     }
 
     override fun showMovies() {
-        Log.w("Testing", "Showing Movies")
+        Timber.d("Showing Movies")
         popularMovieRefresher?.isRefreshing = false
         popularMovieLoadingBar?.visibility = View.GONE
         popularMovieRefresher?.visibility = View.VISIBLE
@@ -85,17 +85,17 @@ class PopularMoviesFragment :
     }
 
     override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
-        Log.w("Testing", "Showing Error")
+        Timber.d("Showing Error")
         popularMovieRefresher?.isRefreshing = false
     }
 
     override fun onRefresh() {
-        Log.w("Testing", "On Refresh")
+        Timber.d("On Refresh")
         presenter.refreshPage(popularMovieAdapter)
     }
 
     override fun showPageLoad() {
-        Log.w("Testing", "showing page load")
+        Timber.d("Showing Page Load")
         loadingSnackbar = popularMovieRecycler?.let {
             Snackbar.make(it, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
         }
@@ -103,7 +103,7 @@ class PopularMoviesFragment :
     }
 
     override fun hidePageLoad() {
-        Log.w("Hiding", "showing page load")
+        Timber.d("Showing Page Load")
         loadingSnackbar?.dismiss()
     }
 

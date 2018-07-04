@@ -1,12 +1,12 @@
 package greenberg.moviedbshell.MosbyImpl
 
-import android.util.Log
 import android.widget.ImageView
 import com.bumptech.glide.RequestManager
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.RetrofitHelpers.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -34,12 +34,12 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
 
     /*TODO: Utility functions are bad, but idk what to do with these */
     fun fetchPosterArt(glide: RequestManager, view: ImageView, posterURL: String?) {
-        Log.d("Poster url", posterURL)
+        Timber.d("posterURL: $posterURL")
         if (posterURL != null) {
             //Load image into view
             glide.load(posterURL).into(view)
         } else {
-            Log.d("Testing", "Poster url is null for ${view.id}")
+            Timber.d("Poster url is null for ${view.id}")
             //TODO: look into placeholders
         }
     }

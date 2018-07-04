@@ -6,7 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.Models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ViewHolders.SearchResultsAdapter
+import timber.log.Timber
 
 class SearchResultsFragment :
         MvpFragment<ZephyrrSearchView, SearchPresenter>(),
@@ -67,7 +67,7 @@ class SearchResultsFragment :
     override fun createPresenter(): SearchPresenter = presenter ?: SearchPresenter()
 
     override fun showLoading(pullToRefresh: Boolean) {
-        Log.w("Testing", "Show Loading")
+        Timber.d("Show Loading")
         searchResultsRefresher?.visibility = View.GONE
         searchResultsRecycler?.visibility = View.GONE
         searchLoadingBar?.visibility = View.VISIBLE
@@ -75,19 +75,19 @@ class SearchResultsFragment :
     }
 
     override fun setResults(items: List<SearchResultsItem?>) {
-        Log.w("Testing", "Setting results")
+        Timber.d("Setting results")
         searchResultsAdapter?.searchResults = items.toMutableList()
         searchResultsAdapter?.notifyDataSetChanged()
     }
 
     override fun addResults(items: List<SearchResultsItem?>) {
-        Log.w("Testing", "Adding results")
+        Timber.d("Adding results")
         items.map { searchResultsAdapter?.searchResults?.add(it) }
         searchResultsAdapter?.notifyDataSetChanged()
     }
 
     override fun showResults() {
-        Log.w("Testing", "Adding results")
+        Timber.d("Adding results")
         searchResultsRefresher?.isRefreshing = false
         searchLoadingBar?.visibility = View.GONE
         searchResultsRefresher?.visibility = View.VISIBLE
@@ -95,19 +95,19 @@ class SearchResultsFragment :
     }
 
     override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
-        Log.w("Testing", "Showing error")
+        Timber.d("Showing error")
         searchResultsRefresher?.isRefreshing = false
     }
 
     override fun onRefresh() {
-        Log.w("Testing", "On Refresh")
+        Timber.d("On Refresh")
         //TODO: perhaps revisit how this is done and make the presenter do it instead
         showLoading(true)
         presenter.refreshView(searchResultsAdapter)
     }
 
     override fun showPageLoad() {
-        Log.w("Testing", "Showing page load")
+        Timber.d("Showing page load")
         loadingSnackbar = searchResultsRecycler?.let {
             Snackbar.make(it, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
         }
