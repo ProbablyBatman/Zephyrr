@@ -5,8 +5,8 @@ import android.app.Application
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.AppCenter
-import greenberg.moviedbshell.Logging.DebuggingTree
-import greenberg.moviedbshell.Logging.NoLogTree
+import greenberg.moviedbshell.logging.DebuggingTree
+import greenberg.moviedbshell.logging.NoLogTree
 import timber.log.Timber
 
 class ZephyrrApplication: Application() {
