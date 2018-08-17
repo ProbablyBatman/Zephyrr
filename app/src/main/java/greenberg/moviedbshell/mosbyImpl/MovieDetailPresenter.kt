@@ -18,6 +18,17 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
     private var TMDBService = RetrofitHelper().getTMDBService()
     private var compositeDisposable = CompositeDisposable()
 
+    override fun attachView(view: MovieDetailView) {
+        super.attachView(view)
+        Timber.d("attachView")
+    }
+
+    fun initView(movieId: Int) {
+        ifViewAttached { view: MovieDetailView ->
+            view.showLoading(movieId)
+        }
+    }
+
     fun loadMovieDetails(movieId: Int) {
         val disposable =
                 TMDBService.queryMovies(movieId)

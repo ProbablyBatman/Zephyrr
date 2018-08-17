@@ -63,9 +63,7 @@ class MovieDetailFragment :
         genresTitleTextView = view.findViewById(R.id.genres_bold)
         genresTextView = view.findViewById(R.id.genres)
 
-        //activity?.setActionBar(collapsingToolbarLayout)
-
-        showLoading(movieId)
+        presenter?.initView(movieId)
     }
 
     override fun createPresenter(): MovieDetailPresenter = presenter ?: MovieDetailPresenter()

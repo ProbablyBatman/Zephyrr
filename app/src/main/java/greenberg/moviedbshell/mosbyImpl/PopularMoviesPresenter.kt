@@ -30,6 +30,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
     override fun attachView(view: PopularMoviesView) {
         super.attachView(view)
+        Timber.d("attachView")
         initView()
     }
 

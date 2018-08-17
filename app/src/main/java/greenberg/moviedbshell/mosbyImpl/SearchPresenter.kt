@@ -32,6 +32,7 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
 
     override fun attachView(view: ZephyrrSearchView) {
         super.attachView(view)
+        Timber.d("attachView")
         initView()
     }
 
