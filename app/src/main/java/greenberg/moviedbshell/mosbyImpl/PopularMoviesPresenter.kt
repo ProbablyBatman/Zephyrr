@@ -16,6 +16,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.util.*
 
 class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
@@ -135,9 +136,9 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
     fun processReleaseDate(releaseDate: String): String {
         return if (releaseDate.isNotBlank()) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd")
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val date = inputFormat.parse(releaseDate)
-            val outputFormat = SimpleDateFormat("MM/dd/yyyy")
+            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
             outputFormat.format(date)
         } else {
             return ""

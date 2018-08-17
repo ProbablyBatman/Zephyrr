@@ -22,7 +22,6 @@ class SearchResultsFragment :
 
     private lateinit var query: String
 
-    private var searchActionBar: Toolbar? = null
     private var searchResultsRecycler: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var searchResultsAdapter: SearchResultsAdapter? = null
@@ -45,9 +44,6 @@ class SearchResultsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("onViewCreated")
-
-        //searchActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
-        //searchActionBar?.title = getString(R.string.app_name)
 
         zephyrrSearchView = view.findViewById(R.id.searchResultsFragment)
 
@@ -73,7 +69,7 @@ class SearchResultsFragment :
         searchResultsRefresher?.visibility = View.GONE
         searchResultsRecycler?.visibility = View.GONE
         searchLoadingBar?.visibility = View.VISIBLE
-        //TODO: rename this
+
         if (shouldPerformSearch) {
             presenter.performSearch(query)
         }

@@ -23,7 +23,6 @@ class PopularMoviesFragment :
         PopularMoviesView,
         SwipeRefreshLayout.OnRefreshListener {
 
-    private var popularMovieActionBar: Toolbar? = null
     private var popularMovieRecycler: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var popularMovieAdapter: PopularMovieAdapter? = null

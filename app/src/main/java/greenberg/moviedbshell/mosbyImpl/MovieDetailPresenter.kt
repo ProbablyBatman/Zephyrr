@@ -11,6 +11,7 @@ import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.util.*
 
 class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
 
@@ -50,9 +51,9 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
     //there has to be a better way to do this
     fun processReleaseDate(releaseDate: String): String {
         return if (releaseDate.isNotBlank()) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd")
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val date = inputFormat.parse(releaseDate)
-            val outputFormat = SimpleDateFormat("MM/dd/yyyy")
+            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
             outputFormat.format(date)
         } else {
             return ""

@@ -133,6 +133,7 @@ class MovieDetailFragment :
     }
 
     companion object {
-        @JvmField val TAG: String = MovieDetailFragment::class.java.simpleName
+        @JvmField
+        val TAG: String = MovieDetailFragment::class.java.simpleName
     }
 }
