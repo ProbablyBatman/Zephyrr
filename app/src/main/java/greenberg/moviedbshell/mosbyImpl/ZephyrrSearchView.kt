@@ -4,9 +4,8 @@ import com.hannesdorfmann.mosby3.mvp.MvpView
 import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
 
 //TODO: Find better naming scheme.  This is only named this because android has one.
-// FIXME Why not ZephyrrSearchView?
 interface ZephyrrSearchView : MvpView {
-    fun showLoading(pullToRefresh: Boolean)
+    fun showLoading(shouldPerformSearch: Boolean)
     fun showError(throwable: Throwable, pullToRefresh: Boolean)
     fun setResults(items: List<SearchResultsItem?>)
     fun addResults(items: List<SearchResultsItem?>)

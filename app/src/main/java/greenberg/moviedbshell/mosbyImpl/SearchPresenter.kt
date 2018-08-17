@@ -2,6 +2,7 @@ package greenberg.moviedbshell.mosbyImpl
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -24,25 +25,16 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     private var lastQuery: String? = null
     private var searchResultsList = mutableListOf<SearchResultsItem?>()
 
-    fun performSearch(query: String) {
-        lastQuery = query
-        searchResultsPageNumber = 1
-        TMDBService.querySearchMulti(lastQuery!!, searchResultsPageNumber)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    response -> ifViewAttached {
-                        view: ZephyrrSearchView ->
-                            response.results?.map { searchResultsList.add(it) }
-                            view.setResults(searchResultsList)
-                            view.showResults()
-                    }
-                }, {
-                    throwable -> ifViewAttached {
-                        view: ZephyrrSearchView ->
-                            view.showError(throwable, false)
-                    }
-                })
+    override fun attachView(view: ZephyrrSearchView) {
+        super.attachView(view)
+        initView()
+    }
+
+    private fun initView() {
+        ifViewAttached {
+            view: ZephyrrSearchView ->
+                view.showLoading(true)
+        }
     }
 
     fun initRecyclerPagination(recyclerView: RecyclerView?) {
@@ -71,8 +63,12 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     }
 
     fun refreshView(adapter: SearchResultsAdapter?) {
-        adapter?.searchResults?.clear()
-        adapter?.notifyDataSetChanged()
+        ifViewAttached {
+            view: ZephyrrSearchView ->
+                view.showLoading(true)
+                adapter?.searchResults?.clear()
+                adapter?.notifyDataSetChanged()
+        }
     }
 
     //Gets next page of search/multi movies call
@@ -129,7 +125,32 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
             val outputFormat = SimpleDateFormat("MM/dd/yyyy")
             outputFormat.format(date)
         } else {
-            return ""
+            ""
         }
+    }
+
+    fun performSearch(query: String) {
+        ifViewAttached {
+            view: ZephyrrSearchView ->
+                view.showLoading(false)
+        }
+        lastQuery = query
+        searchResultsPageNumber = 1
+        TMDBService.querySearchMulti(lastQuery!!, searchResultsPageNumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    response -> ifViewAttached {
+                        view: ZephyrrSearchView ->
+                            response.results?.map { searchResultsList.add(it) }
+                            view.setResults(searchResultsList)
+                            view.showResults()
+                    }
+                }, {
+                    throwable -> ifViewAttached {
+                        view: ZephyrrSearchView ->
+                            view.showError(throwable, false)
+                    }
+                })
     }
 }

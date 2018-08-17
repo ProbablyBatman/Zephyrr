@@ -7,8 +7,8 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.retrofitHelpers.RetrofitHelper
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,17 +34,15 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         TMDBService.queryPopularMovies(popularMoviePageNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    response -> ifViewAttached {
-                        view: PopularMoviesView ->
-                            response.results?.map { popularMoviesList.add(it) }
-                            view.setMovies(popularMoviesList)
-                            view.showMovies()
+                .subscribe({ response ->
+                    ifViewAttached { view: PopularMoviesView ->
+                        response.results?.map { popularMoviesList.add(it) }
+                        view.setMovies(popularMoviesList)
+                        view.showMovies()
                     }
-                },  {
-                    throwable -> ifViewAttached {
-                        view: PopularMoviesView ->
-                            view.showError(throwable, pullToRefresh)
+                }, { throwable ->
+                    ifViewAttached { view: PopularMoviesView ->
+                        view.showError(throwable, pullToRefresh)
                     }
                 })
     }
@@ -63,11 +61,10 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                     if (!isRecyclerLoading
                             && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                             && firstVisibleItemPosition >= 0) {
-                        ifViewAttached {
-                            view: PopularMoviesView ->
-                                isRecyclerLoading = true
-                                view.showPageLoad()
-                                fetchNextPage()
+                        ifViewAttached { view: PopularMoviesView ->
+                            isRecyclerLoading = true
+                            view.showPageLoad()
+                            fetchNextPage()
                         }
                     }
                 }
@@ -76,18 +73,16 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     }
 
     private fun initView() {
-        ifViewAttached {
-            view: PopularMoviesView ->
-                view.showLoading(false)
+        ifViewAttached { view: PopularMoviesView ->
+            view.showLoading(false)
         }
     }
 
     fun refreshPage(adapter: PopularMovieAdapter?) {
-        ifViewAttached {
-            view: PopularMoviesView ->
-                view.showLoading(true)
-                adapter?.popularMovieList?.clear()
-                adapter?.notifyDataSetChanged()
+        ifViewAttached { view: PopularMoviesView ->
+            view.showLoading(true)
+            adapter?.popularMovieList?.clear()
+            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -96,17 +91,15 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         TMDBService.queryPopularMovies(++popularMoviePageNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    response -> ifViewAttached {
-                        view: PopularMoviesView ->
-                            response.results?.map { popularMoviesList.add(it) }
-                            view.setMovies(popularMoviesList)
-                            view.hidePageLoad()
-                            isRecyclerLoading = false
+                .subscribe({ response ->
+                    ifViewAttached { view: PopularMoviesView ->
+                        response.results?.map { popularMoviesList.add(it) }
+                        view.setMovies(popularMoviesList)
+                        view.hidePageLoad()
+                        isRecyclerLoading = false
                     }
-                }, {
-                    throwable -> ifViewAttached {
-                        view: PopularMoviesView ->
+                }, { throwable ->
+                    ifViewAttached { view: PopularMoviesView ->
                         //todo: revisit erroring the whole page on this.  Just error bottom
                         view.showError(throwable, false)
                     }
@@ -114,14 +107,10 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     }
 
     fun onCardSelected(position: Int) {
-        val fragment = MovieDetailFragment()
-        val bundle = Bundle().apply {
-            putInt("MovieID", position)
-        }
-        fragment.arguments = bundle
-        ifViewAttached {
-            view: PopularMoviesView ->
-                view.showDetail(fragment)
+        ifViewAttached { view: PopularMoviesView ->
+            view.showDetail(Bundle().apply {
+                putInt("MovieID", position)
+            })
         }
     }
 

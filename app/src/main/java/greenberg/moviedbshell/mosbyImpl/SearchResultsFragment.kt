@@ -5,14 +5,13 @@ import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ProgressBar
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
-import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
 import timber.log.Timber
 
@@ -30,24 +29,27 @@ class SearchResultsFragment :
     private var searchResultsRefresher: SwipeRefreshLayout? = null
     private var searchLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
+    private var zephyrrSearchView: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-        if (arguments != null) {
-            query = arguments?.get("Query") as String
-        }
+        Timber.d("onCreate")
+        setHasOptionsMenu(false)
+        query = arguments?.get("Query") as String
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.multi_search_layout, container, false)
+        return inflater.inflate(R.layout.zephyrr_search_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
 
         //searchActionBar = activity?.findViewById(R.id.popular_movie_toolbar)
         //searchActionBar?.title = getString(R.string.app_name)
+
+        zephyrrSearchView = view.findViewById(R.id.searchResultsFragment)
 
         searchResultsRecycler = view.findViewById(R.id.search_results_recycler)
         searchResultsRefresher = view.findViewById(R.id.search_results_refresher)
@@ -60,18 +62,21 @@ class SearchResultsFragment :
         searchResultsRecycler?.adapter = searchResultsAdapter
 
         presenter.initRecyclerPagination(searchResultsRecycler)
-
-        showLoading(false)
+        //TODO: maybe change the title of the action bar to show the last performed search
+        //noactivity?.actionBar?.title = query
     }
 
     override fun createPresenter(): SearchPresenter = presenter ?: SearchPresenter()
 
-    override fun showLoading(pullToRefresh: Boolean) {
+    override fun showLoading(shouldPerformSearch: Boolean) {
         Timber.d("Show Loading")
         searchResultsRefresher?.visibility = View.GONE
         searchResultsRecycler?.visibility = View.GONE
         searchLoadingBar?.visibility = View.VISIBLE
-        presenter.performSearch(query)
+        //TODO: rename this
+        if (shouldPerformSearch) {
+            presenter.performSearch(query)
+        }
     }
 
     override fun setResults(items: List<SearchResultsItem?>) {
@@ -102,7 +107,6 @@ class SearchResultsFragment :
     override fun onRefresh() {
         Timber.d("On Refresh")
         //TODO: perhaps revisit how this is done and make the presenter do it instead
-        showLoading(true)
         presenter.refreshView(searchResultsAdapter)
     }
 
@@ -144,7 +148,8 @@ class SearchResultsFragment :
     }
 
     companion object {
-        @JvmField val TAG: String = SearchResultsFragment::class.java.simpleName
+        @JvmField
+        val TAG: String = SearchResultsFragment::class.java.simpleName
     }
 
 }

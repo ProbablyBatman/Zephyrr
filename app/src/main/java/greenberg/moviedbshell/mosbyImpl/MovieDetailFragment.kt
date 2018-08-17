@@ -36,7 +36,7 @@ class MovieDetailFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+        setHasOptionsMenu(false)
         if (arguments != null) {
             movieId = arguments?.get("MovieID") as Int
         }
