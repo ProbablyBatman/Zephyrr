@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.mosbyImpl
 
+import android.os.Bundle
 import com.hannesdorfmann.mosby3.mvp.MvpView
 import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 
@@ -9,7 +10,7 @@ interface PopularMoviesView : MvpView {
     fun setMovies(items: List<PopularMovieResultsItem?>)
     fun addMovies(items: List<PopularMovieResultsItem?>)
     fun showMovies()
-    fun showDetail(fragment: MovieDetailFragment)
+    fun showDetail(bundle: Bundle)
     //TODO: this is a temporary solution to pagination.  Instead of fronting a lot of effort which
     //is subject to change with the change of this app, just pop a snackbar for now.
     fun showPageLoad()

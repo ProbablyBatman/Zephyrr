@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.mosbyImpl
 
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.retrofitHelpers.RetrofitHelper

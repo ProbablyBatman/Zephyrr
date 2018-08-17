@@ -6,8 +6,12 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
@@ -26,11 +30,13 @@ class PopularMoviesFragment :
     private var popularMovieRefresher: SwipeRefreshLayout? = null
     private var popularMovieLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+        setHasOptionsMenu(false)
         Timber.d("onCreate")
+        navController = findNavController(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -108,11 +114,8 @@ class PopularMoviesFragment :
         loadingSnackbar?.dismiss()
     }
 
-    override fun showDetail(fragment: MovieDetailFragment) {
-        activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragment_container, fragment)
-                ?.addToBackStack(MovieDetailFragment.TAG)
-                ?.commit()
+    override fun showDetail(bundle: Bundle) {
+        navController?.navigate(R.id.action_popularMoviesFragment_to_movieDetailFragment, bundle)
     }
 
     override fun onStart() {
@@ -141,7 +144,8 @@ class PopularMoviesFragment :
     }
 
     companion object {
-        @JvmField val TAG: String = PopularMoviesFragment::class.java.simpleName
+        @JvmField
+        val TAG: String = PopularMoviesFragment::class.java.simpleName
     }
 
 }

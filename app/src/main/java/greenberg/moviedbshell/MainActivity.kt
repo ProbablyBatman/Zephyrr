@@ -4,44 +4,53 @@ import android.os.Bundle
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.FrameLayout
+import androidx.navigation.NavController
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import greenberg.moviedbshell.base.BaseActivity
-import greenberg.moviedbshell.mosbyImpl.PopularMoviesFragment
-import greenberg.moviedbshell.mosbyImpl.SearchResultsFragment
 import timber.log.Timber
 
 class MainActivity : BaseActivity() {
+
+    private lateinit var navController: NavController
     //TODO: probably only inherit from this.  For now, this isn't an issue
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_activity_layout)
 
-        if (findViewById<FrameLayout>(R.id.fragment_container) != null) {
+        /*if (findViewById<FrameLayout>(R.id.fragment_container) != null) {
             if (supportFragmentManager.findFragmentByTag(PopularMoviesFragment.TAG) == null) {
                 val popularMoviesFragment = PopularMoviesFragment()
 
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, popularMoviesFragment, PopularMoviesFragment.TAG)
+                        .add(R.id.fragment_container, popularMoviesFragment, PopularMoviesFragment.TAG)
                         .commit()
             }
-        }
+        }*/
+
+        navController = findNavController(this, R.id.my_nav_host_fragment)
+        setupActionBarWithNavController(navController)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         Timber.d("onCreateOptionsMenu")
         menu?.clear()
         menuInflater?.inflate(R.menu.base_menu, menu)
+        menu?.findItem(R.id.searchResultsFragment)?.let {
+            setUpSearchListener(it)
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         Timber.d("onOptionsItemSelected")
         when (item?.itemId) {
-            R.id.base_search -> {
+            R.id.searchResultsFragment -> {
                 setUpSearchListener(item)
             }
         }
-        return true
+        return false
     }
 
     private fun setUpSearchListener(item: MenuItem) {
@@ -49,34 +58,26 @@ class MainActivity : BaseActivity() {
         searchView?.apply {
             queryHint = resources.getString(R.string.search_hint)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(newText: String?): Boolean {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    Timber.d("onQueryTextSubmit: $query")
+                    //searchView.isIconified = true
+                    item.collapseActionView()
+                    searchView.hideKeyboard()
+                    searchView.clearFocus()
+                    navController.navigate(R.id.searchResultsFragment, Bundle().apply {
+                        putString("Query", query)
+                    })
                     return true
                 }
 
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    if (query?.isNotBlank() == true) {
-                        if (supportFragmentManager.findFragmentByTag(SearchResultsFragment.TAG) != null) {
-                            supportFragmentManager.popBackStack(SearchResultsFragment.TAG, 0)
-                            supportFragmentManager.findFragmentByTag(SearchResultsFragment.TAG)
-                        } else {
-                            val searchFragment = SearchResultsFragment()
-                            val bundle = Bundle().apply {
-                                putString("Query", query.toString())
-                            }
-                            searchFragment.arguments = bundle
-                            supportFragmentManager.beginTransaction()
-                                    .replace(R.id.fragment_container, searchFragment)
-                                    .addToBackStack(SearchResultsFragment.TAG)
-                                    .commit()
-                        }
-                    }
-                    //Close keyboard and collapse search
-                    //TODO: figure out how to just close keyboard and stay in search view?
-                    this@apply.clearFocus()
-                    item.collapseActionView()
-                    return true
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    Timber.d("onQueryTextChange: $newText")
+                    return false
                 }
+
             })
         }
     }
+
+    override fun onSupportNavigateUp() = navController.navigateUp()
 }

@@ -1,7 +1,10 @@
 package greenberg.moviedbshell.mosbyImpl
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -24,25 +27,16 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     private var lastQuery: String? = null
     private var searchResultsList = mutableListOf<SearchResultsItem?>()
 
-    fun performSearch(query: String) {
-        lastQuery = query
-        searchResultsPageNumber = 1
-        TMDBService.querySearchMulti(lastQuery!!, searchResultsPageNumber)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    response -> ifViewAttached {
-                        view: ZephyrrSearchView ->
-                            response.results?.map { searchResultsList.add(it) }
-                            view.setResults(searchResultsList)
-                            view.showResults()
-                    }
-                }, {
-                    throwable -> ifViewAttached {
-                        view: ZephyrrSearchView ->
-                            view.showError(throwable, false)
-                    }
-                })
+    override fun attachView(view: ZephyrrSearchView) {
+        super.attachView(view)
+        initView()
+    }
+
+    private fun initView() {
+        ifViewAttached {
+            view: ZephyrrSearchView ->
+                view.showLoading(true)
+        }
     }
 
     fun initRecyclerPagination(recyclerView: RecyclerView?) {
@@ -71,8 +65,12 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     }
 
     fun refreshView(adapter: SearchResultsAdapter?) {
-        adapter?.searchResults?.clear()
-        adapter?.notifyDataSetChanged()
+        ifViewAttached {
+            view: ZephyrrSearchView ->
+                view.showLoading(true)
+                adapter?.searchResults?.clear()
+                adapter?.notifyDataSetChanged()
+        }
     }
 
     //Gets next page of search/multi movies call
@@ -84,7 +82,10 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
                     response -> ifViewAttached {
                         view: ZephyrrSearchView ->
                             response.results?.map { searchResultsList.add(it) }
-                            view.addResults(searchResultsList)
+                            //TODO: here and in the [PopularMoviePresenter], I changed this to set results for a bug fix.
+                            //Instead, see about using add.  I lef it in in case there's another way it can work.
+                            //If it can't, remove it from the interface view.
+                            view.setResults(searchResultsList)
                             view.hidePageLoad()
                             isRecyclerLoading = false
                     }
@@ -98,6 +99,7 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     }
 
     fun fetchPosterArt(cardItemPosterView: ImageView, item: SearchResultsItem) {
+        Glide.with(cardItemPosterView).clear(cardItemPosterView)
         //Load poster art
         when (item.mediaType) {
             SearchResultsAdapter.MEDIA_TYPE_MOVIE, SearchResultsAdapter.MEDIA_TYPE_TV -> {
@@ -114,7 +116,12 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
             Glide.with(cardItemPosterView)
                     //TODO: potentially hacky way to get context
                     .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, it))
-                    .apply { RequestOptions().centerCrop() }
+                    .apply {
+                        RequestOptions()
+                            .placeholder(ColorDrawable(Color.DKGRAY))
+                            .fallback(ColorDrawable(Color.DKGRAY))
+                            .centerCrop()
+                    }
                     .into(cardItemPosterView)
         }
     }
@@ -126,7 +133,32 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
             val outputFormat = SimpleDateFormat("MM/dd/yyyy")
             outputFormat.format(date)
         } else {
-            return ""
+            ""
         }
+    }
+
+    fun performSearch(query: String) {
+        ifViewAttached {
+            view: ZephyrrSearchView ->
+                view.showLoading(false)
+        }
+        lastQuery = query
+        searchResultsPageNumber = 1
+        TMDBService.querySearchMulti(lastQuery!!, searchResultsPageNumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    response -> ifViewAttached {
+                        view: ZephyrrSearchView ->
+                            response.results?.map { searchResultsList.add(it) }
+                            view.setResults(searchResultsList)
+                            view.showResults()
+                    }
+                }, {
+                    throwable -> ifViewAttached {
+                        view: ZephyrrSearchView ->
+                            view.showError(throwable, false)
+                    }
+                })
     }
 }

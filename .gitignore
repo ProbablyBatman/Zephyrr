@@ -43,6 +43,7 @@ captures/
 .idea/dictionaries
 .idea/libraries
 .idea/caches/*
+.idea/navEditor.xml
 
 # Keystore files
 *.jks
