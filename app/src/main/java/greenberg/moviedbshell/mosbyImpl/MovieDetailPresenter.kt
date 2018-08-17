@@ -1,11 +1,11 @@
 package greenberg.moviedbshell.mosbyImpl
 
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.retrofitHelpers.RetrofitHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.DecimalFormat
@@ -15,22 +15,23 @@ import java.text.SimpleDateFormat
 class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
 
     private var TMDBService = RetrofitHelper().getTMDBService()
+    private var compositeDisposable = CompositeDisposable()
 
     fun loadMovieDetails(movieId: Int) {
-        TMDBService.queryMovies(movieId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                        response -> ifViewAttached {
-                            view: MovieDetailView ->
+        val disposable =
+                TMDBService.queryMovies(movieId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ response ->
+                            ifViewAttached { view: MovieDetailView ->
                                 view.showMovieDetails(response)
-                        }
-                    }, {
-                        throwable -> ifViewAttached {
-                            view: MovieDetailView ->
+                            }
+                        }, { throwable ->
+                            ifViewAttached { view: MovieDetailView ->
                                 view.showError(throwable)
-                    }
-                })
+                            }
+                        })
+        compositeDisposable.add(disposable)
     }
 
     /*TODO: Utility functions are bad, but idk what to do with these */
@@ -62,5 +63,11 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
     fun processRatings(voteAverage: Double?): String? {
         val doubleFormat: NumberFormat = DecimalFormat("##.##")
         return doubleFormat.format(voteAverage)
+    }
+
+    override fun destroy() {
+        super.destroy()
+        Timber.d("destroy called, disposables disposed of")
+        compositeDisposable.dispose()
     }
 }

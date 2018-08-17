@@ -12,7 +12,9 @@ import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.retrofitHelpers.RetrofitHelper
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.text.SimpleDateFormat
 
 class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
@@ -23,6 +25,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     //Default to getting the first page
     private var popularMoviePageNumber = 1
     private var popularMoviesList = mutableListOf<PopularMovieResultsItem?>()
+    private var compositeDisposable = CompositeDisposable()
 
     override fun attachView(view: PopularMoviesView) {
         super.attachView(view)
@@ -31,20 +34,22 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
     fun loadPopularMovies(pullToRefresh: Boolean) {
         popularMoviePageNumber = 1
-        TMDBService.queryPopularMovies(popularMoviePageNumber)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    ifViewAttached { view: PopularMoviesView ->
-                        response.results?.map { popularMoviesList.add(it) }
-                        view.setMovies(popularMoviesList)
-                        view.showMovies()
-                    }
-                }, { throwable ->
-                    ifViewAttached { view: PopularMoviesView ->
-                        view.showError(throwable, pullToRefresh)
-                    }
-                })
+        val disposable =
+                TMDBService.queryPopularMovies(popularMoviePageNumber)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ response ->
+                            ifViewAttached { view: PopularMoviesView ->
+                                response.results?.map { popularMoviesList.add(it) }
+                                view.setMovies(popularMoviesList)
+                                view.showMovies()
+                            }
+                        }, { throwable ->
+                            ifViewAttached { view: PopularMoviesView ->
+                                view.showError(throwable, pullToRefresh)
+                            }
+                        })
+        compositeDisposable.add(disposable)
     }
 
     fun initRecyclerPagination(recyclerView: RecyclerView?) {
@@ -88,22 +93,24 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
     //Gets next page of popular movies call
     private fun fetchNextPage() {
-        TMDBService.queryPopularMovies(++popularMoviePageNumber)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    ifViewAttached { view: PopularMoviesView ->
-                        response.results?.map { popularMoviesList.add(it) }
-                        view.setMovies(popularMoviesList)
-                        view.hidePageLoad()
-                        isRecyclerLoading = false
-                    }
-                }, { throwable ->
-                    ifViewAttached { view: PopularMoviesView ->
-                        //todo: revisit erroring the whole page on this.  Just error bottom
-                        view.showError(throwable, false)
-                    }
-                })
+        val disposable =
+                TMDBService.queryPopularMovies(++popularMoviePageNumber)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ response ->
+                            ifViewAttached { view: PopularMoviesView ->
+                                response.results?.map { popularMoviesList.add(it) }
+                                view.setMovies(popularMoviesList)
+                                view.hidePageLoad()
+                                isRecyclerLoading = false
+                            }
+                        }, { throwable ->
+                            ifViewAttached { view: PopularMoviesView ->
+                                //todo: revisit erroring the whole page on this.  Just error bottom
+                                view.showError(throwable, false)
+                            }
+                        })
+        compositeDisposable.add(disposable)
     }
 
     fun onCardSelected(position: Int) {
@@ -137,8 +144,9 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         }
     }
 
-    override fun detachView() {
-        super.detachView()
-        //TODO: cancel anything going on here, though press x to doubt
+    override fun destroy() {
+        super.destroy()
+        Timber.d("destroy called, disposables disposed of")
+        compositeDisposable.dispose()
     }
 }
