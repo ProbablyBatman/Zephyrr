@@ -2,6 +2,7 @@ package greenberg.moviedbshell.mosbyImpl
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.ImageView
@@ -161,6 +162,14 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
                             }
                         })
         compositeDisposable.add(disposable)
+    }
+
+    fun onCardSelected(position: Int) {
+        ifViewAttached { view: ZephyrrSearchView ->
+            view.showDetail(Bundle().apply {
+                putInt("MovieID", position)
+            })
+        }
     }
 
     override fun destroy() {

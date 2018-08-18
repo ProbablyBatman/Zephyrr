@@ -18,6 +18,10 @@
 
     <fragment
         android:id="@+id/searchResultsFragment"
-        android:name="greenberg.moviedbshell.mosbyImpl.SearchResultsFragment"/>
+        android:name="greenberg.moviedbshell.mosbyImpl.SearchResultsFragment">
+        <action
+            android:id="@+id/action_searchResultsFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment" />
+    </fragment>
 
 </navigation>

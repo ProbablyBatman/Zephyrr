@@ -67,7 +67,7 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
             val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
             outputFormat.format(date)
         } else {
-            return ""
+            ""
         }
     }
 

@@ -142,7 +142,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
             val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
             outputFormat.format(date)
         } else {
-            return ""
+            ""
         }
     }
 

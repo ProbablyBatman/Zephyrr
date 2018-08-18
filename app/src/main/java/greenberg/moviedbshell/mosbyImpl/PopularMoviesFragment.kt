@@ -5,17 +5,16 @@ import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
+import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
-import greenberg.moviedbshell.R
 import timber.log.Timber
 
 class PopularMoviesFragment :
@@ -35,7 +34,7 @@ class PopularMoviesFragment :
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
         Timber.d("onCreate")
-        navController = findNavController(this)
+        navController = findNavController()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

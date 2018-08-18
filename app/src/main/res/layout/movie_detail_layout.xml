@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
+    <!--
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -47,9 +48,10 @@
         </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+    -->
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scroll"
+        android:id="@+id/movieDetailScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -59,6 +61,50 @@
             android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/movieDetailProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <FrameLayout
+                android:id="@+id/backgroundImageWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="288dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/backdropImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="288dp"
+                    android:scaleType="centerCrop" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/scrim"/>
+
+                <TextView
+                    android:id="@+id/movie_detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:padding="16dp"
+                    android:textSize="32sp"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:ellipsize="end"/>
+            </FrameLayout>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/imageWrapper"
@@ -71,7 +117,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/backgroundImageWrapper">
 
                 <ImageView
                     android:id="@+id/posterImage"
@@ -87,7 +133,7 @@
                 style="@style/TopInfoStyle"
                 app:layout_constraintLeft_toRightOf="@id/imageWrapper"
                 app:layout_constraintStart_toEndOf="@id/imageWrapper"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/backgroundImageWrapper"
                 android:text="@string/release_date_bold"
                 android:textStyle="bold"/>
 
@@ -96,7 +142,7 @@
                 style="@style/TopInfoStyle"
                 app:layout_constraintLeft_toRightOf="@id/release_date_bold"
                 app:layout_constraintStart_toEndOf="@id/release_date_bold"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/backgroundImageWrapper"/>
 
             <TextView
                 android:id="@+id/user_rating_bold"
@@ -166,13 +212,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/genres_bold"
                 app:layout_constraintStart_toEndOf="@id/genres_bold"
-                app:layout_constraintTop_toBottomOf="@id/runtime"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/imageWrapper"/>
+                app:layout_constraintTop_toTopOf="@+id/genres_bold" />
 
             <!--
                 TODO: can probably put ratings symbols/images, other buttons on top of that or something
@@ -187,7 +233,7 @@
                 android:paddingRight="10dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="10dp"
-                app:layout_constraintTop_toBottomOf="@id/genres"
+                app:layout_constraintTop_toBottomOf="@id/imageWrapper"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textSize="14sp"/>

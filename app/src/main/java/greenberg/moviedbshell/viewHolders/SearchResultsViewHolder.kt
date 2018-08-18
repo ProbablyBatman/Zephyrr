@@ -1,14 +1,15 @@
 package greenberg.moviedbshell.viewHolders
 
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.mosbyImpl.SearchPresenter
-import greenberg.moviedbshell.R
 
 class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = mutableListOf(),
                            private val presenter: SearchPresenter) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -26,6 +27,7 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = 
                     holder.searchItemSubInfo.text = currentItem.releaseDate?.let { presenter.processReleaseDate(it) }
                     holder.searchItemOverview.text = currentItem.overview
                     presenter.fetchPosterArt(holder.searchItemPosterImage, currentItem)
+                    holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1) }
                 }
                 MEDIA_TYPE_TV -> {
                     holder.searchItemTitle.text = currentItem.name
@@ -64,6 +66,7 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = 
         //Used for movies, blank for actors.
         //TODO: potentially add well known movies provided by api to this
         var searchItemOverview: TextView = view.findViewById(R.id.search_item_overview)
+        var cardItem: CardView = view.findViewById(R.id.search_result_card)
     }
 
     companion object {

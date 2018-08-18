@@ -6,9 +6,12 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
@@ -21,6 +24,7 @@ class SearchResultsFragment :
         SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var query: String
+    private var navController: NavController? = null
 
     private var searchResultsRecycler: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -35,6 +39,7 @@ class SearchResultsFragment :
         Timber.d("onCreate")
         setHasOptionsMenu(false)
         query = arguments?.get("Query") as String
+        navController = findNavController()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -112,6 +117,10 @@ class SearchResultsFragment :
             Snackbar.make(it, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
         }
         loadingSnackbar?.show()
+    }
+
+    override fun showDetail(bundle: Bundle) {
+        navController?.navigate(R.id.action_searchResultsFragment_to_movieDetailFragment, bundle)
     }
 
     override fun hidePageLoad() {
