@@ -1,9 +1,9 @@
 package greenberg.moviedbshell.dagger
 
-import TMDB_API_KEY
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import greenberg.moviedbshell.BuildConfig
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.services.TMDBService
 import okhttp3.Cache
@@ -54,7 +54,7 @@ class ServicesModule {
             val original = chain.request()
             val originalHttpUrl = original.url()
             val url = originalHttpUrl.newBuilder()
-                    .addQueryParameter(context.getString(R.string.api_key), TMDB_API_KEY)
+                    .addQueryParameter(context.getString(R.string.api_key), BuildConfig.TMDB_API_KEY)
                     .build()
             val request = original.newBuilder().url(url).build()
             chain.proceed(request)
