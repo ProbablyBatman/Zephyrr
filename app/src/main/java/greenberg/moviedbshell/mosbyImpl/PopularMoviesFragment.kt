@@ -43,6 +43,7 @@ class PopularMoviesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
 
         popularMovieRecycler = view.findViewById(R.id.popularMovieRecycler)
         popularMovieRefresher = view.findViewById(R.id.popularMovieRefresher)
@@ -57,6 +58,7 @@ class PopularMoviesFragment :
         popularMovieRecycler?.adapter = popularMovieAdapter
 
         presenter.initRecyclerPagination(popularMovieRecycler)
+        presenter.loadPopularMoviesList(true)
     }
 
     override fun createPresenter(): PopularMoviesPresenter = presenter ?: PopularMoviesPresenter()
@@ -66,7 +68,6 @@ class PopularMoviesFragment :
         popularMovieRefresher?.visibility = View.GONE
         popularMovieRecycler?.visibility = View.GONE
         popularMovieLoadingBar?.visibility = View.VISIBLE
-        presenter.loadPopularMovies(pullToRefresh)
     }
 
     override fun setMovies(items: List<PopularMovieResultsItem?>) {
@@ -97,6 +98,7 @@ class PopularMoviesFragment :
     override fun onRefresh() {
         Timber.d("On Refresh")
         presenter.refreshPage(popularMovieAdapter)
+        presenter.loadPopularMoviesList(true)
     }
 
     override fun showPageLoad() {

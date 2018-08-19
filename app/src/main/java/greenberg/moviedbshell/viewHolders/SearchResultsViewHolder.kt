@@ -16,10 +16,11 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SearchResultsViewHolder) {
-            //Reset text and images
+            //Reset text, images, and listeners
             holder.searchItemTitle.text = ""
             holder.searchItemSubInfo.text = ""
             holder.searchItemOverview.text = ""
+            holder.cardItem.setOnClickListener(null)
             val currentItem = searchResults[position]
             when (currentItem?.mediaType) {
                 MEDIA_TYPE_MOVIE -> {

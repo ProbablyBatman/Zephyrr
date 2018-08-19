@@ -20,8 +20,7 @@ import timber.log.Timber
 
 class SearchResultsFragment :
         MvpFragment<ZephyrrSearchView, SearchPresenter>(),
-        ZephyrrSearchView,
-        SwipeRefreshLayout.OnRefreshListener {
+        ZephyrrSearchView {
 
     private lateinit var query: String
     private var navController: NavController? = null
@@ -29,7 +28,6 @@ class SearchResultsFragment :
     private var searchResultsRecycler: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var searchResultsAdapter: SearchResultsAdapter? = null
-    private var searchResultsRefresher: SwipeRefreshLayout? = null
     private var searchLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
     private var zephyrrSearchView: SearchView? = null
@@ -53,9 +51,7 @@ class SearchResultsFragment :
         zephyrrSearchView = view.findViewById(R.id.searchResultsFragment)
 
         searchResultsRecycler = view.findViewById(R.id.search_results_recycler)
-        searchResultsRefresher = view.findViewById(R.id.search_results_refresher)
         searchLoadingBar = view.findViewById(R.id.search_results_progress_bar)
-        searchResultsRefresher?.setOnRefreshListener(this)
 
         linearLayoutManager = LinearLayoutManager(activity)
         searchResultsRecycler?.layoutManager = linearLayoutManager
@@ -65,19 +61,15 @@ class SearchResultsFragment :
         presenter.initRecyclerPagination(searchResultsRecycler)
         //TODO: maybe change the title of the action bar to show the last performed search
         //noactivity?.actionBar?.title = query
+        presenter.performSearch(query)
     }
 
     override fun createPresenter(): SearchPresenter = presenter ?: SearchPresenter()
 
-    override fun showLoading(shouldPerformSearch: Boolean) {
+    override fun showLoading() {
         Timber.d("Show Loading")
-        searchResultsRefresher?.visibility = View.GONE
         searchResultsRecycler?.visibility = View.GONE
         searchLoadingBar?.visibility = View.VISIBLE
-
-        if (shouldPerformSearch) {
-            presenter.performSearch(query)
-        }
     }
 
     override fun setResults(items: List<SearchResultsItem?>) {
@@ -94,21 +86,12 @@ class SearchResultsFragment :
 
     override fun showResults() {
         Timber.d("Adding results")
-        searchResultsRefresher?.isRefreshing = false
         searchLoadingBar?.visibility = View.GONE
-        searchResultsRefresher?.visibility = View.VISIBLE
         searchResultsRecycler?.visibility = View.VISIBLE
     }
 
     override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
         Timber.d("Showing error")
-        searchResultsRefresher?.isRefreshing = false
-    }
-
-    override fun onRefresh() {
-        Timber.d("On Refresh")
-        //TODO: perhaps revisit how this is done and make the presenter do it instead
-        presenter.refreshView(searchResultsAdapter)
     }
 
     override fun showPageLoad() {

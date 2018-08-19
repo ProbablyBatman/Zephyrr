@@ -34,12 +34,8 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     override fun attachView(view: ZephyrrSearchView) {
         super.attachView(view)
         Timber.d("attachView")
-        initView()
-    }
-
-    private fun initView() {
-        ifViewAttached { view: ZephyrrSearchView ->
-            view.showLoading(true)
+        if (searchResultsList.isEmpty()) {
+            view.showLoading()
         }
     }
 
@@ -65,14 +61,6 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
                     }
                 }
             })
-        }
-    }
-
-    fun refreshView(adapter: SearchResultsAdapter?) {
-        ifViewAttached { view: ZephyrrSearchView ->
-            view.showLoading(true)
-            adapter?.searchResults?.clear()
-            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -141,27 +129,31 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     }
 
     fun performSearch(query: String) {
-        ifViewAttached { view: ZephyrrSearchView ->
-            view.showLoading(false)
+        if (searchResultsList.isEmpty()) {
+            lastQuery = query
+            searchResultsPageNumber = 1
+            val disposable =
+                    TMDBService.querySearchMulti(lastQuery!!, searchResultsPageNumber)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ response ->
+                                ifViewAttached { view: ZephyrrSearchView ->
+                                    response.results?.map { searchResultsList.add(it) }
+                                    view.setResults(searchResultsList)
+                                    view.showResults()
+                                }
+                            }, { throwable ->
+                                ifViewAttached { view: ZephyrrSearchView ->
+                                    view.showError(throwable, false)
+                                }
+                            })
+            compositeDisposable.add(disposable)
+        } else {
+            ifViewAttached { view: ZephyrrSearchView ->
+                view.setResults(searchResultsList)
+                view.showResults()
+            }
         }
-        lastQuery = query
-        searchResultsPageNumber = 1
-        val disposable =
-                TMDBService.querySearchMulti(lastQuery!!, searchResultsPageNumber)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ response ->
-                            ifViewAttached { view: ZephyrrSearchView ->
-                                response.results?.map { searchResultsList.add(it) }
-                                view.setResults(searchResultsList)
-                                view.showResults()
-                            }
-                        }, { throwable ->
-                            ifViewAttached { view: ZephyrrSearchView ->
-                                view.showError(throwable, false)
-                            }
-                        })
-        compositeDisposable.add(disposable)
     }
 
     fun onCardSelected(position: Int) {

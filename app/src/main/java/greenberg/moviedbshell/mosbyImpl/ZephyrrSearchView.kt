@@ -5,7 +5,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpView
 import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
 
 interface ZephyrrSearchView : MvpView {
-    fun showLoading(shouldPerformSearch: Boolean)
+    fun showLoading()
     fun showError(throwable: Throwable, pullToRefresh: Boolean)
     fun setResults(items: List<SearchResultsItem?>)
     fun addResults(items: List<SearchResultsItem?>)

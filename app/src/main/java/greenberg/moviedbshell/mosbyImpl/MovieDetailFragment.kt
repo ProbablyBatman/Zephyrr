@@ -57,6 +57,7 @@ class MovieDetailFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
 
         //collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar)
         //appBar = view.findViewById(R.id.app_bar_layout)
@@ -111,7 +112,7 @@ class MovieDetailFragment :
 
         ratingTextView?.text = movieDetailResponse.let { resources.getString(R.string.user_rating_substitution, presenter.processRatings(it.voteAverage), it.voteCount) }
         statusTextView?.text = movieDetailResponse.status
-        runtimeTextView?.text = movieDetailResponse.let { resources.getString(R.string.runtime_substitution, it.runtime) }
+        runtimeTextView?.text = movieDetailResponse.runtime?.let { resources.getString(R.string.runtime_substitution, it) }
         //Default to One
         genresTitle?.text = resources.getQuantityString(R.plurals.genres_bold, movieDetailResponse.genres?.size
                 ?: 1)

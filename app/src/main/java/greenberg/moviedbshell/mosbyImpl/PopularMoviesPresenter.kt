@@ -31,27 +31,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     override fun attachView(view: PopularMoviesView) {
         super.attachView(view)
         Timber.d("attachView")
-        initView()
-    }
-
-    fun loadPopularMovies(pullToRefresh: Boolean) {
-        popularMoviePageNumber = 1
-        val disposable =
-                TMDBService.queryPopularMovies(popularMoviePageNumber)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ response ->
-                            ifViewAttached { view: PopularMoviesView ->
-                                response.results?.map { popularMoviesList.add(it) }
-                                view.setMovies(popularMoviesList)
-                                view.showMovies()
-                            }
-                        }, { throwable ->
-                            ifViewAttached { view: PopularMoviesView ->
-                                view.showError(throwable, pullToRefresh)
-                            }
-                        })
-        compositeDisposable.add(disposable)
+        view.showLoading(true)
     }
 
     fun initRecyclerPagination(recyclerView: RecyclerView?) {
@@ -79,17 +59,39 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
         }
     }
 
-    private fun initView() {
-        ifViewAttached { view: PopularMoviesView ->
-            view.showLoading(false)
+    fun loadPopularMoviesList(pullToRefresh: Boolean) {
+        if (popularMoviesList.isEmpty() && pullToRefresh) {
+            popularMoviePageNumber = 1
+            val disposable =
+                    TMDBService.queryPopularMovies(popularMoviePageNumber)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ response ->
+                                ifViewAttached { view: PopularMoviesView ->
+                                    response.results?.map { popularMoviesList.add(it) }
+                                    view.setMovies(popularMoviesList)
+                                    view.showMovies()
+                                }
+                            }, { throwable ->
+                                ifViewAttached { view: PopularMoviesView ->
+                                    view.showError(throwable, pullToRefresh)
+                                }
+                            })
+            compositeDisposable.add(disposable)
+        } else {
+            ifViewAttached { view: PopularMoviesView ->
+                view.setMovies(popularMoviesList)
+                view.showMovies()
+            }
         }
     }
 
     fun refreshPage(adapter: PopularMovieAdapter?) {
         ifViewAttached { view: PopularMoviesView ->
-            view.showLoading(true)
             adapter?.popularMovieList?.clear()
             adapter?.notifyDataSetChanged()
+            popularMoviesList.clear()
+            view.showLoading(true)
         }
     }
 
