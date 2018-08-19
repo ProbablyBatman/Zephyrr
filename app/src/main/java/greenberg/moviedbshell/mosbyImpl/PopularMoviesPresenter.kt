@@ -1,5 +1,8 @@
 package greenberg.moviedbshell.mosbyImpl
 
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,19 +12,22 @@ import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
-import greenberg.moviedbshell.retrofitHelpers.RetrofitHelper
+import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.OkHttpClient
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
+class PopularMoviesPresenter
+@Inject constructor(private val TMDBService: TMDBService,
+                    private val httpClient: OkHttpClient,
+                    private val context: Context) : MvpBasePresenter<PopularMoviesView>() {
 
-    //TODO: revisit this stupid thing
-    private var TMDBService = RetrofitHelper().getTMDBService()
     private var isRecyclerLoading = false
     //Default to getting the first page
     private var popularMoviePageNumber = 1
@@ -90,6 +96,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
     fun refreshPage(adapter: PopularMovieAdapter?) {
         ifViewAttached { view: PopularMoviesView ->
+            evictCachedUrls()
             adapter?.popularMovieList?.clear()
             adapter?.notifyDataSetChanged()
             popularMoviesList.clear()
@@ -99,7 +106,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
     //Gets next page of popular movies call
     private fun fetchNextPage() {
-        if (popularMoviePageNumber >= totalAvailablePages && totalAvailablePages != -1) {
+        if (popularMoviePageNumber <= totalAvailablePages && totalAvailablePages != -1) {
             val disposable =
                     TMDBService.queryPopularMovies(++popularMoviePageNumber)
                             .subscribeOn(Schedulers.io())
@@ -137,7 +144,12 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
             Glide.with(cardItemPosterView)
                     //TODO: potentially hacky way to get context
                     .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, it))
-                    .apply { RequestOptions().centerCrop() }
+                    .apply {
+                        RequestOptions()
+                                .placeholder(ColorDrawable(Color.DKGRAY))
+                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .centerCrop()
+                    }
                     .into(cardItemPosterView)
         }
     }
@@ -150,6 +162,17 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
             outputFormat.format(date)
         } else {
             ""
+        }
+    }
+
+    private fun evictCachedUrls() {
+        val iterator = httpClient.cache()?.urls()
+        while (iterator?.hasNext() == true) {
+            val currentUrl = iterator.next()
+            if (currentUrl.contains(context.getString(R.string.tmdb_popular_url))) {
+                Timber.d("Removed $currentUrl from OkHttpCache")
+                iterator.remove()
+            }
         }
     }
 

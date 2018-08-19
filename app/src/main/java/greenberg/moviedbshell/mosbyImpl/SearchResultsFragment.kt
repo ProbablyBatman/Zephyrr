@@ -2,7 +2,6 @@ package greenberg.moviedbshell.mosbyImpl
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -14,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
 import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
 import timber.log.Timber
@@ -64,7 +64,8 @@ class SearchResultsFragment :
         presenter.performSearch(query)
     }
 
-    override fun createPresenter(): SearchPresenter = presenter ?: SearchPresenter()
+    override fun createPresenter(): SearchPresenter = presenter
+            ?: (activity?.application as ZephyrrApplication).component.searchPresenter()
 
     override fun showLoading() {
         Timber.d("Show Loading")

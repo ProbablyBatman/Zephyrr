@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Zephyrr</string>
+    <string name="tmdb_url">https://api.themoviedb.org/3/</string>
+    <string name="tmdb_popular_url">popular</string>
+    <string name="api_key">api_key</string>
 
     <!-- Movie Detail Layout -->
     <string name="release_date_bold">Release Date</string>

@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.models.MovieDetailModels.MovieDetailResponse
 import timber.log.Timber
 
@@ -82,7 +83,8 @@ class MovieDetailFragment :
         presenter?.initView(movieId)
     }
 
-    override fun createPresenter(): MovieDetailPresenter = presenter ?: MovieDetailPresenter()
+    override fun createPresenter(): MovieDetailPresenter = presenter
+            ?: (activity?.application as ZephyrrApplication).component.movieDetailPresenter()
 
     override fun showLoading(movieId: Int) {
         Timber.d("Show Loading")

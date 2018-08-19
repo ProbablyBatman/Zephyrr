@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
 import timber.log.Timber
@@ -61,7 +62,8 @@ class PopularMoviesFragment :
         presenter.loadPopularMoviesList(true)
     }
 
-    override fun createPresenter(): PopularMoviesPresenter = presenter ?: PopularMoviesPresenter()
+    override fun createPresenter(): PopularMoviesPresenter = presenter
+            ?: (activity?.application as ZephyrrApplication).component.popularMoviesPresenter()
 
     override fun showLoading(pullToRefresh: Boolean) {
         Timber.d("Show Loading")

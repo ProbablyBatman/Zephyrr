@@ -11,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
-import greenberg.moviedbshell.retrofitHelpers.RetrofitHelper
+import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -19,10 +19,11 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
+class SearchPresenter
+@Inject constructor(private val TMDBService: TMDBService) : MvpBasePresenter<ZephyrrSearchView>() {
 
-    private var TMDBService = RetrofitHelper().getTMDBService()
     private var isRecyclerLoading = false
     //Default to getting the first page
     private var searchResultsPageNumber = 1

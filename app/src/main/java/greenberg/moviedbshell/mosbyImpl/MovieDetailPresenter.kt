@@ -1,9 +1,12 @@
 package greenberg.moviedbshell.mosbyImpl
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import greenberg.moviedbshell.retrofitHelpers.RetrofitHelper
+import greenberg.moviedbshell.services.TMDBService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -12,10 +15,11 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
+class MovieDetailPresenter
+@Inject constructor(private val TMDBService: TMDBService) : MvpBasePresenter<MovieDetailView>() {
 
-    private var TMDBService = RetrofitHelper().getTMDBService()
     private var compositeDisposable = CompositeDisposable()
 
     override fun attachView(view: MovieDetailView) {
@@ -51,7 +55,14 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
         Timber.d("posterURL: $posterURL")
         if (posterURL != null) {
             //Load image into view
-            glide.load(posterURL).into(view)
+            glide.load(posterURL)
+                    .apply {
+                        RequestOptions()
+                                .placeholder(ColorDrawable(Color.DKGRAY))
+                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .centerCrop()
+                    }
+                    .into(view)
         } else {
             Timber.d("Poster url is null for ${view.id}")
             //TODO: look into placeholders
