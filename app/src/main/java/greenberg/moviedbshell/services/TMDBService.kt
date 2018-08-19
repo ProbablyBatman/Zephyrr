@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.retrofitHelpers
+package greenberg.moviedbshell.services
 
 import greenberg.moviedbshell.models.MovieDetailModels.MovieDetailResponse
 import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResponse

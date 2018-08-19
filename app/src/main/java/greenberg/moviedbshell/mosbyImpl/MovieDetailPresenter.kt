@@ -1,36 +1,53 @@
 package greenberg.moviedbshell.mosbyImpl
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import greenberg.moviedbshell.retrofitHelpers.RetrofitHelper
+import greenberg.moviedbshell.services.TMDBService
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.util.*
+import javax.inject.Inject
 
-class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
+class MovieDetailPresenter
+@Inject constructor(private val TMDBService: TMDBService) : MvpBasePresenter<MovieDetailView>() {
 
-    private var TMDBService = RetrofitHelper().getTMDBService()
+    private var compositeDisposable = CompositeDisposable()
+
+    override fun attachView(view: MovieDetailView) {
+        super.attachView(view)
+        Timber.d("attachView")
+    }
+
+    fun initView(movieId: Int) {
+        ifViewAttached { view: MovieDetailView ->
+            view.showLoading(movieId)
+        }
+    }
 
     fun loadMovieDetails(movieId: Int) {
-        TMDBService.queryMovies(movieId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                        response -> ifViewAttached {
-                            view: MovieDetailView ->
+        val disposable =
+                TMDBService.queryMovies(movieId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ response ->
+                            ifViewAttached { view: MovieDetailView ->
                                 view.showMovieDetails(response)
-                        }
-                    }, {
-                        throwable -> ifViewAttached {
-                            view: MovieDetailView ->
+                            }
+                        }, { throwable ->
+                            ifViewAttached { view: MovieDetailView ->
                                 view.showError(throwable)
-                    }
-                })
+                            }
+                        })
+        compositeDisposable.add(disposable)
     }
 
     /*TODO: Utility functions are bad, but idk what to do with these */
@@ -38,7 +55,14 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
         Timber.d("posterURL: $posterURL")
         if (posterURL != null) {
             //Load image into view
-            glide.load(posterURL).into(view)
+            glide.load(posterURL)
+                    .apply {
+                        RequestOptions()
+                                .placeholder(ColorDrawable(Color.DKGRAY))
+                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .centerCrop()
+                    }
+                    .into(view)
         } else {
             Timber.d("Poster url is null for ${view.id}")
             //TODO: look into placeholders
@@ -49,12 +73,12 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
     //there has to be a better way to do this
     fun processReleaseDate(releaseDate: String): String {
         return if (releaseDate.isNotBlank()) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd")
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val date = inputFormat.parse(releaseDate)
-            val outputFormat = SimpleDateFormat("MM/dd/yyyy")
+            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
             outputFormat.format(date)
         } else {
-            return ""
+            ""
         }
     }
 
@@ -62,5 +86,11 @@ class MovieDetailPresenter : MvpBasePresenter<MovieDetailView>() {
     fun processRatings(voteAverage: Double?): String? {
         val doubleFormat: NumberFormat = DecimalFormat("##.##")
         return doubleFormat.format(voteAverage)
+    }
+
+    override fun destroy() {
+        super.destroy()
+        Timber.d("destroy called, disposables disposed of")
+        compositeDisposable.dispose()
     }
 }

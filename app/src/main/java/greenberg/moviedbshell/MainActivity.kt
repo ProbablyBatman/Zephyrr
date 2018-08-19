@@ -28,7 +28,7 @@ class MainActivity : BaseActivity() {
             }
         }*/
 
-        navController = findNavController(this, R.id.my_nav_host_fragment)
+        navController = findNavController(this, R.id.nav_host_fragment)
         setupActionBarWithNavController(navController)
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }

@@ -5,17 +5,17 @@ import android.support.design.widget.Snackbar
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
+import greenberg.moviedbshell.R
+import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
-import greenberg.moviedbshell.R
 import timber.log.Timber
 
 class PopularMoviesFragment :
@@ -23,7 +23,6 @@ class PopularMoviesFragment :
         PopularMoviesView,
         SwipeRefreshLayout.OnRefreshListener {
 
-    private var popularMovieActionBar: Toolbar? = null
     private var popularMovieRecycler: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var popularMovieAdapter: PopularMovieAdapter? = null
@@ -36,7 +35,7 @@ class PopularMoviesFragment :
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
         Timber.d("onCreate")
-        navController = findNavController(this)
+        navController = findNavController()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,6 +44,7 @@ class PopularMoviesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
 
         popularMovieRecycler = view.findViewById(R.id.popularMovieRecycler)
         popularMovieRefresher = view.findViewById(R.id.popularMovieRefresher)
@@ -59,16 +59,17 @@ class PopularMoviesFragment :
         popularMovieRecycler?.adapter = popularMovieAdapter
 
         presenter.initRecyclerPagination(popularMovieRecycler)
+        presenter.loadPopularMoviesList(true)
     }
 
-    override fun createPresenter(): PopularMoviesPresenter = presenter ?: PopularMoviesPresenter()
+    override fun createPresenter(): PopularMoviesPresenter = presenter
+            ?: (activity?.application as ZephyrrApplication).component.popularMoviesPresenter()
 
     override fun showLoading(pullToRefresh: Boolean) {
         Timber.d("Show Loading")
         popularMovieRefresher?.visibility = View.GONE
         popularMovieRecycler?.visibility = View.GONE
         popularMovieLoadingBar?.visibility = View.VISIBLE
-        presenter.loadPopularMovies(pullToRefresh)
     }
 
     override fun setMovies(items: List<PopularMovieResultsItem?>) {
@@ -99,6 +100,7 @@ class PopularMoviesFragment :
     override fun onRefresh() {
         Timber.d("On Refresh")
         presenter.refreshPage(popularMovieAdapter)
+        presenter.loadPopularMoviesList(true)
     }
 
     override fun showPageLoad() {
