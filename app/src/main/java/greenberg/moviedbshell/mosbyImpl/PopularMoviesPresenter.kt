@@ -25,6 +25,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
     private var isRecyclerLoading = false
     //Default to getting the first page
     private var popularMoviePageNumber = 1
+    private var totalAvailablePages = -1
     private var popularMoviesList = mutableListOf<PopularMovieResultsItem?>()
     private var compositeDisposable = CompositeDisposable()
 
@@ -71,6 +72,7 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
                                     response.results?.map { popularMoviesList.add(it) }
                                     view.setMovies(popularMoviesList)
                                     view.showMovies()
+                                    totalAvailablePages = response.totalPages ?: -1
                                 }
                             }, { throwable ->
                                 ifViewAttached { view: PopularMoviesView ->
@@ -97,24 +99,27 @@ class PopularMoviesPresenter : MvpBasePresenter<PopularMoviesView>() {
 
     //Gets next page of popular movies call
     private fun fetchNextPage() {
-        val disposable =
-                TMDBService.queryPopularMovies(++popularMoviePageNumber)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ response ->
-                            ifViewAttached { view: PopularMoviesView ->
-                                response.results?.map { popularMoviesList.add(it) }
-                                view.setMovies(popularMoviesList)
-                                view.hidePageLoad()
-                                isRecyclerLoading = false
-                            }
-                        }, { throwable ->
-                            ifViewAttached { view: PopularMoviesView ->
-                                //todo: revisit erroring the whole page on this.  Just error bottom
-                                view.showError(throwable, false)
-                            }
-                        })
-        compositeDisposable.add(disposable)
+        if (popularMoviePageNumber >= totalAvailablePages && totalAvailablePages != -1) {
+            val disposable =
+                    TMDBService.queryPopularMovies(++popularMoviePageNumber)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ response ->
+                                ifViewAttached { view: PopularMoviesView ->
+                                    response.results?.map { popularMoviesList.add(it) }
+                                    view.setMovies(popularMoviesList)
+                                    view.hidePageLoad()
+                                    isRecyclerLoading = false
+                                }
+                            }, { throwable ->
+                                ifViewAttached { view: PopularMoviesView ->
+                                    //todo: revisit erroring the whole page on this.  Just error bottom
+                                    view.showError(throwable, false)
+                                }
+                            })
+            compositeDisposable.add(disposable)
+        }
+        //TODO: else handle error for no available pages
     }
 
     fun onCardSelected(position: Int) {

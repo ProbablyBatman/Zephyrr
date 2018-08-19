@@ -26,6 +26,7 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
     private var isRecyclerLoading = false
     //Default to getting the first page
     private var searchResultsPageNumber = 1
+    private var totalAvailablePages = -1
     //It is enforced that this string is at least not null and blank
     private var lastQuery: String? = null
     private var searchResultsList = mutableListOf<SearchResultsItem?>()
@@ -66,27 +67,29 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
 
     //Gets next page of search/multi movies call
     private fun fetchNextPage(query: String) {
-        val disposable =
-                TMDBService.querySearchMulti(query, ++searchResultsPageNumber)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ response ->
-                            ifViewAttached { view: ZephyrrSearchView ->
-                                response.results?.map { searchResultsList.add(it) }
-                                //TODO: here and in the [PopularMoviePresenter], I changed this to set results for a bug fix.
-                                //Instead, see about using add.  I lef it in in case there's another way it can work.
-                                //If it can't, remove it from the interface view.
-                                view.setResults(searchResultsList)
-                                view.hidePageLoad()
-                                isRecyclerLoading = false
-                            }
-                        }, { throwable ->
-                            ifViewAttached { view: ZephyrrSearchView ->
-                                //todo: revisit erroring the whole page on this.  Just error bottom
-                                view.showError(throwable, false)
-                            }
-                        })
-        compositeDisposable.add(disposable)
+        if (searchResultsPageNumber <= totalAvailablePages && totalAvailablePages != -1) {
+            val disposable =
+                    TMDBService.querySearchMulti(query, ++searchResultsPageNumber)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ response ->
+                                ifViewAttached { view: ZephyrrSearchView ->
+                                    response.results?.map { searchResultsList.add(it) }
+                                    //TODO: here and in the [PopularMoviePresenter], I changed this to set results for a bug fix.
+                                    //Instead, see about using add.  I lef it in in case there's another way it can work.
+                                    //If it can't, remove it from the interface view.
+                                    view.setResults(searchResultsList)
+                                    view.hidePageLoad()
+                                    isRecyclerLoading = false
+                                }
+                            }, { throwable ->
+                                ifViewAttached { view: ZephyrrSearchView ->
+                                    //todo: revisit erroring the whole page on this.  Just error bottom
+                                    view.showError(throwable, false)
+                                }
+                            })
+            compositeDisposable.add(disposable)
+        }
     }
 
     fun fetchPosterArt(cardItemPosterView: ImageView, item: SearchResultsItem) {
@@ -141,6 +144,7 @@ class SearchPresenter : MvpBasePresenter<ZephyrrSearchView>() {
                                     response.results?.map { searchResultsList.add(it) }
                                     view.setResults(searchResultsList)
                                     view.showResults()
+                                    totalAvailablePages = response.totalPages ?: -1
                                 }
                             }, { throwable ->
                                 ifViewAttached { view: ZephyrrSearchView ->
