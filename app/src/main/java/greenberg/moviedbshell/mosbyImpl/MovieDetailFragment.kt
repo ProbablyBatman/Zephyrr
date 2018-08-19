@@ -112,7 +112,11 @@ class MovieDetailFragment :
         //todo: process output
         releaseDateTextView?.text = movieDetailResponse.releaseDate?.let { presenter.processReleaseDate(it) }
 
-        ratingTextView?.text = movieDetailResponse.let { resources.getString(R.string.user_rating_substitution, presenter.processRatings(it.voteAverage), it.voteCount) }
+        //TODO: this is throwing a lint error, so instead of that we'll just fix it for now. This is subject to change when ui model/mapping occurs.
+        ratingTextView?.text = movieDetailResponse.let {
+            val voteCount = it.voteCount ?: 0
+            resources.getString(R.string.user_rating_substitution, presenter.processRatings(it.voteAverage), voteCount)
+        }
         statusTextView?.text = movieDetailResponse.status
         runtimeTextView?.text = movieDetailResponse.runtime?.let { resources.getString(R.string.runtime_substitution, it) }
         //Default to One
