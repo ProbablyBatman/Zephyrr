@@ -5,6 +5,7 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import greenberg.moviedbshell.base.BaseActivity
@@ -66,7 +67,7 @@ class MainActivity : BaseActivity() {
                     searchView.clearFocus()
                     navController.navigate(R.id.searchResultsFragment, Bundle().apply {
                         putString("Query", query)
-                    })
+                    }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment,true).build())
                     return true
                 }
 
