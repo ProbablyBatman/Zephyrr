@@ -1,8 +1,8 @@
 package greenberg.moviedbshell.services
 
-import greenberg.moviedbshell.models.MovieDetailModels.MovieDetailResponse
-import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResponse
-import greenberg.moviedbshell.models.SearchModels.SearchResponse
+import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
+import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
+import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path

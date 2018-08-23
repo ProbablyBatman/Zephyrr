@@ -1,5 +1,6 @@
-package greenberg.moviedbshell.mosbyImpl
+package greenberg.moviedbshell.presenters
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,8 +11,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
+import greenberg.moviedbshell.mappers.SearchResultsMapper
+import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.services.TMDBService
+import greenberg.moviedbshell.view.ZephyrrSearchView
 import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -22,7 +25,9 @@ import java.util.*
 import javax.inject.Inject
 
 class SearchPresenter
-@Inject constructor(private val TMDBService: TMDBService) : MvpBasePresenter<ZephyrrSearchView>() {
+@Inject constructor(private val TMDBService: TMDBService,
+                    private val context: Context,
+                    private val searchResultsMapper: SearchResultsMapper) : MvpBasePresenter<ZephyrrSearchView>() {
 
     private var isRecyclerLoading = false
     //Default to getting the first page
@@ -30,9 +35,8 @@ class SearchPresenter
     private var totalAvailablePages = -1
     //It is enforced that this string is at least not null and blank
     private var lastQuery: String? = null
-    private var searchResultsList = mutableListOf<SearchResultsItem?>()
+    private var searchResultsList = mutableListOf<PreviewItem>()
     private var searchResultAdapter: SearchResultsAdapter? = null
-    private var recyclerView: RecyclerView? = null
     private var compositeDisposable = CompositeDisposable()
     private var loadedMaxPages = false
 
@@ -45,7 +49,6 @@ class SearchPresenter
     }
 
     fun initRecyclerPagination(recyclerView: RecyclerView?, adapter: SearchResultsAdapter?) {
-        this.recyclerView = recyclerView
         searchResultAdapter = adapter
         recyclerView?.apply {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -82,7 +85,7 @@ class SearchPresenter
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
                                 ifViewAttached { view: ZephyrrSearchView ->
-                                    response.results?.map { searchResultAdapter?.searchResults?.add(it) }
+                                    searchResultAdapter?.searchResults?.addAll(searchResultsMapper.mapToEntity(response))
                                     searchResultAdapter?.notifyDataSetChanged()
                                     view.hidePageLoad()
                                     isRecyclerLoading = false
@@ -104,24 +107,12 @@ class SearchPresenter
         }
     }
 
-    fun fetchPosterArt(cardItemPosterView: ImageView, item: SearchResultsItem) {
+    fun fetchPosterArt(cardItemPosterView: ImageView, item: PreviewItem) {
         Glide.with(cardItemPosterView).clear(cardItemPosterView)
         //Load poster art
-        when (item.mediaType) {
-            SearchResultsAdapter.MEDIA_TYPE_MOVIE, SearchResultsAdapter.MEDIA_TYPE_TV -> {
-                item.posterPath
-            }
-            SearchResultsAdapter.MEDIA_TYPE_PERSON -> {
-                item.profilePath
-            }
-            else -> {
-                //Don't fetch poster if there is no poster art
-                return
-            }
-        }?.let {
+        if (item.posterImageUrl.isNotEmpty()) {
             Glide.with(cardItemPosterView)
-                    //TODO: potentially hacky way to get context
-                    .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, it))
+                    .load(context.getString(R.string.poster_url_substitution, item.posterImageUrl))
                     .apply {
                         RequestOptions()
                                 .placeholder(ColorDrawable(Color.DKGRAY))
@@ -132,16 +123,15 @@ class SearchPresenter
         }
     }
 
-    fun processReleaseDate(releaseDate: String): String {
-        return if (releaseDate.isNotBlank()) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val date = inputFormat.parse(releaseDate)
-            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            outputFormat.format(date)
-        } else {
-            ""
-        }
-    }
+    fun processReleaseDate(releaseDate: String): String =
+            if (releaseDate.isNotBlank()) {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = inputFormat.parse(releaseDate)
+                val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                outputFormat.format(date)
+            } else {
+                ""
+            }
 
     fun performSearch(query: String) {
         if (searchResultsList.isEmpty()) {
@@ -156,7 +146,7 @@ class SearchPresenter
                                     if (response.totalResults == 0) {
                                         view.showEmptyState(lastQuery)
                                     } else {
-                                        response.results?.map { searchResultAdapter?.searchResults?.add(it) }
+                                        searchResultAdapter?.searchResults?.addAll(searchResultsMapper.mapToEntity(response))
                                         searchResultAdapter?.notifyDataSetChanged()
                                         view.showResults()
                                         totalAvailablePages = response.totalPages ?: -1
@@ -200,5 +190,13 @@ class SearchPresenter
         super.destroy()
         Timber.d("destroy called, disposables disposed of")
         compositeDisposable.dispose()
+    }
+
+
+    companion object {
+        const val MEDIA_TYPE_PERSON = "person"
+        const val MEDIA_TYPE_MOVIE = "movie"
+        const val MEDIA_TYPE_TV = "tv"
+        const val MEDIA_TYPE_UNKNOWN = "unknown"
     }
 }

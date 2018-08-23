@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.models.MovieDetailModels
+package greenberg.moviedbshell.models.moviedetailmodels
 
 import com.google.gson.annotations.SerializedName
 
@@ -37,7 +37,7 @@ data class MovieDetailResponse(
 	val voteCount: Int? = null,
 
 	@field:SerializedName("budget")
-	val budget: Int? = null,
+	val budget: Long? = null,
 
 	@field:SerializedName("overview")
 	val overview: String? = null,

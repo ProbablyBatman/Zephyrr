@@ -19,16 +19,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_activity_layout)
 
-        /*if (findViewById<FrameLayout>(R.id.fragment_container) != null) {
-            if (supportFragmentManager.findFragmentByTag(PopularMoviesFragment.TAG) == null) {
-                val popularMoviesFragment = PopularMoviesFragment()
-
-                supportFragmentManager.beginTransaction()
-                        .add(R.id.fragment_container, popularMoviesFragment, PopularMoviesFragment.TAG)
-                        .commit()
-            }
-        }*/
-
         navController = findNavController(this, R.id.nav_host_fragment)
         setupActionBarWithNavController(navController)
         actionBar?.setDisplayHomeAsUpEnabled(true)

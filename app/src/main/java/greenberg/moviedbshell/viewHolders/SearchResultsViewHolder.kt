@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
-import greenberg.moviedbshell.mosbyImpl.SearchPresenter
+import greenberg.moviedbshell.models.ui.MovieItem
+import greenberg.moviedbshell.models.ui.PersonItem
+import greenberg.moviedbshell.models.ui.PreviewItem
+import greenberg.moviedbshell.models.ui.TvItem
+import greenberg.moviedbshell.presenters.SearchPresenter
 
-class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = mutableListOf(),
+class SearchResultsAdapter(var searchResults: MutableList<PreviewItem> = mutableListOf(),
                            private val presenter: SearchPresenter) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -22,21 +25,21 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = 
             holder.searchItemOverview.text = ""
             holder.cardItem.setOnClickListener(null)
             val currentItem = searchResults[position]
-            when (currentItem?.mediaType) {
-                MEDIA_TYPE_MOVIE -> {
-                    holder.searchItemTitle.text = currentItem.title
-                    holder.searchItemSubInfo.text = currentItem.releaseDate?.let { presenter.processReleaseDate(it) }
+            when (currentItem) {
+                is MovieItem -> {
+                    holder.searchItemTitle.text = currentItem.movieTitle
+                    holder.searchItemSubInfo.text = presenter.processReleaseDate(currentItem.releaseDate)
                     holder.searchItemOverview.text = currentItem.overview
                     presenter.fetchPosterArt(holder.searchItemPosterImage, currentItem)
                     holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1) }
                 }
-                MEDIA_TYPE_TV -> {
+                is TvItem -> {
                     holder.searchItemTitle.text = currentItem.name
-                    holder.searchItemSubInfo.text = currentItem.firstAirDate?.let { presenter.processReleaseDate(it) }
+                    holder.searchItemSubInfo.text = presenter.processReleaseDate(currentItem.firstAirDate)
                     holder.searchItemOverview.text = currentItem.overview
                     presenter.fetchPosterArt(holder.searchItemPosterImage, currentItem)
                 }
-                MEDIA_TYPE_PERSON -> {
+                is PersonItem -> {
                     //One of the problems with people is their limited fields.  Currently they only have:
                     //popularity, media type, id, profile path (for picture), name, and known for (list of movies).
                     holder.searchItemTitle.text = currentItem.name
@@ -68,11 +71,5 @@ class SearchResultsAdapter(var searchResults: MutableList<SearchResultsItem?> = 
         //TODO: potentially add well known movies provided by api to this
         var searchItemOverview: TextView = view.findViewById(R.id.search_item_overview)
         var cardItem: CardView = view.findViewById(R.id.search_result_card)
-    }
-
-    companion object {
-        const val MEDIA_TYPE_PERSON = "person"
-        const val MEDIA_TYPE_MOVIE = "movie"
-        const val MEDIA_TYPE_TV = "tv"
     }
 }

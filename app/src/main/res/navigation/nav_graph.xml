@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/popularMoviesFragment"
-        android:name="greenberg.moviedbshell.mosbyImpl.PopularMoviesFragment">
+        android:name="greenberg.moviedbshell.view.PopularMoviesFragment">
         <action
             android:id="@+id/action_popularMoviesFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
@@ -14,11 +14,11 @@
 
     <fragment
         android:id="@+id/movieDetailFragment"
-        android:name="greenberg.moviedbshell.mosbyImpl.MovieDetailFragment" />
+        android:name="greenberg.moviedbshell.view.MovieDetailFragment" />
 
     <fragment
         android:id="@+id/searchResultsFragment"
-        android:name="greenberg.moviedbshell.mosbyImpl.SearchResultsFragment">
+        android:name="greenberg.moviedbshell.view.SearchResultsFragment">
         <action
             android:id="@+id/action_searchResultsFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />

@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.mosbyImpl
+package greenberg.moviedbshell.presenters
 
 import android.content.Context
 import android.graphics.Color
@@ -11,8 +11,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
+import greenberg.moviedbshell.mappers.PopularMovieMapper
+import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.services.TMDBService
+import greenberg.moviedbshell.view.PopularMoviesView
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -26,13 +28,15 @@ import javax.inject.Inject
 class PopularMoviesPresenter
 @Inject constructor(private val TMDBService: TMDBService,
                     private val httpClient: OkHttpClient,
-                    private val context: Context) : MvpBasePresenter<PopularMoviesView>() {
+                    private val context: Context,
+                    private val mapper: PopularMovieMapper) : MvpBasePresenter<PopularMoviesView>() {
 
     private var isRecyclerLoading = false
     //Default to getting the first page
     private var popularMoviePageNumber = 1
     private var totalAvailablePages = -1
-    private var popularMoviesList = mutableListOf<PopularMovieResultsItem?>()
+    //private var mapper: PopularMovieMapper = PopularMovieMapper()
+    private var popularMoviesList = mutableListOf<MovieItem>()
     private var popularMovieAdapter: PopularMovieAdapter? = null
     private var compositeDisposable = CompositeDisposable()
     private var loadedMaxPages = false
@@ -80,7 +84,7 @@ class PopularMoviesPresenter
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
                                 ifViewAttached { view: PopularMoviesView ->
-                                    response.results?.map { popularMovieAdapter?.popularMovieList?.add(it) }
+                                    popularMovieAdapter?.popularMovieList?.addAll(mapper.mapToEntity(response))
                                     popularMovieAdapter?.notifyDataSetChanged()
                                     view.showMovies()
                                     totalAvailablePages = response.totalPages ?: -1
@@ -120,7 +124,7 @@ class PopularMoviesPresenter
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
                                 ifViewAttached { view: PopularMoviesView ->
-                                    response.results?.map { popularMovieAdapter?.popularMovieList?.add(it) }
+                                    popularMovieAdapter?.popularMovieList?.addAll(mapper.mapToEntity(response))
                                     popularMovieAdapter?.notifyDataSetChanged()
                                     view.hidePageLoad()
                                     isRecyclerLoading = false
@@ -151,13 +155,13 @@ class PopularMoviesPresenter
         }
     }
 
-    fun fetchPosterArt(cardItemPosterView: ImageView, item: PopularMovieResultsItem) {
+    fun fetchPosterArt(cardItemPosterView: ImageView, posterUrl: String) {
         Glide.with(cardItemPosterView).clear(cardItemPosterView)
         //Load poster art
-        item.posterPath?.let {
+        if (posterUrl.isNotEmpty()) {
             Glide.with(cardItemPosterView)
                     //TODO: potentially hacky way to get context
-                    .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, it))
+                    .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, posterUrl))
                     .apply {
                         RequestOptions()
                                 .placeholder(ColorDrawable(Color.DKGRAY))
@@ -168,16 +172,15 @@ class PopularMoviesPresenter
         }
     }
 
-    fun processReleaseDate(releaseDate: String): String {
-        return if (releaseDate.isNotBlank()) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val date = inputFormat.parse(releaseDate)
-            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            outputFormat.format(date)
-        } else {
-            ""
-        }
-    }
+    fun processReleaseDate(releaseDate: String?): String =
+            if (releaseDate?.isNotBlank() == true) {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = inputFormat.parse(releaseDate)
+                val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                outputFormat.format(date)
+            } else {
+                ""
+            }
 
     private fun evictCachedUrls() {
         val iterator = httpClient.cache()?.urls()

@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.mosbyImpl
+package greenberg.moviedbshell.view
 
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -14,7 +14,9 @@ import com.bumptech.glide.Glide
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
-import greenberg.moviedbshell.models.MovieDetailModels.MovieDetailResponse
+import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
+import greenberg.moviedbshell.models.ui.MovieDetailItem
+import greenberg.moviedbshell.presenters.MovieDetailPresenter
 import timber.log.Timber
 
 class MovieDetailFragment :
@@ -97,36 +99,21 @@ class MovieDetailFragment :
         Timber.d(throwable)
     }
 
-    override fun showMovieDetails(movieDetailResponse: MovieDetailResponse) {
+    override fun showMovieDetails(movieDetailItem: MovieDetailItem) {
         Timber.d("Showing Movie Details")
 
-        presenter.fetchPosterArt(Glide.with(this), posterImageView!!,
-                movieDetailResponse.posterPath?.let { resources.getString(R.string.poster_url_substitution, it) })
-        presenter.fetchPosterArt(Glide.with(this), backdropImageView!!,
-                movieDetailResponse.backdropPath?.let { resources.getString(R.string.poster_url_substitution, it) })
+        presenter.fetchPosterArt(Glide.with(this), posterImageView, movieDetailItem.posterImageUrl)
+        presenter.fetchPosterArt(Glide.with(this), backdropImageView, movieDetailItem.backdropImageUrl)
 
         //collapsingToolbarLayout?.title = movieDetailResponse.originalTitle
-        titleBar?.text = movieDetailResponse.title
-        overviewTextView?.text = movieDetailResponse.overview
-
-        //todo: process output
-        releaseDateTextView?.text = movieDetailResponse.releaseDate?.let { presenter.processReleaseDate(it) }
-
-        //TODO: this is throwing a lint error, so instead of that we'll just fix it for now. This is subject to change when ui model/mapping occurs.
-        ratingTextView?.text = movieDetailResponse.let {
-            val voteCount = it.voteCount ?: 0
-            resources.getString(R.string.user_rating_substitution, presenter.processRatings(it.voteAverage), voteCount)
-        }
-        statusTextView?.text = movieDetailResponse.status
-        runtimeTextView?.text = movieDetailResponse.runtime?.let { resources.getString(R.string.runtime_substitution, it) }
-        //Default to One
-        genresTitle?.text = resources.getQuantityString(R.plurals.genres_bold, movieDetailResponse.genres?.size
-                ?: 1)
-        genresTextView?.text = movieDetailResponse.let {
-            "${it.genres
-                    ?.map { it?.name }
-                    ?.joinToString(", ")}"
-        }
+        titleBar?.text = movieDetailItem.movieTitle
+        overviewTextView?.text = movieDetailItem.overview
+        releaseDateTextView?.text = presenter.processReleaseDate(movieDetailItem.releaseDate)
+        ratingTextView?.text = presenter.processRatingInfo(movieDetailItem.voteAverage, movieDetailItem.voteCount)
+        statusTextView?.text = movieDetailItem.status
+        runtimeTextView?.text = presenter.processRuntime(movieDetailItem.runtime)
+        genresTitle?.text = presenter.processGenreTitle(movieDetailItem.genres.size)
+        genresTextView?.text = presenter.processGenres(movieDetailItem.genres)
         //TODO: potentially scrape other rating information
         toggleLoadingBar()
         showAllViews()

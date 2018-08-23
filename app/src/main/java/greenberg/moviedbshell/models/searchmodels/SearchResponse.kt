@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.models.SearchModels
+package greenberg.moviedbshell.models.searchmodels
 
 import com.google.gson.annotations.SerializedName
 

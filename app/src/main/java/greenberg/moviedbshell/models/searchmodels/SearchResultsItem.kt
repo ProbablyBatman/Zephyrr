@@ -1,9 +1,10 @@
-package greenberg.moviedbshell.models.PopularMoviesModels
+package greenberg.moviedbshell.models.searchmodels
 
 import com.google.gson.annotations.SerializedName
 
-data class PopularMovieResultsItem(
-
+//This a mish mosh model.  It combines elements that not all 3 media types use.
+//The 3 supported media types are movie, tv, and person.  Not every one uses all fields.
+data class SearchResultsItem(
 	@field:SerializedName("overview")
 	val overview: String? = null,
 
@@ -28,6 +29,9 @@ data class PopularMovieResultsItem(
 	@field:SerializedName("backdrop_path")
 	val backdropPath: String? = null,
 
+	@field:SerializedName("media_type")
+	val mediaType: String? = null,
+
 	@field:SerializedName("release_date")
 	val releaseDate: String? = null,
 
@@ -44,5 +48,24 @@ data class PopularMovieResultsItem(
 	val adult: Boolean? = null,
 
 	@field:SerializedName("vote_count")
-	val voteCount: Int? = null
+	val voteCount: Int? = null,
+
+	@field:SerializedName("first_air_date")
+	val firstAirDate: String? = null,
+
+	@field:SerializedName("origin_country")
+	val originCountry: List<String?>? = null,
+
+	@field:SerializedName("original_name")
+	val originalName: String? = null,
+
+	@field:SerializedName("name")
+	val name: String? = null,
+
+    //These two are actually only for people media types
+	@field:SerializedName("known_for")
+	val knownFor: List<KnownForItem?>? = null,
+
+	@field:SerializedName("profile_path")
+	val profilePath: String? = null
 )

@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.mosbyImpl
+package greenberg.moviedbshell.view
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
-import greenberg.moviedbshell.models.SearchModels.SearchResultsItem
+import greenberg.moviedbshell.presenters.SearchPresenter
 import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
 import timber.log.Timber
 

@@ -1,16 +1,16 @@
-package greenberg.moviedbshell.mosbyImpl
+package greenberg.moviedbshell.view
 
 import android.os.Bundle
 import com.hannesdorfmann.mosby3.mvp.MvpView
-import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
 
-interface PopularMoviesView : MvpView {
-    fun showLoading(pullToRefresh: Boolean)
+interface ZephyrrSearchView : MvpView {
+    fun showLoading()
     fun showError(throwable: Throwable, pullToRefresh: Boolean)
-    fun showMovies()
+    fun showResults()
     fun showDetail(bundle: Bundle)
     fun showMaxPages()
     fun hideMaxPages()
+    fun showEmptyState(lastQuery: String?)
     //TODO: this is a temporary solution to pagination.  Instead of fronting a lot of effort which
     //is subject to change with the change of this app, just pop a snackbar for now.
     fun showPageLoad()

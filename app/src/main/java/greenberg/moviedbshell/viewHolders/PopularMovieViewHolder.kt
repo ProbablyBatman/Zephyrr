@@ -7,22 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import greenberg.moviedbshell.models.PopularMoviesModels.PopularMovieResultsItem
-import greenberg.moviedbshell.mosbyImpl.PopularMoviesPresenter
+import greenberg.moviedbshell.presenters.PopularMoviesPresenter
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.models.ui.MovieItem
 
-class PopularMovieAdapter(var popularMovieList: MutableList<PopularMovieResultsItem?> = mutableListOf(),
+class PopularMovieAdapter(var popularMovieList: MutableList<MovieItem> = mutableListOf(),
                           private val presenter: PopularMoviesPresenter) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is PopularMovieViewHolder) {
-            val currentItem = popularMovieList.getOrNull(position)
+            val currentItem = popularMovieList[position]
             //todo: load posters and have like, placeholders
-            holder.cardItemTitle.text = currentItem?.title
-            holder.cardItemReleaseDate.text = currentItem?.releaseDate?.let { presenter.processReleaseDate(it) }
-            holder.cardItemOverview.text = currentItem?.overview
-            popularMovieList[position]?.let { presenter.fetchPosterArt(holder.cardItemPosterImage, it) }
-            holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem?.id ?: -1) }
+            holder.cardItemTitle.text = currentItem.movieTitle
+            holder.cardItemReleaseDate.text = presenter.processReleaseDate(currentItem.releaseDate)
+            holder.cardItemOverview.text = currentItem.overview
+            presenter.fetchPosterArt(holder.cardItemPosterImage, currentItem.posterImageUrl)
+            holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1) }
         }
     }
 
