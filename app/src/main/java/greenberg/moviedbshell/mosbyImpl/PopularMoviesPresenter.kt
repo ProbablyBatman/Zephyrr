@@ -33,7 +33,9 @@ class PopularMoviesPresenter
     private var popularMoviePageNumber = 1
     private var totalAvailablePages = -1
     private var popularMoviesList = mutableListOf<PopularMovieResultsItem?>()
+    private var popularMovieAdapter: PopularMovieAdapter? = null
     private var compositeDisposable = CompositeDisposable()
+    private var loadedMaxPages = false
 
     override fun attachView(view: PopularMoviesView) {
         super.attachView(view)
@@ -41,7 +43,8 @@ class PopularMoviesPresenter
         view.showLoading(true)
     }
 
-    fun initRecyclerPagination(recyclerView: RecyclerView?) {
+    fun initRecyclerPagination(recyclerView: RecyclerView?, adapter: PopularMovieAdapter?) {
+        this.popularMovieAdapter = adapter
         recyclerView?.apply {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
@@ -57,8 +60,10 @@ class PopularMoviesPresenter
                             && firstVisibleItemPosition >= 0) {
                         ifViewAttached { view: PopularMoviesView ->
                             isRecyclerLoading = true
-                            view.showPageLoad()
-                            fetchNextPage()
+                            if (!loadedMaxPages) {
+                                view.showPageLoad()
+                                fetchNextPage()
+                            }
                         }
                     }
                 }
@@ -75,8 +80,8 @@ class PopularMoviesPresenter
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
                                 ifViewAttached { view: PopularMoviesView ->
-                                    response.results?.map { popularMoviesList.add(it) }
-                                    view.setMovies(popularMoviesList)
+                                    response.results?.map { popularMovieAdapter?.popularMovieList?.add(it) }
+                                    popularMovieAdapter?.notifyDataSetChanged()
                                     view.showMovies()
                                     totalAvailablePages = response.totalPages ?: -1
                                 }
@@ -88,17 +93,19 @@ class PopularMoviesPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: PopularMoviesView ->
-                view.setMovies(popularMoviesList)
+                //Copy last good list into adapter
+                popularMovieAdapter?.popularMovieList = popularMoviesList.toMutableList()
+                popularMovieAdapter?.notifyDataSetChanged()
                 view.showMovies()
             }
         }
     }
 
-    fun refreshPage(adapter: PopularMovieAdapter?) {
+    fun refreshPage() {
         ifViewAttached { view: PopularMoviesView ->
             evictCachedUrls()
-            adapter?.popularMovieList?.clear()
-            adapter?.notifyDataSetChanged()
+            popularMovieAdapter?.popularMovieList?.clear()
+            popularMovieAdapter?.notifyDataSetChanged()
             popularMoviesList.clear()
             view.showLoading(true)
         }
@@ -106,15 +113,15 @@ class PopularMoviesPresenter
 
     //Gets next page of popular movies call
     private fun fetchNextPage() {
-        if (popularMoviePageNumber <= totalAvailablePages && totalAvailablePages != -1) {
+        if (popularMoviePageNumber < totalAvailablePages && totalAvailablePages != -1) {
             val disposable =
                     TMDBService.queryPopularMovies(++popularMoviePageNumber)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
                                 ifViewAttached { view: PopularMoviesView ->
-                                    response.results?.map { popularMoviesList.add(it) }
-                                    view.setMovies(popularMoviesList)
+                                    response.results?.map { popularMovieAdapter?.popularMovieList?.add(it) }
+                                    popularMovieAdapter?.notifyDataSetChanged()
                                     view.hidePageLoad()
                                     isRecyclerLoading = false
                                 }
@@ -125,6 +132,13 @@ class PopularMoviesPresenter
                                 }
                             })
             compositeDisposable.add(disposable)
+        } else {
+            ifViewAttached { view: PopularMoviesView ->
+                view.hidePageLoad()
+                view.showMaxPages()
+                isRecyclerLoading = false
+                loadedMaxPages = true
+            }
         }
         //TODO: else handle error for no available pages
     }
@@ -174,6 +188,17 @@ class PopularMoviesPresenter
                 iterator.remove()
             }
         }
+    }
+
+    override fun detachView() {
+        super.detachView()
+        Timber.d("Detach view")
+        ifViewAttached { view: PopularMoviesView ->
+            view.hidePageLoad()
+            view.hideMaxPages()
+        }
+        //Copy last good list or empty. Maybe log if empty
+        popularMoviesList = popularMovieAdapter?.popularMovieList?.toMutableList() ?: mutableListOf()
     }
 
     override fun destroy() {

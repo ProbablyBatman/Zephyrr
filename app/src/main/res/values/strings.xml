@@ -19,4 +19,10 @@
     <string name="generic_loading_text">Loading more results…</string>
     <string name="search">Search</string>
     <string name="search_hint">Search for actors and movies here…</string>
+    <string name="generic_max_pages_text">No more results available.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="empty_state_search_text">No results found for %1$s.</string>
+
+    <!-- Empty Result Card -->
+    <string name="dummy_text">Out of Results!</string>
 </resources>

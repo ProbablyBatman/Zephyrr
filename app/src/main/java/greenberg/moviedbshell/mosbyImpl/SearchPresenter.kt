@@ -31,7 +31,10 @@ class SearchPresenter
     //It is enforced that this string is at least not null and blank
     private var lastQuery: String? = null
     private var searchResultsList = mutableListOf<SearchResultsItem?>()
+    private var searchResultAdapter: SearchResultsAdapter? = null
+    private var recyclerView: RecyclerView? = null
     private var compositeDisposable = CompositeDisposable()
+    private var loadedMaxPages = false
 
     override fun attachView(view: ZephyrrSearchView) {
         super.attachView(view)
@@ -41,7 +44,9 @@ class SearchPresenter
         }
     }
 
-    fun initRecyclerPagination(recyclerView: RecyclerView?) {
+    fun initRecyclerPagination(recyclerView: RecyclerView?, adapter: SearchResultsAdapter?) {
+        this.recyclerView = recyclerView
+        searchResultAdapter = adapter
         recyclerView?.apply {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
@@ -57,8 +62,10 @@ class SearchPresenter
                             && firstVisibleItemPosition >= 0) {
                         ifViewAttached { view: ZephyrrSearchView ->
                             isRecyclerLoading = true
-                            view.showPageLoad()
-                            fetchNextPage(lastQuery!!)
+                            if (!loadedMaxPages) {
+                                view.showPageLoad()
+                                fetchNextPage(lastQuery!!)
+                            }
                         }
                     }
                 }
@@ -68,18 +75,15 @@ class SearchPresenter
 
     //Gets next page of search/multi movies call
     private fun fetchNextPage(query: String) {
-        if (searchResultsPageNumber <= totalAvailablePages && totalAvailablePages != -1) {
+        if (searchResultsPageNumber < totalAvailablePages && totalAvailablePages != -1) {
             val disposable =
                     TMDBService.querySearchMulti(query, ++searchResultsPageNumber)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
                                 ifViewAttached { view: ZephyrrSearchView ->
-                                    response.results?.map { searchResultsList.add(it) }
-                                    //TODO: here and in the [PopularMoviePresenter], I changed this to set results for a bug fix.
-                                    //Instead, see about using add.  I lef it in in case there's another way it can work.
-                                    //If it can't, remove it from the interface view.
-                                    view.setResults(searchResultsList)
+                                    response.results?.map { searchResultAdapter?.searchResults?.add(it) }
+                                    searchResultAdapter?.notifyDataSetChanged()
                                     view.hidePageLoad()
                                     isRecyclerLoading = false
                                 }
@@ -90,6 +94,13 @@ class SearchPresenter
                                 }
                             })
             compositeDisposable.add(disposable)
+        } else {
+            ifViewAttached { view: ZephyrrSearchView ->
+                view.hidePageLoad()
+                view.showMaxPages()
+                isRecyclerLoading = false
+                loadedMaxPages = true
+            }
         }
     }
 
@@ -142,10 +153,14 @@ class SearchPresenter
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
                                 ifViewAttached { view: ZephyrrSearchView ->
-                                    response.results?.map { searchResultsList.add(it) }
-                                    view.setResults(searchResultsList)
-                                    view.showResults()
-                                    totalAvailablePages = response.totalPages ?: -1
+                                    if (response.totalResults == 0) {
+                                        view.showEmptyState(lastQuery)
+                                    } else {
+                                        response.results?.map { searchResultAdapter?.searchResults?.add(it) }
+                                        searchResultAdapter?.notifyDataSetChanged()
+                                        view.showResults()
+                                        totalAvailablePages = response.totalPages ?: -1
+                                    }
                                 }
                             }, { throwable ->
                                 ifViewAttached { view: ZephyrrSearchView ->
@@ -155,7 +170,8 @@ class SearchPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: ZephyrrSearchView ->
-                view.setResults(searchResultsList)
+                searchResultAdapter?.searchResults = searchResultsList
+                searchResultAdapter?.notifyDataSetChanged()
                 view.showResults()
             }
         }
@@ -167,6 +183,17 @@ class SearchPresenter
                 putInt("MovieID", position)
             })
         }
+    }
+
+    override fun detachView() {
+        super.detachView()
+        Timber.d("Detach view")
+        ifViewAttached { view: ZephyrrSearchView ->
+            view.hidePageLoad()
+            view.hideMaxPages()
+        }
+        //Copy last good list or empty. Maybe log if empty
+        searchResultsList = searchResultAdapter?.searchResults?.toMutableList() ?: mutableListOf()
     }
 
     override fun destroy() {

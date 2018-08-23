@@ -29,6 +29,7 @@ class PopularMoviesFragment :
     private var popularMovieRefresher: SwipeRefreshLayout? = null
     private var popularMovieLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
+    private var maxPagesSnackbar: Snackbar? = null
     private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +59,7 @@ class PopularMoviesFragment :
         popularMovieAdapter = PopularMovieAdapter(presenter = presenter)
         popularMovieRecycler?.adapter = popularMovieAdapter
 
-        presenter.initRecyclerPagination(popularMovieRecycler)
+        presenter.initRecyclerPagination(popularMovieRecycler, popularMovieAdapter)
         presenter.loadPopularMoviesList(true)
     }
 
@@ -70,18 +71,6 @@ class PopularMoviesFragment :
         popularMovieRefresher?.visibility = View.GONE
         popularMovieRecycler?.visibility = View.GONE
         popularMovieLoadingBar?.visibility = View.VISIBLE
-    }
-
-    override fun setMovies(items: List<PopularMovieResultsItem?>) {
-        Timber.d("Setting Movies")
-        popularMovieAdapter?.popularMovieList = items.toMutableList()
-        popularMovieAdapter?.notifyDataSetChanged()
-    }
-
-    override fun addMovies(items: List<PopularMovieResultsItem?>) {
-        Timber.d("Adding movies")
-        items.map { popularMovieAdapter?.popularMovieList?.add(it) }
-        popularMovieAdapter?.notifyDataSetChanged()
     }
 
     override fun showMovies() {
@@ -99,7 +88,7 @@ class PopularMoviesFragment :
 
     override fun onRefresh() {
         Timber.d("On Refresh")
-        presenter.refreshPage(popularMovieAdapter)
+        presenter.refreshPage()
         presenter.loadPopularMoviesList(true)
     }
 
@@ -114,6 +103,22 @@ class PopularMoviesFragment :
     override fun hidePageLoad() {
         Timber.d("Showing Page Load")
         loadingSnackbar?.dismiss()
+    }
+
+    override fun showMaxPages() {
+        Timber.d("Show max pages")
+        maxPagesSnackbar = popularMovieRecycler?.let {
+            Snackbar.make(it, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.dismiss), { maxPagesSnackbar?.dismiss() })
+        }
+        if (maxPagesSnackbar?.isShown == false) {
+            maxPagesSnackbar?.show()
+        }
+    }
+
+    override fun hideMaxPages() {
+        Timber.d("Hide max pages")
+        maxPagesSnackbar?.dismiss()
     }
 
     override fun showDetail(bundle: Bundle) {

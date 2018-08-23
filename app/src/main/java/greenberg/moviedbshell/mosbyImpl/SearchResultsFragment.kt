@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
@@ -31,6 +32,8 @@ class SearchResultsFragment :
     private var searchLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
     private var zephyrrSearchView: SearchView? = null
+    private var maxPagesSnackbar: Snackbar? = null
+    private var emptyStateText: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,13 +55,14 @@ class SearchResultsFragment :
 
         searchResultsRecycler = view.findViewById(R.id.search_results_recycler)
         searchLoadingBar = view.findViewById(R.id.search_results_progress_bar)
+        emptyStateText = view.findViewById(R.id.search_empty_state_text)
 
         linearLayoutManager = LinearLayoutManager(activity)
         searchResultsRecycler?.layoutManager = linearLayoutManager
         searchResultsAdapter = SearchResultsAdapter(presenter = presenter)
         searchResultsRecycler?.adapter = searchResultsAdapter
 
-        presenter.initRecyclerPagination(searchResultsRecycler)
+        presenter.initRecyclerPagination(searchResultsRecycler, searchResultsAdapter)
         //TODO: maybe change the title of the action bar to show the last performed search
         //noactivity?.actionBar?.title = query
         presenter.performSearch(query)
@@ -73,20 +77,8 @@ class SearchResultsFragment :
         searchLoadingBar?.visibility = View.VISIBLE
     }
 
-    override fun setResults(items: List<SearchResultsItem?>) {
-        Timber.d("Setting results")
-        searchResultsAdapter?.searchResults = items.toMutableList()
-        searchResultsAdapter?.notifyDataSetChanged()
-    }
-
-    override fun addResults(items: List<SearchResultsItem?>) {
-        Timber.d("Adding results")
-        items.map { searchResultsAdapter?.searchResults?.add(it) }
-        searchResultsAdapter?.notifyDataSetChanged()
-    }
-
     override fun showResults() {
-        Timber.d("Adding results")
+        Timber.d("Showing results")
         searchLoadingBar?.visibility = View.GONE
         searchResultsRecycler?.visibility = View.VISIBLE
     }
@@ -100,15 +92,42 @@ class SearchResultsFragment :
         loadingSnackbar = searchResultsRecycler?.let {
             Snackbar.make(it, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
         }
-        loadingSnackbar?.show()
+        if (loadingSnackbar?.isShown == false) {
+            loadingSnackbar?.show()
+        }
+    }
+
+    override fun hidePageLoad() {
+        Timber.d("Hide page load")
+        loadingSnackbar?.dismiss()
     }
 
     override fun showDetail(bundle: Bundle) {
         navController?.navigate(R.id.action_searchResultsFragment_to_movieDetailFragment, bundle)
     }
 
-    override fun hidePageLoad() {
-        loadingSnackbar?.dismiss()
+    override fun showMaxPages() {
+        Timber.d("Show max pages")
+        maxPagesSnackbar = searchResultsRecycler?.let {
+            Snackbar.make(it, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.dismiss), { maxPagesSnackbar?.dismiss() })
+        }
+        if (maxPagesSnackbar?.isShown == false) {
+            maxPagesSnackbar?.show()
+        }
+    }
+
+    override fun hideMaxPages() {
+        Timber.d("Hide max pages")
+        maxPagesSnackbar?.dismiss()
+    }
+
+    override fun showEmptyState(lastQuery: String?) {
+        Timber.d("Showing empty state for $lastQuery")
+        //TODO: look to get rid of storing the query in the view
+        emptyStateText?.text = getString(R.string.empty_state_search_text, lastQuery)
+        searchLoadingBar?.visibility = View.GONE
+        emptyStateText?.visibility = View.VISIBLE
     }
 
     override fun onStart() {
