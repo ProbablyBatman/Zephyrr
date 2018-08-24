@@ -40,7 +40,6 @@ class SearchResultsFragment :
         Timber.d("onCreate")
         setHasOptionsMenu(false)
         query = arguments?.get("Query") as String
-        navController = findNavController()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,6 +65,7 @@ class SearchResultsFragment :
         //TODO: maybe change the title of the action bar to show the last performed search
         //noactivity?.actionBar?.title = query
         presenter.performSearch(query)
+        navController = findNavController()
     }
 
     override fun createPresenter(): SearchPresenter = presenter

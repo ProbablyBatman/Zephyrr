@@ -36,7 +36,6 @@ class PopularMoviesFragment :
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
         Timber.d("onCreate")
-        navController = findNavController()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,6 +60,7 @@ class PopularMoviesFragment :
 
         presenter.initRecyclerPagination(popularMovieRecycler, popularMovieAdapter)
         presenter.loadPopularMoviesList(true)
+        navController = findNavController()
     }
 
     override fun createPresenter(): PopularMoviesPresenter = presenter
