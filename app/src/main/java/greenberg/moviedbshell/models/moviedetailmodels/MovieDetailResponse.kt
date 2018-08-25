@@ -1,6 +1,8 @@
 package greenberg.moviedbshell.models.moviedetailmodels
 
 import com.google.gson.annotations.SerializedName
+import greenberg.moviedbshell.models.sharedmodels.GenresItem
+import greenberg.moviedbshell.models.sharedmodels.ProductionCompaniesItem
 
 data class MovieDetailResponse(
 	@field:SerializedName("original_language")

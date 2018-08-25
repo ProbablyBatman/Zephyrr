@@ -31,13 +31,14 @@ class SearchResultsAdapter(var searchResults: MutableList<PreviewItem> = mutable
                     holder.searchItemSubInfo.text = presenter.processReleaseDate(currentItem.releaseDate)
                     holder.searchItemOverview.text = currentItem.overview
                     presenter.fetchPosterArt(holder.searchItemPosterImage, currentItem)
-                    holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1) }
+                    holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType) }
                 }
                 is TvItem -> {
                     holder.searchItemTitle.text = currentItem.name
                     holder.searchItemSubInfo.text = presenter.processReleaseDate(currentItem.firstAirDate)
                     holder.searchItemOverview.text = currentItem.overview
                     presenter.fetchPosterArt(holder.searchItemPosterImage, currentItem)
+                    holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType) }
                 }
                 is PersonItem -> {
                     //One of the problems with people is their limited fields.  Currently they only have:

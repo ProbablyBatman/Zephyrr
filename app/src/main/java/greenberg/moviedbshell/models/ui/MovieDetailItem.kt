@@ -9,7 +9,7 @@ class MovieDetailItem(
         val budget: Long,
         val runtime: Int,
         val status: String,
-        val genres: List<String?>,
+        val genres: List<String>,
         val posterImageUrl: String,
         val backdropImageUrl: String,
         val overview: String

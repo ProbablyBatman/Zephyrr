@@ -102,15 +102,20 @@ class SearchResultsFragment :
         loadingSnackbar?.dismiss()
     }
 
-    override fun showDetail(bundle: Bundle) {
-        navController?.navigate(R.id.action_searchResultsFragment_to_movieDetailFragment, bundle)
+    override fun showDetail(bundle: Bundle, mediaType: String) {
+        when (mediaType) {
+            SearchPresenter.MEDIA_TYPE_MOVIE ->
+                navController?.navigate(R.id.action_searchResultsFragment_to_movieDetailFragment, bundle)
+            SearchPresenter.MEDIA_TYPE_TV ->
+                navController?.navigate(R.id.action_searchResultsFragment_to_tvDetailFragment, bundle)
+        }
     }
 
     override fun showMaxPages() {
         Timber.d("Show max pages")
-        maxPagesSnackbar = searchResultsRecycler?.let {
-            Snackbar.make(it, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.dismiss), { maxPagesSnackbar?.dismiss() })
+        maxPagesSnackbar = searchResultsRecycler?.let { view ->
+            Snackbar.make(view, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
         }
         if (maxPagesSnackbar?.isShown == false) {
             maxPagesSnackbar?.show()

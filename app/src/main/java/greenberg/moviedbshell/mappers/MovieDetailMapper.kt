@@ -16,7 +16,7 @@ class MovieDetailMapper
                 budget = item.budget ?: 0L,
                 runtime = item.runtime ?: 0,
                 status = item.status.orEmpty(),
-                genres = item.genres?.map { it?.name }.orEmpty(),
+                genres = item.genres?.mapNotNull { it?.name }.orEmpty(),
                 posterImageUrl = item.posterPath.orEmpty(),
                 backdropImageUrl = item.backdropPath.orEmpty(),
                 overview = item.overview.orEmpty()

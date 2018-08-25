@@ -167,16 +167,17 @@ class SearchPresenter
         }
     }
 
-    fun onCardSelected(position: Int) {
+    fun onCardSelected(cardItemId: Int, mediaType: String) {
         ifViewAttached { view: ZephyrrSearchView ->
             view.showDetail(Bundle().apply {
-                putInt("MovieID", position)
-            })
+                //TODO: update this to when
+                if (mediaType == MEDIA_TYPE_MOVIE) putInt("MovieID", cardItemId)
+                else if (mediaType == MEDIA_TYPE_TV) putInt("TvDetailId", cardItemId)
+            }, mediaType)
         }
     }
 
     override fun detachView() {
-        super.detachView()
         Timber.d("Detach view")
         ifViewAttached { view: ZephyrrSearchView ->
             view.hidePageLoad()
@@ -184,6 +185,7 @@ class SearchPresenter
         }
         //Copy last good list or empty. Maybe log if empty
         searchResultsList = searchResultAdapter?.searchResults?.toMutableList() ?: mutableListOf()
+        super.detachView()
     }
 
     override fun destroy() {

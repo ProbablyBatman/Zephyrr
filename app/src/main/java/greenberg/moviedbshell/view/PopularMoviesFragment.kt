@@ -58,6 +58,7 @@ class PopularMoviesFragment :
         popularMovieAdapter = PopularMovieAdapter(presenter = presenter)
         popularMovieRecycler?.adapter = popularMovieAdapter
 
+        presenter.initView()
         presenter.initRecyclerPagination(popularMovieRecycler, popularMovieAdapter)
         presenter.loadPopularMoviesList(true)
         navController = findNavController()

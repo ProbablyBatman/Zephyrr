@@ -44,7 +44,12 @@ class PopularMoviesPresenter
     override fun attachView(view: PopularMoviesView) {
         super.attachView(view)
         Timber.d("attachView")
-        view.showLoading(true)
+    }
+
+    fun initView() {
+        ifViewAttached { view: PopularMoviesView ->
+            view.showLoading(true)
+        }
     }
 
     fun initRecyclerPagination(recyclerView: RecyclerView?, adapter: PopularMovieAdapter?) {
@@ -76,7 +81,8 @@ class PopularMoviesPresenter
     }
 
     fun loadPopularMoviesList(pullToRefresh: Boolean) {
-        if (popularMoviesList.isEmpty() && pullToRefresh) {
+        if (popularMoviesList.isEmpty()) {
+            Timber.d("Getting new popular movie list")
             popularMoviePageNumber = 1
             val disposable =
                     TMDBService.queryPopularMovies(popularMoviePageNumber)
@@ -98,7 +104,8 @@ class PopularMoviesPresenter
         } else {
             ifViewAttached { view: PopularMoviesView ->
                 //Copy last good list into adapter
-                popularMovieAdapter?.popularMovieList = popularMoviesList.toMutableList()
+                Timber.d("Getting old list and showing")
+                popularMovieAdapter?.popularMovieList = popularMoviesList
                 popularMovieAdapter?.notifyDataSetChanged()
                 view.showMovies()
             }
@@ -118,12 +125,14 @@ class PopularMoviesPresenter
     //Gets next page of popular movies call
     private fun fetchNextPage() {
         if (popularMoviePageNumber < totalAvailablePages && totalAvailablePages != -1) {
+            Timber.d("Fetching next page: $popularMoviePageNumber")
             val disposable =
                     TMDBService.queryPopularMovies(++popularMoviePageNumber)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
                                 ifViewAttached { view: PopularMoviesView ->
+                                    Timber.d("Next page fetched")
                                     popularMovieAdapter?.popularMovieList?.addAll(mapper.mapToEntity(response))
                                     popularMovieAdapter?.notifyDataSetChanged()
                                     view.hidePageLoad()
@@ -160,8 +169,7 @@ class PopularMoviesPresenter
         //Load poster art
         if (posterUrl.isNotEmpty()) {
             Glide.with(cardItemPosterView)
-                    //TODO: potentially hacky way to get context
-                    .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, posterUrl))
+                    .load(context.getString(R.string.poster_url_substitution, posterUrl))
                     .apply {
                         RequestOptions()
                                 .placeholder(ColorDrawable(Color.DKGRAY))
@@ -194,7 +202,6 @@ class PopularMoviesPresenter
     }
 
     override fun detachView() {
-        super.detachView()
         Timber.d("Detach view")
         ifViewAttached { view: PopularMoviesView ->
             view.hidePageLoad()
@@ -202,6 +209,7 @@ class PopularMoviesPresenter
         }
         //Copy last good list or empty. Maybe log if empty
         popularMoviesList = popularMovieAdapter?.popularMovieList?.toMutableList() ?: mutableListOf()
+        super.detachView()
     }
 
     override fun destroy() {

@@ -41,7 +41,7 @@ class MovieDetailPresenter
 
     fun loadMovieDetails(movieId: Int) {
         val disposable =
-                TMDBService.queryMovies(movieId)
+                TMDBService.queryMovieDetail(movieId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ response ->
@@ -56,7 +56,8 @@ class MovieDetailPresenter
         compositeDisposable.add(disposable)
     }
 
-    /*TODO: Utility functions are bad, but idk what to do with these */
+    //TODO: consider moving these utility functions to a presenter superclass for details
+    //these are used multiple times
     fun fetchPosterArt(glide: RequestManager, view: ImageView?, posterUrl: String) {
         Timber.d("posterURL: $posterUrl")
         if (posterUrl.isNotEmpty() && view != null) {
@@ -99,7 +100,7 @@ class MovieDetailPresenter
         return doubleFormat.format(voteAverage)
     }
 
-    fun processRuntime(runtime: Int): String = context.getString(R.string.runtime_substitution, runtime)
+    fun processRuntime(runtime: Int): String = context.getString(R.string.runtime_substitution, runtime.toString())
 
     fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_bold, genresListSize)
 

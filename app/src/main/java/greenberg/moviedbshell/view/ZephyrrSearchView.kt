@@ -7,7 +7,7 @@ interface ZephyrrSearchView : MvpView {
     fun showLoading()
     fun showError(throwable: Throwable, pullToRefresh: Boolean)
     fun showResults()
-    fun showDetail(bundle: Bundle)
+    fun showDetail(bundle: Bundle, mediaType: String)
     fun showMaxPages()
     fun hideMaxPages()
     fun showEmptyState(lastQuery: String?)

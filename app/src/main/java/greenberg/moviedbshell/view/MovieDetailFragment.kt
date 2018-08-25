@@ -91,6 +91,7 @@ class MovieDetailFragment :
     override fun showLoading(movieId: Int) {
         Timber.d("Show Loading")
         hideAllViews()
+        toggleLoadingBar()
         presenter.loadMovieDetails(movieId)
     }
 
