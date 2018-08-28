@@ -1,11 +1,6 @@
 package greenberg.moviedbshell.presenters
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.widget.ImageView
-import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.MovieDetailMapper
@@ -81,27 +76,6 @@ class MovieDetailPresenter
                 castListAdapter?.notifyDataSetChanged()
                 view.showMovieDetails(lastMovieDetailItem)
             }
-        }
-    }
-
-    //TODO: consider moving these utility functions to a presenter superclass for details
-    //these are used multiple times
-    fun fetchPosterArt(glide: RequestManager, view: ImageView?, posterUrl: String) {
-        Timber.d("posterURL: $posterUrl")
-        if (posterUrl.isNotEmpty() && view != null) {
-            val validUrl = context.getString(R.string.poster_url_substitution, posterUrl)
-            //Load image into view
-            glide.load(validUrl)
-                    .apply {
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.DKGRAY))
-                                .fallback(ColorDrawable(Color.DKGRAY))
-                                .centerCrop()
-                    }
-                    .into(view)
-        } else {
-            Timber.d("Poster url is null for movie detail")
-            //TODO: look into placeholders
         }
     }
 

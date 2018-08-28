@@ -1,5 +1,7 @@
 package greenberg.moviedbshell.view
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,6 +13,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
@@ -113,8 +116,33 @@ class TvDetailFragment :
     override fun showTvDetails(tvDetailItem: TvDetailItem) {
         Timber.d("Showing tv details")
 
-        presenter.fetchPosterArt(Glide.with(this), posterImageView, tvDetailItem.posterImageUrl)
-        presenter.fetchPosterArt(Glide.with(this), backgroundImageView, tvDetailItem.backgroundImageUrl)
+        Timber.d("posterURL: ${tvDetailItem.posterImageUrl}")
+        if (tvDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
+            val validUrl = resources.getString(R.string.poster_url_substitution, tvDetailItem.posterImageUrl)
+            Glide.with(this)
+                    .load(validUrl)
+                    .apply {
+                        RequestOptions()
+                                .placeholder(ColorDrawable(Color.DKGRAY))
+                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .centerCrop()
+                    }
+                    .into(posterImageView!!)
+        }
+
+        Timber.d("backdropURL: ${tvDetailItem.backgroundImageUrl}")
+        if (tvDetailItem.posterImageUrl.isNotEmpty() && backgroundImageView != null) {
+            val validUrl = resources.getString(R.string.poster_url_substitution, tvDetailItem.backgroundImageUrl)
+            Glide.with(this)
+                    .load(validUrl)
+                    .apply {
+                        RequestOptions()
+                                .placeholder(ColorDrawable(Color.DKGRAY))
+                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .centerCrop()
+                    }
+                    .into(backgroundImageView!!)
+        }
 
         titleBar?.text = tvDetailItem.title
         firstAirDateText?.text = presenter.processDate(tvDetailItem.firstAirDate)

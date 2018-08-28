@@ -1,5 +1,7 @@
 package greenberg.moviedbshell.view
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.widget.NestedScrollView
@@ -13,6 +15,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
@@ -115,8 +118,33 @@ class MovieDetailFragment :
     override fun showMovieDetails(movieDetailItem: MovieDetailItem) {
         Timber.d("Showing Movie Details")
 
-        presenter.fetchPosterArt(Glide.with(this), posterImageView, movieDetailItem.posterImageUrl)
-        presenter.fetchPosterArt(Glide.with(this), backdropImageView, movieDetailItem.backdropImageUrl)
+        Timber.d("posterURL: ${movieDetailItem.posterImageUrl}")
+        if (movieDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
+            val validUrl = resources.getString(R.string.poster_url_substitution, movieDetailItem.posterImageUrl)
+            Glide.with(this)
+                    .load(validUrl)
+                    .apply {
+                        RequestOptions()
+                                .placeholder(ColorDrawable(Color.DKGRAY))
+                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .centerCrop()
+                    }
+                    .into(posterImageView!!)
+        }
+
+        Timber.d("backdropURL: ${movieDetailItem.backdropImageUrl}")
+        if (movieDetailItem.posterImageUrl.isNotEmpty() && backdropImageView != null) {
+            val validUrl = resources.getString(R.string.poster_url_substitution, movieDetailItem.backdropImageUrl)
+            Glide.with(this)
+                    .load(validUrl)
+                    .apply {
+                        RequestOptions()
+                                .placeholder(ColorDrawable(Color.DKGRAY))
+                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .centerCrop()
+                    }
+                    .into(backdropImageView!!)
+        }
 
         //collapsingToolbarLayout?.title = movieDetailResponse.originalTitle
         titleBar?.text = movieDetailItem.movieTitle

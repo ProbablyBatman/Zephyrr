@@ -107,22 +107,6 @@ class SearchPresenter
         }
     }
 
-    fun fetchPosterArt(cardItemPosterView: ImageView, item: PreviewItem) {
-        Glide.with(cardItemPosterView).clear(cardItemPosterView)
-        //Load poster art
-        if (item.posterImageUrl.isNotEmpty()) {
-            Glide.with(cardItemPosterView)
-                    .load(context.getString(R.string.poster_url_substitution, item.posterImageUrl))
-                    .apply {
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.DKGRAY))
-                                .fallback(ColorDrawable(Color.DKGRAY))
-                                .centerCrop()
-                    }
-                    .into(cardItemPosterView)
-        }
-    }
-
     fun processReleaseDate(releaseDate: String): String =
             if (releaseDate.isNotBlank()) {
                 val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
