@@ -3,6 +3,8 @@ package greenberg.moviedbshell.view
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.widget.NestedScrollView
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,7 @@ import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.presenters.MovieDetailPresenter
+import greenberg.moviedbshell.viewHolders.CastListAdapter
 import timber.log.Timber
 
 class MovieDetailFragment :
@@ -43,6 +46,9 @@ class MovieDetailFragment :
     private var runtimeTitle: TextView? = null
     private var genresTitle: TextView? = null
     private var genresTextView: TextView? = null
+    private var castRecyclerView: RecyclerView? = null
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var castListAdapter: CastListAdapter
 
     private var movieId = -1
 
@@ -81,8 +87,15 @@ class MovieDetailFragment :
         runtimeTitle = view.findViewById(R.id.runtime_bold)
         genresTitle = view.findViewById(R.id.genres_bold)
         genresTextView = view.findViewById(R.id.genres)
+        castRecyclerView = view.findViewById(R.id.movie_detail_cast_members_recycler)
 
-        presenter?.initView(movieId)
+        linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        castRecyclerView?.layoutManager = linearLayoutManager
+        castListAdapter = CastListAdapter()
+        castRecyclerView?.adapter = castListAdapter
+        presenter?.initView(movieId, castListAdapter)
+        presenter.loadMovieDetails(movieId)
+
     }
 
     override fun createPresenter(): MovieDetailPresenter = presenter
@@ -92,7 +105,6 @@ class MovieDetailFragment :
         Timber.d("Show Loading")
         hideAllViews()
         toggleLoadingBar()
-        presenter.loadMovieDetails(movieId)
     }
 
     override fun showError(throwable: Throwable) {
@@ -162,6 +174,7 @@ class MovieDetailFragment :
         releaseDateTitle?.visibility = View.GONE
         ratingTitle?.visibility = View.GONE
         runtimeTitle?.visibility = View.GONE
+        castRecyclerView?.visibility = View.GONE
     }
 
     private fun showAllViews() {
@@ -181,6 +194,7 @@ class MovieDetailFragment :
         releaseDateTitle?.visibility = View.VISIBLE
         ratingTitle?.visibility = View.VISIBLE
         runtimeTitle?.visibility = View.VISIBLE
+        castRecyclerView?.visibility = View.VISIBLE
     }
 
     private fun toggleLoadingBar() {

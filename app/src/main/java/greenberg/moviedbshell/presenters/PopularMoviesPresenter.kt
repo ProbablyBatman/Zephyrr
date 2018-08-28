@@ -1,14 +1,9 @@
 package greenberg.moviedbshell.presenters
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.PopularMovieMapper
@@ -161,22 +156,6 @@ class PopularMoviesPresenter
             view.showDetail(Bundle().apply {
                 putInt("MovieID", position)
             })
-        }
-    }
-
-    fun fetchPosterArt(cardItemPosterView: ImageView, posterUrl: String) {
-        Glide.with(cardItemPosterView).clear(cardItemPosterView)
-        //Load poster art
-        if (posterUrl.isNotEmpty()) {
-            Glide.with(cardItemPosterView)
-                    .load(context.getString(R.string.poster_url_substitution, posterUrl))
-                    .apply {
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.DKGRAY))
-                                .fallback(ColorDrawable(Color.DKGRAY))
-                                .centerCrop()
-                    }
-                    .into(cardItemPosterView)
         }
     }
 

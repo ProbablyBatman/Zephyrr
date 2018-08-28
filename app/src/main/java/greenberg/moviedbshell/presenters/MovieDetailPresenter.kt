@@ -9,10 +9,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.MovieDetailMapper
+import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
+import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
+import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.MovieDetailView
+import greenberg.moviedbshell.viewHolders.CastListAdapter
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.DecimalFormat
@@ -27,33 +33,55 @@ class MovieDetailPresenter
                     private val mapper: MovieDetailMapper) : MvpBasePresenter<MovieDetailView>() {
 
     private var compositeDisposable = CompositeDisposable()
+    private var castListAdapter: CastListAdapter? = null
+    private lateinit var lastMovieDetailItem: MovieDetailItem
 
     override fun attachView(view: MovieDetailView) {
         super.attachView(view)
         Timber.d("attachView")
     }
 
-    fun initView(movieId: Int) {
+    fun initView(movieId: Int, castListAdapter: CastListAdapter) {
         ifViewAttached { view: MovieDetailView ->
             view.showLoading(movieId)
+            this.castListAdapter = castListAdapter
         }
     }
 
+    //TODO: only grab 20 cast members for now.  Figre out limiting for that later
     fun loadMovieDetails(movieId: Int) {
-        val disposable =
-                TMDBService.queryMovieDetail(movieId)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ response ->
-                            ifViewAttached { view: MovieDetailView ->
-                                view.showMovieDetails(mapper.mapToEntity(response))
+        Timber.d("load movie details")
+        if (!compositeDisposable.isDisposed) {
+            val disposable =
+                    Single.zip(
+                            TMDBService.queryMovieDetail(movieId).subscribeOn(Schedulers.io()),
+                            TMDBService.queryMovieCredits(movieId).subscribeOn(Schedulers.io()),
+                            BiFunction<MovieDetailResponse, CreditsResponse, MovieDetailItem> { movieDetail, movieCredits ->
+                                mapper.mapToEntity(Pair(movieDetail, movieCredits))
                             }
-                        }, { throwable ->
-                            ifViewAttached { view: MovieDetailView ->
-                                view.showError(throwable)
-                            }
-                        })
-        compositeDisposable.add(disposable)
+                    )
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ movieDetailItem ->
+                                ifViewAttached { view: MovieDetailView ->
+                                    castListAdapter?.castList?.addAll(movieDetailItem.castMembers.take(20))
+                                    castListAdapter?.notifyDataSetChanged()
+                                    view.showMovieDetails(movieDetailItem)
+                                    lastMovieDetailItem = movieDetailItem
+                                }
+
+                            }, { throwable ->
+                                ifViewAttached { view: MovieDetailView ->
+                                    view.showError(throwable)
+                                }
+                            })
+            compositeDisposable.add(disposable)
+        } else {
+            ifViewAttached { view: MovieDetailView ->
+                castListAdapter?.castList?.addAll(lastMovieDetailItem.castMembers.take(20))
+                castListAdapter?.notifyDataSetChanged()
+                view.showMovieDetails(lastMovieDetailItem)
+            }
+        }
     }
 
     //TODO: consider moving these utility functions to a presenter superclass for details

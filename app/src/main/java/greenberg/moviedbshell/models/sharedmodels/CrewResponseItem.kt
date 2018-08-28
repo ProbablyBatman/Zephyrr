@@ -1,8 +1,8 @@
-package greenberg.moviedbshell.models.tvdetailmodels
+package greenberg.moviedbshell.models.sharedmodels
 
 import com.google.gson.annotations.SerializedName
 
-data class CrewItem(
+data class CrewResponseItem(
 
 	@field:SerializedName("gender")
 	val gender: Int? = null,

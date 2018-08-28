@@ -94,7 +94,7 @@ class TvDetailFragment :
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         castRecyclerView?.layoutManager = linearLayoutManager
-        castListAdapter = CastListAdapter(presenter = presenter)
+        castListAdapter = CastListAdapter()
         castRecyclerView?.adapter = castListAdapter
 
         presenter.initView(tvDetailId, castListAdapter)

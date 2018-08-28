@@ -4,13 +4,12 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.TvDetailMapper
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailCreditsResponse
+import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseItem
 import greenberg.moviedbshell.models.ui.TvDetailItem
@@ -51,7 +50,7 @@ class TvDetailPresenter
     }
 
     fun loadTvDetails(tvShowId: Int) {
-        Timber.d("loadTvDetails")
+        Timber.d("load tv details")
         //TODO: look up a proper check for adding this disposable.
         //Problem is I have no idea how to add it and keep track of it in a non disgusting way
         //I think that the movie detail also has this problem
@@ -60,7 +59,7 @@ class TvDetailPresenter
                     Single.zip(
                             TMDBService.queryTvDetail(tvShowId).subscribeOn(Schedulers.io()),
                             TMDBService.queryTvCredits(tvShowId).subscribeOn(Schedulers.io()),
-                            BiFunction<TvDetailResponse, TvDetailCreditsResponse, TvDetailResponseItem> { tvDetail, tvCredits ->
+                            BiFunction<TvDetailResponse, CreditsResponse, TvDetailResponseItem> { tvDetail, tvCredits ->
                                 TvDetailResponseItem(tvDetail, tvCredits)
                             }
                     )
@@ -105,22 +104,6 @@ class TvDetailPresenter
         } else {
             Timber.d("Poster url is null for tv detail")
             //TODO: look into placeholders
-        }
-    }
-
-    fun fetchPosterArt(view: ImageView, posterUrl: String) {
-        Glide.with(view).clear(view)
-        //Load poster art
-        if (posterUrl.isNotEmpty()) {
-            Glide.with(view)
-                    .load(context.getString(R.string.poster_url_substitution, posterUrl))
-                    .apply {
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.DKGRAY))
-                                .fallback(ColorDrawable(Color.DKGRAY))
-                                .centerCrop()
-                    }
-                    .into(view)
         }
     }
 

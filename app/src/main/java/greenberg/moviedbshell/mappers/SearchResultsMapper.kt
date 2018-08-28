@@ -30,7 +30,7 @@ class SearchResultsMapper
                 SearchPresenter.MEDIA_TYPE_PERSON -> {
                     PersonItem(
                         name = result.name.orEmpty(),
-                        posterImageUrl = result.posterPath.orEmpty(),
+                        posterImageUrl = result.profilePath.orEmpty(),
                         knownForItems = knownForMapper.mapToEntity(result.knownFor),
                         id = result.id
                     )

@@ -1,9 +1,8 @@
-package greenberg.moviedbshell.models.tvdetailmodels
+package greenberg.moviedbshell.models.sharedmodels
 
 import com.google.gson.annotations.SerializedName
-import greenberg.moviedbshell.models.sharedmodels.CastResponseItem
 
-data class TvDetailCreditsResponse(
+data class CreditsResponse(
 
 	@field:SerializedName("cast")
 	val cast: List<CastResponseItem?>? = null,
@@ -12,5 +11,5 @@ data class TvDetailCreditsResponse(
 	val id: Int? = null,
 
 	@field:SerializedName("crew")
-	val crew: List<CrewItem?>? = null
+	val crew: List<CrewResponseItem?>? = null
 )

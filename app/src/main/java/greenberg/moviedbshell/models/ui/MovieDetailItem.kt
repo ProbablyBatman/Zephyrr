@@ -12,5 +12,6 @@ class MovieDetailItem(
         val genres: List<String>,
         val posterImageUrl: String,
         val backdropImageUrl: String,
-        val overview: String
+        val overview: String,
+        val castMembers: List<CastItem>
 )
