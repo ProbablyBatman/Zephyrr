@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.presenters.PopularMoviesPresenter
 import greenberg.moviedbshell.R
@@ -32,6 +33,7 @@ class PopularMovieAdapter(var popularMovieList: MutableList<MovieItem> = mutable
                                     .fallback(ColorDrawable(Color.DKGRAY))
                                     .centerCrop()
                         }
+                        .transition(DrawableTransitionOptions.withCrossFade())
                         .into(holder.cardItemPosterImage)
             }
             holder.cardItemTitle.text = currentItem.movieTitle

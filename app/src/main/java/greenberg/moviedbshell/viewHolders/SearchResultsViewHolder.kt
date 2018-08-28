@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.ui.MovieItem
@@ -76,6 +77,7 @@ class SearchResultsAdapter(var searchResults: MutableList<PreviewItem> = mutable
                                 .fallback(ColorDrawable(Color.DKGRAY))
                                 .centerCrop()
                     }
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(cardItemPosterView)
         }
     }

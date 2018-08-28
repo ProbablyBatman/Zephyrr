@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
@@ -129,6 +130,7 @@ class MovieDetailFragment :
                                 .fallback(ColorDrawable(Color.DKGRAY))
                                 .centerCrop()
                     }
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(posterImageView!!)
         }
 
@@ -143,6 +145,7 @@ class MovieDetailFragment :
                                 .fallback(ColorDrawable(Color.DKGRAY))
                                 .centerCrop()
                     }
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(backdropImageView!!)
         }
 
