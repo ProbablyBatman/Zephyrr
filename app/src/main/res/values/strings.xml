@@ -4,6 +4,8 @@
     <string name="tmdb_popular_url">popular</string>
     <string name="api_key">api_key</string>
 
+    <string name="generic_loading_text">Loading more results…</string>
+
     <!-- Movie Detail Layout -->
     <string name="release_date_bold">Release Date</string>
     <string name="user_rating_bold">User Rating</string>
@@ -14,9 +16,20 @@
         <item quantity="other">Genres</item>
     </plurals>
     <string name="user_rating_substitution">%1$s by %2$d users</string>
-    <string name="runtime_substitution">%1$d minutes</string>
+    <string name="runtime_substitution">%1$s minutes</string>
     <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>
-    <string name="generic_loading_text">Loading more results…</string>
+
+    <!-- Search -->
     <string name="search">Search</string>
     <string name="search_hint">Search for actors and movies here…</string>
+    <string name="generic_max_pages_text">No more results available.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="empty_state_search_text">No results found for %1$s.</string>
+
+    <!-- Tv Detail -->
+    <string name="first_aired">First Aired</string>
+    <string name="next_air_date">Next Air Date</string>
+    <string name="last_aired">Last Aired</string>
+    <string name="number_of_episodes">Episodes</string>
+    <string name="number_of_seasons">Seasons</string>
 </resources>

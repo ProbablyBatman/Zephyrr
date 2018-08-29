@@ -5,6 +5,7 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import greenberg.moviedbshell.base.BaseActivity
@@ -17,16 +18,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_activity_layout)
-
-        /*if (findViewById<FrameLayout>(R.id.fragment_container) != null) {
-            if (supportFragmentManager.findFragmentByTag(PopularMoviesFragment.TAG) == null) {
-                val popularMoviesFragment = PopularMoviesFragment()
-
-                supportFragmentManager.beginTransaction()
-                        .add(R.id.fragment_container, popularMoviesFragment, PopularMoviesFragment.TAG)
-                        .commit()
-            }
-        }*/
 
         navController = findNavController(this, R.id.nav_host_fragment)
         setupActionBarWithNavController(navController)
@@ -66,7 +57,7 @@ class MainActivity : BaseActivity() {
                     searchView.clearFocus()
                     navController.navigate(R.id.searchResultsFragment, Bundle().apply {
                         putString("Query", query)
-                    })
+                    }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment,true).build())
                     return true
                 }
 
