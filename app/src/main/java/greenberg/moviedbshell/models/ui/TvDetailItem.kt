@@ -16,5 +16,5 @@ class TvDetailItem(
         val posterImageUrl: String,
         val backgroundImageUrl: String,
         val overview: String,
-        val castMembers: List<CastItem>
+        val castMembers: List<CastMemberItem>
 )

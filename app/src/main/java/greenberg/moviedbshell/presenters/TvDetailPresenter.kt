@@ -6,7 +6,7 @@ import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.TvDetailMapper
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseItem
+import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseContainer
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.TvDetailView
@@ -54,15 +54,15 @@ class TvDetailPresenter
                     Single.zip(
                             TMDBService.queryTvDetail(tvShowId).subscribeOn(Schedulers.io()),
                             TMDBService.queryTvCredits(tvShowId).subscribeOn(Schedulers.io()),
-                            BiFunction<TvDetailResponse, CreditsResponse, TvDetailResponseItem> { tvDetail, tvCredits ->
-                                TvDetailResponseItem(tvDetail, tvCredits)
+                            BiFunction<TvDetailResponse, CreditsResponse, TvDetailResponseContainer> { tvDetail, tvCredits ->
+                                TvDetailResponseContainer(tvDetail, tvCredits)
                             }
                     )
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ tvDetailResponseItem ->
                                 val tvDetailItem = mapper.mapToEntity(tvDetailResponseItem)
                                 ifViewAttached { view: TvDetailView ->
-                                    castListAdapter?.castList?.addAll(tvDetailItem.castMembers)
+                                    castListAdapter?.castMemberList?.addAll(tvDetailItem.castMembers)
                                     castListAdapter?.notifyDataSetChanged()
                                     view.showTvDetails(tvDetailItem)
                                     lastTvDetailItem = tvDetailItem
@@ -75,7 +75,7 @@ class TvDetailPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: TvDetailView ->
-                castListAdapter?.castList?.addAll(lastTvDetailItem.castMembers)
+                castListAdapter?.castMemberList?.addAll(lastTvDetailItem.castMembers)
                 castListAdapter?.notifyDataSetChanged()
                 view.showTvDetails(lastTvDetailItem)
             }

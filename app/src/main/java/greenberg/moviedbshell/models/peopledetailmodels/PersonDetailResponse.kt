@@ -26,7 +26,7 @@ data class PersonDetailResponse(
 	val biography: String? = null,
 
 	@field:SerializedName("deathday")
-	val deathday: Any? = null,
+	val deathday: String? = null,
 
 	@field:SerializedName("place_of_birth")
 	val placeOfBirth: String? = null,
@@ -44,5 +44,5 @@ data class PersonDetailResponse(
 	val adult: Boolean? = null,
 
 	@field:SerializedName("homepage")
-	val homepage: Any? = null
+	val homepage: String? = null
 )

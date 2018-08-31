@@ -58,7 +58,7 @@ class MovieDetailPresenter
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ movieDetailItem ->
                                 ifViewAttached { view: MovieDetailView ->
-                                    castListAdapter?.castList?.addAll(movieDetailItem.castMembers.take(20))
+                                    castListAdapter?.castMemberList?.addAll(movieDetailItem.castMembers.take(20))
                                     castListAdapter?.notifyDataSetChanged()
                                     view.showMovieDetails(movieDetailItem)
                                     lastMovieDetailItem = movieDetailItem
@@ -72,7 +72,7 @@ class MovieDetailPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: MovieDetailView ->
-                castListAdapter?.castList?.addAll(lastMovieDetailItem.castMembers.take(20))
+                castListAdapter?.castMemberList?.addAll(lastMovieDetailItem.castMembers.take(20))
                 castListAdapter?.notifyDataSetChanged()
                 view.showMovieDetails(lastMovieDetailItem)
             }

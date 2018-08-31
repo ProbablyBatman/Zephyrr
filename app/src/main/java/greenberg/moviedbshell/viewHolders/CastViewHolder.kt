@@ -12,20 +12,20 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.models.ui.CastItem
+import greenberg.moviedbshell.models.ui.CastMemberItem
 
-class CastListAdapter(var castList: MutableList<CastItem> = mutableListOf()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableListOf()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CastListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cast_list_card, parent, false))
     }
 
-    override fun getItemCount() = castList.size
+    override fun getItemCount() = castMemberList.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is CastListViewHolder) {
             resetView(holder)
-            val currentItem = castList[position]
+            val currentItem = castMemberList[position]
             holder.actorRole.text = currentItem.role
             holder.actorName.text = currentItem.name
             //Set poster image
