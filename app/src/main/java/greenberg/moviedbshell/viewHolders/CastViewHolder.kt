@@ -2,6 +2,7 @@ package greenberg.moviedbshell.viewHolders
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,8 @@ import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.ui.CastMemberItem
 
 class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableListOf()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    lateinit var onClickListener: (Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CastListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cast_list_card, parent, false))
@@ -42,6 +45,7 @@ class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableL
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(holder.actorImage)
             }
+            holder.cardView.setOnClickListener { onClickListener.invoke(currentItem.id ?: -1) }
         }
     }
 
@@ -52,6 +56,7 @@ class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableL
     }
 
     class CastListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        var cardView: CardView = view.findViewById(R.id.cast_card_view)
         var actorImage: ImageView = view.findViewById(R.id.cast_list_item_image)
         var actorRole: TextView = view.findViewById(R.id.cast_list_item_role)
         var actorName: TextView = view.findViewById(R.id.cast_list_item_actor)

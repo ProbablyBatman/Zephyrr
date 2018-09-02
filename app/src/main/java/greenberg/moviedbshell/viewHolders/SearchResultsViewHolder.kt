@@ -53,6 +53,7 @@ class SearchResultsAdapter(var searchResults: MutableList<PreviewItem> = mutable
                         holder.searchItemOverview.visibility = View.GONE
                     }
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
+                    holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType) }
                 }
                 else -> {
                     //TODO: handle unknown type?

@@ -1,10 +1,13 @@
 package greenberg.moviedbshell.services
 
 import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
+import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
+import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
 import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
+import greenberg.moviedbshell.models.ui.PersonDetailCreditItem
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -28,4 +31,10 @@ interface TMDBService {
 
     @GET("tv/{id}/credits")
     fun queryTvCredits(@Path("id") id: Int): Single<CreditsResponse>
+
+    @GET("person/{id}")
+    fun queryPersonDetail(@Path("id") id: Int): Single<PersonDetailResponse>
+
+    @GET("person/{id}/combined_credits")
+    fun queryPersonCombinedCredits(@Path("id") id: Int): Single<CombinedCreditsResponse>
 }

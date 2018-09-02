@@ -141,8 +141,11 @@ class SearchPresenter
         ifViewAttached { view: ZephyrrSearchView ->
             view.showDetail(Bundle().apply {
                 //TODO: update this to when
-                if (mediaType == MEDIA_TYPE_MOVIE) putInt("MovieID", cardItemId)
-                else if (mediaType == MEDIA_TYPE_TV) putInt("TvDetailId", cardItemId)
+                when (mediaType) {
+                    MEDIA_TYPE_MOVIE -> putInt("MovieID", cardItemId)
+                    MEDIA_TYPE_TV -> putInt("TvDetailID", cardItemId)
+                    MEDIA_TYPE_PERSON -> putInt("PersonID", cardItemId)
+                }
             }, mediaType)
         }
     }

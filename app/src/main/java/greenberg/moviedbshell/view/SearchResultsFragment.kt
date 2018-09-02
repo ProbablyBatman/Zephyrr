@@ -108,6 +108,8 @@ class SearchResultsFragment :
                 navController?.navigate(R.id.action_searchResultsFragment_to_movieDetailFragment, bundle)
             SearchPresenter.MEDIA_TYPE_TV ->
                 navController?.navigate(R.id.action_searchResultsFragment_to_tvDetailFragment, bundle)
+            SearchPresenter.MEDIA_TYPE_PERSON ->
+                navController?.navigate(R.id.action_searchResultsFragment_to_personDetailFragment, bundle)
         }
     }
 

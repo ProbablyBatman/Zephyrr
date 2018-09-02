@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.presenters
 
 import android.content.Context
+import android.os.Bundle
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.TvDetailMapper
@@ -64,6 +65,7 @@ class TvDetailPresenter
                                 ifViewAttached { view: TvDetailView ->
                                     castListAdapter?.castMemberList?.addAll(tvDetailItem.castMembers)
                                     castListAdapter?.notifyDataSetChanged()
+                                    castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
                                     view.showTvDetails(tvDetailItem)
                                     lastTvDetailItem = tvDetailItem
                                 }
@@ -77,6 +79,7 @@ class TvDetailPresenter
             ifViewAttached { view: TvDetailView ->
                 castListAdapter?.castMemberList?.addAll(lastTvDetailItem.castMembers)
                 castListAdapter?.notifyDataSetChanged()
+                castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
                 view.showTvDetails(lastTvDetailItem)
             }
         }
@@ -129,6 +132,14 @@ class TvDetailPresenter
     fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_bold, genresListSize)
 
     fun processGenres(genres: List<String?>): String = genres.joinToString(", ")
+
+    private fun onCardSelected(itemId: Int) {
+        ifViewAttached { view: TvDetailView ->
+            view.showDetail(Bundle().apply {
+                putInt("PersonID", itemId)
+            })
+        }
+    }
 
     override fun detachView() {
         super.detachView()

@@ -12,6 +12,7 @@ class PersonDetailMapper
         return PersonDetailItem(
                 name = personDetailResponse.name.orEmpty(),
                 birthday = personDetailResponse.birthday.orEmpty(),
+                deathday = personDetailResponse.deathday.orEmpty(),
                 placeOfBirth = personDetailResponse.placeOfBirth.orEmpty(),
                 biography = personDetailResponse.biography.orEmpty(),
                 posterImageUrl = personDetailResponse.profilePath.orEmpty(),

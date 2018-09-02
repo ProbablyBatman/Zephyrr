@@ -17,18 +17,39 @@
         android:name="greenberg.moviedbshell.view.SearchResultsFragment">
         <action
             android:id="@+id/action_searchResultsFragment_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
+            app:destination="@id/movieDetailFragment"/>
         <action
             android:id="@+id/action_searchResultsFragment_to_tvDetailFragment"
-            app:destination="@id/tvDetailFragment"
-            />
+            app:destination="@id/tvDetailFragment"/>
+        <action
+            android:id="@+id/action_searchResultsFragment_to_personDetailFragment"
+            app:destination="@id/personDetailFragment"/>
     </fragment>
 
     <fragment
         android:id="@+id/movieDetailFragment"
-        android:name="greenberg.moviedbshell.view.MovieDetailFragment" />
+        android:name="greenberg.moviedbshell.view.MovieDetailFragment">
+        <action
+            android:id="@+id/action_movieDetailFragment_to_personDetailFragment"
+            app:destination="@id/personDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/tvDetailFragment"
-        android:name="greenberg.moviedbshell.view.TvDetailFragment" />
+        android:name="greenberg.moviedbshell.view.TvDetailFragment">
+        <action
+            android:id="@+id/action_tvDetailFragment_to_personDetailFragment"
+            app:destination="@id/personDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/personDetailFragment"
+        android:name="greenberg.moviedbshell.view.PersonDetailFragment">
+        <action
+            android:id="@+id/action_personDetailFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment" />
+        <action
+            android:id="@+id/action_personDetailFragment_to_tvDetailFragment"
+            app:destination="@id/tvDetailFragment"/>
+    </fragment>
 </navigation>

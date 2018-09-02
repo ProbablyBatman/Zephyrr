@@ -50,4 +50,13 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="CardItemPeople">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minLines">2</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
 </resources>

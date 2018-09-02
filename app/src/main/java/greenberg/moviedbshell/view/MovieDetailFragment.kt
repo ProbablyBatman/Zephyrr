@@ -14,6 +14,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
@@ -55,12 +57,13 @@ class MovieDetailFragment :
     private lateinit var castListAdapter: CastListAdapter
 
     private var movieId = -1
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
         if (arguments != null) {
-            movieId = arguments?.get("MovieID") as Int
+            movieId = arguments?.get("MovieID") as? Int ?: -1
         }
     }
 
@@ -99,6 +102,7 @@ class MovieDetailFragment :
         castRecyclerView?.adapter = castListAdapter
         presenter?.initView(movieId, castListAdapter)
         presenter.loadMovieDetails(movieId)
+        navController = findNavController()
 
     }
 
@@ -161,6 +165,10 @@ class MovieDetailFragment :
         //TODO: potentially scrape other rating information
         toggleLoadingBar()
         showAllViews()
+    }
+
+    override fun showDetail(bundle: Bundle) {
+        navController?.navigate(R.id.action_movieDetailFragment_to_personDetailFragment, bundle)
     }
 
     override fun onStart() {

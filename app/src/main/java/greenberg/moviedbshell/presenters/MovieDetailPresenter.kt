@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.presenters
 
 import android.content.Context
+import android.os.Bundle
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.MovieDetailMapper
@@ -9,6 +10,7 @@ import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.MovieDetailView
+import greenberg.moviedbshell.view.TvDetailView
 import greenberg.moviedbshell.viewHolders.CastListAdapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -60,6 +62,7 @@ class MovieDetailPresenter
                                 ifViewAttached { view: MovieDetailView ->
                                     castListAdapter?.castMemberList?.addAll(movieDetailItem.castMembers.take(20))
                                     castListAdapter?.notifyDataSetChanged()
+                                    castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
                                     view.showMovieDetails(movieDetailItem)
                                     lastMovieDetailItem = movieDetailItem
                                 }
@@ -74,6 +77,7 @@ class MovieDetailPresenter
             ifViewAttached { view: MovieDetailView ->
                 castListAdapter?.castMemberList?.addAll(lastMovieDetailItem.castMembers.take(20))
                 castListAdapter?.notifyDataSetChanged()
+                castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
                 view.showMovieDetails(lastMovieDetailItem)
             }
         }
@@ -107,6 +111,14 @@ class MovieDetailPresenter
     fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_bold, genresListSize)
 
     fun processGenres(genres: List<String?>): String = genres.joinToString(", ")
+
+    private fun onCardSelected(itemId: Int) {
+        ifViewAttached { view: MovieDetailView ->
+            view.showDetail(Bundle().apply {
+                putInt("PersonID", itemId)
+            })
+        }
+    }
 
     override fun destroy() {
         super.destroy()
