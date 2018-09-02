@@ -12,6 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
@@ -45,20 +46,24 @@ class ServicesModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(context: Context, cache: Cache): OkHttpClient {
-        val httpClient = OkHttpClient.Builder()
-                .cache(cache)
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        httpClient.addInterceptor(loggingInterceptor)
-        httpClient.addInterceptor { chain ->
-            val original = chain.request()
-            val originalHttpUrl = original.url()
-            val url = originalHttpUrl.newBuilder()
-                    .addQueryParameter(context.getString(R.string.api_key), BuildConfig.TMDB_API_KEY)
-                    .build()
-            val request = original.newBuilder().url(url).build()
-            chain.proceed(request)
-        }
-        return httpClient.build()
+        return OkHttpClient.Builder()
+                .cache(cache)
+                .apply {
+                    addInterceptor(loggingInterceptor)
+                    addInterceptor { chain ->
+                        val original = chain.request()
+                        val originalHttpUrl = original.url()
+                        val url = originalHttpUrl.newBuilder()
+                                .addQueryParameter(context.getString(R.string.api_key), BuildConfig.TMDB_API_KEY)
+                                .build()
+                        val request = original.newBuilder().url(url).build()
+                        val response = chain.proceed(request)
+                        if (response.networkResponse() == null) Timber.d("call hit the cache")
+                        else Timber.d("call hit the network")
+                        response
+                    }
+                }.build()
     }
 }

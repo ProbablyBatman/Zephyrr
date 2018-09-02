@@ -205,8 +205,8 @@ class TvDetailFragment :
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         Timber.d("onDestroy")
+        super.onDestroy()
     }
 
     private fun toggleLoading() {

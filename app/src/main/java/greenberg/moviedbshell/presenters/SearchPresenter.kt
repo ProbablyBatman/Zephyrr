@@ -187,9 +187,9 @@ class SearchPresenter
     }
 
     override fun destroy() {
-        super.destroy()
         Timber.d("destroy called, disposables disposed of")
         compositeDisposable.dispose()
+        super.destroy()
     }
 
 

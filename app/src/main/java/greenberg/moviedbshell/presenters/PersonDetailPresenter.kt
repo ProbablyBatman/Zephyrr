@@ -27,7 +27,7 @@ class PersonDetailPresenter
 
     private var compositeDisposable = CompositeDisposable()
     private var creditsAdapter: CreditsAdapter? = null
-    private lateinit var lastPersonItem: PersonDetailItem
+    private var lastPersonItem: PersonDetailItem? = null
 
     override fun attachView(view: PersonDetailView) {
         super.attachView(view)
@@ -42,7 +42,9 @@ class PersonDetailPresenter
     }
 
     fun loadPersonDetails(personId: Int) {
-        if (!compositeDisposable.isDisposed) {
+        //If there isn't an already existing item associated with this presenter.
+        //Pages are mostly static, so data can sort of be retained like this. Potentially bad.
+        if (lastPersonItem == null) {
             val disposable =
                     Single.zip(
                             TMDBService.queryPersonDetail(personId).subscribeOn(Schedulers.io()),
@@ -68,9 +70,11 @@ class PersonDetailPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: PersonDetailView ->
-                creditsAdapter?.creditsList?.addAll(lastPersonItem.combinedCredits)
-                creditsAdapter?.notifyDataSetChanged()
-                view.showPersonDetails(lastPersonItem)
+                lastPersonItem?.let {
+                    creditsAdapter?.creditsList?.addAll(it.combinedCredits)
+                    creditsAdapter?.notifyDataSetChanged()
+                    view.showPersonDetails(it)
+                }
             }
         }
     }

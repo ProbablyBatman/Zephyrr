@@ -31,7 +31,7 @@ class TvDetailPresenter
 
     private var compositeDisposable = CompositeDisposable()
     private var castListAdapter: CastListAdapter? = null
-    private lateinit var lastTvDetailItem: TvDetailItem
+    private var lastTvDetailItem: TvDetailItem? = null
 
     override fun attachView(view: TvDetailView) {
         super.attachView(view)
@@ -47,10 +47,9 @@ class TvDetailPresenter
 
     fun loadTvDetails(tvShowId: Int) {
         Timber.d("load tv details")
-        //TODO: look up a proper check for adding this disposable.
-        //Problem is I have no idea how to add it and keep track of it in a non disgusting way
-        //I think that the movie detail also has this problem
-        if (!compositeDisposable.isDisposed) {
+        //If there isn't an already existing item associated with this presenter.
+        //Pages are mostly static, so data can sort of be retained like this. Potentially bad.
+        if (lastTvDetailItem == null) {
             val disposable =
                     Single.zip(
                             TMDBService.queryTvDetail(tvShowId).subscribeOn(Schedulers.io()),
@@ -77,10 +76,12 @@ class TvDetailPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: TvDetailView ->
-                castListAdapter?.castMemberList?.addAll(lastTvDetailItem.castMembers)
-                castListAdapter?.notifyDataSetChanged()
-                castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
-                view.showTvDetails(lastTvDetailItem)
+                lastTvDetailItem?.let {
+                    castListAdapter?.castMemberList?.addAll(it.castMembers.take(20))
+                    castListAdapter?.notifyDataSetChanged()
+                    castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
+                    view.showTvDetails(it)
+                }
             }
         }
     }
@@ -142,13 +143,13 @@ class TvDetailPresenter
     }
 
     override fun detachView() {
-        super.detachView()
         Timber.d("detachView")
+        super.detachView()
     }
 
     override fun destroy() {
-        super.destroy()
         Timber.d("destroy called, disposables disposed of")
         compositeDisposable.dispose()
+        super.destroy()
     }
 }

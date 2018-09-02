@@ -31,7 +31,7 @@ class MovieDetailPresenter
 
     private var compositeDisposable = CompositeDisposable()
     private var castListAdapter: CastListAdapter? = null
-    private lateinit var lastMovieDetailItem: MovieDetailItem
+    private var lastMovieDetailItem: MovieDetailItem? = null
 
     override fun attachView(view: MovieDetailView) {
         super.attachView(view)
@@ -45,10 +45,10 @@ class MovieDetailPresenter
         }
     }
 
-    //TODO: only grab 20 cast members for now.  Figre out limiting for that later
+    //TODO: only grab 20 cast members for now.  Figure out limiting for that later
     fun loadMovieDetails(movieId: Int) {
         Timber.d("load movie details")
-        if (!compositeDisposable.isDisposed) {
+        if (lastMovieDetailItem == null) {
             val disposable =
                     Single.zip(
                             TMDBService.queryMovieDetail(movieId).subscribeOn(Schedulers.io()),
@@ -75,10 +75,12 @@ class MovieDetailPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: MovieDetailView ->
-                castListAdapter?.castMemberList?.addAll(lastMovieDetailItem.castMembers.take(20))
-                castListAdapter?.notifyDataSetChanged()
-                castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
-                view.showMovieDetails(lastMovieDetailItem)
+                lastMovieDetailItem?.let {
+                    castListAdapter?.castMemberList?.addAll(it.castMembers.take(20))
+                    castListAdapter?.notifyDataSetChanged()
+                    castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
+                    view.showMovieDetails(it)
+                }
             }
         }
     }

@@ -111,8 +111,8 @@ class PersonDetailFragment :
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         Timber.d("onDestroy")
+        super.onDestroy()
     }
 
     override fun showLoading() {
