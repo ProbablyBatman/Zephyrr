@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.presenters
 
 import android.content.Context
+import android.os.Bundle
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.MovieDetailMapper
@@ -9,6 +10,7 @@ import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.MovieDetailView
+import greenberg.moviedbshell.view.TvDetailView
 import greenberg.moviedbshell.viewHolders.CastListAdapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,7 +31,7 @@ class MovieDetailPresenter
 
     private var compositeDisposable = CompositeDisposable()
     private var castListAdapter: CastListAdapter? = null
-    private lateinit var lastMovieDetailItem: MovieDetailItem
+    private var lastMovieDetailItem: MovieDetailItem? = null
 
     override fun attachView(view: MovieDetailView) {
         super.attachView(view)
@@ -43,10 +45,10 @@ class MovieDetailPresenter
         }
     }
 
-    //TODO: only grab 20 cast members for now.  Figre out limiting for that later
+    //TODO: only grab 20 cast members for now.  Figure out limiting for that later
     fun loadMovieDetails(movieId: Int) {
         Timber.d("load movie details")
-        if (!compositeDisposable.isDisposed) {
+        if (lastMovieDetailItem == null) {
             val disposable =
                     Single.zip(
                             TMDBService.queryMovieDetail(movieId).subscribeOn(Schedulers.io()),
@@ -58,8 +60,9 @@ class MovieDetailPresenter
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ movieDetailItem ->
                                 ifViewAttached { view: MovieDetailView ->
-                                    castListAdapter?.castList?.addAll(movieDetailItem.castMembers.take(20))
+                                    castListAdapter?.castMemberList?.addAll(movieDetailItem.castMembers.take(20))
                                     castListAdapter?.notifyDataSetChanged()
+                                    castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
                                     view.showMovieDetails(movieDetailItem)
                                     lastMovieDetailItem = movieDetailItem
                                 }
@@ -72,9 +75,12 @@ class MovieDetailPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: MovieDetailView ->
-                castListAdapter?.castList?.addAll(lastMovieDetailItem.castMembers.take(20))
-                castListAdapter?.notifyDataSetChanged()
-                view.showMovieDetails(lastMovieDetailItem)
+                lastMovieDetailItem?.let {
+                    castListAdapter?.castMemberList?.addAll(it.castMembers.take(20))
+                    castListAdapter?.notifyDataSetChanged()
+                    castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
+                    view.showMovieDetails(it)
+                }
             }
         }
     }
@@ -107,6 +113,14 @@ class MovieDetailPresenter
     fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_bold, genresListSize)
 
     fun processGenres(genres: List<String?>): String = genres.joinToString(", ")
+
+    private fun onCardSelected(itemId: Int) {
+        ifViewAttached { view: MovieDetailView ->
+            view.showDetail(Bundle().apply {
+                putInt("PersonID", itemId)
+            })
+        }
+    }
 
     override fun destroy() {
         super.destroy()

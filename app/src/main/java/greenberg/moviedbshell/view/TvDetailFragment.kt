@@ -12,6 +12,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
@@ -55,12 +57,13 @@ class TvDetailFragment :
     private lateinit var castListAdapter: CastListAdapter
 
     private var tvDetailId = -1
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate")
         if (arguments != null) {
-            tvDetailId = arguments?.get("TvDetailId") as Int
+            tvDetailId = arguments?.get("TvDetailID") as? Int ?: -1
         }
     }
 
@@ -103,6 +106,7 @@ class TvDetailFragment :
 
         presenter.initView(tvDetailId, castListAdapter)
         presenter.loadTvDetails(tvDetailId)
+        navController = findNavController()
     }
 
     override fun createPresenter() = presenter
@@ -176,6 +180,10 @@ class TvDetailFragment :
         Timber.d(throwable)
     }
 
+    override fun showDetail(bundle: Bundle) {
+        navController?.navigate(R.id.action_tvDetailFragment_to_personDetailFragment, bundle)
+    }
+
     override fun onStart() {
         super.onStart()
         Timber.d("onStart")
@@ -197,8 +205,8 @@ class TvDetailFragment :
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         Timber.d("onDestroy")
+        super.onDestroy()
     }
 
     private fun toggleLoading() {

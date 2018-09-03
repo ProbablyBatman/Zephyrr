@@ -30,7 +30,6 @@ class PopularMoviesPresenter
     //Default to getting the first page
     private var popularMoviePageNumber = 1
     private var totalAvailablePages = -1
-    //private var mapper: PopularMovieMapper = PopularMovieMapper()
     private var popularMoviesList = mutableListOf<MovieItem>()
     private var popularMovieAdapter: PopularMovieAdapter? = null
     private var compositeDisposable = CompositeDisposable()
@@ -45,6 +44,7 @@ class PopularMoviesPresenter
         ifViewAttached { view: PopularMoviesView ->
             view.showLoading(true)
         }
+        compositeDisposable = CompositeDisposable()
     }
 
     fun initRecyclerPagination(recyclerView: RecyclerView?, adapter: PopularMovieAdapter?) {
@@ -192,8 +192,8 @@ class PopularMoviesPresenter
     }
 
     override fun destroy() {
-        super.destroy()
-        Timber.d("destroy called, disposables disposed of")
+        Timber.d("destroy called")
         compositeDisposable.dispose()
+        super.destroy()
     }
 }

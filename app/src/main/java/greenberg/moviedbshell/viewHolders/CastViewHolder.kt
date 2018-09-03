@@ -2,6 +2,7 @@ package greenberg.moviedbshell.viewHolders
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,20 +13,22 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.models.ui.CastItem
+import greenberg.moviedbshell.models.ui.CastMemberItem
 
-class CastListAdapter(var castList: MutableList<CastItem> = mutableListOf()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableListOf()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    lateinit var onClickListener: (Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CastListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cast_list_card, parent, false))
     }
 
-    override fun getItemCount() = castList.size
+    override fun getItemCount() = castMemberList.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is CastListViewHolder) {
             resetView(holder)
-            val currentItem = castList[position]
+            val currentItem = castMemberList[position]
             holder.actorRole.text = currentItem.role
             holder.actorName.text = currentItem.name
             //Set poster image
@@ -42,6 +45,7 @@ class CastListAdapter(var castList: MutableList<CastItem> = mutableListOf()) : R
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(holder.actorImage)
             }
+            holder.cardView.setOnClickListener { onClickListener.invoke(currentItem.id ?: -1) }
         }
     }
 
@@ -52,6 +56,7 @@ class CastListAdapter(var castList: MutableList<CastItem> = mutableListOf()) : R
     }
 
     class CastListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        var cardView: CardView = view.findViewById(R.id.cast_card_view)
         var actorImage: ImageView = view.findViewById(R.id.cast_list_item_image)
         var actorRole: TextView = view.findViewById(R.id.cast_list_item_role)
         var actorName: TextView = view.findViewById(R.id.cast_list_item_actor)

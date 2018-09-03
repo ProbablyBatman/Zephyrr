@@ -1,18 +1,14 @@
 package greenberg.moviedbshell.presenters
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.SearchResultsMapper
+import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.PreviewItem
+import greenberg.moviedbshell.models.ui.TvItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.ZephyrrSearchView
 import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
@@ -21,7 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class SearchPresenter
@@ -107,16 +103,6 @@ class SearchPresenter
         }
     }
 
-    fun processReleaseDate(releaseDate: String): String =
-            if (releaseDate.isNotBlank()) {
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                val date = inputFormat.parse(releaseDate)
-                val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-                outputFormat.format(date)
-            } else {
-                ""
-            }
-
     fun performSearch(query: String) {
         if (searchResultsList.isEmpty()) {
             lastQuery = query
@@ -155,10 +141,38 @@ class SearchPresenter
         ifViewAttached { view: ZephyrrSearchView ->
             view.showDetail(Bundle().apply {
                 //TODO: update this to when
-                if (mediaType == MEDIA_TYPE_MOVIE) putInt("MovieID", cardItemId)
-                else if (mediaType == MEDIA_TYPE_TV) putInt("TvDetailId", cardItemId)
+                when (mediaType) {
+                    MEDIA_TYPE_MOVIE -> putInt("MovieID", cardItemId)
+                    MEDIA_TYPE_TV -> putInt("TvDetailID", cardItemId)
+                    MEDIA_TYPE_PERSON -> putInt("PersonID", cardItemId)
+                }
             }, mediaType)
         }
+    }
+
+    fun processReleaseDate(releaseDate: String): String =
+            if (releaseDate.isNotBlank()) {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = inputFormat.parse(releaseDate)
+                val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                outputFormat.format(date)
+            } else {
+                ""
+            }
+
+    fun processKnownForItems(items: List<PreviewItem>): String {
+        return "Most Known for: \n" +
+                items.joinToString(separator = "\n") { item ->
+                    when (item) {
+                        is MovieItem -> {
+                            "Movie: ${item.movieTitle}, ${processReleaseDate(item.releaseDate)}"
+                        }
+                        is TvItem -> {
+                            "TV show: ${item.name}, ${processReleaseDate(item.firstAirDate)}"
+                        }
+                        else -> ""
+                    }
+                }
     }
 
     override fun detachView() {
@@ -173,9 +187,9 @@ class SearchPresenter
     }
 
     override fun destroy() {
-        super.destroy()
         Timber.d("destroy called, disposables disposed of")
         compositeDisposable.dispose()
+        super.destroy()
     }
 
 

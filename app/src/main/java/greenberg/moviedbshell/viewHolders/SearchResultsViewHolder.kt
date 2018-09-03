@@ -43,13 +43,17 @@ class SearchResultsAdapter(var searchResults: MutableList<PreviewItem> = mutable
                     holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType) }
                 }
                 is PersonItem -> {
-                    //One of the problems with people is their limited fields.  Currently they only have:
-                    //popularity, media type, id, profile path (for picture), name, and known for (list of movies).
                     holder.searchItemTitle.text = currentItem.name
-                    //todo: find better way to do these
-                    holder.searchItemSubInfo.text = ""
-                    holder.searchItemOverview.text = ""
+                    //Remove this in favor of showing known for items
+                    holder.searchItemSubInfo.visibility = View.GONE
+                    val knownForText = presenter.processKnownForItems(currentItem.knownForItems)
+                    if (knownForText.isNotEmpty()) {
+                        holder.searchItemOverview.text = knownForText
+                    } else {
+                        holder.searchItemOverview.visibility = View.GONE
+                    }
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
+                    holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType) }
                 }
                 else -> {
                     //TODO: handle unknown type?

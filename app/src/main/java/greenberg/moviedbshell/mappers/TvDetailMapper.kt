@@ -1,12 +1,12 @@
 package greenberg.moviedbshell.mappers
 
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseItem
+import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseContainer
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import javax.inject.Inject
 
 class TvDetailMapper
-@Inject constructor(private val castMemberMapper: CastMemberMapper) : Mapper<TvDetailResponseItem, TvDetailItem> {
-    override fun mapToEntity(item: TvDetailResponseItem): TvDetailItem {
+@Inject constructor(private val castMemberMapper: CastMemberMapper) : Mapper<TvDetailResponseContainer, TvDetailItem> {
+    override fun mapToEntity(item: TvDetailResponseContainer): TvDetailItem {
         val tvDetail = item.tvDetailResponse
         val creditsDetail = item.creditsResponse
         return TvDetailItem(

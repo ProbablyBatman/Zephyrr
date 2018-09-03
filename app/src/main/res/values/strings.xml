@@ -6,7 +6,7 @@
 
     <string name="generic_loading_text">Loading more results…</string>
 
-    <!-- Movie Detail Layout -->
+    <!-- Detail Layout -->
     <string name="release_date_bold">Release Date</string>
     <string name="user_rating_bold">User Rating</string>
     <string name="status_bold">Status</string>
@@ -15,6 +15,11 @@
         <item quantity="one">Genre</item>
         <item quantity="other">Genres</item>
     </plurals>
+    <string name="born_bold">Born</string>
+    <string name="died_bold">Died</string>
+    <string name="birthplace_bold">Birthplace</string>
+    <string name="day_and_age_substitution">%1$s (%2$d years old)</string>
+    <string name="birthday_no_substitution">%1$s</string>
     <string name="user_rating_substitution">%1$s by %2$d users</string>
     <string name="runtime_substitution">%1$s minutes</string>
     <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>

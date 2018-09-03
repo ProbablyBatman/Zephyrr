@@ -1,12 +1,13 @@
 package greenberg.moviedbshell.presenters
 
 import android.content.Context
+import android.os.Bundle
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.mappers.TvDetailMapper
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseItem
+import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseContainer
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.TvDetailView
@@ -30,7 +31,7 @@ class TvDetailPresenter
 
     private var compositeDisposable = CompositeDisposable()
     private var castListAdapter: CastListAdapter? = null
-    private lateinit var lastTvDetailItem: TvDetailItem
+    private var lastTvDetailItem: TvDetailItem? = null
 
     override fun attachView(view: TvDetailView) {
         super.attachView(view)
@@ -46,24 +47,24 @@ class TvDetailPresenter
 
     fun loadTvDetails(tvShowId: Int) {
         Timber.d("load tv details")
-        //TODO: look up a proper check for adding this disposable.
-        //Problem is I have no idea how to add it and keep track of it in a non disgusting way
-        //I think that the movie detail also has this problem
-        if (!compositeDisposable.isDisposed) {
+        //If there isn't an already existing item associated with this presenter.
+        //Pages are mostly static, so data can sort of be retained like this. Potentially bad.
+        if (lastTvDetailItem == null) {
             val disposable =
                     Single.zip(
                             TMDBService.queryTvDetail(tvShowId).subscribeOn(Schedulers.io()),
                             TMDBService.queryTvCredits(tvShowId).subscribeOn(Schedulers.io()),
-                            BiFunction<TvDetailResponse, CreditsResponse, TvDetailResponseItem> { tvDetail, tvCredits ->
-                                TvDetailResponseItem(tvDetail, tvCredits)
+                            BiFunction<TvDetailResponse, CreditsResponse, TvDetailResponseContainer> { tvDetail, tvCredits ->
+                                TvDetailResponseContainer(tvDetail, tvCredits)
                             }
                     )
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ tvDetailResponseItem ->
                                 val tvDetailItem = mapper.mapToEntity(tvDetailResponseItem)
                                 ifViewAttached { view: TvDetailView ->
-                                    castListAdapter?.castList?.addAll(tvDetailItem.castMembers)
+                                    castListAdapter?.castMemberList?.addAll(tvDetailItem.castMembers)
                                     castListAdapter?.notifyDataSetChanged()
+                                    castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
                                     view.showTvDetails(tvDetailItem)
                                     lastTvDetailItem = tvDetailItem
                                 }
@@ -75,9 +76,12 @@ class TvDetailPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: TvDetailView ->
-                castListAdapter?.castList?.addAll(lastTvDetailItem.castMembers)
-                castListAdapter?.notifyDataSetChanged()
-                view.showTvDetails(lastTvDetailItem)
+                lastTvDetailItem?.let {
+                    castListAdapter?.castMemberList?.addAll(it.castMembers.take(20))
+                    castListAdapter?.notifyDataSetChanged()
+                    castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
+                    view.showTvDetails(it)
+                }
             }
         }
     }
@@ -130,14 +134,22 @@ class TvDetailPresenter
 
     fun processGenres(genres: List<String?>): String = genres.joinToString(", ")
 
+    private fun onCardSelected(itemId: Int) {
+        ifViewAttached { view: TvDetailView ->
+            view.showDetail(Bundle().apply {
+                putInt("PersonID", itemId)
+            })
+        }
+    }
+
     override fun detachView() {
-        super.detachView()
         Timber.d("detachView")
+        super.detachView()
     }
 
     override fun destroy() {
-        super.destroy()
         Timber.d("destroy called, disposables disposed of")
         compositeDisposable.dispose()
+        super.destroy()
     }
 }
