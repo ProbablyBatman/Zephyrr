@@ -27,7 +27,7 @@ class MainActivity : BaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         Timber.d("onCreateOptionsMenu")
         menu?.clear()
-        menuInflater?.inflate(R.menu.base_menu, menu)
+        menuInflater.inflate(R.menu.base_menu, menu)
         menu?.findItem(R.id.searchResultsFragment)?.let {
             setUpSearchListener(it)
         }
