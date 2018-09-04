@@ -22,7 +22,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
-import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.presenters.MovieDetailPresenter
 import greenberg.moviedbshell.viewHolders.CastListAdapter
@@ -84,16 +83,16 @@ class MovieDetailFragment :
         backdropImageView = view.findViewById(R.id.backdropImage)
         scrollView = view.findViewById(R.id.scroll)
         overviewTextView = view.findViewById(R.id.overview)
-        releaseDateTextView = view.findViewById(R.id.release_date)
-        releaseDateTitle = view.findViewById(R.id.release_date_bold)
-        ratingTextView = view.findViewById(R.id.user_rating)
-        ratingTitle = view.findViewById(R.id.user_rating_bold)
-        statusTextView = view.findViewById(R.id.status)
-        statusTitle = view.findViewById(R.id.status_bold)
-        runtimeTextView = view.findViewById(R.id.runtime)
-        runtimeTitle = view.findViewById(R.id.runtime_bold)
-        genresTitle = view.findViewById(R.id.genres_bold)
-        genresTextView = view.findViewById(R.id.genres)
+        releaseDateTextView = view.findViewById(R.id.movie_detail_release_date)
+        releaseDateTitle = view.findViewById(R.id.movie_detail_release_date_title)
+        ratingTextView = view.findViewById(R.id.movie_detail_user_rating)
+        ratingTitle = view.findViewById(R.id.movie_detail_user_rating_title)
+        statusTextView = view.findViewById(R.id.movie_detail_status)
+        statusTitle = view.findViewById(R.id.movie_detail_status_title)
+        runtimeTextView = view.findViewById(R.id.movie_detail_runtime)
+        runtimeTitle = view.findViewById(R.id.movie_detail_runtime_title)
+        genresTitle = view.findViewById(R.id.movie_detail_genres_title)
+        genresTextView = view.findViewById(R.id.movie_detail_genres)
         castRecyclerView = view.findViewById(R.id.movie_detail_cast_members_recycler)
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)

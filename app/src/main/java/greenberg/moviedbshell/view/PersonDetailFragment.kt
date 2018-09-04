@@ -65,7 +65,7 @@ class PersonDetailFragment :
         Timber.d("onViewCreated")
 
         progressBar = view.findViewById(R.id.person_detail_progress_bar)
-        posterImageWrapper =  view.findViewById(R.id.person_poster_wrapper)
+        posterImageWrapper =  view.findViewById(R.id.person_poster_container)
         posterImageView = view.findViewById(R.id.person_poster_image)
         name = view.findViewById(R.id.person_detail_name)
         birthdayTitle = view.findViewById(R.id.person_detail_birthday_title)
@@ -127,6 +127,9 @@ class PersonDetailFragment :
     }
 
     override fun showPersonDetails(personDetailItem: PersonDetailItem) {
+        toggleLoading()
+        showAllViews()
+
         if (personDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
             val validUrl = resources.getString(R.string.poster_url_substitution, personDetailItem.posterImageUrl)
             Glide.with(this)
@@ -142,24 +145,33 @@ class PersonDetailFragment :
         }
 
         name?.text = personDetailItem.name
-        if (personDetailItem.deathday.isNotEmpty()) {
-            birthday?.text = resources.getString(R.string.birthday_no_substitution,
-                    presenter.processDate(personDetailItem.birthday))
-            deathday?.text = resources.getString(R.string.day_and_age_substitution,
-                    presenter.processDate(personDetailItem.deathday),
-                    presenter.processAge(personDetailItem.birthday, personDetailItem.deathday))
-            deathday?.visibility = View.VISIBLE
-            deathdayTitle?.visibility = View.VISIBLE
-        } else {
-            birthday?.text = resources.getString(R.string.day_and_age_substitution,
-                    presenter.processDate(personDetailItem.birthday),
-                    presenter.processAge(personDetailItem.birthday))
+        when {
+            personDetailItem.deathday.isNotEmpty() -> {
+                birthday?.text = resources.getString(R.string.birthday_no_age_substitution,
+                        presenter.processDate(personDetailItem.birthday))
+                deathday?.text = resources.getString(R.string.day_and_age_substitution,
+                        presenter.processDate(personDetailItem.deathday),
+                        presenter.processAge(personDetailItem.birthday, personDetailItem.deathday))
+                deathday?.visibility = View.VISIBLE
+                deathdayTitle?.visibility = View.VISIBLE
+            }
+            personDetailItem.birthday.isNotEmpty() -> {
+                birthday?.text = resources.getString(R.string.day_and_age_substitution,
+                        presenter.processDate(personDetailItem.birthday),
+                        presenter.processAge(personDetailItem.birthday))
+            }
+            else -> {
+                birthdayTitle?.visibility = View.GONE
+                birthday?.visibility = View.GONE
+            }
         }
-        birthplace?.text = personDetailItem.placeOfBirth
+        if (personDetailItem.placeOfBirth.isNotEmpty()) {
+            birthplace?.text = personDetailItem.placeOfBirth
+        } else {
+            birthplaceTitle?.visibility = View.GONE
+            birthplace?.visibility = View.GONE
+        }
         biography?.text = personDetailItem.biography
-
-        toggleLoading()
-        showAllViews()
     }
 
     private fun toggleLoading() {

@@ -110,7 +110,7 @@ class MovieDetailPresenter
 
     fun processRuntime(runtime: Int): String = context.getString(R.string.runtime_substitution, runtime.toString())
 
-    fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_bold, genresListSize)
+    fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_title, genresListSize)
 
     fun processGenres(genres: List<String?>): String = genres.joinToString(", ")
 

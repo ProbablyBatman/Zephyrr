@@ -34,16 +34,6 @@ class MainActivity : BaseActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        Timber.d("onOptionsItemSelected")
-        when (item?.itemId) {
-            R.id.searchResultsFragment -> {
-                setUpSearchListener(item)
-            }
-        }
-        return false
-    }
-
     private fun setUpSearchListener(item: MenuItem) {
         val searchView = item.actionView as? SearchView
         searchView?.apply {
@@ -51,7 +41,6 @@ class MainActivity : BaseActivity() {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     Timber.d("onQueryTextSubmit: $query")
-                    //searchView.isIconified = true
                     item.collapseActionView()
                     searchView.hideKeyboard()
                     searchView.clearFocus()

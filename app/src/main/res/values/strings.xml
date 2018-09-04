@@ -7,19 +7,19 @@
     <string name="generic_loading_text">Loading more results…</string>
 
     <!-- Detail Layout -->
-    <string name="release_date_bold">Release Date</string>
-    <string name="user_rating_bold">User Rating</string>
-    <string name="status_bold">Status</string>
-    <string name="runtime_bold">Runtime</string>
-    <plurals name="genres_bold">
+    <string name="release_date_title">Release Date</string>
+    <string name="user_rating_title">User Rating</string>
+    <string name="status_title">Status</string>
+    <string name="runtime_title">Runtime</string>
+    <plurals name="genres_title">
         <item quantity="one">Genre</item>
         <item quantity="other">Genres</item>
     </plurals>
-    <string name="born_bold">Born</string>
-    <string name="died_bold">Died</string>
-    <string name="birthplace_bold">Birthplace</string>
+    <string name="born_title">Born</string>
+    <string name="died_title">Died</string>
+    <string name="birthplace_title">Birthplace</string>
     <string name="day_and_age_substitution">%1$s (%2$d years old)</string>
-    <string name="birthday_no_substitution">%1$s</string>
+    <string name="birthday_no_age_substitution">%1$s</string>
     <string name="user_rating_substitution">%1$s by %2$d users</string>
     <string name="runtime_substitution">%1$s minutes</string>
     <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>
@@ -32,9 +32,9 @@
     <string name="empty_state_search_text">No results found for %1$s.</string>
 
     <!-- Tv Detail -->
-    <string name="first_aired">First Aired</string>
-    <string name="next_air_date">Next Air Date</string>
-    <string name="last_aired">Last Aired</string>
-    <string name="number_of_episodes">Episodes</string>
-    <string name="number_of_seasons">Seasons</string>
+    <string name="first_aired_title">First Aired</string>
+    <string name="next_air_date_title">Next Air Date</string>
+    <string name="last_aired_title">Last Aired</string>
+    <string name="number_of_episodes_title">Episodes</string>
+    <string name="number_of_seasons_title">Seasons</string>
 </resources>

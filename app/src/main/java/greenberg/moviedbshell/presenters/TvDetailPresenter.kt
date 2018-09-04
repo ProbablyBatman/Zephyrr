@@ -101,8 +101,8 @@ class TvDetailPresenter
 
     fun processLastOrNextAirDateTitle(tvDetailItem: TvDetailItem): String? {
         return when {
-            tvDetailItem.nextAirDate != null -> context.getString(R.string.next_air_date)
-            tvDetailItem.lastAirDate != null -> context.getString(R.string.last_aired)
+            tvDetailItem.nextAirDate != null -> context.getString(R.string.next_air_date_title)
+            tvDetailItem.lastAirDate != null -> context.getString(R.string.last_aired_title)
             else -> null
         }
     }
@@ -130,7 +130,7 @@ class TvDetailPresenter
         return context.getString(R.string.runtime_substitution, allRuntimes)
     }
 
-    fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_bold, genresListSize)
+    fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_title, genresListSize)
 
     fun processGenres(genres: List<String?>): String = genres.joinToString(", ")
 
