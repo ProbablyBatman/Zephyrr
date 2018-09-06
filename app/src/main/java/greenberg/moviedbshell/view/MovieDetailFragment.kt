@@ -35,8 +35,6 @@ class MovieDetailFragment :
     private var posterImageView: ImageView? = null
     private var backdropImageView: ImageView? = null
     private var backdropImageWrapper: FrameLayout? = null
-    private var appBar: AppBarLayout? = null
-    private var collapsingToolbarLayout: net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout? = null
     private var titleBar: TextView? = null
     private var scrollView: NestedScrollView? = null
 
@@ -74,8 +72,6 @@ class MovieDetailFragment :
         super.onViewCreated(view, savedInstanceState)
         Timber.d("onViewCreated")
 
-        //collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar)
-        //appBar = view.findViewById(R.id.app_bar_layout)
         progressBar = view.findViewById(R.id.movieDetailProgressBar)
         backdropImageWrapper = view.findViewById(R.id.backgroundImageWrapper)
         titleBar = view.findViewById(R.id.movie_detail_title)
@@ -152,7 +148,6 @@ class MovieDetailFragment :
                     .into(backdropImageView!!)
         }
 
-        //collapsingToolbarLayout?.title = movieDetailResponse.originalTitle
         titleBar?.text = movieDetailItem.movieTitle
         overviewTextView?.text = movieDetailItem.overview
         releaseDateTextView?.text = presenter.processReleaseDate(movieDetailItem.releaseDate)
