@@ -28,7 +28,7 @@
             android:visibility="gone"/>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/person_poster_wrapper"
+            android:id="@+id/person_poster_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="10dp"
@@ -49,84 +49,75 @@
 
         <TextView
             android:id="@+id/person_detail_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="@style/TopInfoStyle"
+            style="@style/TopInfoItemStyle"
             android:gravity="center"
-            app:layout_constraintStart_toEndOf="@id/person_poster_wrapper"
+            app:layout_constraintStart_toEndOf="@id/person_poster_container"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             tools:text="Nikolaj Coster-Waldau"/>
 
         <TextView
             android:id="@+id/person_detail_birthday_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TopInfoStyle"
-            app:layout_constraintStart_toEndOf="@id/person_poster_wrapper"
+            style="@style/TopInfoTitleStyle"
+            app:layout_constraintStart_toEndOf="@id/person_poster_container"
             app:layout_constraintEnd_toStartOf="@id/person_detail_birthday"
             app:layout_constraintTop_toBottomOf="@id/person_detail_name"
-            android:textStyle="bold"
-            android:text="@string/born_bold"/>
+            android:text="@string/born_title"/>
 
         <TextView
             android:id="@+id/person_detail_birthday"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="@style/TopInfoStyle"
+            style="@style/TopInfoItemStyle"
             app:layout_constraintStart_toEndOf="@id/person_detail_birthday_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/person_detail_name"/>
 
         <TextView
             android:id="@+id/person_detail_deathday_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TopInfoStyle"
-            app:layout_constraintStart_toEndOf="@id/person_poster_wrapper"
+            style="@style/TopInfoTitleStyle"
+            app:layout_constraintStart_toEndOf="@id/person_poster_container"
             app:layout_constraintEnd_toStartOf="@id/person_detail_deathday"
-            app:layout_constraintTop_toBottomOf="@id/person_detail_birthday_title"
-            android:textStyle="bold"
-            android:text="@string/died_bold"/>
+            app:layout_constraintTop_toBottomOf="@id/person_detail_birthday"
+            android:text="@string/died_title"/>
 
         <TextView
             android:id="@+id/person_detail_deathday"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="@style/TopInfoStyle"
+            style="@style/TopInfoItemStyle"
             app:layout_constraintStart_toEndOf="@id/person_detail_deathday_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/person_detail_birthday"/>
 
         <TextView
             android:id="@+id/person_detail_birthplace_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TopInfoStyle"
-            app:layout_constraintTop_toBottomOf="@id/person_detail_deathday_title"
-            app:layout_constraintStart_toEndOf="@id/person_poster_wrapper"
+            style="@style/TopInfoTitleStyle"
+            app:layout_constraintTop_toBottomOf="@id/person_detail_deathday"
+            app:layout_constraintStart_toEndOf="@id/person_poster_container"
             app:layout_constraintEnd_toStartOf="@id/person_detail_birthplace"
-            android:textStyle="bold"
-            android:text="@string/birthplace_bold"/>
+            android:text="@string/birthplace_title"/>
 
         <TextView
             android:id="@+id/person_detail_birthplace"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="@style/TopInfoStyle"
+            style="@style/TopInfoItemStyle"
             app:layout_constraintTop_toBottomOf="@id/person_detail_deathday"
             app:layout_constraintStart_toEndOf="@id/person_detail_birthplace_title"
             app:layout_constraintEnd_toEndOf="parent"/>
+
+        <android.support.constraint.Barrier
+            android:id="@+id/tv_detail_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="person_detail_birthplace, person_poster_container"/>
 
         <TextView
             android:id="@+id/person_detail_biography"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            style="@style/TopInfoStyle"
-            app:layout_constraintTop_toBottomOf="@id/person_poster_wrapper"
+            android:padding="@dimen/margin_medium"
+            android:textSize="@dimen/text_size_small"
+            android:lineSpacingMultiplier="1.25"
+            app:layout_constraintTop_toBottomOf="@id/person_poster_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -134,7 +125,7 @@
             android:id="@+id/person_detail_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin_small"
             app:layout_constraintTop_toBottomOf="@id/person_detail_biography"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="spacing_large">16dp</dimen>
-    <dimen name="action_bar_size">56dp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_medium">24sp</dimen>
+    <dimen name="text_size_large">32sp</dimen>
+    <dimen name="margin_small">10dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="card_corner_radius">5dp</dimen>
+
+    <!-- Cast/Credit recycler -->
+    <dimen name="people_recycler_poster_width">132dp</dimen>
+    <dimen name="people_recycler_poster_height">198dp</dimen>
 </resources>

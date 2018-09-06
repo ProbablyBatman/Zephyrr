@@ -25,38 +25,47 @@
     <style name="PosterArtStyle">
         <item name="android:layout_width">130dp</item>
         <item name="android:layout_height">195dp</item>
-        <item name="android:layout_margin">@dimen/spacing_large</item>
+        <item name="android:layout_margin">@dimen/margin_medium</item>
         <item name="borderWidth">0dp</item>
         <item name="elevation">6dp</item>
     </style>
 
-    <style name="FabStyle">
+    <style name="TopInfoTitleStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">@dimen/spacing_large</item>
-        <item name="android:src">@drawable/ic_launcher_background</item>
-        <item name="borderWidth">0dp</item>
-        <item name="elevation">6dp</item>
-        <item name="pressedTranslationZ">12dp</item>
-        <item name="rippleColor">@android:color/white</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
+        <item name="android:layout_marginLeft">@dimen/margin_small</item>
+        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">@dimen/margin_small</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TopInfoStyle">
-        <item name="android:layout_width">wrap_content</item>
+    <style name="TopInfoItemStyle">
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">10dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
+        <item name="android:layout_marginLeft">@dimen/margin_small</item>
+        <item name="android:layout_marginRight">@dimen/margin_small</item>
+        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">@dimen/margin_small</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 
     <style name="CardItemPeople">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:minLines">2</item>
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
         <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="DetailTitleStyle">
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:padding">@dimen/margin_medium</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
 </resources>
