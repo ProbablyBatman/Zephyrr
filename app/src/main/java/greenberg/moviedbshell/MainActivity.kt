@@ -14,7 +14,6 @@ import timber.log.Timber
 class MainActivity : BaseActivity() {
 
     private lateinit var navController: NavController
-    //TODO: probably only inherit from this.  For now, this isn't an issue
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_activity_layout)
@@ -60,4 +59,8 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()
+
+    override fun log(message: String) {
+        Timber.d(message)
+    }
 }
