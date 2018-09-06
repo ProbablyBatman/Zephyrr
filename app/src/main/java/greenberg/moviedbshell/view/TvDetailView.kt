@@ -8,6 +8,6 @@ interface TvDetailView : MvpView {
     fun showLoading(tvShowId: Int)
     fun showError(throwable: Throwable)
     fun showTvDetails(tvDetailItem: TvDetailItem)
-    //TODO: fix naming of this
+    // TODO: fix naming of this
     fun showDetail(bundle: Bundle)
 }

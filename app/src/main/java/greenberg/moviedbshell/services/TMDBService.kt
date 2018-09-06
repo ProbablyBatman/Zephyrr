@@ -7,7 +7,6 @@ import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
-import greenberg.moviedbshell.models.ui.PersonDetailCreditItem
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -45,7 +45,7 @@ class MainActivity : BaseActivity() {
                     searchView.clearFocus()
                     navController.navigate(R.id.searchResultsFragment, Bundle().apply {
                         putString("Query", query)
-                    }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment,true).build())
+                    }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true).build())
                     return true
                 }
 
@@ -53,7 +53,6 @@ class MainActivity : BaseActivity() {
                     Timber.d("onQueryTextChange: $newText")
                     return false
                 }
-
             })
         }
     }

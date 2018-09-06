@@ -97,7 +97,6 @@ class MovieDetailFragment :
         presenter?.initView(movieId, castListAdapter)
         presenter.loadMovieDetails(movieId)
         navController = findNavController()
-
     }
 
     override fun createPresenter(): MovieDetailPresenter = presenter
@@ -155,7 +154,7 @@ class MovieDetailFragment :
         runtimeTextView?.text = presenter.processRuntime(movieDetailItem.runtime)
         genresTitle?.text = presenter.processGenreTitle(movieDetailItem.genres.size)
         genresTextView?.text = presenter.processGenres(movieDetailItem.genres)
-        //TODO: potentially scrape other rating information
+        // TODO: potentially scrape other rating information
         toggleLoadingBar()
         showAllViews()
     }

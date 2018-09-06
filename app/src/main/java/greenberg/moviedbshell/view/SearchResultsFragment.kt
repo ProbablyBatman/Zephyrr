@@ -62,8 +62,8 @@ class SearchResultsFragment :
         searchResultsRecycler?.adapter = searchResultsAdapter
 
         presenter.initRecyclerPagination(searchResultsRecycler, searchResultsAdapter)
-        //TODO: maybe change the title of the action bar to show the last performed search
-        //noactivity?.actionBar?.title = query
+        // TODO: maybe change the title of the action bar to show the last performed search
+        // noactivity?.actionBar?.title = query
         presenter.performSearch(query)
         navController = findNavController()
     }
@@ -131,7 +131,7 @@ class SearchResultsFragment :
 
     override fun showEmptyState(lastQuery: String?) {
         Timber.d("Showing empty state for $lastQuery")
-        //TODO: look to get rid of storing the query in the view
+        // TODO: look to get rid of storing the query in the view
         emptyStateText?.text = getString(R.string.empty_state_search_text, lastQuery)
         searchLoadingBar?.visibility = View.GONE
         emptyStateText?.visibility = View.VISIBLE
@@ -166,5 +166,4 @@ class SearchResultsFragment :
         @JvmField
         val TAG: String = SearchResultsFragment::class.java.simpleName
     }
-
 }

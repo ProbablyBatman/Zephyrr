@@ -5,9 +5,8 @@ import android.view.View
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import com.hannesdorfmann.mosby3.mvp.MvpView
-import timber.log.Timber
 
-abstract class BaseFragment<V: MvpView, P: MvpBasePresenter<V>> :
+abstract class BaseFragment<V : MvpView, P : MvpBasePresenter<V>> :
         MvpFragment<V, P>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

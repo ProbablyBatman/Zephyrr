@@ -1,7 +1,10 @@
 package greenberg.moviedbshell.mappers
 
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
-import greenberg.moviedbshell.models.ui.*
+import greenberg.moviedbshell.models.ui.MovieItem
+import greenberg.moviedbshell.models.ui.PersonItem
+import greenberg.moviedbshell.models.ui.PreviewItem
+import greenberg.moviedbshell.models.ui.TvItem
 import greenberg.moviedbshell.presenters.SearchPresenter
 import javax.inject.Inject
 
@@ -12,27 +15,27 @@ class SearchResultsMapper
             when (result?.mediaType) {
                 SearchPresenter.MEDIA_TYPE_MOVIE ->
                     MovieItem(
-                        movieTitle = result.title.orEmpty(),
-                        overview = result.overview.orEmpty(),
-                        releaseDate = result.releaseDate.orEmpty(),
-                        posterImageUrl = result.posterPath.orEmpty(),
-                        id = result.id
+                            movieTitle = result.title.orEmpty(),
+                            overview = result.overview.orEmpty(),
+                            releaseDate = result.releaseDate.orEmpty(),
+                            posterImageUrl = result.posterPath.orEmpty(),
+                            id = result.id
                     )
                 SearchPresenter.MEDIA_TYPE_TV -> {
                     TvItem(
-                        name = result.name.orEmpty(),
-                        overview = result.overview.orEmpty(),
-                        firstAirDate = result.firstAirDate.orEmpty(),
-                        posterImageUrl = result.posterPath.orEmpty(),
-                        id = result.id
+                            name = result.name.orEmpty(),
+                            overview = result.overview.orEmpty(),
+                            firstAirDate = result.firstAirDate.orEmpty(),
+                            posterImageUrl = result.posterPath.orEmpty(),
+                            id = result.id
                     )
                 }
                 SearchPresenter.MEDIA_TYPE_PERSON -> {
                     PersonItem(
-                        name = result.name.orEmpty(),
-                        posterImageUrl = result.profilePath.orEmpty(),
-                        knownForItems = knownForMapper.mapToEntity(result.knownFor),
-                        id = result.id
+                            name = result.name.orEmpty(),
+                            posterImageUrl = result.profilePath.orEmpty(),
+                            knownForItems = knownForMapper.mapToEntity(result.knownFor),
+                            id = result.id
                     )
                 }
                 else -> PreviewItem(mediaType = SearchPresenter.MEDIA_TYPE_UNKNOWN)

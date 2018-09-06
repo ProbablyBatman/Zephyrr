@@ -8,13 +8,13 @@ import greenberg.moviedbshell.presenters.SearchPresenter
 import javax.inject.Inject
 
 class KnownForMapper
-@Inject constructor(): Mapper<List<KnownForItem?>?, List<PreviewItem>> {
+@Inject constructor() : Mapper<List<KnownForItem?>?, List<PreviewItem>> {
     override fun mapToEntity(item: List<KnownForItem?>?): List<PreviewItem> {
         val mappedItems = item?.map {
             when (it?.mediaType) {
                 SearchPresenter.MEDIA_TYPE_MOVIE ->
                     MovieItem(
-                        movieTitle =  it.title.orEmpty(),
+                        movieTitle = it.title.orEmpty(),
                         overview = it.overview.orEmpty(),
                         releaseDate = it.releaseDate.orEmpty(),
                         posterImageUrl = it.posterPath.orEmpty(),

@@ -1,135 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:clipToPadding="false"
-    tools:context=".MainActivity">
-
-    <ProgressBar
-        android:id="@+id/person_detail_progress_bar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"/>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/person_detail_scroll"
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:clipToPadding="false"
-        android:visibility="gone">
+        tools:context=".MainActivity">
 
-        <android.support.constraint.ConstraintLayout
+    <ProgressBar
+            android:id="@+id/person_detail_progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"/>
+
+    <android.support.v4.widget.NestedScrollView
+            android:id="@+id/person_detail_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants">
+            android:clipToPadding="false"
+            android:visibility="gone">
+
+        <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="blocksDescendants">
 
             <android.support.v7.widget.CardView
-                android:id="@+id/person_poster_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                    android:id="@+id/person_poster_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/person_poster_image"
-                    android:layout_width="120dp"
-                    android:layout_height="180dp" />
+                        android:id="@+id/person_poster_image"
+                        android:layout_width="120dp"
+                        android:layout_height="180dp"/>
 
             </android.support.v7.widget.CardView>
 
             <TextView
-                android:id="@+id/person_detail_name"
-                style="@style/TopInfoItemStyle"
-                android:gravity="center"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/person_poster_container"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Nikolaj Coster-Waldau" />
+                    android:id="@+id/person_detail_name"
+                    style="@style/TopInfoItemStyle"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/person_poster_container"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Nikolaj Coster-Waldau"/>
 
             <TextView
-                android:id="@+id/person_detail_birthday_title"
-                style="@style/TopInfoTitleStyle"
-                android:text="@string/born_title"
-                app:layout_constraintEnd_toStartOf="@id/person_detail_birthday"
-                app:layout_constraintStart_toEndOf="@id/person_poster_container"
-                app:layout_constraintTop_toBottomOf="@id/person_detail_name" />
+                    android:id="@+id/person_detail_birthday_title"
+                    style="@style/TopInfoTitleStyle"
+                    android:text="@string/born_title"
+                    app:layout_constraintEnd_toStartOf="@id/person_detail_birthday"
+                    app:layout_constraintStart_toEndOf="@id/person_poster_container"
+                    app:layout_constraintTop_toBottomOf="@id/person_detail_name"/>
 
             <TextView
-                android:id="@+id/person_detail_birthday"
-                style="@style/TopInfoItemStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/person_detail_birthday_title"
-                app:layout_constraintTop_toBottomOf="@id/person_detail_name" />
+                    android:id="@+id/person_detail_birthday"
+                    style="@style/TopInfoItemStyle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/person_detail_birthday_title"
+                    app:layout_constraintTop_toBottomOf="@id/person_detail_name"/>
 
             <TextView
-                android:id="@+id/person_detail_deathday_title"
-                style="@style/TopInfoTitleStyle"
-                android:text="@string/died_title"
-                app:layout_constraintEnd_toStartOf="@id/person_detail_deathday"
-                app:layout_constraintStart_toEndOf="@id/person_poster_container"
-                app:layout_constraintTop_toBottomOf="@id/person_detail_birthday" />
+                    android:id="@+id/person_detail_deathday_title"
+                    style="@style/TopInfoTitleStyle"
+                    android:text="@string/died_title"
+                    app:layout_constraintEnd_toStartOf="@id/person_detail_deathday"
+                    app:layout_constraintStart_toEndOf="@id/person_poster_container"
+                    app:layout_constraintTop_toBottomOf="@id/person_detail_birthday"/>
 
             <TextView
-                android:id="@+id/person_detail_deathday"
-                style="@style/TopInfoItemStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/person_detail_deathday_title"
-                app:layout_constraintTop_toBottomOf="@id/person_detail_birthday" />
+                    android:id="@+id/person_detail_deathday"
+                    style="@style/TopInfoItemStyle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/person_detail_deathday_title"
+                    app:layout_constraintTop_toBottomOf="@id/person_detail_birthday"/>
 
             <TextView
-                android:id="@+id/person_detail_birthplace_title"
-                style="@style/TopInfoTitleStyle"
-                android:text="@string/birthplace_title"
-                app:layout_constraintEnd_toStartOf="@id/person_detail_birthplace"
-                app:layout_constraintStart_toEndOf="@id/person_poster_container"
-                app:layout_constraintTop_toBottomOf="@id/person_detail_deathday" />
+                    android:id="@+id/person_detail_birthplace_title"
+                    style="@style/TopInfoTitleStyle"
+                    android:text="@string/birthplace_title"
+                    app:layout_constraintEnd_toStartOf="@id/person_detail_birthplace"
+                    app:layout_constraintStart_toEndOf="@id/person_poster_container"
+                    app:layout_constraintTop_toBottomOf="@id/person_detail_deathday"/>
 
             <TextView
-                android:id="@+id/person_detail_birthplace"
-                style="@style/TopInfoItemStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/person_detail_birthplace_title"
-                app:layout_constraintTop_toBottomOf="@id/person_detail_deathday" />
+                    android:id="@+id/person_detail_birthplace"
+                    style="@style/TopInfoItemStyle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/person_detail_birthplace_title"
+                    app:layout_constraintTop_toBottomOf="@id/person_detail_deathday"/>
 
             <android.support.constraint.Barrier
-                android:id="@+id/tv_detail_barrier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="person_detail_birthplace, person_poster_container" />
+                    android:id="@+id/tv_detail_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="person_detail_birthplace, person_poster_container"/>
 
             <TextView
-                android:id="@+id/person_detail_biography"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:lineSpacingMultiplier="1.25"
-                android:padding="@dimen/margin_medium"
-                android:textSize="@dimen/text_size_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/person_poster_container" />
+                    android:id="@+id/person_detail_biography"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="1.25"
+                    android:padding="@dimen/margin_medium"
+                    android:textSize="@dimen/text_size_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/person_poster_container"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/person_detail_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/person_detail_biography" />
+                    android:id="@+id/person_detail_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/person_detail_biography"/>
 
         </android.support.constraint.ConstraintLayout>
 

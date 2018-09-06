@@ -156,7 +156,7 @@ class TvDetailFragment :
 
         titleBar?.text = tvDetailItem.title
         firstAirDateText?.text = presenter.processDate(tvDetailItem.firstAirDate)
-        //Both of these have to not be null to show them
+        // Both of these have to not be null to show them
         val lastOrNextAirDateTitleText = presenter.processLastOrNextAirDateTitle(tvDetailItem)
         val lastOrNextAirDate = presenter.processLastOrNextAirDate(tvDetailItem)
         if (lastOrNextAirDateTitleText != null && lastOrNextAirDate != null) {

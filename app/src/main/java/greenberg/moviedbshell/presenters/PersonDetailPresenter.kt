@@ -22,8 +22,10 @@ import java.util.Locale
 import javax.inject.Inject
 
 class PersonDetailPresenter
-@Inject constructor(private val TMDBService: TMDBService,
-                    private val mapper: PersonDetailMapper) : MvpBasePresenter<PersonDetailView>() {
+@Inject constructor(
+    private val TMDBService: TMDBService,
+    private val mapper: PersonDetailMapper
+) : MvpBasePresenter<PersonDetailView>() {
 
     private var compositeDisposable = CompositeDisposable()
     private var creditsAdapter: CreditsAdapter? = null
@@ -42,8 +44,8 @@ class PersonDetailPresenter
     }
 
     fun loadPersonDetails(personId: Int) {
-        //If there isn't an already existing item associated with this presenter.
-        //Pages are mostly static, so data can sort of be retained like this. Potentially bad.
+        // If there isn't an already existing item associated with this presenter.
+        // Pages are mostly static, so data can sort of be retained like this. Potentially bad.
         if (lastPersonItem == null) {
             val disposable =
                     Single.zip(
@@ -79,8 +81,8 @@ class PersonDetailPresenter
         }
     }
 
-    //TODO: probably make sure every date is like this?
-    //there has to be a better way to do this
+    // TODO: probably make sure every date is like this?
+    // there has to be a better way to do this
     fun processDate(date: String): String {
         return if (date.isNotBlank()) {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -92,8 +94,8 @@ class PersonDetailPresenter
         }
     }
 
-    //TODO: probably make sure every date is like this?
-    //there has to be a better way to do this
+    // TODO: probably make sure every date is like this?
+    // there has to be a better way to do this
     fun processAge(birthday: String, deathday: String = ""): Int {
         var age: Int
         when {

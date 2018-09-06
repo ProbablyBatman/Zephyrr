@@ -21,15 +21,17 @@ import java.util.Locale
 import javax.inject.Inject
 
 class SearchPresenter
-@Inject constructor(private val TMDBService: TMDBService,
-                    private val context: Context,
-                    private val searchResultsMapper: SearchResultsMapper) : MvpBasePresenter<ZephyrrSearchView>() {
+@Inject constructor(
+    private val TMDBService: TMDBService,
+    private val context: Context,
+    private val searchResultsMapper: SearchResultsMapper
+) : MvpBasePresenter<ZephyrrSearchView>() {
 
     private var isRecyclerLoading = false
-    //Default to getting the first page
+    // Default to getting the first page
     private var searchResultsPageNumber = 1
     private var totalAvailablePages = -1
-    //It is enforced that this string is at least not null and blank
+    // It is enforced that this string is at least not null and blank
     private var lastQuery: String? = null
     private var searchResultsList = mutableListOf<PreviewItem>()
     private var searchResultAdapter: SearchResultsAdapter? = null
@@ -56,9 +58,9 @@ class SearchPresenter
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                    if (!isRecyclerLoading
-                            && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                            && firstVisibleItemPosition >= 0) {
+                    if (!isRecyclerLoading &&
+                            (visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
+                            firstVisibleItemPosition >= 0) {
                         ifViewAttached { view: ZephyrrSearchView ->
                             isRecyclerLoading = true
                             if (!loadedMaxPages) {
@@ -72,7 +74,7 @@ class SearchPresenter
         }
     }
 
-    //Gets next page of search/multi movies call
+    // Gets next page of search/multi movies call
     private fun fetchNextPage(query: String) {
         if (searchResultsPageNumber < totalAvailablePages && totalAvailablePages != -1) {
             val disposable =
@@ -88,7 +90,7 @@ class SearchPresenter
                                 }
                             }, { throwable ->
                                 ifViewAttached { view: ZephyrrSearchView ->
-                                    //todo: revisit erroring the whole page on this.  Just error bottom
+                                    // todo: revisit erroring the whole page on this.  Just error bottom
                                     view.showError(throwable, false)
                                 }
                             })
@@ -140,7 +142,7 @@ class SearchPresenter
     fun onCardSelected(cardItemId: Int, mediaType: String) {
         ifViewAttached { view: ZephyrrSearchView ->
             view.showDetail(Bundle().apply {
-                //TODO: update this to when
+                // TODO: update this to when
                 when (mediaType) {
                     MEDIA_TYPE_MOVIE -> putInt("MovieID", cardItemId)
                     MEDIA_TYPE_TV -> putInt("TvDetailID", cardItemId)
@@ -181,7 +183,7 @@ class SearchPresenter
             view.hidePageLoad()
             view.hideMaxPages()
         }
-        //Copy last good list or empty. Maybe log if empty
+        // Copy last good list or empty. Maybe log if empty
         searchResultsList = searchResultAdapter?.searchResults?.toMutableList() ?: mutableListOf()
         super.detachView()
     }
@@ -191,7 +193,6 @@ class SearchPresenter
         compositeDisposable.dispose()
         super.destroy()
     }
-
 
     companion object {
         const val MEDIA_TYPE_PERSON = "person"
