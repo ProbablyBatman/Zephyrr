@@ -12,15 +12,15 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
+import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.presenters.SearchPresenter
 import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
 import timber.log.Timber
 
 class SearchResultsFragment :
-        MvpFragment<ZephyrrSearchView, SearchPresenter>(),
+        BaseFragment<ZephyrrSearchView, SearchPresenter>(),
         ZephyrrSearchView {
 
     private lateinit var query: String
@@ -37,7 +37,6 @@ class SearchResultsFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
         setHasOptionsMenu(false)
         query = arguments?.get("Query") as String
     }
@@ -48,7 +47,6 @@ class SearchResultsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
 
         zephyrrSearchView = view.findViewById(R.id.searchResultsFragment)
 
@@ -137,29 +135,8 @@ class SearchResultsFragment :
         emptyStateText?.visibility = View.VISIBLE
     }
 
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
-    override fun onPause() {
-        Timber.d("onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Timber.d("onStop")
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        Timber.d("onDestroy")
-        super.onDestroy()
+    override fun log(message: String) {
+        Timber.d(message)
     }
 
     companion object {

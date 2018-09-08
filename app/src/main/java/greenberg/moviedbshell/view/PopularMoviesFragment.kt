@@ -11,15 +11,15 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
+import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.presenters.PopularMoviesPresenter
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
 import timber.log.Timber
 
 class PopularMoviesFragment :
-        MvpFragment<PopularMoviesView, PopularMoviesPresenter>(),
+        BaseFragment<PopularMoviesView, PopularMoviesPresenter>(),
         PopularMoviesView,
         SwipeRefreshLayout.OnRefreshListener {
 
@@ -35,7 +35,6 @@ class PopularMoviesFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        Timber.d("onCreate")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,7 +43,6 @@ class PopularMoviesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
 
         popularMovieRecycler = view.findViewById(R.id.popularMovieRecycler)
         popularMovieRefresher = view.findViewById(R.id.popularMovieRefresher)
@@ -126,29 +124,8 @@ class PopularMoviesFragment :
         navController?.navigate(R.id.action_popularMoviesFragment_to_movieDetailFragment, bundle)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
-    override fun onPause() {
-        Timber.d("onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Timber.d("onStop")
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        Timber.d("onDestroy")
-        super.onDestroy()
+    override fun log(message: String) {
+        Timber.d(message)
     }
 
     companion object {
