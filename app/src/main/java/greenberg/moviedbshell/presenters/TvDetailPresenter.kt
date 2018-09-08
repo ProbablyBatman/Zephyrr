@@ -21,13 +21,15 @@ import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class TvDetailPresenter
-@Inject constructor(private val TMDBService: TMDBService,
-                    private val context: Context,
-                    private val mapper: TvDetailMapper) : MvpBasePresenter<TvDetailView>() {
+@Inject constructor(
+    private val TMDBService: TMDBService,
+    private val context: Context,
+    private val mapper: TvDetailMapper
+) : MvpBasePresenter<TvDetailView>() {
 
     private var compositeDisposable = CompositeDisposable()
     private var castListAdapter: CastListAdapter? = null
@@ -47,8 +49,8 @@ class TvDetailPresenter
 
     fun loadTvDetails(tvShowId: Int) {
         Timber.d("load tv details")
-        //If there isn't an already existing item associated with this presenter.
-        //Pages are mostly static, so data can sort of be retained like this. Potentially bad.
+        // If there isn't an already existing item associated with this presenter.
+        // Pages are mostly static, so data can sort of be retained like this. Potentially bad.
         if (lastTvDetailItem == null) {
             val disposable =
                     Single.zip(
@@ -86,8 +88,8 @@ class TvDetailPresenter
         }
     }
 
-    //TODO: probably make sure every date is like this?
-    //there has to be a better way to do this
+    // TODO: probably make sure every date is like this?
+    // there has to be a better way to do this
     fun processDate(releaseDate: String): String {
         return if (releaseDate.isNotBlank()) {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

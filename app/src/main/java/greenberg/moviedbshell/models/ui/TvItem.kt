@@ -3,11 +3,11 @@ package greenberg.moviedbshell.models.ui
 import greenberg.moviedbshell.presenters.SearchPresenter
 
 class TvItem(
-        val name: String,
-        val overview: String,
-        val firstAirDate: String,
-        posterImageUrl: String,
-        id: Int?
+    val name: String,
+    val overview: String,
+    val firstAirDate: String,
+    posterImageUrl: String,
+    id: Int?
 ) : PreviewItem(
         posterImageUrl,
         id,

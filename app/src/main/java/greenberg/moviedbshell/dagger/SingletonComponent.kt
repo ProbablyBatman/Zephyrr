@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Component(modules = [(ApplicationModule::class), (ServicesModule::class)])
 @Singleton
 interface SingletonComponent {
-    fun popularMoviesPresenter() : PopularMoviesPresenter
+    fun popularMoviesPresenter(): PopularMoviesPresenter
     fun searchPresenter(): SearchPresenter
     fun movieDetailPresenter(): MovieDetailPresenter
     fun tvDetailPresenter(): TvDetailPresenter

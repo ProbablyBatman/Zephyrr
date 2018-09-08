@@ -3,6 +3,7 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,19 +18,21 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
+import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.presenters.TvDetailPresenter
 import greenberg.moviedbshell.viewHolders.CastListAdapter
 import timber.log.Timber
 
 class TvDetailFragment :
-        MvpFragment<TvDetailView, TvDetailPresenter>(),
+        BaseFragment<TvDetailView, TvDetailPresenter>(),
         TvDetailView {
 
     private var progressBar: ProgressBar? = null
+    private var scrollView: NestedScrollView? = null
+    private var posterImageContainer: FrameLayout? = null
     private var posterImageView: ImageView? = null
     private var backgroundImageView: ImageView? = null
     private var backgroundImageViewContainer: FrameLayout? = null
@@ -61,7 +64,6 @@ class TvDetailFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
         if (arguments != null) {
             tvDetailId = arguments?.get("TvDetailID") as? Int ?: -1
         }
@@ -73,9 +75,10 @@ class TvDetailFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
 
         progressBar = view.findViewById(R.id.tv_detail_progress_bar)
+        scrollView = view.findViewById(R.id.tv_detail_scroll)
+        posterImageContainer = view.findViewById(R.id.tv_detail_poster_image_container)
         posterImageView = view.findViewById(R.id.tv_detail_poster_image)
         backgroundImageView = view.findViewById(R.id.tv_detail_background_image)
         backgroundImageViewContainer = view.findViewById(R.id.tv_detail_background_image_container)
@@ -153,7 +156,7 @@ class TvDetailFragment :
 
         titleBar?.text = tvDetailItem.title
         firstAirDateText?.text = presenter.processDate(tvDetailItem.firstAirDate)
-        //Both of these have to not be null to show them
+        // Both of these have to not be null to show them
         val lastOrNextAirDateTitleText = presenter.processLastOrNextAirDateTitle(tvDetailItem)
         val lastOrNextAirDate = presenter.processLastOrNextAirDate(tvDetailItem)
         if (lastOrNextAirDateTitleText != null && lastOrNextAirDate != null) {
@@ -184,31 +187,6 @@ class TvDetailFragment :
         navController?.navigate(R.id.action_tvDetailFragment_to_personDetailFragment, bundle)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Timber.d("onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Timber.d("onStop")
-    }
-
-    override fun onDestroy() {
-        Timber.d("onDestroy")
-        super.onDestroy()
-    }
-
     private fun toggleLoading() {
         progressBar?.visibility =
                 if (progressBar?.visibility == View.GONE) View.VISIBLE
@@ -217,7 +195,9 @@ class TvDetailFragment :
 
     private fun hideAllViews() {
         progressBar?.visibility = View.GONE
-        posterImageView ?.visibility = View.GONE
+        scrollView?.visibility = View.GONE
+        posterImageContainer?.visibility = View.GONE
+        posterImageView?.visibility = View.GONE
         backgroundImageView?.visibility = View.GONE
         backgroundImageViewContainer?.visibility = View.GONE
         firstAirDateText?.visibility = View.GONE
@@ -241,7 +221,9 @@ class TvDetailFragment :
     }
 
     private fun showAllViews() {
-        posterImageView ?.visibility = View.VISIBLE
+        posterImageView?.visibility = View.VISIBLE
+        scrollView?.visibility = View.VISIBLE
+        posterImageContainer?.visibility = View.VISIBLE
         backgroundImageView?.visibility = View.VISIBLE
         backgroundImageViewContainer?.visibility = View.VISIBLE
         firstAirDateText?.visibility = View.VISIBLE
@@ -260,5 +242,9 @@ class TvDetailFragment :
         genresTitle?.visibility = View.VISIBLE
         overviewText?.visibility = View.VISIBLE
         castRecyclerView?.visibility = View.VISIBLE
+    }
+
+    override fun log(message: String) {
+        Timber.d(message)
     }
 }

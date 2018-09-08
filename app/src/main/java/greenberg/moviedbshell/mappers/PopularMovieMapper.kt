@@ -5,7 +5,7 @@ import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
 import javax.inject.Inject
 
 class PopularMovieMapper
-@Inject constructor(): Mapper<PopularMovieResponse, List<MovieItem>> {
+@Inject constructor() : Mapper<PopularMovieResponse, List<MovieItem>> {
     override fun mapToEntity(item: PopularMovieResponse): List<MovieItem> {
         val mappedItems = item.results?.map { result ->
             MovieItem(
@@ -16,7 +16,7 @@ class PopularMovieMapper
                     id = result?.id
             )
         }
-        //TODO: is this correct
+        // TODO: is this correct
         return mappedItems ?: emptyList()
     }
 }

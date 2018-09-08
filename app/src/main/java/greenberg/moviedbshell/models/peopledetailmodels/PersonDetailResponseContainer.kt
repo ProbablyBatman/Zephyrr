@@ -8,5 +8,7 @@ package greenberg.moviedbshell.models.peopledetailmodels
  * Perhaps this is not a permanent solution but until further data level optimizations come along, but this is a functional
  * and clean enough stopgap.
  */
-data class PersonDetailResponseContainer(val personDetailResponse: PersonDetailResponse,
-                                         val creditsResponse: CombinedCreditsResponse)
+data class PersonDetailResponseContainer(
+    val personDetailResponse: PersonDetailResponse,
+    val creditsResponse: CombinedCreditsResponse
+)

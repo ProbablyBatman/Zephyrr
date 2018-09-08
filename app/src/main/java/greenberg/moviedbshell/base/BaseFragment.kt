@@ -1,12 +1,21 @@
 package greenberg.moviedbshell.base
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.view.View
+import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
+import com.hannesdorfmann.mosby3.mvp.MvpFragment
+import com.hannesdorfmann.mosby3.mvp.MvpView
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseFragment<V : MvpView, P : MvpBasePresenter<V>> :
+        MvpFragment<V, P>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         log("onCreate")
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        log("onViewCreated")
     }
 
     override fun onStart() {
@@ -17,11 +26,6 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         log("onResume")
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        log("onBackPressed")
     }
 
     override fun onPause() {
@@ -40,11 +44,11 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     /*
-     * Designed to be overriden and used for logging.  This way, sub classes of this activity will show their own lifecycle in the logcat, as
+     * Designed to be overriden and used for logging.  This way, sub classes of this fragment will show their own lifecycle in the logcat, as
      * opposed to this class.
      *
      * Example:
-     * MainActivity onCreate will log MainActivity:xy: onCreate and will not show BaseActivity:xy: onCreate
+     * MovieDetailFragment onCreate will log MovieDetailFragment:xy: onCreate and will not show BaseFragment:xy: onCreate
      * in the logs.
      */
     abstract fun log(message: String)

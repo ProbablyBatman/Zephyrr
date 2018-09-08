@@ -3,7 +3,6 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,24 +18,23 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
+import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.presenters.MovieDetailPresenter
 import greenberg.moviedbshell.viewHolders.CastListAdapter
 import timber.log.Timber
 
 class MovieDetailFragment :
-        MvpFragment<MovieDetailView, MovieDetailPresenter>(),
+        BaseFragment<MovieDetailView, MovieDetailPresenter>(),
         MovieDetailView {
 
     private var progressBar: ProgressBar? = null
+    private var posterImageContainer: FrameLayout? = null
     private var posterImageView: ImageView? = null
     private var backdropImageView: ImageView? = null
-    private var backdropImageWrapper: FrameLayout? = null
-    private var appBar: AppBarLayout? = null
-    private var collapsingToolbarLayout: net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout? = null
+    private var backdropImageContainer: FrameLayout? = null
     private var titleBar: TextView? = null
     private var scrollView: NestedScrollView? = null
 
@@ -72,17 +70,14 @@ class MovieDetailFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
 
-        //collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar)
-        //appBar = view.findViewById(R.id.app_bar_layout)
-        progressBar = view.findViewById(R.id.movieDetailProgressBar)
-        backdropImageWrapper = view.findViewById(R.id.backgroundImageWrapper)
+        progressBar = view.findViewById(R.id.movie_detail_progress_bar)
+        backdropImageContainer = view.findViewById(R.id.movie_detail_background_image_container)
         titleBar = view.findViewById(R.id.movie_detail_title)
-        posterImageView = view.findViewById(R.id.posterImage)
-        backdropImageView = view.findViewById(R.id.backdropImage)
-        scrollView = view.findViewById(R.id.scroll)
-        overviewTextView = view.findViewById(R.id.overview)
+        posterImageView = view.findViewById(R.id.movie_detail_poster)
+        backdropImageView = view.findViewById(R.id.movie_detail_background_image)
+        scrollView = view.findViewById(R.id.movie_detail_scroll)
+        overviewTextView = view.findViewById(R.id.movie_detail_overview)
         releaseDateTextView = view.findViewById(R.id.movie_detail_release_date)
         releaseDateTitle = view.findViewById(R.id.movie_detail_release_date_title)
         ratingTextView = view.findViewById(R.id.movie_detail_user_rating)
@@ -102,7 +97,6 @@ class MovieDetailFragment :
         presenter?.initView(movieId, castListAdapter)
         presenter.loadMovieDetails(movieId)
         navController = findNavController()
-
     }
 
     override fun createPresenter(): MovieDetailPresenter = presenter
@@ -152,7 +146,6 @@ class MovieDetailFragment :
                     .into(backdropImageView!!)
         }
 
-        //collapsingToolbarLayout?.title = movieDetailResponse.originalTitle
         titleBar?.text = movieDetailItem.movieTitle
         overviewTextView?.text = movieDetailItem.overview
         releaseDateTextView?.text = presenter.processReleaseDate(movieDetailItem.releaseDate)
@@ -161,7 +154,7 @@ class MovieDetailFragment :
         runtimeTextView?.text = presenter.processRuntime(movieDetailItem.runtime)
         genresTitle?.text = presenter.processGenreTitle(movieDetailItem.genres.size)
         genresTextView?.text = presenter.processGenres(movieDetailItem.genres)
-        //TODO: potentially scrape other rating information
+        // TODO: potentially scrape other rating information
         toggleLoadingBar()
         showAllViews()
     }
@@ -170,35 +163,10 @@ class MovieDetailFragment :
         navController?.navigate(R.id.action_movieDetailFragment_to_personDetailFragment, bundle)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
-    override fun onPause() {
-        Timber.d("onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Timber.d("onStop")
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        Timber.d("onDestroy")
-        super.onDestroy()
-    }
-
     private fun hideAllViews() {
+        progressBar?.visibility = View.GONE
         titleBar?.visibility = View.GONE
-        posterImageView?.visibility = View.GONE
-        backdropImageView?.visibility = View.GONE
+        posterImageContainer?.visibility = View.GONE
         scrollView?.visibility = View.GONE
         overviewTextView?.visibility = View.GONE
         releaseDateTextView?.visibility = View.GONE
@@ -206,7 +174,7 @@ class MovieDetailFragment :
         statusTextView?.visibility = View.GONE
         runtimeTextView?.visibility = View.GONE
         genresTextView?.visibility = View.GONE
-        backdropImageWrapper?.visibility = View.GONE
+        backdropImageContainer?.visibility = View.GONE
         genresTitle?.visibility = View.GONE
         statusTitle?.visibility = View.GONE
         releaseDateTitle?.visibility = View.GONE
@@ -217,8 +185,7 @@ class MovieDetailFragment :
 
     private fun showAllViews() {
         titleBar?.visibility = View.VISIBLE
-        posterImageView?.visibility = View.VISIBLE
-        backdropImageView?.visibility = View.VISIBLE
+        posterImageContainer?.visibility = View.VISIBLE
         scrollView?.visibility = View.VISIBLE
         overviewTextView?.visibility = View.VISIBLE
         releaseDateTextView?.visibility = View.VISIBLE
@@ -226,7 +193,7 @@ class MovieDetailFragment :
         statusTextView?.visibility = View.VISIBLE
         runtimeTextView?.visibility = View.VISIBLE
         genresTextView?.visibility = View.VISIBLE
-        backdropImageWrapper?.visibility = View.VISIBLE
+        backdropImageContainer?.visibility = View.VISIBLE
         genresTitle?.visibility = View.VISIBLE
         statusTitle?.visibility = View.VISIBLE
         releaseDateTitle?.visibility = View.VISIBLE
@@ -239,6 +206,10 @@ class MovieDetailFragment :
         progressBar?.visibility =
                 if (progressBar?.visibility == View.GONE) View.VISIBLE
                 else View.GONE
+    }
+
+    override fun log(message: String) {
+        Timber.d(message)
     }
 
     companion object {

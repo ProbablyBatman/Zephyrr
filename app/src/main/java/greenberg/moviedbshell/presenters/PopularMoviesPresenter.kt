@@ -17,17 +17,19 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class PopularMoviesPresenter
-@Inject constructor(private val TMDBService: TMDBService,
-                    private val httpClient: OkHttpClient,
-                    private val context: Context,
-                    private val mapper: PopularMovieMapper) : MvpBasePresenter<PopularMoviesView>() {
+@Inject constructor(
+    private val TMDBService: TMDBService,
+    private val httpClient: OkHttpClient,
+    private val context: Context,
+    private val mapper: PopularMovieMapper
+) : MvpBasePresenter<PopularMoviesView>() {
 
     private var isRecyclerLoading = false
-    //Default to getting the first page
+    // Default to getting the first page
     private var popularMoviePageNumber = 1
     private var totalAvailablePages = -1
     private var popularMoviesList = mutableListOf<MovieItem>()
@@ -51,7 +53,7 @@ class PopularMoviesPresenter
         this.popularMovieAdapter = adapter
         recyclerView?.apply {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
                     val layoutManager = this@apply.layoutManager as LinearLayoutManager
@@ -59,9 +61,9 @@ class PopularMoviesPresenter
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                    if (!isRecyclerLoading
-                            && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                            && firstVisibleItemPosition >= 0) {
+                    if (!isRecyclerLoading &&
+                            (visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
+                            firstVisibleItemPosition >= 0) {
                         ifViewAttached { view: PopularMoviesView ->
                             isRecyclerLoading = true
                             if (!loadedMaxPages) {
@@ -98,7 +100,7 @@ class PopularMoviesPresenter
             compositeDisposable.add(disposable)
         } else {
             ifViewAttached { view: PopularMoviesView ->
-                //Copy last good list into adapter
+                // Copy last good list into adapter
                 Timber.d("Getting old list and showing")
                 popularMovieAdapter?.popularMovieList = popularMoviesList
                 popularMovieAdapter?.notifyDataSetChanged()
@@ -117,7 +119,7 @@ class PopularMoviesPresenter
         }
     }
 
-    //Gets next page of popular movies call
+    // Gets next page of popular movies call
     private fun fetchNextPage() {
         if (popularMoviePageNumber < totalAvailablePages && totalAvailablePages != -1) {
             Timber.d("Fetching next page: $popularMoviePageNumber")
@@ -135,7 +137,7 @@ class PopularMoviesPresenter
                                 }
                             }, { throwable ->
                                 ifViewAttached { view: PopularMoviesView ->
-                                    //todo: revisit erroring the whole page on this.  Just error bottom
+                                    // todo: revisit erroring the whole page on this.  Just error bottom
                                     view.showError(throwable, false)
                                 }
                             })
@@ -148,7 +150,7 @@ class PopularMoviesPresenter
                 loadedMaxPages = true
             }
         }
-        //TODO: else handle error for no available pages
+        // TODO: else handle error for no available pages
     }
 
     fun onCardSelected(position: Int) {
@@ -186,7 +188,7 @@ class PopularMoviesPresenter
             view.hidePageLoad()
             view.hideMaxPages()
         }
-        //Copy last good list or empty. Maybe log if empty
+        // Copy last good list or empty. Maybe log if empty
         popularMoviesList = popularMovieAdapter?.popularMovieList?.toMutableList() ?: mutableListOf()
         super.detachView()
     }

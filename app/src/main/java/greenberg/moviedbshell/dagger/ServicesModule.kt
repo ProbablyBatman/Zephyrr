@@ -38,7 +38,7 @@ class ServicesModule {
     @Provides
     @Singleton
     fun provideOkHttpCache(context: Context): Cache {
-        //10mb cache size.  Probably won't need larger, probably won't need this.  Images are big sometimes, though.
+        // 10mb cache size.  Probably won't need larger, probably won't need this.  Images are big sometimes, though.
         val cacheSize: Long = 10 * 1024 * 1024
         return Cache(context.cacheDir, cacheSize)
     }

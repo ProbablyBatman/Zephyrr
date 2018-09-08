@@ -3,6 +3,7 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -17,9 +18,9 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
+import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.models.ui.PersonDetailItem
 import greenberg.moviedbshell.presenters.PersonDetailPresenter
 import greenberg.moviedbshell.presenters.SearchPresenter
@@ -27,11 +28,12 @@ import greenberg.moviedbshell.viewHolders.CreditsAdapter
 import timber.log.Timber
 
 class PersonDetailFragment :
-        MvpFragment<PersonDetailView, PersonDetailPresenter>(),
+        BaseFragment<PersonDetailView, PersonDetailPresenter>(),
         PersonDetailView {
 
     private var progressBar: ProgressBar? = null
-    private var posterImageWrapper: CardView? = null
+    private var scrollView: NestedScrollView? = null
+    private var posterImageContainer: CardView? = null
     private var posterImageView: ImageView? = null
     private var name: TextView? = null
     private var birthdayTitle: TextView? = null
@@ -50,7 +52,6 @@ class PersonDetailFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
         if (arguments != null) {
             personId = arguments?.get("PersonID") as? Int ?: -1
         }
@@ -62,10 +63,10 @@ class PersonDetailFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
 
         progressBar = view.findViewById(R.id.person_detail_progress_bar)
-        posterImageWrapper =  view.findViewById(R.id.person_poster_container)
+        scrollView = view.findViewById(R.id.person_detail_scroll)
+        posterImageContainer = view.findViewById(R.id.person_poster_container)
         posterImageView = view.findViewById(R.id.person_poster_image)
         name = view.findViewById(R.id.person_detail_name)
         birthdayTitle = view.findViewById(R.id.person_detail_birthday_title)
@@ -89,31 +90,6 @@ class PersonDetailFragment :
 
     override fun createPresenter() = presenter
             ?: (activity?.application as ZephyrrApplication).component.personDetailPresenter()
-
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Timber.d("onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Timber.d("onStop")
-    }
-
-    override fun onDestroy() {
-        Timber.d("onDestroy")
-        super.onDestroy()
-    }
 
     override fun showLoading() {
         Timber.d("Showing loading")
@@ -182,7 +158,8 @@ class PersonDetailFragment :
 
     private fun hideAllViews() {
         progressBar?.visibility = View.GONE
-        posterImageWrapper?.visibility = View.GONE
+        scrollView?.visibility = View.GONE
+        posterImageContainer?.visibility = View.GONE
         posterImageView?.visibility = View.GONE
         name?.visibility = View.GONE
         birthdayTitle?.visibility = View.GONE
@@ -196,7 +173,8 @@ class PersonDetailFragment :
     }
 
     private fun showAllViews() {
-        posterImageWrapper?.visibility = View.VISIBLE
+        scrollView?.visibility = View.VISIBLE
+        posterImageContainer?.visibility = View.VISIBLE
         posterImageView?.visibility = View.VISIBLE
         name?.visibility = View.VISIBLE
         birthdayTitle?.visibility = View.VISIBLE
@@ -216,4 +194,7 @@ class PersonDetailFragment :
         }
     }
 
+    override fun log(message: String) {
+        Timber.d(message)
+    }
 }

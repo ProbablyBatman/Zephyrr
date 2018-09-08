@@ -51,10 +51,10 @@ class PopularMoviesFragment :
         popularMovieLoadingBar = view.findViewById(R.id.popularMovieProgressBar)
         popularMovieRefresher?.setOnRefreshListener(this)
 
-        //TODO: look into proper context for this; i.e. application or base
+        // TODO: look into proper context for this; i.e. application or base
         linearLayoutManager = LinearLayoutManager(activity)
         popularMovieRecycler?.layoutManager = linearLayoutManager
-        //TODO: revisit this initialization
+        // TODO: revisit this initialization
         popularMovieAdapter = PopularMovieAdapter(presenter = presenter)
         popularMovieRecycler?.adapter = popularMovieAdapter
 
@@ -155,5 +155,4 @@ class PopularMoviesFragment :
         @JvmField
         val TAG: String = PopularMoviesFragment::class.java.simpleName
     }
-
 }

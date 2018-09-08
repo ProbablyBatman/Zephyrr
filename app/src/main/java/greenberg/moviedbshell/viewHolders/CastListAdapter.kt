@@ -2,13 +2,9 @@ package greenberg.moviedbshell.viewHolders
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
@@ -31,7 +27,7 @@ class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableL
             val currentItem = castMemberList[position]
             holder.actorRole.text = currentItem.role
             holder.actorName.text = currentItem.name
-            //Set poster image
+            // Set poster image
             val validUrl = holder.actorImage.context.getString(R.string.poster_url_substitution, currentItem.posterUrl)
             if (validUrl.isNotEmpty()) {
                 Glide.with(holder.actorImage)
@@ -53,12 +49,5 @@ class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableL
         holder.actorRole.text = ""
         holder.actorName.text = ""
         Glide.with(holder.actorImage).clear(holder.actorImage)
-    }
-
-    class CastListViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        var cardView: CardView = view.findViewById(R.id.cast_card_view)
-        var actorImage: ImageView = view.findViewById(R.id.cast_list_item_image)
-        var actorRole: TextView = view.findViewById(R.id.cast_list_item_role)
-        var actorName: TextView = view.findViewById(R.id.cast_list_item_actor)
     }
 }

@@ -11,8 +11,8 @@ interface ZephyrrSearchView : MvpView {
     fun showMaxPages()
     fun hideMaxPages()
     fun showEmptyState(lastQuery: String?)
-    //TODO: this is a temporary solution to pagination.  Instead of fronting a lot of effort which
-    //is subject to change with the change of this app, just pop a snackbar for now.
+    // TODO: this is a temporary solution to pagination.  Instead of fronting a lot of effort which
+    // is subject to change with the change of this app, just pop a snackbar for now.
     fun showPageLoad()
     fun hidePageLoad()
 }

@@ -8,7 +8,7 @@ import greenberg.moviedbshell.logging.DebuggingTree
 import greenberg.moviedbshell.logging.NoLogTree
 import timber.log.Timber
 
-class ZephyrrApplication: Application() {
+class ZephyrrApplication : Application() {
 
     lateinit var component: SingletonComponent
 

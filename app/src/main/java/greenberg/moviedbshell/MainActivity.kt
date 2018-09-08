@@ -14,7 +14,6 @@ import timber.log.Timber
 class MainActivity : BaseActivity() {
 
     private lateinit var navController: NavController
-    //TODO: probably only inherit from this.  For now, this isn't an issue
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_activity_layout)
@@ -46,7 +45,7 @@ class MainActivity : BaseActivity() {
                     searchView.clearFocus()
                     navController.navigate(R.id.searchResultsFragment, Bundle().apply {
                         putString("Query", query)
-                    }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment,true).build())
+                    }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true).build())
                     return true
                 }
 
@@ -54,10 +53,13 @@ class MainActivity : BaseActivity() {
                     Timber.d("onQueryTextChange: $newText")
                     return false
                 }
-
             })
         }
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()
+
+    override fun log(message: String) {
+        Timber.d(message)
+    }
 }

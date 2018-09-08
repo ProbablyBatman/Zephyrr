@@ -10,7 +10,6 @@ import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.MovieDetailView
-import greenberg.moviedbshell.view.TvDetailView
 import greenberg.moviedbshell.viewHolders.CastListAdapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,13 +20,15 @@ import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class MovieDetailPresenter
-@Inject constructor(private val TMDBService: TMDBService,
-                    private val context: Context,
-                    private val mapper: MovieDetailMapper) : MvpBasePresenter<MovieDetailView>() {
+@Inject constructor(
+    private val TMDBService: TMDBService,
+    private val context: Context,
+    private val mapper: MovieDetailMapper
+) : MvpBasePresenter<MovieDetailView>() {
 
     private var compositeDisposable = CompositeDisposable()
     private var castListAdapter: CastListAdapter? = null
@@ -45,7 +46,7 @@ class MovieDetailPresenter
         }
     }
 
-    //TODO: only grab 20 cast members for now.  Figure out limiting for that later
+    // TODO: only grab 20 cast members for now.  Figure out limiting for that later
     fun loadMovieDetails(movieId: Int) {
         Timber.d("load movie details")
         if (lastMovieDetailItem == null) {
@@ -66,7 +67,6 @@ class MovieDetailPresenter
                                     view.showMovieDetails(movieDetailItem)
                                     lastMovieDetailItem = movieDetailItem
                                 }
-
                             }, { throwable ->
                                 ifViewAttached { view: MovieDetailView ->
                                     view.showError(throwable)
@@ -85,8 +85,8 @@ class MovieDetailPresenter
         }
     }
 
-    //TODO: probably make sure every date is like this?
-    //there has to be a better way to do this
+    // TODO: probably make sure every date is like this?
+    // there has to be a better way to do this
     fun processReleaseDate(releaseDate: String): String {
         return if (releaseDate.isNotBlank()) {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
