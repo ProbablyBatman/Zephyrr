@@ -15,19 +15,47 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:visibility="gone"/>
 
     <android.support.v4.widget.NestedScrollView
             android:id="@+id/person_detail_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:visibility="gone">
+            android:clipToPadding="false">
 
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:descendantFocusability="blocksDescendants">
+
+            <TextView
+                    android:id="@+id/person_detail_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_medium"
+                    android:text="@string/generic_error_text"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@id/person_detail_retry_button"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
+
+            <android.support.design.button.MaterialButton
+                    android:id="@+id/person_detail_retry_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/colorAccent"
+                    android:textSize="@dimen/text_size_small"
+                    android:textColor="#fff"
+                    android:text="@string/retry"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/person_detail_error"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
 
             <android.support.v7.widget.CardView
                     android:id="@+id/person_poster_container"

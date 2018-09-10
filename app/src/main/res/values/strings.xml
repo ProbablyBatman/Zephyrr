@@ -5,6 +5,9 @@
     <string name="api_key">api_key</string>
 
     <string name="generic_loading_text">Loading more results…</string>
+    <string name="generic_error_text">An error has occurred.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="retry">RETRY</string>
 
     <!-- Detail Layout -->
     <string name="release_date_title">Release Date</string>
@@ -28,7 +31,6 @@
     <string name="search">Search</string>
     <string name="search_hint">Search for actors and movies here…</string>
     <string name="generic_max_pages_text">No more results available.</string>
-    <string name="dismiss">Dismiss</string>
     <string name="empty_state_search_text">No results found for %1$s.</string>
 
     <!-- Tv Detail -->

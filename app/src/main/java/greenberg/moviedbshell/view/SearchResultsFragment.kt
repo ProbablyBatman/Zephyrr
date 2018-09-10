@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.view
 
 import android.os.Bundle
+import android.support.design.button.MaterialButton
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -34,6 +35,8 @@ class SearchResultsFragment :
     private var zephyrrSearchView: SearchView? = null
     private var maxPagesSnackbar: Snackbar? = null
     private var emptyStateText: TextView? = null
+    private var errorTextView: TextView? = null
+    private var errorRetryButton: MaterialButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +56,8 @@ class SearchResultsFragment :
         searchResultsRecycler = view.findViewById(R.id.search_results_recycler)
         searchLoadingBar = view.findViewById(R.id.search_results_progress_bar)
         emptyStateText = view.findViewById(R.id.search_empty_state_text)
+        errorTextView = view.findViewById(R.id.search_error)
+        errorRetryButton = view.findViewById(R.id.search_error_retry_button)
 
         linearLayoutManager = LinearLayoutManager(activity)
         searchResultsRecycler?.layoutManager = linearLayoutManager
@@ -61,7 +66,6 @@ class SearchResultsFragment :
 
         presenter.initRecyclerPagination(searchResultsRecycler, searchResultsAdapter)
         // TODO: maybe change the title of the action bar to show the last performed search
-        // noactivity?.actionBar?.title = query
         presenter.performSearch(query)
         navController = findNavController()
     }
@@ -71,18 +75,27 @@ class SearchResultsFragment :
 
     override fun showLoading() {
         Timber.d("Show Loading")
-        searchResultsRecycler?.visibility = View.GONE
-        searchLoadingBar?.visibility = View.VISIBLE
+        showLoadingBar()
+        hideResultsView()
+        hideErrorState()
     }
 
     override fun showResults() {
         Timber.d("Showing results")
-        searchLoadingBar?.visibility = View.GONE
-        searchResultsRecycler?.visibility = View.VISIBLE
+        hideLoadingBar()
+        showResultsView()
     }
 
     override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
         Timber.d("Showing error")
+        Timber.e(throwable)
+        hideLoadingBar()
+        hideResultsView()
+        showErrorState()
+        errorRetryButton?.setOnClickListener {
+            presenter.performSearch(query)
+            hideErrorState()
+        }
     }
 
     override fun showPageLoad() {
@@ -133,6 +146,32 @@ class SearchResultsFragment :
         emptyStateText?.text = getString(R.string.empty_state_search_text, lastQuery)
         searchLoadingBar?.visibility = View.GONE
         emptyStateText?.visibility = View.VISIBLE
+    }
+
+    private fun showLoadingBar() {
+        searchLoadingBar?.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingBar() {
+        searchLoadingBar?.visibility = View.GONE
+    }
+
+    private fun hideResultsView() {
+        searchResultsRecycler?.visibility = View.GONE
+    }
+
+    private fun showResultsView() {
+        searchResultsRecycler?.visibility = View.VISIBLE
+    }
+
+    private fun hideErrorState() {
+        errorTextView?.visibility = View.GONE
+        errorRetryButton?.visibility = View.GONE
+    }
+
+    private fun showErrorState() {
+        errorTextView?.visibility = View.VISIBLE
+        errorRetryButton?.visibility = View.VISIBLE
     }
 
     override fun log(message: String) {

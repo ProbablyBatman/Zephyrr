@@ -3,6 +3,7 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.design.button.MaterialButton
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -56,6 +57,8 @@ class TvDetailFragment :
     private var genresTitle: TextView? = null
     private var overviewText: TextView? = null
     private var castRecyclerView: RecyclerView? = null
+    private var errorTextView: TextView? = null
+    private var errorRetryButton: MaterialButton? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var castListAdapter: CastListAdapter
 
@@ -100,6 +103,8 @@ class TvDetailFragment :
         genresText = view.findViewById(R.id.tv_detail_genres)
         genresTitle = view.findViewById(R.id.tv_detail_genres_title)
         overviewText = view.findViewById(R.id.tv_detail_overview)
+        errorTextView = view.findViewById(R.id.tv_detail_error)
+        errorRetryButton = view.findViewById(R.id.tv_detail_retry_button)
         castRecyclerView = view.findViewById(R.id.tv_detail_cast_members_recycler)
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -118,7 +123,8 @@ class TvDetailFragment :
     override fun showLoading(tvShowId: Int) {
         Timber.d("Showing loading")
         hideAllViews()
-        toggleLoading()
+        hideErrorState()
+        showLoadingBar()
     }
 
     override fun showTvDetails(tvDetailItem: TvDetailItem) {
@@ -174,23 +180,23 @@ class TvDetailFragment :
         genresText?.text = presenter.processGenres(tvDetailItem.genres)
         overviewText?.text = tvDetailItem.overview
 
-        toggleLoading()
+        hideLoadingBar()
         showAllViews()
     }
 
     override fun showError(throwable: Throwable) {
         Timber.d("Showing Error")
-        Timber.d(throwable)
+        Timber.e(throwable)
+        hideLoadingBar()
+        showErrorState()
+        errorRetryButton?.setOnClickListener {
+            presenter.loadTvDetails(tvDetailId)
+            hideErrorState()
+        }
     }
 
     override fun showDetail(bundle: Bundle) {
         navController?.navigate(R.id.action_tvDetailFragment_to_personDetailFragment, bundle)
-    }
-
-    private fun toggleLoading() {
-        progressBar?.visibility =
-                if (progressBar?.visibility == View.GONE) View.VISIBLE
-                else View.GONE
     }
 
     private fun hideAllViews() {
@@ -242,6 +248,25 @@ class TvDetailFragment :
         genresTitle?.visibility = View.VISIBLE
         overviewText?.visibility = View.VISIBLE
         castRecyclerView?.visibility = View.VISIBLE
+    }
+
+    private fun showLoadingBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingBar() {
+        progressBar?.visibility = View.GONE
+    }
+
+    private fun hideErrorState() {
+        errorTextView?.visibility = View.GONE
+        errorRetryButton?.visibility = View.GONE
+    }
+
+    private fun showErrorState() {
+        errorTextView?.visibility = View.VISIBLE
+        errorRetryButton?.visibility = View.VISIBLE
+        scrollView?.visibility = View.VISIBLE
     }
 
     override fun log(message: String) {

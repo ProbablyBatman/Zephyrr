@@ -37,7 +37,7 @@ class TvDetailPresenter
 
     override fun attachView(view: TvDetailView) {
         super.attachView(view)
-        Timber.d("attachView $this")
+        Timber.d("attachView")
     }
 
     fun initView(tvShowId: Int, castListAdapter: CastListAdapter) {
@@ -51,6 +51,10 @@ class TvDetailPresenter
         Timber.d("load tv details")
         // If there isn't an already existing item associated with this presenter.
         // Pages are mostly static, so data can sort of be retained like this. Potentially bad.
+        // Present in all detail views
+        ifViewAttached { view: TvDetailView ->
+            view.showLoading(tvShowId)
+        }
         if (lastTvDetailItem == null) {
             val disposable =
                     Single.zip(

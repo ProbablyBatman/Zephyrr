@@ -3,6 +3,7 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.design.button.MaterialButton
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
@@ -45,6 +46,8 @@ class PersonDetailFragment :
     private var biography: TextView? = null
     private var creditsRecycler: RecyclerView? = null
     private var creditsAdapter: CreditsAdapter? = null
+    private var errorTextView: TextView? = null
+    private var errorRetryButton: MaterialButton? = null
     private var linearLayoutManager: LinearLayoutManager? = null
 
     private var personId = -1
@@ -76,6 +79,8 @@ class PersonDetailFragment :
         deathdayTitle = view.findViewById(R.id.person_detail_deathday_title)
         birthplace = view.findViewById(R.id.person_detail_birthplace)
         biography = view.findViewById(R.id.person_detail_biography)
+        errorTextView = view.findViewById(R.id.person_detail_error)
+        errorRetryButton = view.findViewById(R.id.person_detail_retry_button)
         creditsRecycler = view.findViewById(R.id.person_detail_recycler)
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -94,16 +99,23 @@ class PersonDetailFragment :
     override fun showLoading() {
         Timber.d("Showing loading")
         hideAllViews()
-        toggleLoading()
+        hideErrorState()
+        showLoadingBar()
     }
 
     override fun showError(throwable: Throwable) {
         Timber.d("Showing error")
-        Timber.d(throwable)
+        Timber.e(throwable)
+        hideLoadingBar()
+        showErrorState()
+        errorRetryButton?.setOnClickListener {
+            presenter.loadPersonDetails(personId)
+            hideErrorState()
+        }
     }
 
     override fun showPersonDetails(personDetailItem: PersonDetailItem) {
-        toggleLoading()
+        hideLoadingBar()
         showAllViews()
 
         if (personDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
@@ -150,12 +162,6 @@ class PersonDetailFragment :
         biography?.text = personDetailItem.biography
     }
 
-    private fun toggleLoading() {
-        progressBar?.visibility =
-                if (progressBar?.visibility == View.GONE) View.VISIBLE
-                else View.GONE
-    }
-
     private fun hideAllViews() {
         progressBar?.visibility = View.GONE
         scrollView?.visibility = View.GONE
@@ -192,6 +198,25 @@ class PersonDetailFragment :
             SearchPresenter.MEDIA_TYPE_TV ->
                 navController?.navigate(R.id.action_personDetailFragment_to_tvDetailFragment, bundle)
         }
+    }
+
+    private fun showLoadingBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingBar() {
+        progressBar?.visibility = View.GONE
+    }
+
+    private fun hideErrorState() {
+        errorTextView?.visibility = View.GONE
+        errorRetryButton?.visibility = View.GONE
+    }
+
+    private fun showErrorState() {
+        errorTextView?.visibility = View.VISIBLE
+        errorRetryButton?.visibility = View.VISIBLE
+        scrollView?.visibility = View.VISIBLE
     }
 
     override fun log(message: String) {

@@ -47,7 +47,16 @@ class MovieDetailPresenter
     }
 
     // TODO: only grab 20 cast members for now.  Figure out limiting for that later
+    // Note: There's an architectural issue at play here.  In terms of error loading, if one of these endpoints is no good
+    // the whole page will fail to load.  I'm not sure what to do about that as it stands, however the first logical step
+    // is separating these calls.  That would require nullable parameters in mapper, which is doable.  As it stands,
+    // with the first round of error handling, just fail the whole page.  It is unlikely that a single endpoint from the
+    // api will be down, instead the whole thing will just be down if that's the case.
+    // This applies to all detail views.
     fun loadMovieDetails(movieId: Int) {
+        ifViewAttached { view: MovieDetailView ->
+            view.showLoading(movieId)
+        }
         Timber.d("load movie details")
         if (lastMovieDetailItem == null) {
             val disposable =

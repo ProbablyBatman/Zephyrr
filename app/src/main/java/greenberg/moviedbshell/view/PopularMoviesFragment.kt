@@ -30,6 +30,7 @@ class PopularMoviesFragment :
     private var popularMovieLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
     private var maxPagesSnackbar: Snackbar? = null
+    private var errorSnackbar: Snackbar? = null
     private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +83,21 @@ class PopularMoviesFragment :
 
     override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
         Timber.d("Showing Error")
+        Timber.e(throwable)
         popularMovieRefresher?.isRefreshing = false
+        errorSnackbar = popularMovieRecycler?.let { view ->
+            Snackbar.make(view, getString(R.string.generic_error_text), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.retry)) {
+                        errorSnackbar?.dismiss()
+                        if (pullToRefresh) presenter.loadPopularMoviesList(pullToRefresh)
+                        else presenter.fetchNextPage()
+                    }
+        }
+        errorSnackbar?.show()
+    }
+
+    override fun hideError() {
+        errorSnackbar?.dismiss()
     }
 
     override fun onRefresh() {
@@ -106,9 +121,9 @@ class PopularMoviesFragment :
 
     override fun showMaxPages() {
         Timber.d("Show max pages")
-        maxPagesSnackbar = popularMovieRecycler?.let {
-            Snackbar.make(it, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.dismiss), { maxPagesSnackbar?.dismiss() })
+        maxPagesSnackbar = popularMovieRecycler?.let { view ->
+            Snackbar.make(view, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
         }
         if (maxPagesSnackbar?.isShown == false) {
             maxPagesSnackbar?.show()

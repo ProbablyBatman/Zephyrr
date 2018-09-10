@@ -91,6 +91,7 @@ class PopularMoviesPresenter
                                     popularMovieAdapter?.notifyDataSetChanged()
                                     view.showMovies()
                                     totalAvailablePages = response.totalPages ?: -1
+                                    isRecyclerLoading = false
                                 }
                             }, { throwable ->
                                 ifViewAttached { view: PopularMoviesView ->
@@ -120,11 +121,11 @@ class PopularMoviesPresenter
     }
 
     // Gets next page of popular movies call
-    private fun fetchNextPage() {
+    fun fetchNextPage() {
         if (popularMoviePageNumber < totalAvailablePages && totalAvailablePages != -1) {
-            Timber.d("Fetching next page: $popularMoviePageNumber")
             val disposable =
                     TMDBService.queryPopularMovies(++popularMoviePageNumber)
+                            .doOnSubscribe { Timber.d("Fetching next page: $popularMoviePageNumber") }
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ response ->
@@ -137,7 +138,8 @@ class PopularMoviesPresenter
                                 }
                             }, { throwable ->
                                 ifViewAttached { view: PopularMoviesView ->
-                                    // todo: revisit erroring the whole page on this.  Just error bottom
+                                    --popularMoviePageNumber
+                                    view.hidePageLoad()
                                     view.showError(throwable, false)
                                 }
                             })
@@ -150,7 +152,6 @@ class PopularMoviesPresenter
                 loadedMaxPages = true
             }
         }
-        // TODO: else handle error for no available pages
     }
 
     fun onCardSelected(position: Int) {
@@ -187,7 +188,9 @@ class PopularMoviesPresenter
         ifViewAttached { view: PopularMoviesView ->
             view.hidePageLoad()
             view.hideMaxPages()
+            view.hideError()
         }
+        isRecyclerLoading = false
         // Copy last good list or empty. Maybe log if empty
         popularMoviesList = popularMovieAdapter?.popularMovieList?.toMutableList() ?: mutableListOf()
         super.detachView()
