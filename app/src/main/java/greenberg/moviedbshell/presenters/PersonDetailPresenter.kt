@@ -44,6 +44,9 @@ class PersonDetailPresenter
     }
 
     fun loadPersonDetails(personId: Int) {
+        ifViewAttached { view: PersonDetailView ->
+            view.showLoading()
+        }
         // If there isn't an already existing item associated with this presenter.
         // Pages are mostly static, so data can sort of be retained like this. Potentially bad.
         if (lastPersonItem == null) {

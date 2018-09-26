@@ -3,6 +3,7 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.design.button.MaterialButton
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -50,6 +51,8 @@ class MovieDetailFragment :
     private var genresTitle: TextView? = null
     private var genresTextView: TextView? = null
     private var castRecyclerView: RecyclerView? = null
+    private var errorTextView: TextView? = null
+    private var errorRetryButton: MaterialButton? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var castListAdapter: CastListAdapter
 
@@ -72,6 +75,7 @@ class MovieDetailFragment :
         super.onViewCreated(view, savedInstanceState)
 
         progressBar = view.findViewById(R.id.movie_detail_progress_bar)
+        posterImageContainer = view.findViewById(R.id.movie_detail_poster_container)
         backdropImageContainer = view.findViewById(R.id.movie_detail_background_image_container)
         titleBar = view.findViewById(R.id.movie_detail_title)
         posterImageView = view.findViewById(R.id.movie_detail_poster)
@@ -88,6 +92,8 @@ class MovieDetailFragment :
         runtimeTitle = view.findViewById(R.id.movie_detail_runtime_title)
         genresTitle = view.findViewById(R.id.movie_detail_genres_title)
         genresTextView = view.findViewById(R.id.movie_detail_genres)
+        errorTextView = view.findViewById(R.id.movie_detail_error)
+        errorRetryButton = view.findViewById(R.id.movie_detail_retry_button)
         castRecyclerView = view.findViewById(R.id.movie_detail_cast_members_recycler)
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -105,12 +111,19 @@ class MovieDetailFragment :
     override fun showLoading(movieId: Int) {
         Timber.d("Show Loading")
         hideAllViews()
-        toggleLoadingBar()
+        hideErrorState()
+        showLoadingBar()
     }
 
     override fun showError(throwable: Throwable) {
         Timber.d("Showing Error")
-        Timber.d(throwable)
+        Timber.e(throwable)
+        hideLoadingBar()
+        showErrorState()
+        errorRetryButton?.setOnClickListener {
+            presenter.loadMovieDetails(movieId)
+            hideErrorState()
+        }
     }
 
     override fun showMovieDetails(movieDetailItem: MovieDetailItem) {
@@ -155,7 +168,7 @@ class MovieDetailFragment :
         genresTitle?.text = presenter.processGenreTitle(movieDetailItem.genres.size)
         genresTextView?.text = presenter.processGenres(movieDetailItem.genres)
         // TODO: potentially scrape other rating information
-        toggleLoadingBar()
+        hideLoadingBar()
         showAllViews()
     }
 
@@ -202,10 +215,23 @@ class MovieDetailFragment :
         castRecyclerView?.visibility = View.VISIBLE
     }
 
-    private fun toggleLoadingBar() {
-        progressBar?.visibility =
-                if (progressBar?.visibility == View.GONE) View.VISIBLE
-                else View.GONE
+    private fun showLoadingBar() {
+        progressBar?.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingBar() {
+        progressBar?.visibility = View.GONE
+    }
+
+    private fun hideErrorState() {
+        errorTextView?.visibility = View.GONE
+        errorRetryButton?.visibility = View.GONE
+    }
+
+    private fun showErrorState() {
+        errorTextView?.visibility = View.VISIBLE
+        errorRetryButton?.visibility = View.VISIBLE
+        scrollView?.visibility = View.VISIBLE
     }
 
     override fun log(message: String) {

@@ -10,6 +10,7 @@ interface PopularMoviesView : MvpView {
     fun showDetail(bundle: Bundle)
     fun showMaxPages()
     fun hideMaxPages()
+    fun hideError()
     // TODO: this is a temporary solution to pagination.  Instead of fronting a lot of effort which
     // is subject to change with the change of this app, just pop a snackbar for now.
     fun showPageLoad()

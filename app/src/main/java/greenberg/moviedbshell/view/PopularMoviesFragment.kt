@@ -11,15 +11,15 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
+import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.presenters.PopularMoviesPresenter
 import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
 import timber.log.Timber
 
 class PopularMoviesFragment :
-        MvpFragment<PopularMoviesView, PopularMoviesPresenter>(),
+        BaseFragment<PopularMoviesView, PopularMoviesPresenter>(),
         PopularMoviesView,
         SwipeRefreshLayout.OnRefreshListener {
 
@@ -30,12 +30,12 @@ class PopularMoviesFragment :
     private var popularMovieLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
     private var maxPagesSnackbar: Snackbar? = null
+    private var errorSnackbar: Snackbar? = null
     private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        Timber.d("onCreate")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,7 +44,6 @@ class PopularMoviesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
 
         popularMovieRecycler = view.findViewById(R.id.popularMovieRecycler)
         popularMovieRefresher = view.findViewById(R.id.popularMovieRefresher)
@@ -84,7 +83,21 @@ class PopularMoviesFragment :
 
     override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
         Timber.d("Showing Error")
+        Timber.e(throwable)
         popularMovieRefresher?.isRefreshing = false
+        errorSnackbar = popularMovieRecycler?.let { view ->
+            Snackbar.make(view, getString(R.string.generic_error_text), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.retry)) {
+                        errorSnackbar?.dismiss()
+                        if (pullToRefresh) presenter.loadPopularMoviesList(pullToRefresh)
+                        else presenter.fetchNextPage()
+                    }
+        }
+        errorSnackbar?.show()
+    }
+
+    override fun hideError() {
+        errorSnackbar?.dismiss()
     }
 
     override fun onRefresh() {
@@ -108,9 +121,9 @@ class PopularMoviesFragment :
 
     override fun showMaxPages() {
         Timber.d("Show max pages")
-        maxPagesSnackbar = popularMovieRecycler?.let {
-            Snackbar.make(it, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.dismiss), { maxPagesSnackbar?.dismiss() })
+        maxPagesSnackbar = popularMovieRecycler?.let { view ->
+            Snackbar.make(view, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
         }
         if (maxPagesSnackbar?.isShown == false) {
             maxPagesSnackbar?.show()
@@ -126,29 +139,8 @@ class PopularMoviesFragment :
         navController?.navigate(R.id.action_popularMoviesFragment_to_movieDetailFragment, bundle)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
-    override fun onPause() {
-        Timber.d("onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Timber.d("onStop")
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        Timber.d("onDestroy")
-        super.onDestroy()
+    override fun log(message: String) {
+        Timber.d(message)
     }
 
     companion object {

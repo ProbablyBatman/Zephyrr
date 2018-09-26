@@ -90,7 +90,6 @@ class SearchPresenter
                                 }
                             }, { throwable ->
                                 ifViewAttached { view: ZephyrrSearchView ->
-                                    // todo: revisit erroring the whole page on this.  Just error bottom
                                     view.showError(throwable, false)
                                 }
                             })
@@ -106,6 +105,10 @@ class SearchPresenter
     }
 
     fun performSearch(query: String) {
+        Timber.d("Performing search: $query")
+        ifViewAttached { view: ZephyrrSearchView ->
+            view.showLoading()
+        }
         if (searchResultsList.isEmpty()) {
             lastQuery = query
             searchResultsPageNumber = 1
