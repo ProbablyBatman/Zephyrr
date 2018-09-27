@@ -33,6 +33,15 @@ class MainActivity : BaseActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.aboutFragment -> {
+                navController.navigate(R.id.action_global_aboutFragment)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
     private fun setUpSearchListener(item: MenuItem) {
         val searchView = item.actionView as? SearchView
         searchView?.apply {
