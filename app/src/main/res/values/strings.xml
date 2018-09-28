@@ -3,11 +3,23 @@
     <string name="tmdb_url">https://api.themoviedb.org/3/</string>
     <string name="tmdb_popular_url">popular</string>
     <string name="api_key">api_key</string>
+    <string name="about_me">\u00a9 2018 Samuel Greenberg\nThis product uses the TMDb API but is not endorsed or
+        certified by TMDb.\nVersion %1$s
+    </string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_url">
+        https://cdn.rawgit.com/sag343/Zephyrr/c08d2510/policies/zephyrr_privacy_policy.html
+    </string>
+    <string name="terms_and_conditions_title">Terms and Conditions</string>
+    <string name="terms_and_conditions_url">
+        https://cdn.rawgit.com/sag343/Zephyrr/c08d2510/policies/zephyrr_terms_and_conditions.html
+    </string>
 
     <string name="generic_loading_text">Loading more results…</string>
     <string name="generic_error_text">An error has occurred.</string>
-    <string name="dismiss">Dismiss</string>
+    <string name="dismiss">DISMISS</string>
     <string name="retry">RETRY</string>
+    <string name="about_menu_item">About</string>
 
     <!-- Detail Layout -->
     <string name="release_date_title">Release Date</string>

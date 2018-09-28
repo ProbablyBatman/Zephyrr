@@ -1,55 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/popularMoviesFragment">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/popularMoviesFragment">
 
     <fragment
-        android:id="@+id/popularMoviesFragment"
-        android:name="greenberg.moviedbshell.view.PopularMoviesFragment">
+            android:id="@+id/popularMoviesFragment"
+            android:name="greenberg.moviedbshell.view.PopularMoviesFragment">
         <action
-            android:id="@+id/action_popularMoviesFragment_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
+                android:id="@+id/action_popularMoviesFragment_to_movieDetailFragment"
+                app:destination="@id/movieDetailFragment"/>
     </fragment>
 
     <fragment
-        android:id="@+id/searchResultsFragment"
-        android:name="greenberg.moviedbshell.view.SearchResultsFragment">
+            android:id="@+id/searchResultsFragment"
+            android:name="greenberg.moviedbshell.view.SearchResultsFragment">
         <action
-            android:id="@+id/action_searchResultsFragment_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment"/>
+                android:id="@+id/action_searchResultsFragment_to_movieDetailFragment"
+                app:destination="@id/movieDetailFragment"/>
         <action
-            android:id="@+id/action_searchResultsFragment_to_tvDetailFragment"
-            app:destination="@id/tvDetailFragment"/>
+                android:id="@+id/action_searchResultsFragment_to_tvDetailFragment"
+                app:destination="@id/tvDetailFragment"/>
         <action
-            android:id="@+id/action_searchResultsFragment_to_personDetailFragment"
-            app:destination="@id/personDetailFragment"/>
+                android:id="@+id/action_searchResultsFragment_to_personDetailFragment"
+                app:destination="@id/personDetailFragment"/>
     </fragment>
 
     <fragment
-        android:id="@+id/movieDetailFragment"
-        android:name="greenberg.moviedbshell.view.MovieDetailFragment">
+            android:id="@+id/movieDetailFragment"
+            android:name="greenberg.moviedbshell.view.MovieDetailFragment">
         <action
-            android:id="@+id/action_movieDetailFragment_to_personDetailFragment"
-            app:destination="@id/personDetailFragment" />
+                android:id="@+id/action_movieDetailFragment_to_personDetailFragment"
+                app:destination="@id/personDetailFragment"/>
     </fragment>
 
     <fragment
-        android:id="@+id/tvDetailFragment"
-        android:name="greenberg.moviedbshell.view.TvDetailFragment">
+            android:id="@+id/tvDetailFragment"
+            android:name="greenberg.moviedbshell.view.TvDetailFragment">
         <action
-            android:id="@+id/action_tvDetailFragment_to_personDetailFragment"
-            app:destination="@id/personDetailFragment" />
+                android:id="@+id/action_tvDetailFragment_to_personDetailFragment"
+                app:destination="@id/personDetailFragment"/>
     </fragment>
 
     <fragment
-        android:id="@+id/personDetailFragment"
-        android:name="greenberg.moviedbshell.view.PersonDetailFragment">
+            android:id="@+id/personDetailFragment"
+            android:name="greenberg.moviedbshell.view.PersonDetailFragment">
         <action
-            android:id="@+id/action_personDetailFragment_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
+                android:id="@+id/action_personDetailFragment_to_movieDetailFragment"
+                app:destination="@id/movieDetailFragment"/>
         <action
-            android:id="@+id/action_personDetailFragment_to_tvDetailFragment"
-            app:destination="@id/tvDetailFragment"/>
+                android:id="@+id/action_personDetailFragment_to_tvDetailFragment"
+                app:destination="@id/tvDetailFragment"/>
     </fragment>
+
+    <fragment
+            android:id="@+id/aboutFragment"
+            android:name="greenberg.moviedbshell.view.AboutFragment">
+    </fragment>
+
+    <action android:id="@+id/action_global_aboutFragment"
+            app:destination="@id/aboutFragment"/>
+
 </navigation>
