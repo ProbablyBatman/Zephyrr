@@ -8,11 +8,11 @@
     </string>
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="privacy_policy_url">
-        https://cdn.rawgit.com/sag343/Zephyrr/c08d2510/policies/zephyrr_privacy_policy.html
+        https://sag343.github.io/Zephyrr/policies/zephyrr_privacy_policy.html
     </string>
     <string name="terms_and_conditions_title">Terms and Conditions</string>
     <string name="terms_and_conditions_url">
-        https://cdn.rawgit.com/sag343/Zephyrr/c08d2510/policies/zephyrr_terms_and_conditions.html
+        https://sag343.github.io/Zephyrr/policies/zephyrr_terms_and_conditions.html
     </string>
 
     <string name="generic_loading_text">Loading more results…</string>
