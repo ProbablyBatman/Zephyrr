@@ -81,12 +81,12 @@ class SearchResultsAdapter(
         if (posterImageUrl.isNotEmpty()) {
             Glide.with(cardItemPosterView)
                     .load(cardItemPosterView.context.getString(R.string.poster_url_substitution, posterImageUrl))
-                    .apply {
+                    .apply(
                         RequestOptions()
-                                .placeholder(ColorDrawable(Color.DKGRAY))
-                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .placeholder(ColorDrawable(Color.LTGRAY))
+                                .fallback(ColorDrawable(Color.LTGRAY))
                                 .centerCrop()
-                    }
+                    )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(cardItemPosterView)
         }

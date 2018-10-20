@@ -29,12 +29,12 @@ class CreditsAdapter(
             if (currentItem.posterImageUrl.isNotEmpty()) {
                 Glide.with(holder.actorImage)
                         .load(holder.actorImage.context.getString(R.string.poster_url_substitution, currentItem.posterImageUrl))
-                        .apply {
+                        .apply(
                             RequestOptions()
-                                    .placeholder(ColorDrawable(Color.DKGRAY))
-                                    .fallback(ColorDrawable(Color.DKGRAY))
+                                    .placeholder(ColorDrawable(Color.LTGRAY))
+                                    .fallback(ColorDrawable(Color.LTGRAY))
                                     .centerCrop()
-                        }
+                        )
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(holder.actorImage)
             }

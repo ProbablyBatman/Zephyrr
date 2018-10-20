@@ -32,12 +32,12 @@ class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableL
             if (validUrl.isNotEmpty()) {
                 Glide.with(holder.actorImage)
                         .load(validUrl)
-                        .apply {
+                        .apply(
                             RequestOptions()
-                                    .placeholder(ColorDrawable(Color.DKGRAY))
-                                    .fallback(ColorDrawable(Color.DKGRAY))
+                                    .placeholder(ColorDrawable(Color.LTGRAY))
+                                    .fallback(ColorDrawable(Color.LTGRAY))
                                     .centerCrop()
-                        }
+                        )
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(holder.actorImage)
             }

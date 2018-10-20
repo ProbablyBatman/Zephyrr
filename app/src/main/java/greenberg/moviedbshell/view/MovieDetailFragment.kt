@@ -134,12 +134,12 @@ class MovieDetailFragment :
             val validUrl = resources.getString(R.string.poster_url_substitution, movieDetailItem.posterImageUrl)
             Glide.with(this)
                     .load(validUrl)
-                    .apply {
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.DKGRAY))
-                                .fallback(ColorDrawable(Color.DKGRAY))
-                                .centerCrop()
-                    }
+                    .apply(
+                            RequestOptions()
+                                    .placeholder(ColorDrawable(Color.LTGRAY))
+                                    .fallback(ColorDrawable(Color.LTGRAY))
+                                    .centerCrop()
+                    )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(posterImageView!!)
         }
@@ -149,12 +149,12 @@ class MovieDetailFragment :
             val validUrl = resources.getString(R.string.poster_url_substitution, movieDetailItem.backdropImageUrl)
             Glide.with(this)
                     .load(validUrl)
-                    .apply {
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.DKGRAY))
-                                .fallback(ColorDrawable(Color.DKGRAY))
-                                .centerCrop()
-                    }
+                    .apply(
+                            RequestOptions()
+                                    .placeholder(ColorDrawable(Color.LTGRAY))
+                                    .fallback(ColorDrawable(Color.LTGRAY))
+                                    .centerCrop()
+                    )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(backdropImageView!!)
         }

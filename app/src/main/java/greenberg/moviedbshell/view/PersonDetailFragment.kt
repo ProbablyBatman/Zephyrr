@@ -122,12 +122,12 @@ class PersonDetailFragment :
             val validUrl = resources.getString(R.string.poster_url_substitution, personDetailItem.posterImageUrl)
             Glide.with(this)
                     .load(validUrl)
-                    .apply {
+                    .apply(
                         RequestOptions()
-                                .placeholder(ColorDrawable(Color.DKGRAY))
-                                .fallback(ColorDrawable(Color.DKGRAY))
+                                .placeholder(ColorDrawable(Color.LTGRAY))
+                                .fallback(ColorDrawable(Color.LTGRAY))
                                 .centerCrop()
-                    }
+                    )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(posterImageView!!)
         }
