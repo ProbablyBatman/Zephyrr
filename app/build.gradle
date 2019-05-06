@@ -13,6 +13,7 @@ android {
         targetSdkVersion 28
         versionCode buildNumber
         versionName "1.0.$buildNumber"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
