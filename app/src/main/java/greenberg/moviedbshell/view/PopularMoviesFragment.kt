@@ -84,7 +84,7 @@ class PopularMoviesFragment :
     override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
         Timber.d("Showing Error")
         Timber.e(throwable)
-        //hide progress bar
+        // hide progress bar
         popularMovieRefresher?.isRefreshing = false
         errorSnackbar = popularMovieRecycler?.let { view ->
             Snackbar.make(view, getString(R.string.generic_error_text), Snackbar.LENGTH_INDEFINITE)
