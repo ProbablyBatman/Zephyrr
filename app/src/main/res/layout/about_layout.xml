@@ -11,7 +11,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_medium"
-            android:text="@string/privacy_policy_title"/>
+            android:text="@string/privacy_policy_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
             android:id="@+id/privacy_policy_link"
@@ -29,7 +31,9 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_medium"
             android:text="@string/terms_and_conditions_title"
-            app:layout_constraintTop_toBottomOf="@id/privacy_policy_link"/>
+            app:layout_constraintTop_toBottomOf="@id/privacy_policy_link"
+            app:layout_constraintStart_toStartOf="parent"/>
+
     <TextView
             android:id="@+id/terms_and_conditions_link"
             android:layout_width="0dp"
