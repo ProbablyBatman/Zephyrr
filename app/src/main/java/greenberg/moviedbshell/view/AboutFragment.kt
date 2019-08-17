@@ -16,6 +16,7 @@ import timber.log.Timber
 import android.content.Intent
 import android.net.Uri
 import greenberg.moviedbshell.BuildConfig
+import java.util.Calendar
 
 class AboutFragment :
         BaseFragment<AboutView, AboutPresenter>(),
@@ -48,7 +49,9 @@ class AboutFragment :
 
     override fun show() {
         setUpLinks()
-        aboutMeTextView?.text = resources.getString(R.string.about_me, BuildConfig.VERSION_NAME)
+        aboutMeTextView?.text = resources.getString(R.string.about_me,
+                Calendar.getInstance().get(Calendar.YEAR).toString(),
+                BuildConfig.VERSION_NAME)
     }
 
     private fun setUpLinks() {

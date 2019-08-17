@@ -3,8 +3,8 @@
     <string name="tmdb_url">https://api.themoviedb.org/3/</string>
     <string name="tmdb_popular_url">popular</string>
     <string name="api_key">api_key</string>
-    <string name="about_me">\u00a9 2018 Samuel Greenberg\nThis product uses the TMDb API but is not endorsed or
-        certified by TMDb.\nVersion %1$s\nThanks to Matthew McKenna for the inspiration to actually do this!
+    <string name="about_me">\u00a9 %1$s Samuel Greenberg\nThis product uses the TMDb API but is not endorsed or
+        certified by TMDb.\nVersion %2$s\nThanks to Matthew McKenna for the inspiration to actually do this!
     </string>
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="privacy_policy_url">
