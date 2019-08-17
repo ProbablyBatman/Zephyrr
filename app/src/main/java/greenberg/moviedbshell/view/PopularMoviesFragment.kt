@@ -1,10 +1,10 @@
 package greenberg.moviedbshell.view
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,8 +23,8 @@ class PopularMoviesFragment :
         PopularMoviesView,
         SwipeRefreshLayout.OnRefreshListener {
 
-    private var popularMovieRecycler: RecyclerView? = null
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private var popularMovieRecycler: androidx.recyclerview.widget.RecyclerView? = null
+    private lateinit var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
     private var popularMovieAdapter: PopularMovieAdapter? = null
     private var popularMovieRefresher: SwipeRefreshLayout? = null
     private var popularMovieLoadingBar: ProgressBar? = null
@@ -51,7 +51,7 @@ class PopularMoviesFragment :
         popularMovieRefresher?.setOnRefreshListener(this)
 
         // TODO: look into proper context for this; i.e. application or base
-        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         popularMovieRecycler?.layoutManager = linearLayoutManager
         // TODO: revisit this initialization
         popularMovieAdapter = PopularMovieAdapter(presenter = presenter)

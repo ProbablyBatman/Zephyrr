@@ -3,18 +3,19 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-def buildNumber = System.getenv("BITRISE_BUILD_NUMBER") as Integer ?: 1
+def rawBuildNumber = System.getenv("BITRISE_BUILD_NUMBER") ?: "1"
+def buildNumber = Integer.parseInt(rawBuildNumber)
 
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "greenberg.moviedbshell"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode buildNumber
         versionName "1.0.$buildNumber"
         multiDexEnabled true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -33,8 +34,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:$currentVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation "androidx.appcompat:appcompat:$appCompat_Version"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
@@ -48,22 +49,21 @@ dependencies {
     implementation 'com.hannesdorfmann.mosby3:mvp:3.1.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    implementation "com.android.support:appcompat-v7:$currentVersion"
-    implementation "com.android.support:recyclerview-v7:$currentVersion"
-    implementation "com.android.support:cardview-v7:$currentVersion"
-    implementation "com.android.support:palette-v7:$currentVersion"
-    implementation "com.android.support:design:$currentVersion"
-    implementation "com.android.support:support-v4:$currentVersion"
-    implementation "com.android.support:support-media-compat:$currentVersion"
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.media:media:$media_version"
 
-    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0-alpha01'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0-alpha01'
 
     implementation 'com.google.dagger:dagger:2.17'
     kapt 'com.google.dagger:dagger-compiler:2.17'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
 
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-core:17.1.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5') {
         transitive = true
     }
@@ -71,8 +71,8 @@ dependencies {
     ktlint "com.github.shyiko:ktlint:0.28.0"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
 
 task ktlint(type: JavaExec, group: "verification") {

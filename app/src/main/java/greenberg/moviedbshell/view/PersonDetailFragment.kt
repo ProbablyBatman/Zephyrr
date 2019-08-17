@@ -3,11 +3,11 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.design.button.MaterialButton
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.CardView
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import androidx.core.widget.NestedScrollView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +34,7 @@ class PersonDetailFragment :
 
     private var progressBar: ProgressBar? = null
     private var scrollView: NestedScrollView? = null
-    private var posterImageContainer: CardView? = null
+    private var posterImageContainer: androidx.cardview.widget.CardView? = null
     private var posterImageView: ImageView? = null
     private var name: TextView? = null
     private var birthdayTitle: TextView? = null
@@ -44,11 +44,11 @@ class PersonDetailFragment :
     private var deathdayTitle: TextView? = null
     private var deathday: TextView? = null
     private var biography: TextView? = null
-    private var creditsRecycler: RecyclerView? = null
+    private var creditsRecycler: androidx.recyclerview.widget.RecyclerView? = null
     private var creditsAdapter: CreditsAdapter? = null
     private var errorTextView: TextView? = null
     private var errorRetryButton: MaterialButton? = null
-    private var linearLayoutManager: LinearLayoutManager? = null
+    private var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager? = null
 
     private var personId = -1
     private var navController: NavController? = null
@@ -83,7 +83,7 @@ class PersonDetailFragment :
         errorRetryButton = view.findViewById(R.id.person_detail_retry_button)
         creditsRecycler = view.findViewById(R.id.person_detail_recycler)
 
-        linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        linearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
         creditsRecycler?.layoutManager = linearLayoutManager
         creditsAdapter = CreditsAdapter(presenter = presenter)
         creditsRecycler?.adapter = creditsAdapter

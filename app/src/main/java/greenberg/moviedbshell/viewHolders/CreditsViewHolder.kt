@@ -1,14 +1,14 @@
 package greenberg.moviedbshell.viewHolders
 
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import greenberg.moviedbshell.R
 
-class CreditsViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    val cardView: CardView = view.findViewById(R.id.person_detail_card)
+class CreditsViewHolder(val view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    val cardView: androidx.cardview.widget.CardView = view.findViewById(R.id.person_detail_card)
     val actorImage: ImageView = view.findViewById(R.id.credit_list_item_image)
     val itemTitle: TextView = view.findViewById(R.id.credit_list_item_title)
     val releaseDate: TextView = view.findViewById(R.id.credit_list_item_release_date)

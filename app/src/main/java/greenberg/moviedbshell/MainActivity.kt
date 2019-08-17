@@ -1,7 +1,7 @@
 package greenberg.moviedbshell
 
 import android.os.Bundle
-import android.support.v7.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.NavController

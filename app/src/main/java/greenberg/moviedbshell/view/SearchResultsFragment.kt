@@ -1,11 +1,11 @@
 package greenberg.moviedbshell.view
 
 import android.os.Bundle
-import android.support.design.button.MaterialButton
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.SearchView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +27,8 @@ class SearchResultsFragment :
     private lateinit var query: String
     private var navController: NavController? = null
 
-    private var searchResultsRecycler: RecyclerView? = null
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private var searchResultsRecycler: androidx.recyclerview.widget.RecyclerView? = null
+    private lateinit var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
     private var searchResultsAdapter: SearchResultsAdapter? = null
     private var searchLoadingBar: ProgressBar? = null
     private var loadingSnackbar: Snackbar? = null
@@ -59,7 +59,7 @@ class SearchResultsFragment :
         errorTextView = view.findViewById(R.id.search_error)
         errorRetryButton = view.findViewById(R.id.search_error_retry_button)
 
-        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         searchResultsRecycler?.layoutManager = linearLayoutManager
         searchResultsAdapter = SearchResultsAdapter(presenter = presenter)
         searchResultsRecycler?.adapter = searchResultsAdapter

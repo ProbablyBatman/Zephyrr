@@ -2,8 +2,8 @@ package greenberg.moviedbshell.presenters
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.mappers.SearchResultsMapper
 import greenberg.moviedbshell.models.ui.MovieItem
@@ -46,14 +46,14 @@ class SearchPresenter
         }
     }
 
-    fun initRecyclerPagination(recyclerView: RecyclerView?, adapter: SearchResultsAdapter?) {
+    fun initRecyclerPagination(recyclerView: androidx.recyclerview.widget.RecyclerView?, adapter: SearchResultsAdapter?) {
         searchResultAdapter = adapter
         recyclerView?.apply {
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
-                    val layoutManager = this@apply.layoutManager as LinearLayoutManager
+                    val layoutManager = this@apply.layoutManager as androidx.recyclerview.widget.LinearLayoutManager
                     val visibleItemCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()

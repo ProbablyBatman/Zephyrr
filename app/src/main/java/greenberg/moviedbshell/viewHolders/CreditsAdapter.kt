@@ -2,7 +2,7 @@ package greenberg.moviedbshell.viewHolders
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -15,14 +15,14 @@ import greenberg.moviedbshell.presenters.PersonDetailPresenter
 class CreditsAdapter(
     var creditsList: MutableList<PersonDetailCreditItem> = mutableListOf(),
     private val presenter: PersonDetailPresenter
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         return CreditsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.credit_list_card, parent, false))
     }
 
     override fun getItemCount() = creditsList.size
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
         if (holder is CreditsViewHolder) {
             resetView(holder)
             val currentItem = creditsList[position]

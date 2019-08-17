@@ -3,10 +3,10 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.design.button.MaterialButton
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,10 +56,10 @@ class TvDetailFragment :
     private var genresText: TextView? = null
     private var genresTitle: TextView? = null
     private var overviewText: TextView? = null
-    private var castRecyclerView: RecyclerView? = null
+    private var castRecyclerView: androidx.recyclerview.widget.RecyclerView? = null
     private var errorTextView: TextView? = null
     private var errorRetryButton: MaterialButton? = null
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
     private lateinit var castListAdapter: CastListAdapter
 
     private var tvDetailId = -1
@@ -107,7 +107,7 @@ class TvDetailFragment :
         errorRetryButton = view.findViewById(R.id.tv_detail_retry_button)
         castRecyclerView = view.findViewById(R.id.tv_detail_cast_members_recycler)
 
-        linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        linearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
         castRecyclerView?.layoutManager = linearLayoutManager
         castListAdapter = CastListAdapter()
         castRecyclerView?.adapter = castListAdapter
