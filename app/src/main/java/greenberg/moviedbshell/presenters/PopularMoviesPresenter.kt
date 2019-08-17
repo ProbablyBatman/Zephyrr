@@ -173,7 +173,7 @@ class PopularMoviesPresenter
             }
 
     private fun evictCachedUrls() {
-        val iterator = httpClient.cache()?.urls()
+        val iterator = httpClient.cache?.urls()
         while (iterator?.hasNext() == true) {
             val currentUrl = iterator.next()
             if (currentUrl.contains(context.getString(R.string.tmdb_popular_url))) {

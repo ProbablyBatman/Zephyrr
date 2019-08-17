@@ -54,13 +54,13 @@ class ServicesModule {
                     addInterceptor(loggingInterceptor)
                     addInterceptor { chain ->
                         val original = chain.request()
-                        val originalHttpUrl = original.url()
+                        val originalHttpUrl = original.url
                         val url = originalHttpUrl.newBuilder()
                                 .addQueryParameter(context.getString(R.string.api_key), BuildConfig.TMDB_API_KEY)
                                 .build()
                         val request = original.newBuilder().url(url).build()
                         val response = chain.proceed(request)
-                        if (response.networkResponse() == null) Timber.d("call hit the cache")
+                        if (response.networkResponse == null) Timber.d("call hit the cache")
                         else Timber.d("call hit the network")
                         response
                     }
