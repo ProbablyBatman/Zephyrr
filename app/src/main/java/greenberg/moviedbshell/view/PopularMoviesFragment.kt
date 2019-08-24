@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.core.view.ViewCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import greenberg.moviedbshell.R
@@ -23,8 +24,8 @@ class PopularMoviesFragment :
         PopularMoviesView,
         SwipeRefreshLayout.OnRefreshListener {
 
-    private var popularMovieRecycler: androidx.recyclerview.widget.RecyclerView? = null
-    private lateinit var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
+    private var popularMovieRecycler: RecyclerView? = null
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private var popularMovieAdapter: PopularMovieAdapter? = null
     private var popularMovieRefresher: SwipeRefreshLayout? = null
     private var popularMovieLoadingBar: ProgressBar? = null

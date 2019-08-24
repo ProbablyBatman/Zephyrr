@@ -7,15 +7,29 @@
         <item name="android:titleTextStyle">@style/AppTheme.ActionBarStyle.TitleTextStyle</item>
     </style>-->
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <!--<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">-->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <!--<item name="android:titleTextStyle">@style/AppTheme.ActionBarStyle.TitleTextStyle</item>-->
+    <!--</style>-->
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar.Bridge">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:titleTextStyle">@style/AppTheme.ActionBarStyle.TitleTextStyle</item>
+<!--        <item name="android:titleTextStyle">@style/DayNightActionBar</item>-->
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="actionBarPopupTheme">@style/PopUpMenu</item>
+        <item name="colorSurface">@android:color/holo_blue_bright</item>
     </style>
 
     <style name="AppTheme.ActionBarStyle.TitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="PopUpMenu">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     <style name="TopInfoTitleStyle">

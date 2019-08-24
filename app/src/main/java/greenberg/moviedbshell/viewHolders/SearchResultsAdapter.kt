@@ -20,14 +20,13 @@ import greenberg.moviedbshell.presenters.SearchPresenter
 class SearchResultsAdapter(
     var searchResults: MutableList<PreviewItem> = mutableListOf(),
     private val presenter: SearchPresenter
-) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SearchResultsViewHolder) {
             // Reset text, images, and listeners
             resetView(holder)
-            val currentItem = searchResults[position]
-            when (currentItem) {
+            when (val currentItem = searchResults[position]) {
                 is MovieItem -> {
                     holder.searchItemTitle.text = currentItem.movieTitle
                     holder.searchItemSubInfo.text = presenter.processReleaseDate(currentItem.releaseDate)
@@ -71,7 +70,7 @@ class SearchResultsAdapter(
 
     override fun getItemCount() = searchResults.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return SearchResultsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.search_card_layout, parent, false))
     }
 

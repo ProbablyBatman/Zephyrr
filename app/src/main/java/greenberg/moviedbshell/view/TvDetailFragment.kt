@@ -56,10 +56,10 @@ class TvDetailFragment :
     private var genresText: TextView? = null
     private var genresTitle: TextView? = null
     private var overviewText: TextView? = null
-    private var castRecyclerView: androidx.recyclerview.widget.RecyclerView? = null
+    private var castRecyclerView: RecyclerView? = null
     private var errorTextView: TextView? = null
     private var errorRetryButton: MaterialButton? = null
-    private lateinit var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var castListAdapter: CastListAdapter
 
     private var tvDetailId = -1
@@ -107,7 +107,7 @@ class TvDetailFragment :
         errorRetryButton = view.findViewById(R.id.tv_detail_retry_button)
         castRecyclerView = view.findViewById(R.id.tv_detail_cast_members_recycler)
 
-        linearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
+        linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         castRecyclerView?.layoutManager = linearLayoutManager
         castListAdapter = CastListAdapter()
         castRecyclerView?.adapter = castListAdapter

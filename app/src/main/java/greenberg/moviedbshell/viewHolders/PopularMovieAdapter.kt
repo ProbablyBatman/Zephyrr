@@ -15,9 +15,9 @@ import greenberg.moviedbshell.presenters.PopularMoviesPresenter
 class PopularMovieAdapter(
     var popularMovieList: MutableList<MovieItem> = mutableListOf(),
     private val presenter: PopularMoviesPresenter
-) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is PopularMovieViewHolder) {
             resetView(holder)
             val currentItem = popularMovieList[position]
@@ -43,7 +43,7 @@ class PopularMovieAdapter(
 
     override fun getItemCount() = popularMovieList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PopularMovieViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.popular_movie_card, parent, false))
     }
 

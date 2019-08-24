@@ -27,9 +27,8 @@ class MainActivity : BaseActivity() {
         Timber.d("onCreateOptionsMenu")
         menu?.clear()
         menuInflater.inflate(R.menu.base_menu, menu)
-        menu?.findItem(R.id.searchResultsFragment)?.let {
-            setUpSearchListener(it)
-        }
+        menu?.findItem(R.id.searchResultsFragment)?.let { setUpSearchListener(it) }
+        menu?.findItem(R.id.toggleDarkMode)?.let { setUpDarkModeToggle(it) }
         return true
     }
 
@@ -63,6 +62,13 @@ class MainActivity : BaseActivity() {
                     return false
                 }
             })
+        }
+    }
+
+    private fun setUpDarkModeToggle(item: MenuItem) {
+        item.setOnMenuItemClickListener {
+            (application as ZephyrrApplication).toggleNightMode()
+            true
         }
     }
 

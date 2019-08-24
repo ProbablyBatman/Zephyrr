@@ -10,6 +10,11 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
     <item
+        android:id="@+id/toggleDarkMode"
+        android:title="@string/toggle_dark_mode_text"
+        app:showAsAction="never"
+        android:textColor="?android:attr/textColorPrimary"/>
+    <item
         android:id="@+id/aboutFragment"
         android:title="@string/about_menu_item"
         app:showAsAction="never"/>

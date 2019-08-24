@@ -15,14 +15,14 @@ import greenberg.moviedbshell.presenters.PersonDetailPresenter
 class CreditsAdapter(
     var creditsList: MutableList<PersonDetailCreditItem> = mutableListOf(),
     private val presenter: PersonDetailPresenter
-) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CreditsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.credit_list_card, parent, false))
     }
 
     override fun getItemCount() = creditsList.size
 
-    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is CreditsViewHolder) {
             resetView(holder)
             val currentItem = creditsList[position]

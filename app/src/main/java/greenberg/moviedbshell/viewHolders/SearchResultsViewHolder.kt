@@ -7,12 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import greenberg.moviedbshell.R
 
-class SearchResultsViewHolder(val view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+class SearchResultsViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     var searchItemPosterImage: ImageView = view.findViewById(R.id.search_item_poster_image)
     var searchItemTitle: TextView = view.findViewById(R.id.search_item_title)
     // Used for release date, or alternatively info line of "Actor"
     var searchItemSubInfo: TextView = view.findViewById(R.id.search_item_sub_info_line)
     // Used for movies, known for list for actors.
     var searchItemOverview: TextView = view.findViewById(R.id.search_item_overview)
-    var cardItem: androidx.cardview.widget.CardView = view.findViewById(R.id.search_result_card)
+    var cardItem: CardView = view.findViewById(R.id.search_result_card)
 }

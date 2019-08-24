@@ -38,6 +38,7 @@
     <string name="user_rating_substitution">%1$s by %2$d users</string>
     <string name="runtime_substitution">%1$s minutes</string>
     <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>
+    <string name="toggle_dark_mode_text">Toggle Dark Mode</string>
 
     <!-- Search -->
     <string name="search">Search</string>

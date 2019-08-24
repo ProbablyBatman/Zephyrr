@@ -49,14 +49,14 @@ class PopularMoviesPresenter
         compositeDisposable = CompositeDisposable()
     }
 
-    fun initRecyclerPagination(recyclerView: androidx.recyclerview.widget.RecyclerView?, adapter: PopularMovieAdapter?) {
+    fun initRecyclerPagination(recyclerView: RecyclerView?, adapter: PopularMovieAdapter?) {
         this.popularMovieAdapter = adapter
         recyclerView?.apply {
-            addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
-                    val layoutManager = this@apply.layoutManager as androidx.recyclerview.widget.LinearLayoutManager
+                    val layoutManager = this@apply.layoutManager as LinearLayoutManager
                     val visibleItemCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
