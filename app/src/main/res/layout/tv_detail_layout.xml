@@ -90,12 +90,11 @@
                         android:layout_height="wrap_content"/>
             </FrameLayout>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                     android:id="@+id/tv_detail_poster_image_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="10dp"
@@ -108,7 +107,7 @@
                         android:layout_width="108dp"
                         android:layout_height="162dp"/>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                     android:id="@+id/first_air_date_title"

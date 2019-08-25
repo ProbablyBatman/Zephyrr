@@ -82,13 +82,12 @@
                         android:layout_height="wrap_content"/>
             </FrameLayout>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                     android:id="@+id/movie_detail_poster_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/margin_small"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
@@ -100,7 +99,7 @@
                         android:layout_width="108dp"
                         android:layout_height="162dp"/>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                     android:id="@+id/movie_detail_release_date_title"
@@ -176,9 +175,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginLeft="@dimen/margin_small"
                     android:layout_marginEnd="@dimen/margin_small"
-                    android:layout_marginRight="@dimen/margin_small"
                     android:textSize="@dimen/text_size_small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/movie_detail_genres_title"

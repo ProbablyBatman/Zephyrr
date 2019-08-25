@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.services
 
+import greenberg.moviedbshell.models.imagegallerymodels.ImageGalleryResponse
 import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
 import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
@@ -18,6 +19,9 @@ interface TMDBService {
 
     @GET("movie/{id}/credits")
     fun queryMovieCredits(@Path("id") id: Int): Single<CreditsResponse>
+
+    @GET("movies/{id}/images")
+    fun queryMovieImages(@Path("id") id: Int): Single<ImageGalleryResponse>
 
     @GET("movie/popular")
     fun queryPopularMovies(@Query("page") page: Int): Single<PopularMovieResponse>
