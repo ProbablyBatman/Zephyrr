@@ -33,6 +33,7 @@ class ZephyrrApplication : Application() {
                 .build()
 
         nightMode = retrieveSharedPreferences().getBoolean(NIGHT_MODE, false)
+        Timber.d("$nightMode Status")
         if (nightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
@@ -40,6 +41,7 @@ class ZephyrrApplication : Application() {
 
     fun toggleNightMode() {
         nightMode = !nightMode
+        Timber.d("$nightMode Status update")
         retrieveSharedPreferences().edit().putBoolean(NIGHT_MODE, nightMode).apply()
         AppCompatDelegate.setDefaultNightMode(
                 if (nightMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO

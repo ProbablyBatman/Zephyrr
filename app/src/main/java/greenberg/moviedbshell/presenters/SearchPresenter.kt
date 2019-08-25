@@ -9,6 +9,7 @@ import greenberg.moviedbshell.mappers.SearchResultsMapper
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.models.ui.TvItem
+import greenberg.moviedbshell.processReleaseDate
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.ZephyrrSearchView
 import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
@@ -16,8 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.Locale
 import javax.inject.Inject
 
 class SearchPresenter
@@ -154,16 +153,6 @@ class SearchPresenter
             }, mediaType)
         }
     }
-
-    fun processReleaseDate(releaseDate: String): String =
-            if (releaseDate.isNotBlank()) {
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                val date = inputFormat.parse(releaseDate)
-                val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-                outputFormat.format(date)
-            } else {
-                ""
-            }
 
     fun processKnownForItems(items: List<PreviewItem>): String {
         return "Most Known for: \n" +

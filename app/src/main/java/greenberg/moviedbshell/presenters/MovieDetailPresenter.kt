@@ -19,8 +19,6 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
-import java.util.Locale
 import javax.inject.Inject
 
 class MovieDetailPresenter
@@ -91,19 +89,6 @@ class MovieDetailPresenter
                     view.showMovieDetails(it)
                 }
             }
-        }
-    }
-
-    // TODO: probably make sure every date is like this?
-    // there has to be a better way to do this
-    fun processReleaseDate(releaseDate: String): String {
-        return if (releaseDate.isNotBlank()) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val date = inputFormat.parse(releaseDate)
-            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            outputFormat.format(date)
-        } else {
-            ""
         }
     }
 

@@ -24,6 +24,7 @@ import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.presenters.MovieDetailPresenter
+import greenberg.moviedbshell.processReleaseDate
 import greenberg.moviedbshell.viewHolders.CastListAdapter
 import timber.log.Timber
 
@@ -161,7 +162,7 @@ class MovieDetailFragment :
 
         titleBar?.text = movieDetailItem.movieTitle
         overviewTextView?.text = movieDetailItem.overview
-        releaseDateTextView?.text = presenter.processReleaseDate(movieDetailItem.releaseDate)
+        releaseDateTextView?.text = processReleaseDate(movieDetailItem.releaseDate)
         ratingTextView?.text = presenter.processRatingInfo(movieDetailItem.voteAverage, movieDetailItem.voteCount)
         statusTextView?.text = movieDetailItem.status
         runtimeTextView?.text = presenter.processRuntime(movieDetailItem.runtime)

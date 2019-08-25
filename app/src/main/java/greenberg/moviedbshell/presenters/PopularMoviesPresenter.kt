@@ -16,8 +16,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.Locale
 import javax.inject.Inject
 
 class PopularMoviesPresenter
@@ -161,16 +159,6 @@ class PopularMoviesPresenter
             })
         }
     }
-
-    fun processReleaseDate(releaseDate: String?): String =
-            if (releaseDate?.isNotBlank() == true) {
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                val date = inputFormat.parse(releaseDate)
-                val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-                outputFormat.format(date)
-            } else {
-                ""
-            }
 
     private fun evictCachedUrls() {
         val iterator = httpClient.cache?.urls()

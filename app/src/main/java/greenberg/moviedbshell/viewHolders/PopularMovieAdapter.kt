@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.presenters.PopularMoviesPresenter
+import greenberg.moviedbshell.processReleaseDate
 
 class PopularMovieAdapter(
     var popularMovieList: MutableList<MovieItem> = mutableListOf(),
@@ -35,7 +36,7 @@ class PopularMovieAdapter(
                         .into(holder.cardItemPosterImage)
             }
             holder.cardItemTitle.text = currentItem.movieTitle
-            holder.cardItemReleaseDate.text = presenter.processReleaseDate(currentItem.releaseDate)
+            holder.cardItemReleaseDate.text = processReleaseDate(currentItem.releaseDate)
             holder.cardItemOverview.text = currentItem.overview
             holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1) }
         }

@@ -16,6 +16,7 @@ import greenberg.moviedbshell.models.ui.PersonItem
 import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.models.ui.TvItem
 import greenberg.moviedbshell.presenters.SearchPresenter
+import greenberg.moviedbshell.processReleaseDate
 
 class SearchResultsAdapter(
     var searchResults: MutableList<PreviewItem> = mutableListOf(),
@@ -29,7 +30,7 @@ class SearchResultsAdapter(
             when (val currentItem = searchResults[position]) {
                 is MovieItem -> {
                     holder.searchItemTitle.text = currentItem.movieTitle
-                    holder.searchItemSubInfo.text = presenter.processReleaseDate(currentItem.releaseDate)
+                    holder.searchItemSubInfo.text = processReleaseDate(currentItem.releaseDate)
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
                     holder.cardItem.setOnClickListener {
@@ -38,7 +39,7 @@ class SearchResultsAdapter(
                 }
                 is TvItem -> {
                     holder.searchItemTitle.text = currentItem.name
-                    holder.searchItemSubInfo.text = presenter.processReleaseDate(currentItem.firstAirDate)
+                    holder.searchItemSubInfo.text = processReleaseDate(currentItem.firstAirDate)
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
                     holder.cardItem.setOnClickListener {
