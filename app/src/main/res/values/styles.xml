@@ -27,6 +27,13 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
     <style name="PopUpMenu">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>

@@ -179,7 +179,9 @@ class MovieDetailFragment :
     }
 
     override fun showBackdropImageGallery(bundle: Bundle) {
-        navController?.navigate(R.id.action_movieDetailFragment_to_backdropImageGalleryFragment, bundle)
+        BackdropImageGalleryDialog()
+                .apply { arguments = bundle }
+                .show(parentFragmentManager, BackdropImageGalleryDialog.TAG)
     }
 
     private fun hideAllViews() {

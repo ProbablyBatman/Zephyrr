@@ -52,4 +52,9 @@
     <string name="last_aired_title">Last Aired</string>
     <string name="number_of_episodes_title">Episodes</string>
     <string name="number_of_seasons_title">Seasons</string>
+
+    <!-- Image Gallery -->
+    <string name="copy_image">Copy image URL to clipboard</string>
+    <string name="copy_image_toast">Copied URL to clipboard!</string>
+    <string name="copy_image_error_toast">Couldn\'t copy URL!</string>
 </resources>

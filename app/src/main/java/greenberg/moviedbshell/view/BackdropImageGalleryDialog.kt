@@ -1,5 +1,8 @@
 package greenberg.moviedbshell.view
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,19 +11,22 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.ImageGalleryAdapter
-import greenberg.moviedbshell.base.BaseFragment
+import greenberg.moviedbshell.base.BaseDialogFragment
 import greenberg.moviedbshell.models.imagegallerymodels.BackdropsItem
 import greenberg.moviedbshell.presenters.BackdropImageGalleryPresenter
 import timber.log.Timber
 
-class BackdropImageGalleryFragment :
-        BaseFragment<BackdropImageGalleryView, BackdropImageGalleryPresenter>(),
+class BackdropImageGalleryDialog :
+        BaseDialogFragment<BackdropImageGalleryView, BackdropImageGalleryPresenter>(),
         BackdropImageGalleryView {
 
     private var progressBar: ProgressBar? = null
@@ -37,6 +43,7 @@ class BackdropImageGalleryFragment :
         if (arguments != null) {
             entityId = arguments?.get("EntityID") as? Int ?: -1
         }
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -54,16 +61,48 @@ class BackdropImageGalleryFragment :
         val bottomSheet = view.findViewById<LinearLayout>(R.id.image_bottom_sheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        //todo: fix this value
-        bottomSheetBehavior.peekHeight = 112
+        //todo: fix this value, will probably have to siffer for tablets
+        bottomSheetBehavior.peekHeight = 200
         bottomSheetBehavior.isHideable = false
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        //todo: do I need this
+        bottomSheetBehavior.bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 Timber.d("sag onslide")
             }
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                Timber.d("sag newstate is $newState")
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED ->
+                        bottomSheetExpander?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_expand_menu))
+                    BottomSheetBehavior.STATE_EXPANDED ->
+                        bottomSheetExpander?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_close_menu))
+                    else -> return
+                }
+            }
+        }
+
+        bottomSheet.setOnClickListener {
+            when (bottomSheetBehavior.state) {
+                BottomSheetBehavior.STATE_EXPANDED -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                BottomSheetBehavior.STATE_COLLAPSED -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+
+        viewPager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                bottomSheetCopier?.setOnClickListener {
+                    val currentPosition = viewPager?.currentItem
+                    if (currentPosition != null) {
+                        Toast.makeText(requireContext(), R.string.copy_image_toast, Toast.LENGTH_SHORT).show()
+                        val clipboard = getSystemService(requireContext(), ClipboardManager::class.java)
+                        val clip = ClipData.newPlainText("zephyrr_image_gallery_link", presenter.getCurrentImageLink(currentPosition))
+                        clipboard?.primaryClip = clip
+                    } else {
+                        Toast.makeText(requireContext(), R.string.copy_image_error_toast, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         })
 
@@ -76,12 +115,12 @@ class BackdropImageGalleryFragment :
 
     override fun onResume() {
         super.onResume()
-        (activity as AppCompatActivity).supportActionBar?.hide()
+        //(activity as AppCompatActivity).supportActionBar?.hide()
     }
 
     override fun onPause() {
         super.onPause()
-        (activity as AppCompatActivity).supportActionBar?.show()
+        //(activity as AppCompatActivity).supportActionBar?.show()
     }
 
     override fun showLoading() {
@@ -149,5 +188,10 @@ class BackdropImageGalleryFragment :
 
     override fun log(message: String) {
         Timber.d(message)
+    }
+
+    companion object {
+        @JvmField
+        val TAG: String = BackdropImageGalleryDialog::class.java.simpleName
     }
 }
