@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.viewHolders
+package greenberg.moviedbshell.adapters
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -12,6 +12,7 @@ import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.presenters.PopularMoviesPresenter
 import greenberg.moviedbshell.processReleaseDate
+import greenberg.moviedbshell.viewHolders.PopularMovieViewHolder
 
 class PopularMovieAdapter(
     var popularMovieList: MutableList<MovieItem> = mutableListOf(),

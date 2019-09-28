@@ -32,6 +32,9 @@
         <action
                 android:id="@+id/action_movieDetailFragment_to_personDetailFragment"
                 app:destination="@id/personDetailFragment"/>
+        <action
+                android:id="@+id/action_movieDetailFragment_to_backdropImageGalleryFragment"
+                app:destination="@id/BackdropImageGalleryFragment"/>
     </fragment>
 
     <fragment
@@ -56,6 +59,11 @@
     <fragment
             android:id="@+id/aboutFragment"
             android:name="greenberg.moviedbshell.view.AboutFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/BackdropImageGalleryFragment"
+        android:name="greenberg.moviedbshell.view.BackdropImageGalleryFragment">
     </fragment>
 
     <action android:id="@+id/action_global_aboutFragment"

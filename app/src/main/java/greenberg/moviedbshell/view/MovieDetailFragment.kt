@@ -3,10 +3,6 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import com.google.android.material.button.MaterialButton
-import androidx.core.widget.NestedScrollView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,18 +10,22 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.button.MaterialButton
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.presenters.MovieDetailPresenter
 import greenberg.moviedbshell.processReleaseDate
-import greenberg.moviedbshell.viewHolders.CastListAdapter
+import greenberg.moviedbshell.adapters.CastListAdapter
 import timber.log.Timber
 
 class MovieDetailFragment :
@@ -101,7 +101,7 @@ class MovieDetailFragment :
         castRecyclerView?.layoutManager = linearLayoutManager
         castListAdapter = CastListAdapter()
         castRecyclerView?.adapter = castListAdapter
-        presenter?.initView(movieId, castListAdapter)
+        presenter.initView(movieId, castListAdapter)
         presenter.loadMovieDetails(movieId)
         navController = findNavController()
     }
@@ -168,6 +168,7 @@ class MovieDetailFragment :
         runtimeTextView?.text = presenter.processRuntime(movieDetailItem.runtime)
         genresTitle?.text = presenter.processGenreTitle(movieDetailItem.genres.size)
         genresTextView?.text = presenter.processGenres(movieDetailItem.genres)
+        backdropImageContainer?.setOnClickListener { presenter.loadBackdropImageGallery(movieDetailItem) }
         // TODO: potentially scrape other rating information
         hideLoadingBar()
         showAllViews()
@@ -175,6 +176,10 @@ class MovieDetailFragment :
 
     override fun showDetail(bundle: Bundle) {
         navController?.navigate(R.id.action_movieDetailFragment_to_personDetailFragment, bundle)
+    }
+
+    override fun showBackdropImageGallery(bundle: Bundle) {
+        navController?.navigate(R.id.action_movieDetailFragment_to_backdropImageGalleryFragment, bundle)
     }
 
     private fun hideAllViews() {

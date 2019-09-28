@@ -9,7 +9,7 @@ import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponseCont
 import greenberg.moviedbshell.models.ui.PersonDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.PersonDetailView
-import greenberg.moviedbshell.viewHolders.CreditsAdapter
+import greenberg.moviedbshell.adapters.CreditsAdapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

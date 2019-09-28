@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.viewHolders
+package greenberg.moviedbshell.adapters
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.ui.PersonDetailCreditItem
 import greenberg.moviedbshell.presenters.PersonDetailPresenter
+import greenberg.moviedbshell.viewHolders.CreditsViewHolder
 
 class CreditsAdapter(
     var creditsList: MutableList<PersonDetailCreditItem> = mutableListOf(),

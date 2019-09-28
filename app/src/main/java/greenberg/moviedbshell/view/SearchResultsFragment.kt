@@ -3,8 +3,6 @@ package greenberg.moviedbshell.view
 import android.os.Bundle
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.SearchView
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +15,7 @@ import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.presenters.SearchPresenter
-import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
+import greenberg.moviedbshell.adapters.SearchResultsAdapter
 import timber.log.Timber
 
 class SearchResultsFragment :

@@ -10,7 +10,7 @@ import greenberg.moviedbshell.mappers.PopularMovieMapper
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.PopularMoviesView
-import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
+import greenberg.moviedbshell.adapters.PopularMovieAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

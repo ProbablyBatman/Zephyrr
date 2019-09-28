@@ -12,7 +12,7 @@ import greenberg.moviedbshell.models.ui.TvItem
 import greenberg.moviedbshell.processReleaseDate
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.ZephyrrSearchView
-import greenberg.moviedbshell.viewHolders.SearchResultsAdapter
+import greenberg.moviedbshell.adapters.SearchResultsAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

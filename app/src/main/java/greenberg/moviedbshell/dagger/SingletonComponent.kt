@@ -2,6 +2,7 @@ package greenberg.moviedbshell.dagger
 
 import dagger.Component
 import greenberg.moviedbshell.presenters.AboutPresenter
+import greenberg.moviedbshell.presenters.BackdropImageGalleryPresenter
 import greenberg.moviedbshell.presenters.MovieDetailPresenter
 import greenberg.moviedbshell.presenters.PersonDetailPresenter
 import greenberg.moviedbshell.presenters.PopularMoviesPresenter
@@ -18,4 +19,5 @@ interface SingletonComponent {
     fun tvDetailPresenter(): TvDetailPresenter
     fun personDetailPresenter(): PersonDetailPresenter
     fun aboutPresenter(): AboutPresenter
+    fun backdropImageGalleryPresenter(): BackdropImageGalleryPresenter
 }

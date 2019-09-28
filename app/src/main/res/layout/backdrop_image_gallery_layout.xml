@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<RelativeLayout-->
+<!--        xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical"-->
+<!--        tools:context=".MainActivity">-->
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/image_gallery_coordinator"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".MainActivity"
+            android:background="@android:color/black">
+
+        <ProgressBar
+                android:id="@+id/image_gallery_progress_bar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/image_gallery_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <include layout="@layout/image_bottom_sheet"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+<!--</RelativeLayout>-->

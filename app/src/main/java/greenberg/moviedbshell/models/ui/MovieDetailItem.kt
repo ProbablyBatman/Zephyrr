@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.models.ui
 
 class MovieDetailItem(
+    val movieId: Int,
     val movieTitle: String,
     val originalTitle: String,
     val releaseDate: String,

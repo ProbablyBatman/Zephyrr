@@ -20,7 +20,7 @@ interface TMDBService {
     @GET("movie/{id}/credits")
     fun queryMovieCredits(@Path("id") id: Int): Single<CreditsResponse>
 
-    @GET("movies/{id}/images")
+    @GET("movie/{id}/images")
     fun queryMovieImages(@Path("id") id: Int): Single<ImageGalleryResponse>
 
     @GET("movie/popular")

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:id="@+id/image_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <ImageView
+            android:id="@+id/image_bottom_sheet_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_gravity="end"
+            android:padding="5dp"
+            android:src="@drawable/ic_open_bottom_sheet" />
+
+    <TextView
+            android:id="@+id/image_bottom_sheet_copy"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="start"
+            android:drawableStart="@drawable/ic_content_copy"
+            android:drawablePadding="10dp" />
+
+</LinearLayout>

@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.viewHolders
+package greenberg.moviedbshell.adapters
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -17,6 +17,7 @@ import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.models.ui.TvItem
 import greenberg.moviedbshell.presenters.SearchPresenter
 import greenberg.moviedbshell.processReleaseDate
+import greenberg.moviedbshell.viewHolders.SearchResultsViewHolder
 
 class SearchResultsAdapter(
     var searchResults: MutableList<PreviewItem> = mutableListOf(),

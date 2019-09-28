@@ -11,7 +11,7 @@ import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseContainer
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.TvDetailView
-import greenberg.moviedbshell.viewHolders.CastListAdapter
+import greenberg.moviedbshell.adapters.CastListAdapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

@@ -9,4 +9,5 @@ interface MovieDetailView : MvpView {
     fun showError(throwable: Throwable)
     fun showMovieDetails(movieDetailItem: MovieDetailItem)
     fun showDetail(bundle: Bundle)
+    fun showBackdropImageGallery(bundle: Bundle)
 }

@@ -11,6 +11,7 @@ class MovieDetailMapper
         val movieDetail = item.first
         val creditsDetail = item.second
         return MovieDetailItem(
+                movieId = movieDetail.id ?: 0,
                 movieTitle = movieDetail.title.orEmpty(),
                 originalTitle = movieDetail.originalTitle.orEmpty(),
                 releaseDate = movieDetail.releaseDate.orEmpty(),

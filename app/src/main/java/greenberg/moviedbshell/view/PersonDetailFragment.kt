@@ -25,7 +25,7 @@ import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.models.ui.PersonDetailItem
 import greenberg.moviedbshell.presenters.PersonDetailPresenter
 import greenberg.moviedbshell.presenters.SearchPresenter
-import greenberg.moviedbshell.viewHolders.CreditsAdapter
+import greenberg.moviedbshell.adapters.CreditsAdapter
 import timber.log.Timber
 
 class PersonDetailFragment :

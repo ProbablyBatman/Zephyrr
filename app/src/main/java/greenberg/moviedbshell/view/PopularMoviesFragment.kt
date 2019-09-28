@@ -9,14 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import androidx.core.view.ViewCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.presenters.PopularMoviesPresenter
-import greenberg.moviedbshell.viewHolders.PopularMovieAdapter
+import greenberg.moviedbshell.adapters.PopularMovieAdapter
 import timber.log.Timber
 
 class PopularMoviesFragment :

@@ -24,7 +24,7 @@ import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.presenters.TvDetailPresenter
-import greenberg.moviedbshell.viewHolders.CastListAdapter
+import greenberg.moviedbshell.adapters.CastListAdapter
 import timber.log.Timber
 
 class TvDetailFragment :

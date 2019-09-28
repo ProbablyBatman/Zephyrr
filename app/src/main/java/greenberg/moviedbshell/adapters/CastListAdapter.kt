@@ -1,4 +1,4 @@
-package greenberg.moviedbshell.viewHolders
+package greenberg.moviedbshell.adapters
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,6 +10,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.ui.CastMemberItem
+import greenberg.moviedbshell.viewHolders.CastListViewHolder
 
 class CastListAdapter(var castMemberList: MutableList<CastMemberItem> = mutableListOf()) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

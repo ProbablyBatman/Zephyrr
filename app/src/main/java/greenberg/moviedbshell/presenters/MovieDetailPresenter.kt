@@ -10,7 +10,7 @@ import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.view.MovieDetailView
-import greenberg.moviedbshell.viewHolders.CastListAdapter
+import greenberg.moviedbshell.adapters.CastListAdapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -68,6 +68,7 @@ class MovieDetailPresenter
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ movieDetailItem ->
                                 ifViewAttached { view: MovieDetailView ->
+                                    //TODO: this castAdapter logic should really be moved out of here.
                                     castListAdapter?.castMemberList?.addAll(movieDetailItem.castMembers.take(20))
                                     castListAdapter?.notifyDataSetChanged()
                                     castListAdapter?.onClickListener = { itemId: Int -> this.onCardSelected(itemId) }
@@ -107,6 +108,18 @@ class MovieDetailPresenter
     fun processGenreTitle(genresListSize: Int): String = context.resources.getQuantityString(R.plurals.genres_title, genresListSize)
 
     fun processGenres(genres: List<String?>): String = genres.joinToString(", ")
+
+    fun loadBackdropImageGallery(movieDetailItem: MovieDetailItem) {
+        ifViewAttached { view: MovieDetailView ->
+            view.showBackdropImageGallery(Bundle().apply{
+                // Note: try to avoid using the lastMovieDetailItem present in presenter because I think
+                // even having that variable in this class is bad.  I'm questioning whether passing the view
+                // the state and passing it right back to the presenter is worth it, but it seems most
+                // correct for the time being, so do it this way.
+                putInt("EntityID", movieDetailItem.movieId)
+            })
+        }
+    }
 
     private fun onCardSelected(itemId: Int) {
         ifViewAttached { view: MovieDetailView ->
