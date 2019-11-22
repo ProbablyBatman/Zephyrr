@@ -57,4 +57,7 @@
     <string name="copy_image">Copy image URL to clipboard</string>
     <string name="copy_image_toast">Copied URL to clipboard!</string>
     <string name="copy_image_error_toast">Couldn\'t copy URL!</string>
+    <string name="image_gallery_counter">%1$d/%2$d</string>
+    <string name="image_downloaded">Image downloaded!</string>
+    <string name="image_download">Save to gallery</string>
 </resources>

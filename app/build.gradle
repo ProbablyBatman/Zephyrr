@@ -50,24 +50,24 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
-    implementation 'com.hannesdorfmann.mosby3:mvp:3.1.1'
+    implementation 'com.hannesdorfmann.mosby3:mvp:3.1.2-SNAPSHOT'
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.palette:palette:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'com.google.android.material:material:1.2.0-alpha01'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.media:media:$media_version"
 
-    implementation 'androidx.viewpager2:viewpager2:1.0.0-beta04'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0-alpha03'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0-alpha03'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0-rc01'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0-rc02'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0-rc02'
 
     implementation 'com.google.dagger:dagger:2.24'
     kapt 'com.google.dagger:dagger-compiler:2.24'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
 
-    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5') {
         transitive = true
     }

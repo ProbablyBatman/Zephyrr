@@ -29,9 +29,12 @@ class ImageGalleryAdapter(
                     .apply(RequestOptions().fitCenter())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.imageView)
+            // Show the current position / number of items
+            holder.counter.text = holder.counter.context.getString(R.string.image_gallery_counter, position+1, itemCount)
         }
     }
 
+    // why not just page the bottom sheet ?
     private fun resetView(holder: ImageGalleryViewHolder) {
         Glide.with(holder.imageView).clear(holder.imageView)
     }

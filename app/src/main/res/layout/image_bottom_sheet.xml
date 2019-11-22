@@ -30,4 +30,17 @@
             android:ellipsize="end"
             android:gravity="center"/>
 
+    <TextView
+            android:id="@+id/image_bottom_sheet_download"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="start"
+            android:drawableStart="@drawable/ic_file_download"
+            android:drawablePadding="10dp"
+            android:text="@string/image_download"
+            android:textSize="@dimen/text_size_small"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:gravity="center"/>
+
 </LinearLayout>

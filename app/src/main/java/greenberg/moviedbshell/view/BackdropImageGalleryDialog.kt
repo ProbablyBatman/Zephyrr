@@ -1,8 +1,12 @@
 package greenberg.moviedbshell.view
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
@@ -34,9 +39,14 @@ class BackdropImageGalleryDialog :
     private var currentImage: ImageView? = null
     private var bottomSheetExpander: ImageView? = null
     private var bottomSheetCopier: TextView? = null
+    private var bottomSheetDownload: TextView? = null
+    private var coordinatorLayout: CoordinatorLayout? = null
 
     private var imageGalleryAdapter: ImageGalleryAdapter? = null
     private var entityId = -1
+
+    private var downloadReceiver: BroadcastReceiver? = null
+    private var downloadId = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +54,17 @@ class BackdropImageGalleryDialog :
             entityId = arguments?.get("EntityID") as? Int ?: -1
         }
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
+
+        downloadReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+                if (downloadId == id && id != -1L) {
+                    //send notification
+                    Toast.makeText(requireContext(), R.string.image_downloaded, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        requireActivity().registerReceiver(downloadReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,17 +78,18 @@ class BackdropImageGalleryDialog :
         currentImage = view.findViewById(R.id.image_gallery_current)
         bottomSheetExpander = view.findViewById(R.id.image_bottom_sheet_expand)
         bottomSheetCopier = view.findViewById(R.id.image_bottom_sheet_copy)
+        bottomSheetDownload = view.findViewById(R.id.image_bottom_sheet_download)
+        coordinatorLayout = view.findViewById(R.id.image_gallery_coordinator)
 
         val bottomSheet = view.findViewById<LinearLayout>(R.id.image_bottom_sheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        //todo: fix this value, will probably have to siffer for tablets
+        //todo: fix this value, will probably have to differ for tablets
         bottomSheetBehavior.peekHeight = 200
         bottomSheetBehavior.isHideable = false
-        //todo: do I need this
-        bottomSheetBehavior.bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                Timber.d("sag onslide")
+                // no-op
             }
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -79,7 +101,7 @@ class BackdropImageGalleryDialog :
                     else -> return
                 }
             }
-        }
+        })
 
         bottomSheet.setOnClickListener {
             when (bottomSheetBehavior.state) {
@@ -88,19 +110,28 @@ class BackdropImageGalleryDialog :
             }
         }
 
+        //Investigate if there's a way to page this
         viewPager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                // Collapse bottom sheet every time the user changes
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 bottomSheetCopier?.setOnClickListener {
                     val currentPosition = viewPager?.currentItem
                     if (currentPosition != null) {
-                        Toast.makeText(requireContext(), R.string.copy_image_toast, Toast.LENGTH_SHORT).show()
                         val clipboard = getSystemService(requireContext(), ClipboardManager::class.java)
                         val clip = ClipData.newPlainText("zephyrr_image_gallery_link", presenter.getCurrentImageLink(currentPosition))
                         clipboard?.primaryClip = clip
+                        presenter.startDownload(currentPosition)
+                        Toast.makeText(requireContext(), R.string.copy_image_toast, Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(requireContext(), R.string.copy_image_error_toast, Toast.LENGTH_SHORT).show()
+                    }
+                }
+                bottomSheetDownload?.setOnClickListener {
+                    val currentPosition = viewPager?.currentItem
+                    if (currentPosition != null) {
+                        presenter.startDownload(currentPosition)
                     }
                 }
             }
@@ -121,6 +152,11 @@ class BackdropImageGalleryDialog :
     override fun onPause() {
         super.onPause()
         //(activity as AppCompatActivity).supportActionBar?.show()
+    }
+
+    override fun onDestroy() {
+        requireActivity().unregisterReceiver(downloadReceiver)
+        super.onDestroy()
     }
 
     override fun showLoading() {

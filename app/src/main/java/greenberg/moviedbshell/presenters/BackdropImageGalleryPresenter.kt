@@ -1,9 +1,10 @@
 package greenberg.moviedbshell.presenters
 
+import android.app.DownloadManager
 import android.content.Context
+import android.net.Uri
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.adapters.ImagePagerAdapter
 import greenberg.moviedbshell.mappers.BackdropImageMapper
 import greenberg.moviedbshell.models.imagegallerymodels.BackdropsItem
 import greenberg.moviedbshell.services.TMDBService
@@ -62,6 +63,23 @@ class BackdropImageGalleryPresenter
     // image's url
     fun getCurrentImageLink(currentPagerPosition: Int): String {
         return context.getString(R.string.poster_url_substitution, mostRecentBackdropsItems[currentPagerPosition].filePath)
+    }
+
+    fun startDownload(currentPagerPosition: Int): Long {
+        val link = getCurrentImageLink(currentPagerPosition)
+        // This is just the path
+        val imageName = mostRecentBackdropsItems[currentPagerPosition].filePath
+        Timber.d("Downloading $link")
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
+        val request = DownloadManager.Request(Uri.parse(link))
+                .setTitle("Image Saved")
+                .setDescription("$imageName saved")
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationInExternalPublicDir(context.getString(R.string.app_name), imageName)
+                .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+                .setAllowedOverMetered(true)
+                .setAllowedOverRoaming(false)
+        return downloadManager?.enqueue(request) ?: -1
     }
 
     override fun detachView() {

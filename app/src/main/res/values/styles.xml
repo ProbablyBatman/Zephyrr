@@ -29,7 +29,6 @@
 
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Dialog">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@android:color/black</item>
     </style>
