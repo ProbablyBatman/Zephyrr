@@ -1,10 +1,10 @@
 package greenberg.moviedbshell.mappers
 
+import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.searchmodels.KnownForItem
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.models.ui.TvItem
-import greenberg.moviedbshell.presenters.SearchPresenter
 import javax.inject.Inject
 
 class KnownForMapper
@@ -12,7 +12,7 @@ class KnownForMapper
     override fun mapToEntity(item: List<KnownForItem?>?): List<PreviewItem> {
         val mappedItems = item?.map {
             when (it?.mediaType) {
-                SearchPresenter.MEDIA_TYPE_MOVIE ->
+                MediaType.MOVIE ->
                     MovieItem(
                         movieTitle = it.title.orEmpty(),
                         overview = it.overview.orEmpty(),
@@ -20,7 +20,7 @@ class KnownForMapper
                         posterImageUrl = it.posterPath.orEmpty(),
                         id = it.id
                     )
-                SearchPresenter.MEDIA_TYPE_TV -> {
+                MediaType.TV -> {
                     TvItem(
                         name = it.name.orEmpty(),
                         overview = it.overview.orEmpty(),
@@ -29,7 +29,7 @@ class KnownForMapper
                         id = it.id
                     )
                 }
-                else -> PreviewItem(mediaType = SearchPresenter.MEDIA_TYPE_UNKNOWN)
+                else -> PreviewItem(mediaType = MediaType.UNKNOWN)
             }
         }
         return mappedItems ?: emptyList()

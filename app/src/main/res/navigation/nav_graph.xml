@@ -26,6 +26,9 @@
                 app:destination="@id/personDetailFragment"/>
     </fragment>
 
+    <action android:id="@+id/action_global_searchResultsFragment"
+            app:destination="@id/searchResultsFragment"/>
+
     <fragment
             android:id="@+id/movieDetailFragment"
             android:name="greenberg.moviedbshell.view.MovieDetailFragment">

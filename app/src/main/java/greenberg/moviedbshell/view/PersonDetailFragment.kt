@@ -14,6 +14,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
@@ -22,15 +28,23 @@ import com.google.android.material.card.MaterialCardView
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
-import greenberg.moviedbshell.models.ui.PersonDetailItem
-import greenberg.moviedbshell.presenters.PersonDetailPresenter
-import greenberg.moviedbshell.presenters.SearchPresenter
 import greenberg.moviedbshell.adapters.CreditsAdapter
+import greenberg.moviedbshell.extensions.processAge
+import greenberg.moviedbshell.extensions.processDate
+import greenberg.moviedbshell.models.MediaType
+import greenberg.moviedbshell.state.MovieDetailArgs
+import greenberg.moviedbshell.state.PersonDetailState
+import greenberg.moviedbshell.state.TvDetailArgs
+import greenberg.moviedbshell.viewmodel.PersonDetailViewModel
 import timber.log.Timber
 
-class PersonDetailFragment :
-        BaseFragment<PersonDetailView, PersonDetailPresenter>(),
-        PersonDetailView {
+class PersonDetailFragment : BaseFragment() {
+
+    val personDetailViewModelFactory by lazy {
+        (activity?.application as ZephyrrApplication).component.personDetailViewModelFactory
+    }
+
+    private val viewModel: PersonDetailViewModel by fragmentViewModel()
 
     private var progressBar: ProgressBar? = null
     private var scrollView: NestedScrollView? = null
@@ -85,81 +99,81 @@ class PersonDetailFragment :
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         creditsRecycler?.layoutManager = linearLayoutManager
-        creditsAdapter = CreditsAdapter(presenter = presenter)
+        creditsAdapter = CreditsAdapter(onClickListener = this::onClickListener)
         creditsRecycler?.adapter = creditsAdapter
-
-        presenter.initView(creditsAdapter)
-        presenter.loadPersonDetails(personId)
         navController = findNavController()
+
+        viewModel.fetchPersonDetail()
+        viewModel.subscribe { Timber.d("State is $it") }
     }
 
-    override fun createPresenter() = presenter
-            ?: (activity?.application as ZephyrrApplication).component.personDetailPresenter()
-
-    override fun showLoading() {
+    private fun showLoading() {
         Timber.d("Showing loading")
         hideAllViews()
         hideErrorState()
         showLoadingBar()
     }
 
-    override fun showError(throwable: Throwable) {
+    private fun showError(throwable: Throwable) {
         Timber.d("Showing error")
         Timber.e(throwable)
         hideLoadingBar()
         showErrorState()
         errorRetryButton?.setOnClickListener {
-            presenter.loadPersonDetails(personId)
+            viewModel.fetchPersonDetail()
             hideErrorState()
         }
     }
 
-    override fun showPersonDetails(personDetailItem: PersonDetailItem) {
-        hideLoadingBar()
-        showAllViews()
+    private fun showPersonDetails(state: PersonDetailState) {
+        val personDetailItem = state.personDetailItem
 
-        if (personDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
-            val validUrl = resources.getString(R.string.poster_url_substitution, personDetailItem.posterImageUrl)
-            Glide.with(this)
-                    .load(validUrl)
-                    .apply(
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.LTGRAY))
-                                .fallback(ColorDrawable(Color.LTGRAY))
-                                .centerCrop()
-                    )
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(posterImageView!!)
-        }
+        if (personDetailItem != null) {
+            if (personDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
+                val validUrl = resources.getString(R.string.poster_url_substitution, personDetailItem.posterImageUrl)
+                Glide.with(this)
+                        .load(validUrl)
+                        .apply(
+                                RequestOptions()
+                                        .placeholder(ColorDrawable(Color.LTGRAY))
+                                        .fallback(ColorDrawable(Color.LTGRAY))
+                                        .centerCrop()
+                        )
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(posterImageView!!)
+            }
 
-        name?.text = personDetailItem.name
-        when {
-            personDetailItem.deathday.isNotEmpty() -> {
-                birthday?.text = resources.getString(R.string.birthday_no_age_substitution,
-                        presenter.processDate(personDetailItem.birthday))
-                deathday?.text = resources.getString(R.string.day_and_age_substitution,
-                        presenter.processDate(personDetailItem.deathday),
-                        presenter.processAge(personDetailItem.birthday, personDetailItem.deathday))
-                deathday?.visibility = View.VISIBLE
-                deathdayTitle?.visibility = View.VISIBLE
+            name?.text = personDetailItem.name
+            when {
+                personDetailItem.deathday.isNotEmpty() -> {
+                    birthday?.text = resources.getString(R.string.birthday_no_age_substitution, personDetailItem.birthday.processDate())
+                    deathday?.text = resources.getString(R.string.day_and_age_substitution,
+                            personDetailItem.deathday.processDate(),
+                            processAge(personDetailItem.birthday, personDetailItem.deathday))
+                    deathday?.visibility = View.VISIBLE
+                    deathdayTitle?.visibility = View.VISIBLE
+                }
+                personDetailItem.birthday.isNotEmpty() -> {
+                    birthday?.text = resources.getString(R.string.day_and_age_substitution,
+                            personDetailItem.birthday.processDate(),
+                            processAge(personDetailItem.birthday))
+                }
+                else -> {
+                    birthdayTitle?.visibility = View.GONE
+                    birthday?.visibility = View.GONE
+                }
             }
-            personDetailItem.birthday.isNotEmpty() -> {
-                birthday?.text = resources.getString(R.string.day_and_age_substitution,
-                        presenter.processDate(personDetailItem.birthday),
-                        presenter.processAge(personDetailItem.birthday))
+            if (personDetailItem.placeOfBirth.isNotEmpty()) {
+                birthplace?.text = personDetailItem.placeOfBirth
+            } else {
+                birthplaceTitle?.visibility = View.GONE
+                birthplace?.visibility = View.GONE
             }
-            else -> {
-                birthdayTitle?.visibility = View.GONE
-                birthday?.visibility = View.GONE
-            }
+            biography?.text = personDetailItem.biography
+
+            creditsAdapter?.creditsList = personDetailItem.combinedCredits
+            creditsAdapter?.notifyDataSetChanged()
         }
-        if (personDetailItem.placeOfBirth.isNotEmpty()) {
-            birthplace?.text = personDetailItem.placeOfBirth
-        } else {
-            birthplaceTitle?.visibility = View.GONE
-            birthplace?.visibility = View.GONE
-        }
-        biography?.text = personDetailItem.biography
     }
 
     private fun hideAllViews() {
@@ -191,15 +205,6 @@ class PersonDetailFragment :
         creditsRecycler?.visibility = View.VISIBLE
     }
 
-    override fun showDetail(bundle: Bundle, mediaType: String) {
-        when (mediaType) {
-            SearchPresenter.MEDIA_TYPE_MOVIE ->
-                navController?.navigate(R.id.action_personDetailFragment_to_movieDetailFragment, bundle)
-            SearchPresenter.MEDIA_TYPE_TV ->
-                navController?.navigate(R.id.action_personDetailFragment_to_tvDetailFragment, bundle)
-        }
-    }
-
     private fun showLoadingBar() {
         progressBar?.visibility = View.VISIBLE
     }
@@ -217,6 +222,42 @@ class PersonDetailFragment :
         errorTextView?.visibility = View.VISIBLE
         errorRetryButton?.visibility = View.VISIBLE
         scrollView?.visibility = View.VISIBLE
+    }
+
+    override fun invalidate() {
+        withState(viewModel) { state ->
+            when (state.personDetailResponse) {
+                Uninitialized -> Timber.d("uninitialized")
+                is Loading -> {
+                    showLoading()
+                }
+                is Success -> {
+                    showPersonDetails(state)
+                    hideLoadingBar()
+                    showAllViews()
+                }
+                is Fail -> {
+                    showError(state.personDetailResponse.error)
+                }
+            }
+        }
+    }
+
+    private fun onClickListener(itemId: Int, mediaType: String) {
+        when (mediaType) {
+            MediaType.MOVIE -> {
+                navigate(
+                        R.id.action_personDetailFragment_to_movieDetailFragment,
+                        MovieDetailArgs(itemId)
+                )
+            }
+            MediaType.TV -> {
+                navigate(
+                        R.id.action_personDetailFragment_to_tvDetailFragment,
+                        TvDetailArgs(itemId)
+                )
+            }
+        }
     }
 
     override fun log(message: String) {

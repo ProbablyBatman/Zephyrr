@@ -9,13 +9,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.extensions.processAsReleaseDate
 import greenberg.moviedbshell.models.ui.PersonDetailCreditItem
-import greenberg.moviedbshell.presenters.PersonDetailPresenter
 import greenberg.moviedbshell.viewHolders.CreditsViewHolder
 
 class CreditsAdapter(
-    var creditsList: MutableList<PersonDetailCreditItem> = mutableListOf(),
-    private val presenter: PersonDetailPresenter
+    var creditsList: List<PersonDetailCreditItem> = listOf(),
+    val onClickListener : (Int, String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CreditsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.credit_list_card, parent, false))
@@ -40,11 +40,9 @@ class CreditsAdapter(
                         .into(holder.actorImage)
             }
             holder.itemTitle.text = currentItem.title
-            holder.releaseDate.text = presenter.processDate(currentItem.releaseDate)
+            holder.releaseDate.text = currentItem.releaseDate.processAsReleaseDate()
             holder.actorRole.text = currentItem.role
-            holder.cardView.setOnClickListener {
-                presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType)
-            }
+            holder.cardView.setOnClickListener { onClickListener(currentItem.id ?: -1, currentItem.mediaType) }
         }
     }
 

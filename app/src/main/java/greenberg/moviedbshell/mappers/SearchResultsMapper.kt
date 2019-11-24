@@ -1,19 +1,19 @@
 package greenberg.moviedbshell.mappers
 
+import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.PersonItem
 import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.models.ui.TvItem
-import greenberg.moviedbshell.presenters.SearchPresenter
 import javax.inject.Inject
 
 class SearchResultsMapper
 @Inject constructor(private val knownForMapper: KnownForMapper) : Mapper<SearchResponse, List<PreviewItem>> {
-    override fun mapToEntity(item: SearchResponse): List<PreviewItem> {
-        val mappedItems = item.results?.map { result ->
+    override fun mapToEntity(item: SearchResponse?): List<PreviewItem> {
+        val mappedItems = item?.results?.map { result ->
             when (result?.mediaType) {
-                SearchPresenter.MEDIA_TYPE_MOVIE ->
+                MediaType.MOVIE ->
                     MovieItem(
                             movieTitle = result.title.orEmpty(),
                             overview = result.overview.orEmpty(),
@@ -21,7 +21,7 @@ class SearchResultsMapper
                             posterImageUrl = result.posterPath.orEmpty(),
                             id = result.id
                     )
-                SearchPresenter.MEDIA_TYPE_TV -> {
+                MediaType.TV -> {
                     TvItem(
                             name = result.name.orEmpty(),
                             overview = result.overview.orEmpty(),
@@ -30,7 +30,7 @@ class SearchResultsMapper
                             id = result.id
                     )
                 }
-                SearchPresenter.MEDIA_TYPE_PERSON -> {
+                MediaType.PERSON -> {
                     PersonItem(
                             name = result.name.orEmpty(),
                             posterImageUrl = result.profilePath.orEmpty(),
@@ -38,7 +38,7 @@ class SearchResultsMapper
                             id = result.id
                     )
                 }
-                else -> PreviewItem(mediaType = SearchPresenter.MEDIA_TYPE_UNKNOWN)
+                else -> PreviewItem(mediaType = MediaType.UNKNOWN)
             }
         }
         return mappedItems ?: emptyList()

@@ -1,13 +1,14 @@
 package greenberg.moviedbshell.base
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
-import com.hannesdorfmann.mosby3.mvp.MvpView
+import androidx.annotation.IdRes
+import androidx.navigation.fragment.findNavController
+import com.airbnb.mvrx.BaseMvRxFragment
+import com.airbnb.mvrx.MvRx
 
-abstract class BaseFragment<V : MvpView, P : MvpBasePresenter<V>> :
-        MvpFragment<V, P>() {
+abstract class BaseFragment : BaseMvRxFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         log("onCreate")
@@ -52,4 +53,8 @@ abstract class BaseFragment<V : MvpView, P : MvpBasePresenter<V>> :
      * in the logs.
      */
     abstract fun log(message: String)
+
+    protected fun navigate(@IdRes id: Int, args: Parcelable? = null) {
+        findNavController().navigate(id, Bundle().apply { putParcelable(MvRx.KEY_ARG, args) })
+    }
 }

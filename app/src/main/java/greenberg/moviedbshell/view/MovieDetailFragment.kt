@@ -15,6 +15,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
@@ -22,15 +29,26 @@ import com.google.android.material.button.MaterialButton
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
-import greenberg.moviedbshell.models.ui.MovieDetailItem
-import greenberg.moviedbshell.presenters.MovieDetailPresenter
-import greenberg.moviedbshell.processReleaseDate
 import greenberg.moviedbshell.adapters.CastListAdapter
+import greenberg.moviedbshell.extensions.processAsReleaseDate
+import greenberg.moviedbshell.extensions.processGenreTitle
+import greenberg.moviedbshell.extensions.processGenres
+import greenberg.moviedbshell.extensions.processRatingInfo
+import greenberg.moviedbshell.extensions.processRuntime
+import greenberg.moviedbshell.models.MediaType
+import greenberg.moviedbshell.state.BackdropImageGalleryArgs
+import greenberg.moviedbshell.state.MovieDetailState
+import greenberg.moviedbshell.state.PersonDetailArgs
+import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
 import timber.log.Timber
 
-class MovieDetailFragment :
-        BaseFragment<MovieDetailView, MovieDetailPresenter>(),
-        MovieDetailView {
+class MovieDetailFragment : BaseFragment() {
+
+    val movieDetailViewModelFactory by lazy {
+        (activity?.application as ZephyrrApplication).component.movieDetailViewModelFactory
+    }
+
+    private val viewModel: MovieDetailViewModel by fragmentViewModel()
 
     private var progressBar: ProgressBar? = null
     private var posterImageContainer: FrameLayout? = null
@@ -57,15 +75,11 @@ class MovieDetailFragment :
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var castListAdapter: CastListAdapter
 
-    private var movieId = -1
     private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        if (arguments != null) {
-            movieId = arguments?.get("MovieID") as? Int ?: -1
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -99,89 +113,90 @@ class MovieDetailFragment :
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         castRecyclerView?.layoutManager = linearLayoutManager
-        castListAdapter = CastListAdapter()
+        castListAdapter = CastListAdapter(onClickListener = this::onClickListener)
         castRecyclerView?.adapter = castListAdapter
-        presenter.initView(movieId, castListAdapter)
-        presenter.loadMovieDetails(movieId)
         navController = findNavController()
+
+        // TODO: Investigate if this should be init by the view model or here
+        viewModel.fetchMovieDetail()
+        viewModel.subscribe { Timber.d("State is $it") }
     }
 
-    override fun createPresenter(): MovieDetailPresenter = presenter
-            ?: (activity?.application as ZephyrrApplication).component.movieDetailPresenter()
-
-    override fun showLoading(movieId: Int) {
+    private fun showLoading() {
         Timber.d("Show Loading")
         hideAllViews()
         hideErrorState()
         showLoadingBar()
     }
 
-    override fun showError(throwable: Throwable) {
+    private fun showError(throwable: Throwable) {
         Timber.d("Showing Error")
         Timber.e(throwable)
         hideLoadingBar()
         showErrorState()
         errorRetryButton?.setOnClickListener {
-            presenter.loadMovieDetails(movieId)
+            viewModel.fetchMovieDetail()
             hideErrorState()
         }
     }
 
-    override fun showMovieDetails(movieDetailItem: MovieDetailItem) {
+    private fun showMovieDetails(state: MovieDetailState) {
         Timber.d("Showing Movie Details")
+        val movieDetailItem = state.movieDetailItem
+        Timber.d("MovieDetails: $movieDetailItem")
+        if (movieDetailItem != null) {
+            Timber.d("posterURL: ${movieDetailItem.posterImageUrl}")
+            if (movieDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
+                val validUrl = resources.getString(R.string.poster_url_substitution, movieDetailItem.posterImageUrl)
+                Glide.with(this)
+                        .load(validUrl)
+                        .apply(
+                                RequestOptions()
+                                        .placeholder(ColorDrawable(Color.LTGRAY))
+                                        .fallback(ColorDrawable(Color.LTGRAY))
+                                        .centerCrop()
+                        )
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(posterImageView!!)
+            }
 
-        Timber.d("posterURL: ${movieDetailItem.posterImageUrl}")
-        if (movieDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
-            val validUrl = resources.getString(R.string.poster_url_substitution, movieDetailItem.posterImageUrl)
-            Glide.with(this)
-                    .load(validUrl)
-                    .apply(
-                            RequestOptions()
-                                    .placeholder(ColorDrawable(Color.LTGRAY))
-                                    .fallback(ColorDrawable(Color.LTGRAY))
-                                    .centerCrop()
-                    )
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(posterImageView!!)
+            Timber.d("backdropURL: ${movieDetailItem.backdropImageUrl}")
+            if (movieDetailItem.posterImageUrl.isNotEmpty() && backdropImageView != null) {
+                val validUrl = resources.getString(R.string.poster_url_substitution, movieDetailItem.backdropImageUrl)
+                Glide.with(this)
+                        .load(validUrl)
+                        .apply(
+                                RequestOptions()
+                                        .placeholder(ColorDrawable(Color.LTGRAY))
+                                        .fallback(ColorDrawable(Color.LTGRAY))
+                                        .centerCrop()
+                        )
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(backdropImageView!!)
+            }
+
+            castListAdapter.castMemberList = movieDetailItem.castMembers
+            castListAdapter.notifyDataSetChanged()
+
+            titleBar?.text = movieDetailItem.movieTitle
+            overviewTextView?.text = movieDetailItem.overview
+            releaseDateTextView?.text = movieDetailItem.releaseDate.processAsReleaseDate()
+            ratingTextView?.text = requireContext().processRatingInfo(movieDetailItem.voteAverage, movieDetailItem.voteCount)
+            statusTextView?.text = movieDetailItem.status
+            runtimeTextView?.text = requireContext().processRuntime(movieDetailItem.runtime)
+            genresTitle?.text = requireContext().processGenreTitle(movieDetailItem.genres.size)
+            genresTextView?.text = requireContext().processGenres(movieDetailItem.genres)
+            backdropImageContainer?.setOnClickListener {
+                BackdropImageGalleryDialog()
+                        .apply {
+                            arguments = Bundle().apply {
+                                putParcelable(MvRx.KEY_ARG, BackdropImageGalleryArgs(state.movieId, MediaType.MOVIE))
+                            }
+                        }
+                        .show(parentFragmentManager, BackdropImageGalleryDialog.TAG)
+            }
+            // TODO: potentially scrape other rating information
         }
-
-        Timber.d("backdropURL: ${movieDetailItem.backdropImageUrl}")
-        if (movieDetailItem.posterImageUrl.isNotEmpty() && backdropImageView != null) {
-            val validUrl = resources.getString(R.string.poster_url_substitution, movieDetailItem.backdropImageUrl)
-            Glide.with(this)
-                    .load(validUrl)
-                    .apply(
-                            RequestOptions()
-                                    .placeholder(ColorDrawable(Color.LTGRAY))
-                                    .fallback(ColorDrawable(Color.LTGRAY))
-                                    .centerCrop()
-                    )
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(backdropImageView!!)
-        }
-
-        titleBar?.text = movieDetailItem.movieTitle
-        overviewTextView?.text = movieDetailItem.overview
-        releaseDateTextView?.text = processReleaseDate(movieDetailItem.releaseDate)
-        ratingTextView?.text = presenter.processRatingInfo(movieDetailItem.voteAverage, movieDetailItem.voteCount)
-        statusTextView?.text = movieDetailItem.status
-        runtimeTextView?.text = presenter.processRuntime(movieDetailItem.runtime)
-        genresTitle?.text = presenter.processGenreTitle(movieDetailItem.genres.size)
-        genresTextView?.text = presenter.processGenres(movieDetailItem.genres)
-        backdropImageContainer?.setOnClickListener { presenter.loadBackdropImageGallery(movieDetailItem) }
-        // TODO: potentially scrape other rating information
-        hideLoadingBar()
-        showAllViews()
-    }
-
-    override fun showDetail(bundle: Bundle) {
-        navController?.navigate(R.id.action_movieDetailFragment_to_personDetailFragment, bundle)
-    }
-
-    override fun showBackdropImageGallery(bundle: Bundle) {
-        BackdropImageGalleryDialog()
-                .apply { arguments = bundle }
-                .show(parentFragmentManager, BackdropImageGalleryDialog.TAG)
     }
 
     private fun hideAllViews() {
@@ -240,6 +255,34 @@ class MovieDetailFragment :
         errorTextView?.visibility = View.VISIBLE
         errorRetryButton?.visibility = View.VISIBLE
         scrollView?.visibility = View.VISIBLE
+    }
+
+    override fun invalidate() {
+        withState(viewModel) { state ->
+            Timber.d("Invalidating")
+            when (state.movieDetailResponse) {
+                Uninitialized -> Timber.d("uninitialized")
+                is Loading -> {
+                    showLoading()
+                }
+                is Success -> {
+                    showMovieDetails(state)
+                    hideLoadingBar()
+                    showAllViews()
+                }
+                is Fail -> {
+                    hideAllViews()
+                    showError(state.movieDetailResponse.error)
+                }
+            }
+        }
+    }
+
+    private fun onClickListener(personId: Int) {
+        navigate(
+                R.id.action_movieDetailFragment_to_personDetailFragment,
+                PersonDetailArgs(personId)
+        )
     }
 
     override fun log(message: String) {

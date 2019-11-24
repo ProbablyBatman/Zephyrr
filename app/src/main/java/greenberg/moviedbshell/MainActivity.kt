@@ -8,7 +8,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.airbnb.mvrx.MvRx
 import greenberg.moviedbshell.base.BaseActivity
+import greenberg.moviedbshell.extensions.hideKeyboard
+import greenberg.moviedbshell.state.SearchResultsArgs
 import timber.log.Timber
 
 class MainActivity : BaseActivity() {
@@ -48,12 +51,14 @@ class MainActivity : BaseActivity() {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     Timber.d("onQueryTextSubmit: $query")
-                    item.collapseActionView()
-                    searchView.hideKeyboard()
-                    searchView.clearFocus()
-                    navController.navigate(R.id.searchResultsFragment, Bundle().apply {
-                        putString("Query", query)
-                    }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true).build())
+                    if (query != null) {
+                        item.collapseActionView()
+                        searchView.hideKeyboard()
+                        searchView.clearFocus()
+                        navController.navigate(R.id.action_global_searchResultsFragment, Bundle().apply {
+                            putParcelable(MvRx.KEY_ARG, SearchResultsArgs(query))
+                        }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true).build())
+                    }
                     return true
                 }
 

@@ -1,7 +1,7 @@
 package greenberg.moviedbshell.models.ui
 
 open class PreviewItem(
-    val posterImageUrl: String = "",
-    val id: Int? = null,
-    val mediaType: String
+    open val posterImageUrl: String = "",
+    open val id: Int? = null,
+    open val mediaType: String
 )

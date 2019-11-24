@@ -11,17 +11,28 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
-import greenberg.moviedbshell.presenters.PopularMoviesPresenter
 import greenberg.moviedbshell.adapters.PopularMovieAdapter
+import greenberg.moviedbshell.state.MovieDetailArgs
+import greenberg.moviedbshell.state.PopularMovieState
+import greenberg.moviedbshell.viewmodel.PopularMoviesViewModel
 import timber.log.Timber
 
-class PopularMoviesFragment :
-        BaseFragment<PopularMoviesView, PopularMoviesPresenter>(),
-        PopularMoviesView,
-        SwipeRefreshLayout.OnRefreshListener {
+class PopularMoviesFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
+
+    val popularMoviesViewModelFactory by lazy {
+        (activity?.application as ZephyrrApplication).component.popularViewModelFactory
+    }
+
+    private val viewModel: PopularMoviesViewModel by fragmentViewModel()
 
     private var popularMovieRecycler: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -51,37 +62,49 @@ class PopularMoviesFragment :
         popularMovieRefresher?.setOnRefreshListener(this)
 
         // TODO: look into proper context for this; i.e. application or base
-        linearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
+        linearLayoutManager = LinearLayoutManager(activity)
         popularMovieRecycler?.layoutManager = linearLayoutManager
-        // TODO: revisit this initialization
-        popularMovieAdapter = PopularMovieAdapter(presenter = presenter)
+        popularMovieAdapter = PopularMovieAdapter(onClickListener = this::onClickListener)
         popularMovieRecycler?.adapter = popularMovieAdapter
-
-        presenter.initView()
-        presenter.initRecyclerPagination(popularMovieRecycler, popularMovieAdapter)
-        presenter.loadPopularMoviesList(true)
+        // TODO: revisit this because it still calls multiple pages while scrolling
+        popularMovieRecycler?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1){
+                    viewModel.fetchPopularMovies()
+                }
+            }
+        })
         navController = findNavController()
+        viewModel.fetchPopularMovies()
+
+        //TODO: why does this get hit like 30 times after scrolling one page?
+        viewModel.subscribe {
+            Timber.d("State is $it")
+            Timber.d("State's page number is ${it.pageNumber}")
+        }
     }
 
-    override fun createPresenter(): PopularMoviesPresenter = presenter
-            ?: (activity?.application as ZephyrrApplication).component.popularMoviesPresenter()
-
-    override fun showLoading(pullToRefresh: Boolean) {
+    private fun showLoading() {
         Timber.d("Show Loading")
         popularMovieRefresher?.visibility = View.GONE
         popularMovieRecycler?.visibility = View.GONE
         popularMovieLoadingBar?.visibility = View.VISIBLE
     }
 
-    override fun showMovies() {
+    private fun showMovies(state: PopularMovieState) {
         Timber.d("Showing Movies")
         popularMovieRefresher?.isRefreshing = false
         popularMovieLoadingBar?.visibility = View.GONE
         popularMovieRefresher?.visibility = View.VISIBLE
         popularMovieRecycler?.visibility = View.VISIBLE
+        // Might have to change the popular movie list to just be latest set
+        popularMovieAdapter?.popularMovieList = state.popularMovies
+        popularMovieAdapter?.notifyDataSetChanged()
+
     }
 
-    override fun showError(throwable: Throwable, pullToRefresh: Boolean) {
+    private fun showError(throwable: Throwable) {
         Timber.d("Showing Error")
         Timber.e(throwable)
         // hide progress bar
@@ -90,24 +113,23 @@ class PopularMoviesFragment :
             Snackbar.make(view, getString(R.string.generic_error_text), Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.retry)) {
                         errorSnackbar?.dismiss()
-                        if (pullToRefresh) presenter.loadPopularMoviesList(pullToRefresh)
-                        else presenter.fetchNextPage()
+                        viewModel.fetchPopularMovies()
                     }
         }
         errorSnackbar?.show()
     }
 
-    override fun hideError() {
+    private fun hideError() {
         errorSnackbar?.dismiss()
     }
 
     override fun onRefresh() {
         Timber.d("On Refresh")
-        presenter.refreshPage()
-        presenter.loadPopularMoviesList(true)
+        showLoading()
+        viewModel.fetchFirstPage()
     }
 
-    override fun showPageLoad() {
+    private fun showPageLoad() {
         Timber.d("Showing Page Load")
         loadingSnackbar = popularMovieRecycler?.let {
             Snackbar.make(it, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
@@ -115,12 +137,12 @@ class PopularMoviesFragment :
         loadingSnackbar?.show()
     }
 
-    override fun hidePageLoad() {
+    private fun hidePageLoad() {
         Timber.d("Showing Page Load")
         loadingSnackbar?.dismiss()
     }
 
-    override fun showMaxPages() {
+    private fun showMaxPages() {
         Timber.d("Show max pages")
         maxPagesSnackbar = popularMovieRecycler?.let { view ->
             Snackbar.make(view, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
@@ -131,17 +153,55 @@ class PopularMoviesFragment :
         }
     }
 
-    override fun hideMaxPages() {
+    private fun hideMaxPages() {
         Timber.d("Hide max pages")
         maxPagesSnackbar?.dismiss()
     }
 
-    override fun showDetail(bundle: Bundle) {
-        navController?.navigate(R.id.action_popularMoviesFragment_to_movieDetailFragment, bundle)
-    }
-
     override fun log(message: String) {
         Timber.d(message)
+    }
+
+    override fun invalidate() {
+        withState(viewModel) { state ->
+            // Borderline unnecessary check for max pages
+            // Users would have to scroll through every movie to get here...
+            if (state.popularMovieResponse.invoke()?.totalPages == state.pageNumber) {
+                showMaxPages()
+            }
+
+            when (state.popularMovieResponse) {
+                Uninitialized -> Timber.d("uninitialized")
+                is Loading -> {
+                    Timber.d("Loading")
+                    hideError()
+                    hideMaxPages()
+                    // TODO: revisit this because this seems dumb
+                    if (state.pageNumber < 1) {
+                        showLoading()
+                    } else {
+                        showPageLoad()
+                    }
+                }
+                is Success -> {
+                    Timber.d("Success")
+                    hidePageLoad()
+                    hideMaxPages()
+                    showMovies(state)
+                }
+                is Fail -> {
+                    Timber.d("Fail")
+                    showError(state.popularMovieResponse.error)
+                }
+            }
+        }
+    }
+
+    private fun onClickListener(movieId: Int) {
+        navigate(
+                R.id.action_popularMoviesFragment_to_movieDetailFragment,
+                MovieDetailArgs(movieId)
+        )
     }
 
     companion object {

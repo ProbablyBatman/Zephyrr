@@ -2,16 +2,43 @@ package greenberg.moviedbshell.base
 
 import android.os.Bundle
 import android.view.View
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import com.hannesdorfmann.mosby3.mvp.MvpDialogFragment
-import com.hannesdorfmann.mosby3.mvp.MvpFragment
-import com.hannesdorfmann.mosby3.mvp.MvpView
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.LifecycleOwner
+import com.airbnb.mvrx.BaseMvRxViewModel
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MvRxView
+import java.util.UUID
 
-abstract class BaseDialogFragment<V : MvpView, P : MvpBasePresenter<V>> :
-        MvpDialogFragment<V, P>() {
+abstract class BaseDialogFragment : DialogFragment(), MvRxView {
+    override val mvrxViewId by lazy { backdropViewUUID }
+    private lateinit var backdropViewUUID: String
+    //protected open lateinit var viewModel: BaseMvRxViewModel<MvRxState>
+    protected open lateinit var stateClazz: Class<MvRxState>
+
+    override val subscriptionLifecycleOwner: LifecycleOwner
+        get() = this.viewLifecycleOwnerLiveData.value ?: this
+
     override fun onCreate(savedInstanceState: Bundle?) {
+//        viewModel =
+//                MvRxViewModelProvider.get(
+//                        viewModel::class.java,
+//                        stateClazz,
+//                        FragmentViewModelContext(
+//                                requireActivity(),
+//                                null,
+//                                this
+//                        )
+//                )
+        backdropViewUUID = savedInstanceState?.getString(DIALOG_KEY)
+                ?: "${this.javaClass.name}.${UUID.randomUUID()}"
         super.onCreate(savedInstanceState)
         log("onCreate")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(DIALOG_KEY, backdropViewUUID)
+        log("onSaveInstanceState")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,13 +71,9 @@ abstract class BaseDialogFragment<V : MvpView, P : MvpBasePresenter<V>> :
         super.onDestroy()
     }
 
-    /*
-     * Designed to be overriden and used for logging.  This way, sub classes of this fragment will show their own lifecycle in the logcat, as
-     * opposed to this class.
-     *
-     * Example:
-     * MovieDetailFragment onCreate will log MovieDetailFragment:xy: onCreate and will not show BaseFragment:xy: onCreate
-     * in the logs.
-     */
     abstract fun log(message: String)
+
+    companion object {
+        private const val DIALOG_KEY = "DIALOG_KEY"
+    }
 }

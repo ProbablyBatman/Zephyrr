@@ -16,20 +16,38 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseFragment
-import greenberg.moviedbshell.models.ui.TvDetailItem
-import greenberg.moviedbshell.presenters.TvDetailPresenter
 import greenberg.moviedbshell.adapters.CastListAdapter
+import greenberg.moviedbshell.extensions.processAsReleaseDate
+import greenberg.moviedbshell.extensions.processGenreTitle
+import greenberg.moviedbshell.extensions.processGenres
+import greenberg.moviedbshell.extensions.processLastOrNextAirDate
+import greenberg.moviedbshell.extensions.processLastOrNextAirDateTitle
+import greenberg.moviedbshell.extensions.processRatingInfo
+import greenberg.moviedbshell.extensions.processRuntimes
+import greenberg.moviedbshell.state.PersonDetailArgs
+import greenberg.moviedbshell.state.TvDetailState
+import greenberg.moviedbshell.viewmodel.TvDetailViewModel
 import timber.log.Timber
 
-class TvDetailFragment :
-        BaseFragment<TvDetailView, TvDetailPresenter>(),
-        TvDetailView {
+class TvDetailFragment : BaseFragment() {
+
+    val tvDetailViewModelFactory by lazy {
+        (activity?.application as ZephyrrApplication).component.tvDetailViewModelFactory
+    }
+
+    private val viewModel: TvDetailViewModel by fragmentViewModel()
 
     private var progressBar: ProgressBar? = null
     private var scrollView: NestedScrollView? = null
@@ -109,94 +127,90 @@ class TvDetailFragment :
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         castRecyclerView?.layoutManager = linearLayoutManager
-        castListAdapter = CastListAdapter()
+        castListAdapter = CastListAdapter(onClickListener = this::onClickListener)
         castRecyclerView?.adapter = castListAdapter
-
-        presenter.initView(tvDetailId, castListAdapter)
-        presenter.loadTvDetails(tvDetailId)
         navController = findNavController()
+
+        viewModel.fetchTvDetail()
+        viewModel.subscribe { Timber.d("State is $it") }
     }
 
-    override fun createPresenter() = presenter
-            ?: (activity?.application as ZephyrrApplication).component.tvDetailPresenter()
-
-    override fun showLoading(tvShowId: Int) {
+    private fun showLoading() {
         Timber.d("Showing loading")
         hideAllViews()
         hideErrorState()
         showLoadingBar()
     }
 
-    override fun showTvDetails(tvDetailItem: TvDetailItem) {
+    private fun showTvDetails(tvDetailState: TvDetailState) {
         Timber.d("Showing tv details")
+        val tvDetailItem = tvDetailState.tvDetailItem
 
-        Timber.d("posterURL: ${tvDetailItem.posterImageUrl}")
-        if (tvDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
-            val validUrl = resources.getString(R.string.poster_url_substitution, tvDetailItem.posterImageUrl)
-            Glide.with(this)
-                    .load(validUrl)
-                    .apply(
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.LTGRAY))
-                                .fallback(ColorDrawable(Color.LTGRAY))
-                                .centerCrop()
-                    )
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(posterImageView!!)
+        if (tvDetailItem != null) {
+            Timber.d("posterURL: ${tvDetailItem.posterImageUrl}")
+            if (tvDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
+                val validUrl = resources.getString(R.string.poster_url_substitution, tvDetailItem.posterImageUrl)
+                Glide.with(this)
+                        .load(validUrl)
+                        .apply(
+                                RequestOptions()
+                                        .placeholder(ColorDrawable(Color.LTGRAY))
+                                        .fallback(ColorDrawable(Color.LTGRAY))
+                                        .centerCrop()
+                        )
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(posterImageView!!)
+            }
+
+            Timber.d("backdropURL: ${tvDetailItem.backgroundImageUrl}")
+            if (tvDetailItem.posterImageUrl.isNotEmpty() && backgroundImageView != null) {
+                val validUrl = resources.getString(R.string.poster_url_substitution, tvDetailItem.backgroundImageUrl)
+                Glide.with(this)
+                        .load(validUrl)
+                        .apply(
+                                RequestOptions()
+                                        .placeholder(ColorDrawable(Color.LTGRAY))
+                                        .fallback(ColorDrawable(Color.LTGRAY))
+                                        .centerCrop()
+                        )
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(backgroundImageView!!)
+            }
+
+            titleBar?.text = tvDetailItem.title
+            firstAirDateText?.text = tvDetailItem.firstAirDate.processAsReleaseDate()
+            // Both of these have to not be null to show them
+            val lastOrNextAirDateTitleText = requireContext().processLastOrNextAirDateTitle(tvDetailItem)
+            val lastOrNextAirDate = tvDetailItem.processLastOrNextAirDate()
+            if (lastOrNextAirDateTitleText != null && lastOrNextAirDate != null) {
+                lastOrNextAirDateTitle?.text = lastOrNextAirDateTitleText
+                lastOrNextAirDateText?.text = lastOrNextAirDate
+                lastOrNextAirDateTitle?.visibility = View.VISIBLE
+                lastOrNextAirDateText?.visibility = View.VISIBLE
+            }
+            statusText?.text = tvDetailItem.status
+            numberOfEpisodesText?.text = tvDetailItem.numberOfEpisodes.toString()
+            numberOfSeasonsText?.text = tvDetailItem.numberOfSeasons.toString()
+            userRatingsText?.text = requireContext().processRatingInfo(tvDetailItem.voteAverage, tvDetailItem.voteCount)
+            runtimeText?.text = requireContext().processRuntimes(tvDetailItem.runtime)
+            genresTitle?.text = requireContext().processGenreTitle(tvDetailItem.genres.size)
+            genresText?.text = requireContext().processGenres(tvDetailItem.genres)
+            overviewText?.text = tvDetailItem.overview
+
+            castListAdapter.castMemberList = tvDetailItem.castMembers
+            castListAdapter.notifyDataSetChanged()
         }
-
-        Timber.d("backdropURL: ${tvDetailItem.backgroundImageUrl}")
-        if (tvDetailItem.posterImageUrl.isNotEmpty() && backgroundImageView != null) {
-            val validUrl = resources.getString(R.string.poster_url_substitution, tvDetailItem.backgroundImageUrl)
-            Glide.with(this)
-                    .load(validUrl)
-                    .apply(
-                        RequestOptions()
-                                .placeholder(ColorDrawable(Color.LTGRAY))
-                                .fallback(ColorDrawable(Color.LTGRAY))
-                                .centerCrop()
-                    )
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(backgroundImageView!!)
-        }
-
-        titleBar?.text = tvDetailItem.title
-        firstAirDateText?.text = presenter.processDate(tvDetailItem.firstAirDate)
-        // Both of these have to not be null to show them
-        val lastOrNextAirDateTitleText = presenter.processLastOrNextAirDateTitle(tvDetailItem)
-        val lastOrNextAirDate = presenter.processLastOrNextAirDate(tvDetailItem)
-        if (lastOrNextAirDateTitleText != null && lastOrNextAirDate != null) {
-            lastOrNextAirDateTitle?.text = lastOrNextAirDateTitleText
-            lastOrNextAirDateText?.text = lastOrNextAirDate
-            lastOrNextAirDateTitle?.visibility = View.VISIBLE
-            lastOrNextAirDateText?.visibility = View.VISIBLE
-        }
-        statusText?.text = tvDetailItem.status
-        numberOfEpisodesText?.text = tvDetailItem.numberOfEpisodes.toString()
-        numberOfSeasonsText?.text = tvDetailItem.numberOfSeasons.toString()
-        userRatingsText?.text = presenter.processRatingInfo(tvDetailItem.voteAverage, tvDetailItem.voteCount)
-        runtimeText?.text = presenter.processRuntime(tvDetailItem.runtime)
-        genresTitle?.text = presenter.processGenreTitle(tvDetailItem.genres.size)
-        genresText?.text = presenter.processGenres(tvDetailItem.genres)
-        overviewText?.text = tvDetailItem.overview
-
-        hideLoadingBar()
-        showAllViews()
     }
 
-    override fun showError(throwable: Throwable) {
+    private fun showError(throwable: Throwable) {
         Timber.d("Showing Error")
         Timber.e(throwable)
         hideLoadingBar()
         showErrorState()
         errorRetryButton?.setOnClickListener {
-            presenter.loadTvDetails(tvDetailId)
+            viewModel.fetchTvDetail()
             hideErrorState()
         }
-    }
-
-    override fun showDetail(bundle: Bundle) {
-        navController?.navigate(R.id.action_tvDetailFragment_to_personDetailFragment, bundle)
     }
 
     private fun hideAllViews() {
@@ -267,6 +281,32 @@ class TvDetailFragment :
         errorTextView?.visibility = View.VISIBLE
         errorRetryButton?.visibility = View.VISIBLE
         scrollView?.visibility = View.VISIBLE
+    }
+
+    override fun invalidate() {
+        withState(viewModel) { state ->
+            when (state.tvDetailResponse) {
+                Uninitialized -> Timber.d("uninitialized")
+                is Loading -> {
+                    showLoading()
+                }
+                is Success -> {
+                    showTvDetails(state)
+                    hideLoadingBar()
+                    showAllViews()
+                }
+                is Fail -> {
+                    showError(state.tvDetailResponse.error)
+                }
+            }
+        }
+    }
+
+    private fun onClickListener(personId: Int) {
+        navigate(
+                R.id.action_tvDetailFragment_to_personDetailFragment,
+                PersonDetailArgs(personId)
+        )
     }
 
     override fun log(message: String) {

@@ -11,17 +11,17 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.extensions.processAsReleaseDate
+import greenberg.moviedbshell.extensions.processKnownForItems
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.PersonItem
 import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.models.ui.TvItem
-import greenberg.moviedbshell.presenters.SearchPresenter
-import greenberg.moviedbshell.processReleaseDate
 import greenberg.moviedbshell.viewHolders.SearchResultsViewHolder
 
 class SearchResultsAdapter(
-    var searchResults: MutableList<PreviewItem> = mutableListOf(),
-    private val presenter: SearchPresenter
+    var searchResults: List<PreviewItem> = listOf(),
+    val onClickListener: (Int, String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -31,36 +31,30 @@ class SearchResultsAdapter(
             when (val currentItem = searchResults[position]) {
                 is MovieItem -> {
                     holder.searchItemTitle.text = currentItem.movieTitle
-                    holder.searchItemSubInfo.text = processReleaseDate(currentItem.releaseDate)
+                    holder.searchItemSubInfo.text = currentItem.releaseDate.processAsReleaseDate()
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
-                    holder.cardItem.setOnClickListener {
-                        presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType)
-                    }
+                    holder.cardItem.setOnClickListener { onClickListener(currentItem.id ?: -1, currentItem.mediaType) }
                 }
                 is TvItem -> {
                     holder.searchItemTitle.text = currentItem.name
-                    holder.searchItemSubInfo.text = processReleaseDate(currentItem.firstAirDate)
+                    holder.searchItemSubInfo.text = currentItem.firstAirDate.processAsReleaseDate()
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
-                    holder.cardItem.setOnClickListener {
-                        presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType)
-                    }
+                    holder.cardItem.setOnClickListener { onClickListener(currentItem.id ?: -1, currentItem.mediaType) }
                 }
                 is PersonItem -> {
                     holder.searchItemTitle.text = currentItem.name
                     // Remove this in favor of showing known for items
                     holder.searchItemSubInfo.visibility = View.GONE
-                    val knownForText = presenter.processKnownForItems(currentItem.knownForItems)
+                    val knownForText = currentItem.knownForItems.processKnownForItems()
                     if (knownForText.isNotEmpty()) {
                         holder.searchItemOverview.text = knownForText
                     } else {
                         holder.searchItemOverview.visibility = View.GONE
                     }
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
-                    holder.cardItem.setOnClickListener {
-                        presenter.onCardSelected(currentItem.id ?: -1, currentItem.mediaType)
-                    }
+                    holder.cardItem.setOnClickListener { onClickListener(currentItem.id ?: -1, currentItem.mediaType) }
                 }
                 else -> {
                     // TODO: handle unknown type?
