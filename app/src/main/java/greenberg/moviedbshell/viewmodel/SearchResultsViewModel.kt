@@ -16,9 +16,9 @@ import io.reactivex.schedulers.Schedulers
 
 class SearchResultsViewModel
 @AssistedInject constructor(
-        @Assisted state: SearchResultsState,
-        private val TMDBService: TMDBService,
-        private val mapper: SearchResultsMapper
+    @Assisted state: SearchResultsState,
+    private val TMDBService: TMDBService,
+    private val mapper: SearchResultsMapper
 ) : ZephyrrMvRxViewModel<SearchResultsState>(state) {
 
     @AssistedInject.Factory
@@ -62,7 +62,7 @@ class SearchResultsViewModel
 
     fun fetchFirstPage() {
         withState { state ->
-            //if (state.searchResultsResponse is Loading) return@withState
+            // if (state.searchResultsResponse is Loading) return@withState
             TMDBService
                     .querySearchMulti(state.query, 1)
                     .subscribeOn(Schedulers.io())

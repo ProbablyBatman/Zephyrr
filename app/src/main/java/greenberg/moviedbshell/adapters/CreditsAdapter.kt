@@ -15,7 +15,7 @@ import greenberg.moviedbshell.viewHolders.CreditsViewHolder
 
 class CreditsAdapter(
     var creditsList: List<PersonDetailCreditItem> = listOf(),
-    val onClickListener : (Int, String) -> Unit
+    val onClickListener: (Int, String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CreditsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.credit_list_card, parent, false))

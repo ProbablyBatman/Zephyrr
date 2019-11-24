@@ -70,7 +70,7 @@ class PopularMoviesFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListen
         popularMovieRecycler?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1){
+                if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1) {
                     viewModel.fetchPopularMovies()
                 }
             }
@@ -78,7 +78,7 @@ class PopularMoviesFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListen
         navController = findNavController()
         viewModel.fetchPopularMovies()
 
-        //TODO: why does this get hit like 30 times after scrolling one page?
+        // TODO: why does this get hit like 30 times after scrolling one page?
         viewModel.subscribe {
             Timber.d("State is $it")
             Timber.d("State's page number is ${it.pageNumber}")
@@ -101,7 +101,6 @@ class PopularMoviesFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListen
         // Might have to change the popular movie list to just be latest set
         popularMovieAdapter?.popularMovieList = state.popularMovies
         popularMovieAdapter?.notifyDataSetChanged()
-
     }
 
     private fun showError(throwable: Throwable) {

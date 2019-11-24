@@ -9,16 +9,16 @@ import greenberg.moviedbshell.models.ui.PreviewItem
 import kotlinx.android.parcel.Parcelize
 
 data class SearchResultsState(
-        val query: String = "",
-        val pageNumber: Int = 1,
-        val totalPages: Int = -1,
-        val searchResultsResponse: Async<SearchResponse> = Uninitialized,
-        val searchResults: List<PreviewItem> = emptyList()
+    val query: String = "",
+    val pageNumber: Int = 1,
+    val totalPages: Int = -1,
+    val searchResultsResponse: Async<SearchResponse> = Uninitialized,
+    val searchResults: List<PreviewItem> = emptyList()
 ) : MvRxState {
     constructor(args: SearchResultsArgs) : this(query = args.query)
 }
 
 @Parcelize
 data class SearchResultsArgs(
-        val query: String
+    val query: String
 ) : Parcelable

@@ -11,7 +11,7 @@ import greenberg.moviedbshell.models.ui.BackdropPosterItem
 import greenberg.moviedbshell.viewHolders.ImageGalleryViewHolder
 
 class ImageGalleryAdapter(
-        var backdrops: List<BackdropPosterItem> = listOf()
+    var backdrops: List<BackdropPosterItem> = listOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -30,7 +30,7 @@ class ImageGalleryAdapter(
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.imageView)
             // Show the current position / number of items
-            holder.counter.text = holder.counter.context.getString(R.string.image_gallery_counter, position+1, itemCount)
+            holder.counter.text = holder.counter.context.getString(R.string.image_gallery_counter, position + 1, itemCount)
         }
     }
 

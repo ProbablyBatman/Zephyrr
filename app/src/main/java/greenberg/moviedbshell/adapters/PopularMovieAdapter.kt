@@ -15,7 +15,7 @@ import greenberg.moviedbshell.viewHolders.PopularMovieViewHolder
 
 class PopularMovieAdapter(
     var popularMovieList: List<MovieItem> = listOf(),
-    val onClickListener : (Int) -> Unit
+    val onClickListener: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

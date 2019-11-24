@@ -5,7 +5,7 @@ import greenberg.moviedbshell.models.ui.BackdropPosterItem
 import javax.inject.Inject
 
 class BackdropImageMapper
-@Inject constructor(): Mapper<ImageGalleryResponse, List<BackdropPosterItem>> {
+@Inject constructor() : Mapper<ImageGalleryResponse, List<BackdropPosterItem>> {
     override fun mapToEntity(item: ImageGalleryResponse?): List<BackdropPosterItem> {
         return item?.backdrops?.mapNotNull { backdrop ->
             BackdropPosterItem(

@@ -21,9 +21,9 @@ import io.reactivex.schedulers.Schedulers
 
 class PersonDetailViewModel
 @AssistedInject constructor(
-        @Assisted var state: PersonDetailState,
-        private val TMDBService: TMDBService,
-        private val mapper: PersonDetailMapper
+    @Assisted var state: PersonDetailState,
+    private val TMDBService: TMDBService,
+    private val mapper: PersonDetailMapper
 ) : ZephyrrMvRxViewModel<PersonDetailState>(state) {
 
     @AssistedInject.Factory

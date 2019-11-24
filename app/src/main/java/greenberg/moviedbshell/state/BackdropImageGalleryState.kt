@@ -9,16 +9,16 @@ import greenberg.moviedbshell.models.ui.BackdropPosterItem
 import kotlinx.android.parcel.Parcelize
 
 data class BackdropImageGalleryState(
-        val itemId: Int = -1,
-        val mediaType: String = MediaType.UNKNOWN,
-        val backdropItems: List<BackdropPosterItem>? = emptyList(),
-        val backdropItemResponse: Async<List<BackdropPosterItem>> = Uninitialized
+    val itemId: Int = -1,
+    val mediaType: String = MediaType.UNKNOWN,
+    val backdropItems: List<BackdropPosterItem>? = emptyList(),
+    val backdropItemResponse: Async<List<BackdropPosterItem>> = Uninitialized
 ) : MvRxState {
     constructor(args: BackdropImageGalleryArgs) : this(itemId = args.itemId, mediaType = args.mediaType)
 }
 
 @Parcelize
 data class BackdropImageGalleryArgs(
-        val itemId: Int,
-        val mediaType: String
+    val itemId: Int,
+    val mediaType: String
 ) : Parcelable

@@ -13,8 +13,8 @@ import greenberg.moviedbshell.models.ui.CastMemberItem
 import greenberg.moviedbshell.viewHolders.CastListViewHolder
 
 class CastListAdapter(
-        var castMemberList: List<CastMemberItem> = listOf(),
-        val onClickListener : (Int) -> Unit
+    var castMemberList: List<CastMemberItem> = listOf(),
+    val onClickListener: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

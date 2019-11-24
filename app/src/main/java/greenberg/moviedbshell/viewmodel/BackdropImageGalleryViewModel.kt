@@ -16,9 +16,9 @@ import io.reactivex.schedulers.Schedulers
 
 class BackdropImageGalleryViewModel
 @AssistedInject constructor(
-        @Assisted var state: BackdropImageGalleryState,
-        private val TMDBService: TMDBService,
-        private val mapper: BackdropImageMapper
+    @Assisted var state: BackdropImageGalleryState,
+    private val TMDBService: TMDBService,
+    private val mapper: BackdropImageMapper
 ) : ZephyrrMvRxViewModel<BackdropImageGalleryState>(state) {
 
     @AssistedInject.Factory

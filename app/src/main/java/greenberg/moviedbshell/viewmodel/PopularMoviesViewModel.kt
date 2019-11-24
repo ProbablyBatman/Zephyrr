@@ -15,9 +15,9 @@ import io.reactivex.schedulers.Schedulers
 
 class PopularMoviesViewModel
 @AssistedInject constructor(
-        @Assisted var state: PopularMovieState,
-        private val TMDBService: TMDBService,
-        private val mapper: PopularMovieMapper
+    @Assisted var state: PopularMovieState,
+    private val TMDBService: TMDBService,
+    private val mapper: PopularMovieMapper
 ) : ZephyrrMvRxViewModel<PopularMovieState>(state) {
 
     @AssistedInject.Factory
@@ -97,7 +97,6 @@ class PopularMoviesViewModel
 //            }
 //        }
 //    }
-
 
     companion object : MvRxViewModelFactory<PopularMoviesViewModel, PopularMovieState> {
         @JvmStatic

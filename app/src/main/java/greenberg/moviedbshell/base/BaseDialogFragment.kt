@@ -4,31 +4,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
-import com.airbnb.mvrx.BaseMvRxViewModel
-import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.MvRxView
 import java.util.UUID
 
 abstract class BaseDialogFragment : DialogFragment(), MvRxView {
     override val mvrxViewId by lazy { backdropViewUUID }
     private lateinit var backdropViewUUID: String
-    //protected open lateinit var viewModel: BaseMvRxViewModel<MvRxState>
-    protected open lateinit var stateClazz: Class<MvRxState>
 
     override val subscriptionLifecycleOwner: LifecycleOwner
         get() = this.viewLifecycleOwnerLiveData.value ?: this
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        viewModel =
-//                MvRxViewModelProvider.get(
-//                        viewModel::class.java,
-//                        stateClazz,
-//                        FragmentViewModelContext(
-//                                requireActivity(),
-//                                null,
-//                                this
-//                        )
-//                )
         backdropViewUUID = savedInstanceState?.getString(DIALOG_KEY)
                 ?: "${this.javaClass.name}.${UUID.randomUUID()}"
         super.onCreate(savedInstanceState)

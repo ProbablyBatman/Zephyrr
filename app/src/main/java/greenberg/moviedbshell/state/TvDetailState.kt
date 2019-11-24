@@ -8,14 +8,14 @@ import greenberg.moviedbshell.models.ui.TvDetailItem
 import kotlinx.android.parcel.Parcelize
 
 data class TvDetailState(
-        val tvId: Int = -1,
-        val tvDetailItem: TvDetailItem? = null,
-        val tvDetailResponse: Async<TvDetailItem> = Uninitialized
+    val tvId: Int = -1,
+    val tvDetailItem: TvDetailItem? = null,
+    val tvDetailResponse: Async<TvDetailItem> = Uninitialized
 ) : MvRxState {
     constructor(args: TvDetailArgs) : this(tvId = args.tvId)
 }
 
 @Parcelize
 data class TvDetailArgs(
-        val tvId: Int
+    val tvId: Int
 ) : Parcelable

@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
-import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import kotlinx.android.parcel.Parcelize
 

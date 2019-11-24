@@ -72,7 +72,7 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
             override fun onReceive(context: Context, intent: Intent) {
                 val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                 if (downloadId == id && id != -1L) {
-                    //send notification
+                    // send notification
                     Toast.makeText(requireContext(), R.string.image_downloaded, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -100,7 +100,7 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
         val bottomSheet = view.findViewById<LinearLayout>(R.id.image_bottom_sheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        //todo: fix this value, will probably have to differ for tablets
+        // todo: fix this value, will probably have to differ for tablets
         bottomSheetBehavior.peekHeight = 200
         bottomSheetBehavior.isHideable = false
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -126,7 +126,7 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
             }
         }
 
-        //Investigate if there's a way to page this
+        // Investigate if there's a way to page this
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -150,12 +150,12 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        //(activity as AppCompatActivity).supportActionBar?.hide()
+        // (activity as AppCompatActivity).supportActionBar?.hide()
     }
 
     override fun onPause() {
         super.onPause()
-        //(activity as AppCompatActivity).supportActionBar?.show()
+        // (activity as AppCompatActivity).supportActionBar?.show()
     }
 
     override fun onDestroy() {
@@ -190,7 +190,7 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
     }
 
     private fun preloadNextImage(right: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // no-op
     }
 
     private fun hideAllViews() {
@@ -217,7 +217,7 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
         progressBar?.visibility = View.GONE
     }
 
-    //TODO: implement error stuff for this
+    // TODO: implement error stuff for this
 //    private fun hideErrorState() {
 //        errorTextView?.visibility = View.GONE
 //        errorRetryButton?.visibility = View.GONE

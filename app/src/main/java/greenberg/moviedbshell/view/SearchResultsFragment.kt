@@ -78,7 +78,7 @@ class SearchResultsFragment : BaseFragment() {
         searchResultsRecycler?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1){
+                if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1) {
                     viewModel.fetchSearchResults()
                 }
             }
@@ -235,8 +235,8 @@ class SearchResultsFragment : BaseFragment() {
                 )
             }
             MediaType.UNKNOWN -> {
-                //TODO: figure this one out
-                //no-op?
+                // TODO: figure this one out
+                // no-op?
             }
         }
     }

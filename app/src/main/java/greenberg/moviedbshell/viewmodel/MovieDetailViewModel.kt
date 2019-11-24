@@ -20,9 +20,9 @@ import io.reactivex.schedulers.Schedulers
 
 class MovieDetailViewModel
 @AssistedInject constructor(
-        @Assisted var state: MovieDetailState,
-        private val TMDBService: TMDBService,
-        private val mapper: MovieDetailMapper
+    @Assisted var state: MovieDetailState,
+    private val TMDBService: TMDBService,
+    private val mapper: MovieDetailMapper
 ) : ZephyrrMvRxViewModel<MovieDetailState>(state) {
 
     @AssistedInject.Factory
