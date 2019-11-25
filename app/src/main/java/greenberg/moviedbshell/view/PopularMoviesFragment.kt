@@ -79,10 +79,7 @@ class PopularMoviesFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListen
         viewModel.fetchPopularMovies()
 
         // TODO: why does this get hit like 30 times after scrolling one page?
-        viewModel.subscribe {
-            Timber.d("State is $it")
-            Timber.d("State's page number is ${it.pageNumber}")
-        }
+        viewModel.subscribe { Timber.d("State's page number is ${it.pageNumber}") }
     }
 
     private fun showLoading() {

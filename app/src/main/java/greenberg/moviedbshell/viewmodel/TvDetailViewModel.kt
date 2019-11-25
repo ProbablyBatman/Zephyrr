@@ -30,6 +30,10 @@ class TvDetailViewModel
         fun create(state: TvDetailState): TvDetailViewModel
     }
 
+    init {
+        logStateChanges()
+    }
+
     fun fetchTvDetail() {
         withState { state ->
             Single.zip(

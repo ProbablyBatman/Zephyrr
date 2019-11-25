@@ -119,7 +119,6 @@ class MovieDetailFragment : BaseFragment() {
 
         // TODO: Investigate if this should be init by the view model or here
         viewModel.fetchMovieDetail()
-        viewModel.subscribe { Timber.d("State is $it") }
     }
 
     private fun showLoading() {

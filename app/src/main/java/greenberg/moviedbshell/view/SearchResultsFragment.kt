@@ -88,7 +88,6 @@ class SearchResultsFragment : BaseFragment() {
         navController = findNavController()
 
         viewModel.fetchSearchResults()
-        viewModel.subscribe { Timber.d("State is $it") }
     }
 
     private fun showLoading() {

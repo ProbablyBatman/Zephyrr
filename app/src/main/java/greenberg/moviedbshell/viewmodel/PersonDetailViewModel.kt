@@ -31,6 +31,10 @@ class PersonDetailViewModel
         fun create(state: PersonDetailState): PersonDetailViewModel
     }
 
+    init {
+        logStateChanges()
+    }
+
     fun fetchPersonDetail() {
         withState { state ->
             // Swallows requests if there's already one loading

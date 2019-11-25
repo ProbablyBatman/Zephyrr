@@ -104,7 +104,6 @@ class PersonDetailFragment : BaseFragment() {
         navController = findNavController()
 
         viewModel.fetchPersonDetail()
-        viewModel.subscribe { Timber.d("State is $it") }
     }
 
     private fun showLoading() {

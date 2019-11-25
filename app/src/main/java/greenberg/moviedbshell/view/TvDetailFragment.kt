@@ -132,7 +132,6 @@ class TvDetailFragment : BaseFragment() {
         navController = findNavController()
 
         viewModel.fetchTvDetail()
-        viewModel.subscribe { Timber.d("State is $it") }
     }
 
     private fun showLoading() {

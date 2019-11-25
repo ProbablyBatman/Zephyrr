@@ -157,7 +157,6 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
         }
 
         viewModel.fetchBackdropPosters()
-        viewModel.subscribe { Timber.d("State is $it") }
     }
 
     override fun onDestroy() {

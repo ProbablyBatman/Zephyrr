@@ -30,6 +30,10 @@ class MovieDetailViewModel
         fun create(state: MovieDetailState): MovieDetailViewModel
     }
 
+    init {
+        logStateChanges()
+    }
+
     fun fetchMovieDetail() {
         withState { state ->
             // Swallows requests if there's already one loading
