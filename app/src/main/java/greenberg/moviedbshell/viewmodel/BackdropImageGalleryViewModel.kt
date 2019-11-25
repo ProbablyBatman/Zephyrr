@@ -26,6 +26,10 @@ class BackdropImageGalleryViewModel
         fun create(state: BackdropImageGalleryState): BackdropImageGalleryViewModel
     }
 
+    init {
+        logStateChanges()
+    }
+
     fun fetchBackdropPosters() {
         withState { state ->
             if (state.backdropItemResponse is Loading) return@withState

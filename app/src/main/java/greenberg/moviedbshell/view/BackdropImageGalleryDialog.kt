@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -28,6 +29,7 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.button.MaterialButton
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.ImageGalleryAdapter
@@ -54,6 +56,10 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
     private var bottomSheetCopier: TextView? = null
     private var bottomSheetDownload: TextView? = null
     private var coordinatorLayout: CoordinatorLayout? = null
+    private lateinit var errorTextView: TextView
+    private lateinit var errorRetryButton: MaterialButton
+    private lateinit var bottomSheet: LinearLayout
+    private lateinit var constraintLayout: ConstraintLayout
 
     private lateinit var imageGalleryAdapter: ImageGalleryAdapter
     private var entityId = -1
@@ -93,11 +99,14 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
         bottomSheetCopier = view.findViewById(R.id.image_bottom_sheet_copy)
         bottomSheetDownload = view.findViewById(R.id.image_bottom_sheet_download)
         coordinatorLayout = view.findViewById(R.id.image_gallery_coordinator)
+        constraintLayout = view.findViewById(R.id.image_gallery_constraint)
+        errorTextView = view.findViewById(R.id.image_gallery_error)
+        errorRetryButton = view.findViewById(R.id.image_gallery_retry_button)
 
         imageGalleryAdapter = ImageGalleryAdapter()
         viewPager.adapter = imageGalleryAdapter
 
-        val bottomSheet = view.findViewById<LinearLayout>(R.id.image_bottom_sheet)
+        bottomSheet = view.findViewById(R.id.image_bottom_sheet)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         // todo: fix this value, will probably have to differ for tablets
@@ -142,20 +151,13 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
             }
         })
 
+        errorRetryButton.setOnClickListener {
+            Timber.d("sag am I even hitting this")
+            viewModel.fetchBackdropPosters()
+        }
+
         viewModel.fetchBackdropPosters()
         viewModel.subscribe { Timber.d("State is $it") }
-//        presenter.initView()
-//        presenter.loadImages(entityId)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // (activity as AppCompatActivity).supportActionBar?.hide()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // (activity as AppCompatActivity).supportActionBar?.show()
     }
 
     override fun onDestroy() {
@@ -166,7 +168,7 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
     private fun showLoading() {
         Timber.d("Show Loading")
         hideAllViews()
-//        hideErrorState()
+        hideErrorState()
         showLoadingBar()
     }
 
@@ -174,7 +176,8 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
         Timber.d("Showing Error")
         Timber.e(throwable)
         hideLoadingBar()
-//        showErrorState()
+        hideBottomSheet()
+        showErrorState()
     }
 
     private fun showImages(state: BackdropImageGalleryState) {
@@ -186,7 +189,9 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
             imageGalleryAdapter.notifyDataSetChanged()
         }
         hideLoadingBar()
+        hideErrorState()
         showAllViews()
+        showBottomSheet()
     }
 
     private fun preloadNextImage(right: String) {
@@ -199,6 +204,7 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
         currentImage?.visibility = View.GONE
         bottomSheetExpander?.visibility = View.GONE
         bottomSheetCopier?.visibility = View.GONE
+        errorTextView.visibility = View.GONE
     }
 
     private fun showAllViews() {
@@ -217,17 +223,27 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
         progressBar?.visibility = View.GONE
     }
 
-    // TODO: implement error stuff for this
-//    private fun hideErrorState() {
-//        errorTextView?.visibility = View.GONE
-//        errorRetryButton?.visibility = View.GONE
-//    }
-//
-//    private fun showErrorState() {
-//        errorTextView?.visibility = View.VISIBLE
-//        errorRetryButton?.visibility = View.VISIBLE
-//        scrollView?.visibility = View.VISIBLE
-//    }
+    private fun hideErrorState() {
+        constraintLayout.visibility = View.GONE
+        errorTextView.visibility = View.GONE
+        errorRetryButton.visibility = View.GONE
+        viewPager.visibility = View.VISIBLE
+    }
+
+    private fun showErrorState() {
+        constraintLayout.visibility = View.VISIBLE
+        errorTextView.visibility = View.VISIBLE
+        errorRetryButton.visibility = View.VISIBLE
+        viewPager.visibility = View.GONE
+    }
+
+    private fun hideBottomSheet() {
+        bottomSheet.visibility = View.GONE
+    }
+
+    private fun showBottomSheet() {
+        bottomSheet.visibility = View.VISIBLE
+    }
 
     // TODO: Architecturally speaking, I'm pretty confident that these aren't supposed to be here,
     // so find out where they are supposed to be.
@@ -263,7 +279,7 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
                     showImages(state)
                 }
                 is Fail -> {
-                    // TODO: error
+                    showError(state.backdropItemResponse.error)
                 }
             }
         }
