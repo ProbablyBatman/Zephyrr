@@ -9,18 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.ZephyrrApplication
-import greenberg.moviedbshell.base.BaseFragment
-import greenberg.moviedbshell.presenters.AboutPresenter
-import timber.log.Timber
 import android.content.Intent
 import android.net.Uri
+import androidx.fragment.app.Fragment
 import greenberg.moviedbshell.BuildConfig
 import java.util.Calendar
 
-class AboutFragment :
-        BaseFragment<AboutView, AboutPresenter>(),
-        AboutView {
+class AboutFragment : Fragment() {
 
     private var privacyPolicyLink: TextView? = null
     private var termsAndConditionsLink: TextView? = null
@@ -40,14 +35,10 @@ class AboutFragment :
         privacyPolicyLink = view.findViewById(R.id.privacy_policy_link)
         termsAndConditionsLink = view.findViewById(R.id.terms_and_conditions_link)
         aboutMeTextView = view.findViewById(R.id.about_me_text)
-
-        presenter?.initView()
+        show()
     }
 
-    override fun createPresenter(): AboutPresenter = presenter
-            ?: (activity?.application as ZephyrrApplication).component.aboutPresenter()
-
-    override fun show() {
+    private fun show() {
         setUpLinks()
         aboutMeTextView?.text = resources.getString(R.string.about_me,
                 Calendar.getInstance().get(Calendar.YEAR).toString(),
@@ -76,9 +67,5 @@ class AboutFragment :
         }, 0, termsAndConditionsUrl.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
         termsAndConditionsLink?.text = termsSpannableString
         termsAndConditionsLink?.movementMethod = LinkMovementMethod.getInstance()
-    }
-
-    override fun log(message: String) {
-        Timber.d(message)
     }
 }

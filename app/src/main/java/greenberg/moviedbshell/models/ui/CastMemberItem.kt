@@ -1,6 +1,6 @@
 package greenberg.moviedbshell.models.ui
 
-class CastMemberItem(
+data class CastMemberItem(
     val role: String,
     val name: String,
     val posterUrl: String,

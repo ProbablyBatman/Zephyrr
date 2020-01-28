@@ -9,14 +9,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
+import greenberg.moviedbshell.extensions.processAsReleaseDate
 import greenberg.moviedbshell.models.ui.MovieItem
-import greenberg.moviedbshell.presenters.PopularMoviesPresenter
-import greenberg.moviedbshell.processReleaseDate
 import greenberg.moviedbshell.viewHolders.PopularMovieViewHolder
 
 class PopularMovieAdapter(
-    var popularMovieList: MutableList<MovieItem> = mutableListOf(),
-    private val presenter: PopularMoviesPresenter
+    var popularMovieList: List<MovieItem> = listOf(),
+    val onClickListener: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -37,9 +36,9 @@ class PopularMovieAdapter(
                         .into(holder.cardItemPosterImage)
             }
             holder.cardItemTitle.text = currentItem.movieTitle
-            holder.cardItemReleaseDate.text = processReleaseDate(currentItem.releaseDate)
+            holder.cardItemReleaseDate.text = currentItem.releaseDate.processAsReleaseDate()
             holder.cardItemOverview.text = currentItem.overview
-            holder.cardItem.setOnClickListener { presenter.onCardSelected(currentItem.id ?: -1) }
+            holder.cardItem.setOnClickListener { onClickListener(currentItem.id ?: -1) }
         }
     }
 

@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class PopularMovieMapper
 @Inject constructor() : Mapper<PopularMovieResponse, List<MovieItem>> {
-    override fun mapToEntity(item: PopularMovieResponse): List<MovieItem> {
-        val mappedItems = item.results?.map { result ->
+    override fun mapToEntity(item: PopularMovieResponse?): List<MovieItem> {
+        val mappedItems = item?.results?.map { result ->
             MovieItem(
                     movieTitle = result?.title.orEmpty(),
                     overview = result?.overview.orEmpty(),

@@ -14,14 +14,16 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            tools:visibility="gone"/>
 
     <androidx.core.widget.NestedScrollView
             android:id="@+id/movie_detail_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraint"
@@ -32,7 +34,7 @@
                     android:id="@+id/movie_detail_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:textSize="@dimen/text_size_medium"
                     android:text="@string/generic_error_text"
                     android:visibility="gone"
@@ -45,7 +47,7 @@
                     android:id="@+id/movie_detail_retry_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:background="@color/colorAccent"
                     android:textSize="@dimen/text_size_small"
                     android:textColor="#fff"
@@ -204,15 +206,42 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/movie_detail_barrier"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/movie_detail_cast_members_recycler"
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/movie_detail_cast_members_recycler"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="@dimen/margin_small"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/movie_detail_overview"/>-->
+
+            <include layout="@layout/cast_crew_viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_small"
+                    android:layout_height="500dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/movie_detail_overview"/>
+
+<!--            <com.google.android.material.tabs.TabLayout-->
+<!--                    android:id="@+id/cast_crew_tab"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:tabMode="scrollable"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/movie_detail_overview"/>-->
+
+<!--            <androidx.viewpager2.widget.ViewPager2-->
+<!--                    android:id="@+id/cast_crew_viewpager"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="@dimen/margin_small"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/cast_crew_tab"/>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

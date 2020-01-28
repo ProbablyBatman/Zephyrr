@@ -1,14 +1,14 @@
 package greenberg.moviedbshell.models.ui
 
-import greenberg.moviedbshell.presenters.SearchPresenter
+import greenberg.moviedbshell.models.MediaType
 
-class TvItem(
+data class TvItem(
     val name: String,
     val overview: String,
     val firstAirDate: String,
-    posterImageUrl: String,
-    id: Int?
+    override val posterImageUrl: String,
+    override val id: Int?
 ) : PreviewItem(
         posterImageUrl,
         id,
-        SearchPresenter.MEDIA_TYPE_TV)
+        MediaType.TV)

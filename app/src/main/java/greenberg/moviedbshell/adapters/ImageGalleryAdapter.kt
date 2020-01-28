@@ -7,11 +7,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.models.imagegallerymodels.BackdropsItem
+import greenberg.moviedbshell.models.ui.BackdropPosterItem
 import greenberg.moviedbshell.viewHolders.ImageGalleryViewHolder
 
 class ImageGalleryAdapter(
-        private val backdrops: List<BackdropsItem>
+    var backdrops: List<BackdropPosterItem> = listOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -29,9 +29,12 @@ class ImageGalleryAdapter(
                     .apply(RequestOptions().fitCenter())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.imageView)
+            // Show the current position / number of items
+            holder.counter.text = holder.counter.context.getString(R.string.image_gallery_counter, position + 1, itemCount)
         }
     }
 
+    // why not just page the bottom sheet ?
     private fun resetView(holder: ImageGalleryViewHolder) {
         Glide.with(holder.imageView).clear(holder.imageView)
     }
