@@ -54,13 +54,14 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.palette:palette:1.0.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'com.google.android.material:material:1.2.0-alpha04'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.media:media:$media_version"
 
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0-rc02'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0-rc02'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0'
 
     implementation 'com.google.dagger:dagger:2.24'
     kapt 'com.google.dagger:dagger-compiler:2.24'
@@ -69,7 +70,7 @@ dependencies {
     compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.5.1'
     kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.1'
 
-    implementation 'com.google.firebase:firebase-core:17.2.1'
+    implementation 'com.google.firebase:firebase-core:17.2.2'
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5') {
         transitive = true
     }
