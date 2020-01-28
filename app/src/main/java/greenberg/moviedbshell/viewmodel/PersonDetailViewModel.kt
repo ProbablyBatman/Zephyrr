@@ -33,6 +33,7 @@ class PersonDetailViewModel
 
     init {
         logStateChanges()
+        fetchPersonDetail()
     }
 
     fun fetchPersonDetail() {

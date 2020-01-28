@@ -32,6 +32,7 @@ class MovieDetailViewModel
 
     init {
         logStateChanges()
+        fetchMovieDetail()
     }
 
     fun fetchMovieDetail() {

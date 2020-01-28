@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRx
@@ -26,8 +27,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
+import greenberg.moviedbshell.adapters.CastCrewAdapter
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.adapters.CastListAdapter
 import greenberg.moviedbshell.extensions.processAsReleaseDate
@@ -37,6 +42,7 @@ import greenberg.moviedbshell.extensions.processRatingInfo
 import greenberg.moviedbshell.extensions.processRuntime
 import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.state.BackdropImageGalleryArgs
+import greenberg.moviedbshell.state.CastStateArgs
 import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
@@ -73,7 +79,9 @@ class MovieDetailFragment : BaseFragment() {
     private var errorTextView: TextView? = null
     private var errorRetryButton: MaterialButton? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var castListAdapter: CastListAdapter
+    private lateinit var castCrewViewPager: ViewPager2
+    private lateinit var castCrewTabLayout: TabLayout
+    private lateinit var collectionAdapter: CastCrewAdapter
 
     private var navController: NavController? = null
 
@@ -109,16 +117,10 @@ class MovieDetailFragment : BaseFragment() {
         genresTextView = view.findViewById(R.id.movie_detail_genres)
         errorTextView = view.findViewById(R.id.movie_detail_error)
         errorRetryButton = view.findViewById(R.id.movie_detail_retry_button)
-        castRecyclerView = view.findViewById(R.id.movie_detail_cast_members_recycler)
-
+        castCrewViewPager = view.findViewById(R.id.cast_crew_viewpager)
+        castCrewTabLayout = view.findViewById(R.id.cast_crew_tab)
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        castRecyclerView?.layoutManager = linearLayoutManager
-        castListAdapter = CastListAdapter(onClickListener = this::onClickListener)
-        castRecyclerView?.adapter = castListAdapter
         navController = findNavController()
-
-        // TODO: Investigate if this should be init by the view model or here
-        viewModel.fetchMovieDetail()
     }
 
     private fun showLoading() {
@@ -174,8 +176,18 @@ class MovieDetailFragment : BaseFragment() {
                         .into(backdropImageView!!)
             }
 
-            castListAdapter.castMemberList = movieDetailItem.castMembers
-            castListAdapter.notifyDataSetChanged()
+            // Only recreate this if we haven't made the adapter
+            if (castCrewViewPager.adapter == null) {
+                collectionAdapter = CastCrewAdapter(this, CastStateArgs(Gson().toJson(movieDetailItem.castMembers)))
+                castCrewViewPager.adapter = collectionAdapter
+                TabLayoutMediator(castCrewTabLayout, castCrewViewPager) { tab, position ->
+                    if (position == 0) {
+                        tab.text = requireContext().getString(R.string.cast_tab)
+                    } else {
+                        tab.text = "TODO"
+                    }
+                }.attach()
+            }
 
             titleBar?.text = movieDetailItem.movieTitle
             overviewTextView?.text = movieDetailItem.overview

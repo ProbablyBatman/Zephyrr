@@ -155,8 +155,6 @@ class BackdropImageGalleryDialog : BaseDialogFragment() {
             Timber.d("sag am I even hitting this")
             viewModel.fetchBackdropPosters()
         }
-
-        viewModel.fetchBackdropPosters()
     }
 
     override fun onDestroy() {

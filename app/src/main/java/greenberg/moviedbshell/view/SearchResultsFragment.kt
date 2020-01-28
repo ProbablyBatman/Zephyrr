@@ -86,8 +86,6 @@ class SearchResultsFragment : BaseFragment() {
 
         // TODO: maybe change the title of the action bar to show the last performed search
         navController = findNavController()
-
-        viewModel.fetchSearchResults()
     }
 
     private fun showLoading() {

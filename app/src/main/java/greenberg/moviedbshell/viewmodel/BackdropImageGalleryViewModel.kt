@@ -28,6 +28,7 @@ class BackdropImageGalleryViewModel
 
     init {
         logStateChanges()
+        fetchBackdropPosters()
     }
 
     fun fetchBackdropPosters() {

@@ -102,8 +102,6 @@ class PersonDetailFragment : BaseFragment() {
         creditsAdapter = CreditsAdapter(onClickListener = this::onClickListener)
         creditsRecycler?.adapter = creditsAdapter
         navController = findNavController()
-
-        viewModel.fetchPersonDetail()
     }
 
     private fun showLoading() {

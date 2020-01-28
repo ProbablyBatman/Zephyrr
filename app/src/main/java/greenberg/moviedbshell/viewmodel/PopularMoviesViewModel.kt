@@ -27,6 +27,7 @@ class PopularMoviesViewModel
 
     init {
         logStateChanges()
+        fetchPopularMovies()
     }
 
     // TODO: do I need this like this

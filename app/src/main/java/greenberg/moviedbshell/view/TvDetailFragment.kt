@@ -130,8 +130,6 @@ class TvDetailFragment : BaseFragment() {
         castListAdapter = CastListAdapter(onClickListener = this::onClickListener)
         castRecyclerView?.adapter = castListAdapter
         navController = findNavController()
-
-        viewModel.fetchTvDetail()
     }
 
     private fun showLoading() {

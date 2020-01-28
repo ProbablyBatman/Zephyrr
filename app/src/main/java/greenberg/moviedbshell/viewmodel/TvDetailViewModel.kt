@@ -32,6 +32,7 @@ class TvDetailViewModel
 
     init {
         logStateChanges()
+        fetchTvDetail()
     }
 
     fun fetchTvDetail() {

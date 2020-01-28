@@ -28,6 +28,7 @@ class SearchResultsViewModel
 
     init {
         logStateChanges()
+        fetchSearchResults()
     }
 
     fun fetchSearchResults() {

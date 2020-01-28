@@ -35,6 +35,7 @@ class AboutFragment : Fragment() {
         privacyPolicyLink = view.findViewById(R.id.privacy_policy_link)
         termsAndConditionsLink = view.findViewById(R.id.terms_and_conditions_link)
         aboutMeTextView = view.findViewById(R.id.about_me_text)
+        show()
     }
 
     private fun show() {

@@ -76,7 +76,6 @@ class PopularMoviesFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListen
             }
         })
         navController = findNavController()
-        viewModel.fetchPopularMovies()
 
         // TODO: why does this get hit like 30 times after scrolling one page?
         viewModel.subscribe { Timber.d("State's page number is ${it.pageNumber}") }
