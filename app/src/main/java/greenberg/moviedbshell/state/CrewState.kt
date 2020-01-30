@@ -5,12 +5,12 @@ import com.airbnb.mvrx.MvRxState
 import kotlinx.android.parcel.Parcelize
 
 data class CrewState(
-        val crewMembersJson: String = ""
-) : MvRxState  {
+    val crewMembersJson: String = ""
+) : MvRxState {
     constructor(args: CrewStateArgs) : this(crewMembersJson = args.crewMembersJson)
 }
 
 @Parcelize
 data class CrewStateArgs(
-        val crewMembersJson: String
+    val crewMembersJson: String
 ) : Parcelable

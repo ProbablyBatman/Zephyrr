@@ -68,5 +68,4 @@ class CrewFragment : BaseFragment() {
     override fun log(message: String) {
         Timber.d(message)
     }
-
 }

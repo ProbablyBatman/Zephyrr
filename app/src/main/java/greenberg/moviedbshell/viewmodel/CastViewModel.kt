@@ -8,7 +8,7 @@ class CastViewModel(
 ) : ZephyrrMvRxViewModel<CastState>(state) {
     init {
         logStateChanges()
-        //state.castMembersJson
+        // state.castMembersJson
 //        withState {
 //            state.copy(castMembersJson = )
 //        }
@@ -18,5 +18,4 @@ class CastViewModel(
 //            state.copy(castMembers = state.castMembers)
 //        }
 //    }
-
 }

@@ -13,8 +13,8 @@ import greenberg.moviedbshell.models.ui.CrewMemberItem
 import greenberg.moviedbshell.viewHolders.CrewListViewHolder
 
 class CrewListAdapter(
-        var crewMemberList: List<CrewMemberItem> = listOf(),
-        val onClickListener: (Int) -> Unit
+    var crewMemberList: List<CrewMemberItem> = listOf(),
+    val onClickListener: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

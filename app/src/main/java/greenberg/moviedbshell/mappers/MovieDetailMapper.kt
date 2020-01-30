@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class MovieDetailMapper
 @Inject constructor(
-        private val castMemberMapper: CastMemberMapper,
-        private val crewMemberMapper: CrewMemberMapper
+    private val castMemberMapper: CastMemberMapper,
+    private val crewMemberMapper: CrewMemberMapper
 ) : Mapper<Pair<MovieDetailResponse, CreditsResponse>, MovieDetailItem> {
     override fun mapToEntity(item: Pair<MovieDetailResponse, CreditsResponse>?): MovieDetailItem {
         val movieDetail = item?.first

@@ -10,9 +10,9 @@ import greenberg.moviedbshell.view.CastFragment
 import greenberg.moviedbshell.view.CrewFragment
 
 class CastCrewAdapter(
-        fragment: Fragment,
-        private val castStateArgs: CastStateArgs,
-        private val crewStateArgs: CrewStateArgs
+    fragment: Fragment,
+    private val castStateArgs: CastStateArgs,
+    private val crewStateArgs: CrewStateArgs
 ) : FragmentStateAdapter(fragment) {
     override fun getItemCount() = 2
 
