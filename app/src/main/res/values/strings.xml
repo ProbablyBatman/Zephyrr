@@ -40,6 +40,7 @@
     <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>
     <string name="toggle_dark_mode_text">Toggle Dark Mode</string>
     <string name="cast_tab">Cast</string>
+    <string name="crew_tab">Crew</string>
 
     <!-- Search -->
     <string name="search">Search</string>

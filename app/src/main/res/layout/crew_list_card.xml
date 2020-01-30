@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/crew_card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="@dimen/card_corner_radius">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/crew_list_item_image"
+                android:layout_width="@dimen/people_recycler_poster_width"
+                android:layout_height="@dimen/people_recycler_poster_height"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+                android:id="@+id/crew_list_item_job"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/CardItemPeople"
+                app:layout_constraintTop_toBottomOf="@id/crew_list_item_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:id="@+id/crew_list_item_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/CardItemPeople"
+                app:layout_constraintTop_toBottomOf="@id/crew_list_item_job"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

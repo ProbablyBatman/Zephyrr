@@ -6,7 +6,10 @@ import greenberg.moviedbshell.models.ui.MovieDetailItem
 import javax.inject.Inject
 
 class MovieDetailMapper
-@Inject constructor(private val castMemberMapper: CastMemberMapper) : Mapper<Pair<MovieDetailResponse, CreditsResponse>, MovieDetailItem> {
+@Inject constructor(
+        private val castMemberMapper: CastMemberMapper,
+        private val crewMemberMapper: CrewMemberMapper
+) : Mapper<Pair<MovieDetailResponse, CreditsResponse>, MovieDetailItem> {
     override fun mapToEntity(item: Pair<MovieDetailResponse, CreditsResponse>?): MovieDetailItem {
         val movieDetail = item?.first
         val creditsDetail = item?.second
@@ -24,7 +27,8 @@ class MovieDetailMapper
                 posterImageUrl = movieDetail?.posterPath.orEmpty(),
                 backdropImageUrl = movieDetail?.backdropPath.orEmpty(),
                 overview = movieDetail?.overview.orEmpty(),
-                castMembers = castMemberMapper.mapToEntity(creditsDetail?.cast)
+                castMembers = castMemberMapper.mapToEntity(creditsDetail?.cast),
+                crewMembers = crewMemberMapper.mapToEntity(creditsDetail?.crew)
         )
     }
 }

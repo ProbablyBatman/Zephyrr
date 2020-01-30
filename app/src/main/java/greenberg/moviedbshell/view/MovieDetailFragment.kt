@@ -34,7 +34,6 @@ import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.CastCrewAdapter
 import greenberg.moviedbshell.base.BaseFragment
-import greenberg.moviedbshell.adapters.CastListAdapter
 import greenberg.moviedbshell.extensions.processAsReleaseDate
 import greenberg.moviedbshell.extensions.processGenreTitle
 import greenberg.moviedbshell.extensions.processGenres
@@ -43,6 +42,7 @@ import greenberg.moviedbshell.extensions.processRuntime
 import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.state.BackdropImageGalleryArgs
 import greenberg.moviedbshell.state.CastStateArgs
+import greenberg.moviedbshell.state.CrewStateArgs
 import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
@@ -178,13 +178,18 @@ class MovieDetailFragment : BaseFragment() {
 
             // Only recreate this if we haven't made the adapter
             if (castCrewViewPager.adapter == null) {
-                collectionAdapter = CastCrewAdapter(this, CastStateArgs(Gson().toJson(movieDetailItem.castMembers)))
+                // TODO: perhaps this is an issue
+                collectionAdapter = CastCrewAdapter(
+                        this,
+                        CastStateArgs(Gson().toJson(movieDetailItem.castMembers)),
+                        CrewStateArgs(Gson().toJson(movieDetailItem.crewMembers))
+                )
                 castCrewViewPager.adapter = collectionAdapter
                 TabLayoutMediator(castCrewTabLayout, castCrewViewPager) { tab, position ->
                     if (position == 0) {
                         tab.text = requireContext().getString(R.string.cast_tab)
                     } else {
-                        tab.text = "TODO"
+                        tab.text = requireContext().getString(R.string.crew_tab)
                     }
                 }.attach()
             }

@@ -5,7 +5,7 @@ import greenberg.moviedbshell.models.ui.PersonDetailItem
 import javax.inject.Inject
 
 class PersonDetailMapper
-@Inject constructor(private val creditMapper: PersonDetailCreditMapper) : Mapper<PersonDetailResponseContainer, PersonDetailItem> {
+@Inject constructor(private val creditMapper: CreditsCastMapper) : Mapper<PersonDetailResponseContainer, PersonDetailItem> {
     override fun mapToEntity(item: PersonDetailResponseContainer?): PersonDetailItem {
         val personDetailResponse = item?.personDetailResponse
         val creditsResponse = item?.creditsResponse
