@@ -1,7 +1,6 @@
 package greenberg.moviedbshell.mappers
 
-import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
-import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
+import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponseContainer
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import javax.inject.Inject
 
@@ -9,10 +8,10 @@ class MovieDetailMapper
 @Inject constructor(
     private val castMemberMapper: CastMemberMapper,
     private val crewMemberMapper: CrewMemberMapper
-) : Mapper<Pair<MovieDetailResponse, CreditsResponse>, MovieDetailItem> {
-    override fun mapToEntity(item: Pair<MovieDetailResponse, CreditsResponse>?): MovieDetailItem {
-        val movieDetail = item?.first
-        val creditsDetail = item?.second
+) : Mapper<MovieDetailResponseContainer, MovieDetailItem> {
+    override fun mapToEntity(item: MovieDetailResponseContainer?): MovieDetailItem {
+        val movieDetail = item?.movieDetailResponse
+        val creditsDetail = item?.creditsResponse
         return MovieDetailItem(
                 movieId = movieDetail?.id ?: 0,
                 movieTitle = movieDetail?.title.orEmpty(),

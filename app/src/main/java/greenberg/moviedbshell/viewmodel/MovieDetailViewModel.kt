@@ -9,6 +9,7 @@ import com.squareup.inject.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.MovieDetailMapper
 import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
+import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponseContainer
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.services.TMDBService
@@ -43,7 +44,7 @@ class MovieDetailViewModel
                     TMDBService.queryMovieDetail(state.movieId),
                     TMDBService.queryMovieCredits(state.movieId),
                     BiFunction<MovieDetailResponse, CreditsResponse, MovieDetailItem> { movieDetail, movieCredits ->
-                        mapper.mapToEntity(Pair(movieDetail, movieCredits))
+                        mapper.mapToEntity(MovieDetailResponseContainer(movieDetail, movieCredits))
                     }
             )
                     .subscribeOn(Schedulers.io())
