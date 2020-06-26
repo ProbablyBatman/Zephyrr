@@ -1,8 +1,9 @@
 buildscript {
-    ext.kotlin_version = '1.3.61'
-    ext.appCompat_Version = '1.2.0-alpha01'
+    ext.kotlin_version = '1.3.72'
+    ext.appCompat_version = '1.3.0-alpha01'
     ext.media_version = '1.1.0'
     ext.nav_version = "1.0.0"
+    ext.ktx_version = "2.2.2"
     repositories {
         google()
         jcenter()
@@ -11,10 +12,10 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.3'
-        classpath 'io.fabric.tools:gradle:1.28.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.2.0'
     }
 }
 
@@ -22,9 +23,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven {
-            url 'https://maven.google.com/'
-        }
+        maven { url 'https://maven.google.com/' }
     }
 }
 
