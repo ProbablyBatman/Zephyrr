@@ -11,4 +11,5 @@ data class TvItem(
 ) : PreviewItem(
         posterImageUrl,
         id,
-        MediaType.TV)
+        MediaType.TV
+)

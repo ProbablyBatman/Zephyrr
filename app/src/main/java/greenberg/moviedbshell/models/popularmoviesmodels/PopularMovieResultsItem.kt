@@ -3,7 +3,6 @@ package greenberg.moviedbshell.models.popularmoviesmodels
 import com.google.gson.annotations.SerializedName
 
 data class PopularMovieResultsItem(
-
     @field:SerializedName("overview")
     val overview: String? = null,
 

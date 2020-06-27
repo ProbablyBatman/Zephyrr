@@ -10,7 +10,7 @@ import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.PersonDetailMapper
 import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
 import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
-import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponseContainer
+import greenberg.moviedbshell.models.container.PersonDetailResponseContainer
 import greenberg.moviedbshell.models.ui.PersonDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.PersonDetailState

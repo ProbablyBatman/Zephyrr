@@ -2,6 +2,7 @@ package greenberg.moviedbshell.dagger
 
 import dagger.Component
 import greenberg.moviedbshell.viewmodel.BackdropImageGalleryViewModel
+import greenberg.moviedbshell.viewmodel.LandingViewModel
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
 import greenberg.moviedbshell.viewmodel.PersonDetailViewModel
 import greenberg.moviedbshell.viewmodel.PopularMoviesViewModel
@@ -18,4 +19,5 @@ interface SingletonComponent {
     val tvDetailViewModelFactory: TvDetailViewModel.Factory
     val searchResultsViewModelFactory: SearchResultsViewModel.Factory
     val backdropImageGalleryViewModelFactory: BackdropImageGalleryViewModel.Factory
+    val landingViewModelFactory: LandingViewModel.Factory
 }

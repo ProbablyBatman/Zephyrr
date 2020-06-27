@@ -1,6 +1,6 @@
 package greenberg.moviedbshell.models.ui
 
-class TvDetailItem(
+data class TvDetailItem(
     val title: String,
     val originalTitle: String,
     val firstAirDate: String,

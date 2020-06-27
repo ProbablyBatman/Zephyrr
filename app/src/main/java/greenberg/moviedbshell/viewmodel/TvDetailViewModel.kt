@@ -9,7 +9,7 @@ import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.TvDetailMapper
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseContainer
+import greenberg.moviedbshell.models.container.TvDetailResponseContainer
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.TvDetailState

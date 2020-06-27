@@ -13,4 +13,5 @@ data class MovieItem(
 ) : PreviewItem(
         posterImageUrl,
         id,
-        MediaType.MOVIE)
+        MediaType.MOVIE
+)

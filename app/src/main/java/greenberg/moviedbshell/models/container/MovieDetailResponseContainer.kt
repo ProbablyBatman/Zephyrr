@@ -1,5 +1,6 @@
-package greenberg.moviedbshell.models.tvdetailmodels
+package greenberg.moviedbshell.models.container
 
+import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 
 /*
@@ -10,7 +11,7 @@ import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
  * Perhaps this is not a permanent solution but until further data level optimizations come along, but this is a functional
  * and clean enough stopgap.
  */
-data class TvDetailResponseContainer(
-    val tvDetailResponse: TvDetailResponse,
+data class MovieDetailResponseContainer(
+    val movieDetailResponse: MovieDetailResponse,
     val creditsResponse: CreditsResponse
 )

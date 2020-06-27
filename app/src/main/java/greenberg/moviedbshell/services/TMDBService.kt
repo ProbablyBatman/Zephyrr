@@ -5,8 +5,10 @@ import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
 import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
 import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
+import greenberg.moviedbshell.models.recentlyreleasedmodels.RecentlyReleasedResponse
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
+import greenberg.moviedbshell.models.soontmmodels.SoonTMResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -40,4 +42,16 @@ interface TMDBService {
 
     @GET("person/{id}/combined_credits")
     fun queryPersonCombinedCredits(@Path("id") id: Int): Single<CombinedCreditsResponse>
+
+    /**
+     * This is implemented for now only against English releases. It is probably a bit complex to go global.
+     */
+    @GET("movie/now_playing")
+    fun queryRecentlyReleased(
+            @Query("page") page: Int,
+            @Query("language") language: String = "en-US"
+    ): Single<RecentlyReleasedResponse>
+
+    @GET("movie/upcoming")
+    fun querySoonTM(@Query("page") page: Int): Single<SoonTMResponse>
 }

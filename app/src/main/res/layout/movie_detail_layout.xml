@@ -206,16 +206,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/movie_detail_barrier"/>
 
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/movie_detail_cast_members_recycler"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_margin="@dimen/margin_small"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/movie_detail_overview"/>-->
-
             <include layout="@layout/cast_crew_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="500dp"
@@ -223,25 +213,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/movie_detail_overview"/>
-
-<!--            <com.google.android.material.tabs.TabLayout-->
-<!--                    android:id="@+id/cast_crew_tab"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:tabMode="scrollable"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/movie_detail_overview"/>-->
-
-<!--            <androidx.viewpager2.widget.ViewPager2-->
-<!--                    android:id="@+id/cast_crew_viewpager"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_margin="@dimen/margin_small"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/cast_crew_tab"/>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

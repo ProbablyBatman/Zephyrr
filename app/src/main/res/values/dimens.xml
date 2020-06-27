@@ -10,4 +10,8 @@
     <!-- Cast/Credit recycler -->
     <dimen name="people_recycler_poster_width">132dp</dimen>
     <dimen name="people_recycler_poster_height">198dp</dimen>
+
+    <!-- Landing recyclers -->
+    <dimen name="generic_poster_width">264</dimen>
+    <dimen name="generic_poster_height">396</dimen>
 </resources>

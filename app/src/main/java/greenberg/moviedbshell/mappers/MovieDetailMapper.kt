@@ -1,6 +1,6 @@
 package greenberg.moviedbshell.mappers
 
-import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponseContainer
+import greenberg.moviedbshell.models.container.MovieDetailResponseContainer
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import javax.inject.Inject
 

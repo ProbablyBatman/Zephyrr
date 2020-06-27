@@ -9,7 +9,7 @@ import com.squareup.inject.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.MovieDetailMapper
 import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
-import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponseContainer
+import greenberg.moviedbshell.models.container.MovieDetailResponseContainer
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.services.TMDBService
