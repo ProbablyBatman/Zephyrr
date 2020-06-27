@@ -11,6 +11,6 @@ import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
  * and clean enough stopgap.
  */
 data class MovieDetailResponseContainer(
-        val movieDetailResponse: MovieDetailResponse,
-        val creditsResponse: CreditsResponse
+    val movieDetailResponse: MovieDetailResponse,
+    val creditsResponse: CreditsResponse
 )
