@@ -9,6 +9,7 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
+    <!-- Currently there's a bug preventing me from changing this to a FragmentContainerView -->
     <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
