@@ -63,4 +63,9 @@
     <string name="image_downloaded">Image downloaded!</string>
     <string name="image_download">Save to gallery</string>
     <string name="image_gallery_error">Unable to retrieve images.</string>
+
+    <!-- Landing Page -->
+    <string name="recently_released_row">Recently Released</string>
+    <string name="popular_row">Popular</string>
+    <string name="soon_tm_row">Soonᵗᵐ</string>
 </resources>

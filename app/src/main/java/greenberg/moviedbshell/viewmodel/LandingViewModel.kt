@@ -22,14 +22,14 @@ import timber.log.Timber
 
 class LandingViewModel
 @AssistedInject constructor(
-    @Assisted var state: LandingState,
+    @Assisted var initialState: LandingState,
     private val TMDBService: TMDBService,
     private val mapper: LandingMapper
-) : ZephyrrMvRxViewModel<LandingState>(state) {
+) : ZephyrrMvRxViewModel<LandingState>(initialState) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(state: LandingState): LandingViewModel
+        fun create(initialState: LandingState): LandingViewModel
     }
 
     init {
@@ -61,13 +61,13 @@ class LandingViewModel
                     .subscribeOn(Schedulers.io())
                     .execute {
                         // If this call fails, should be retry-able
-                        Timber.d("sag difference in objects ${state.recentlyReleasedResponse}")
-                        Timber.d("sag difference vs $recentlyReleasedResponse")
+//                        Timber.d("sag difference in objects ${state.recentlyReleasedResponse}")
+//                        Timber.d("sag difference vs $recentlyReleasedResponse")
                         copy(
-                            recentlyReleasedResponse = state.recentlyReleasedResponse,
-                            popularMovieResponse = state.popularMovieResponse,
-                            soonTMResponse = state.soonTMResponse,
-                            landingItem = it()
+//                            recentlyReleasedResponse = recentlyReleasedResponse,
+//                            popularMovieResponse = popularMovieResponse,
+//                            soonTMResponse = soonTMResponse,
+                            landingItem = it
 //                            recentlyReleasedMovies = it.invoke()?.recentlyReleasedItems.orEmpty()
                         )
                     }

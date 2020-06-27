@@ -194,8 +194,8 @@ class PopularMoviesFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListen
 
     private fun onClickListener(movieId: Int) {
         navigate(
-                R.id.action_popularMoviesFragment_to_movieDetailFragment,
-                MovieDetailArgs(movieId)
+            R.id.action_popularMoviesFragment_to_movieDetailFragment,
+            MovieDetailArgs(movieId)
         )
     }
 
