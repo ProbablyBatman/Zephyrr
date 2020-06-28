@@ -71,15 +71,15 @@ class PopularMoviesViewModel
                         // where Async is of Fail type.
                         if (it is Fail) {
                             copy(
-                                    popularMovieResponse = it,
-                                    pageNumber = 1,
-                                    popularMovies = emptyList()
+                                popularMovieResponse = it,
+                                pageNumber = 1,
+                                popularMovies = emptyList()
                             )
                         } else {
                             copy(
-                                    popularMovieResponse = it,
-                                    pageNumber = 2,
-                                    popularMovies = mapper.mapToEntity(it())
+                                popularMovieResponse = it,
+                                pageNumber = 2,
+                                popularMovies = mapper.mapToEntity(it())
                             )
                         }
                     }

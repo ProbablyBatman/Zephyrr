@@ -87,7 +87,7 @@ class LandingFragment  : BaseFragment() {
         recentlyReleasedContainer = view.findViewById(R.id.recently_released_container)
         recentlyReleasedSeeAllButton = view.findViewById(R.id.recently_released_see_all_button)
         recentlyReleasedSeeAllButton.setOnClickListener {
-            navigate(R.id.action_landingFragment_to_popularMovieFragment)
+            navigate(R.id.action_landingFragment_to_recentlyReleasedFragment)
         }
         popularContainer = view.findViewById(R.id.popular_movie_container)
         popularSeeAllButton = view.findViewById(R.id.popular_see_all_button)

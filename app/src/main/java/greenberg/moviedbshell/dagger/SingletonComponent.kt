@@ -1,11 +1,13 @@
 package greenberg.moviedbshell.dagger
 
 import dagger.Component
+import greenberg.moviedbshell.view.RecentlyReleasedFragment
 import greenberg.moviedbshell.viewmodel.BackdropImageGalleryViewModel
 import greenberg.moviedbshell.viewmodel.LandingViewModel
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
 import greenberg.moviedbshell.viewmodel.PersonDetailViewModel
 import greenberg.moviedbshell.viewmodel.PopularMoviesViewModel
+import greenberg.moviedbshell.viewmodel.RecentlyReleasedViewModel
 import greenberg.moviedbshell.viewmodel.SearchResultsViewModel
 import greenberg.moviedbshell.viewmodel.TvDetailViewModel
 import javax.inject.Singleton
@@ -20,4 +22,6 @@ interface SingletonComponent {
     val searchResultsViewModelFactory: SearchResultsViewModel.Factory
     val backdropImageGalleryViewModelFactory: BackdropImageGalleryViewModel.Factory
     val landingViewModelFactory: LandingViewModel.Factory
+    val recentlyReleasedViewModelFactory: RecentlyReleasedViewModel.Factory
+    fun inject(fragment: RecentlyReleasedFragment)
 }

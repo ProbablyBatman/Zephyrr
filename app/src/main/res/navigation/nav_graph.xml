@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_landingFragment_to_popularMovieFragment"
             app:destination="@id/popularMoviesFragment"/>
+        <action
+            android:id="@+id/action_landingFragment_to_recentlyReleasedFragment"
+            app:destination="@id/recentlyReleasedFragment"/>
     </fragment>
 
     <fragment
@@ -65,6 +68,14 @@
         <action
                 android:id="@+id/action_personDetailFragment_to_tvDetailFragment"
                 app:destination="@id/tvDetailFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/recentlyReleasedFragment"
+        android:name="greenberg.moviedbshell.view.RecentlyReleasedFragment">
+        <action
+            android:id="@+id/action_recentlyReleasedFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment"/>
     </fragment>
 
     <fragment

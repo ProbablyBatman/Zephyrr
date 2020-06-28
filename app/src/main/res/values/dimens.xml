@@ -14,4 +14,8 @@
     <!-- Landing recyclers -->
     <dimen name="generic_poster_width">150dp</dimen>
     <dimen name="generic_poster_height">225dp</dimen>
+
+    <!-- Movie Item recyclers -->
+    <dimen name="grid_poster_width">125dp</dimen>
+    <dimen name="grid_poster_height">187dp</dimen>
 </resources>
