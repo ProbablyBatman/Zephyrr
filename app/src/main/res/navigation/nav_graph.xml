@@ -10,6 +10,9 @@
         <action
             android:id="@+id/action_landingFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment"/>
+        <action
+            android:id="@+id/action_landingFragment_to_popularMovieFragment"
+            app:destination="@id/popularMoviesFragment"/>
     </fragment>
 
     <fragment

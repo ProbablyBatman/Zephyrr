@@ -18,7 +18,6 @@ import greenberg.moviedbshell.view.LandingFragment
 import io.reactivex.Single
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 
 class LandingViewModel
 @AssistedInject constructor(
@@ -61,8 +60,6 @@ class LandingViewModel
                     .subscribeOn(Schedulers.io())
                     .execute {
                         // If this call fails, should be retry-able
-//                        Timber.d("sag difference in objects ${state.recentlyReleasedResponse}")
-//                        Timber.d("sag difference vs $recentlyReleasedResponse")
                         copy(
 //                            recentlyReleasedResponse = recentlyReleasedResponse,
 //                            popularMovieResponse = popularMovieResponse,

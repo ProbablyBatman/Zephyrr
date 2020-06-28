@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.ScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.snackbar.Snackbar
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.LandingAdapter
@@ -37,6 +41,15 @@ class LandingFragment  : BaseFragment() {
     private lateinit var soonTMRecycler: RecyclerView
     private lateinit var soonTMLayoutManager: LinearLayoutManager
     private lateinit var soonTMAdapter: LandingAdapter
+    private lateinit var recentlyReleasedSeeAllButton: ImageView
+    private lateinit var recentlyReleasedContainer: View
+    private lateinit var popularSeeAllButton: ImageView
+    private lateinit var popularContainer: View
+    private lateinit var soonTMSeeAllButton: ImageView
+    private lateinit var soonTMContainer: View
+    private lateinit var progressBar: ProgressBar
+    private lateinit var contentContainer: ScrollView
+    private var errorSnackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,19 +81,43 @@ class LandingFragment  : BaseFragment() {
 
         soonTMRecycler.adapter = soonTMAdapter
         soonTMRecycler.layoutManager = soonTMLayoutManager
+
+        contentContainer = view.findViewById(R.id.content_container)
+        progressBar = view.findViewById(R.id.landing_page_progress_bar)
+        recentlyReleasedContainer = view.findViewById(R.id.recently_released_container)
+        recentlyReleasedSeeAllButton = view.findViewById(R.id.recently_released_see_all_button)
+        recentlyReleasedSeeAllButton.setOnClickListener {
+            navigate(R.id.action_landingFragment_to_popularMovieFragment)
+        }
+        popularContainer = view.findViewById(R.id.popular_movie_container)
+        popularSeeAllButton = view.findViewById(R.id.popular_see_all_button)
+        popularSeeAllButton.setOnClickListener {
+            navigate(R.id.action_landingFragment_to_popularMovieFragment)
+        }
+        soonTMContainer = view.findViewById(R.id.soon_tm_container)
+        soonTMSeeAllButton = view.findViewById(R.id.soon_tm_see_all_button)
+        soonTMSeeAllButton.setOnClickListener {
+            navigate(R.id.action_landingFragment_to_popularMovieFragment)
+        }
     }
 
     override fun invalidate() {
         withState(viewModel) { state ->
             when {
                 state.shouldShowError() -> {
+                    hideLoading()
+                    hideRows()
                     showError()
                 }
                 state.shouldShowLoading() -> {
                     hideError()
+                    hideRows()
+                    showLoading()
                 }
                 else -> {
                     hideError()
+                    hideLoading()
+                    showRows()
                     showMovies(state)
                 }
             }
@@ -97,11 +134,39 @@ class LandingFragment  : BaseFragment() {
     }
 
     private fun showError() {
-
+        errorSnackbar =
+            Snackbar.make(contentContainer, getString(R.string.generic_error_text), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.retry)) {
+                    errorSnackbar?.dismiss()
+                    viewModel.fetchLandingResults()
+                }
+        errorSnackbar?.show()
     }
 
     private fun hideError() {
+        errorSnackbar?.dismiss()
+    }
 
+    private fun showLoading() {
+        progressBar.visibility = View.VISIBLE
+        contentContainer.visibility = View.GONE
+    }
+
+    private fun hideLoading() {
+        progressBar.visibility = View.GONE
+        contentContainer.visibility = View.VISIBLE
+    }
+
+    private fun hideRows() {
+        recentlyReleasedContainer.visibility = View.GONE
+        popularContainer.visibility = View.GONE
+        soonTMContainer.visibility = View.GONE
+    }
+
+    private fun showRows() {
+        recentlyReleasedContainer.visibility = View.VISIBLE
+        popularContainer.visibility = View.VISIBLE
+        soonTMContainer.visibility = View.VISIBLE
     }
 
     private fun onClickListener(movieId: Int) {
