@@ -12,7 +12,7 @@ import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.viewmodel.PopularMoviesViewModel
 import timber.log.Timber
 
-class PopularMoviesFragment : BaseMovieListFragment<PopularMoviesViewModel, MovieListState>(), SwipeRefreshLayout.OnRefreshListener {
+class PopularMoviesFragment : BaseMovieListFragment<PopularMoviesViewModel, MovieListState>() {
 
     override val viewModelFactory by lazy {
         (activity?.application as ZephyrrApplication).component.popularViewModelFactory
@@ -29,10 +29,6 @@ class PopularMoviesFragment : BaseMovieListFragment<PopularMoviesViewModel, Movi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         title.text = getString(R.string.popular_row)
-    }
-
-    override fun onRefresh() {
-        viewModel.fetchFirstPage()
     }
 
     override fun onClickListener(movieId: Int) {
