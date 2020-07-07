@@ -260,4 +260,8 @@ class PersonDetailFragment : BaseFragment() {
     override fun log(message: String) {
         Timber.d(message)
     }
+
+    override fun log(throwable: Throwable) {
+        Timber.e(throwable)
+    }
 }

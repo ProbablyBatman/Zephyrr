@@ -8,9 +8,8 @@ import com.squareup.inject.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.LandingMapper
 import greenberg.moviedbshell.models.container.LandingContainer
+import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
-import greenberg.moviedbshell.models.recentlyreleasedmodels.RecentlyReleasedResponse
-import greenberg.moviedbshell.models.soontmmodels.SoonTMResponse
 import greenberg.moviedbshell.models.ui.LandingItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.LandingState
@@ -47,7 +46,7 @@ class LandingViewModel
                     TMDBService.queryRecentlyReleased(1),
                     TMDBService.queryPopularMovies(1),
                     TMDBService.querySoonTM(1),
-                    Function3<RecentlyReleasedResponse, PopularMovieResponse, SoonTMResponse, LandingItem> { recentlyReleasedResponse, popularMovieResponse, soonTMResponse ->
+                    Function3<MovieListResponse, MovieListResponse, MovieListResponse, LandingItem> { recentlyReleasedResponse, popularMovieResponse, soonTMResponse ->
                         mapper.mapToEntity(
                             LandingContainer(
                                 recentlyReleasedResponse,
@@ -59,7 +58,7 @@ class LandingViewModel
             )
                     .subscribeOn(Schedulers.io())
                     .execute {
-                        // If this call fails, should be retry-able
+                        // TODO: If this call fails, should be retry-able. Might wanna match with other fragments
                         copy(
                             landingItem = it
                         )

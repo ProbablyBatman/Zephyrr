@@ -305,6 +305,10 @@ class MovieDetailFragment : BaseFragment() {
         Timber.d(message)
     }
 
+    override fun log(throwable: Throwable) {
+        Timber.e(throwable)
+    }
+
     companion object {
         @JvmField
         val TAG: String = MovieDetailFragment::class.java.simpleName

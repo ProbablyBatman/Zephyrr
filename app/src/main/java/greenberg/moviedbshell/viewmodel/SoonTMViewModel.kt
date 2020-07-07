@@ -3,52 +3,63 @@ package greenberg.moviedbshell.viewmodel
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
-import greenberg.moviedbshell.mappers.SoonTMMapper
+import greenberg.moviedbshell.mappers.MovieListMapper
 import greenberg.moviedbshell.services.TMDBService
-import greenberg.moviedbshell.state.SoonTMState
+import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.view.SoonTMFragment
+import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import io.reactivex.schedulers.Schedulers
 
 class SoonTMViewModel
 @AssistedInject constructor(
-    @Assisted var state: SoonTMState,
+    @Assisted override var state: MovieListState,
     private val TMDBService: TMDBService,
-    private val mapper: SoonTMMapper
-) : ZephyrrMvRxViewModel<SoonTMState>(state) {
+    private val mapper: MovieListMapper
+) : BaseMovieListViewModel<MovieListState>(state) {
 
     @AssistedInject.Factory
-    interface Factory {
-        fun create(state: SoonTMState): SoonTMViewModel
+    interface Factory : BaseMovieListViewModel.Factory {
+        fun create(state: MovieListState): SoonTMViewModel
     }
 
     init {
         logStateChanges()
-        fetchSoonTM()
+        fetchMovies()
     }
 
-    fun fetchSoonTM() {
+    override fun fetchMovies() {
         withState { state ->
             TMDBService
                 .querySoonTM(state.pageNumber)
                 .subscribeOn(Schedulers.io())
                 .execute {
-                    // If call fails, pass the same state through, but it's a copy with the Async
-                    // where Async is of Fail type.
-                    if (it is Fail) {
-                        copy(
-                            pageNumber = state.pageNumber,
-                            soonTMResponse = it,
-                            soonTMMovies = state.soonTMMovies
-                        )
-                    } else {
-                        copy(
-                            pageNumber = state.pageNumber + 1,
-                            soonTMResponse = it,
-                            soonTMMovies = state.soonTMMovies + mapper.mapToEntity(it())
+                    val totalPages = it.invoke()?.totalPages
+                    when {
+                        totalPages != null && state.pageNumber > totalPages -> {
+                            copy(
+                                shouldShowMaxPages = true
+                            )
+                        }
+                        it is Fail -> {
+                            copy(
+                                pageNumber = state.pageNumber,
+                                movieListResponse = it,
+                                movieList = state.movieList
+                            )
+                        }
+                        it is Success -> {
+                            copy(
+                                pageNumber = state.pageNumber + 1,
+                                movieListResponse = it,
+                                movieList = state.movieList + mapper.mapToEntity(it())
+                            )
+                        }
+                        else -> copy(
+                            movieListResponse = it
                         )
                     }
                 }
@@ -56,11 +67,11 @@ class SoonTMViewModel
         }
     }
 
-    companion object : MvRxViewModelFactory<SoonTMViewModel, SoonTMState> {
+    companion object : MvRxViewModelFactory<SoonTMViewModel, MovieListState> {
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: SoonTMState): SoonTMViewModel {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<SoonTMFragment>().soonTMViewModelFactory
-        return fragment.create(state)
-    }
+        override fun create(viewModelContext: ViewModelContext, state: MovieListState): SoonTMViewModel {
+            val fragment = (viewModelContext as FragmentViewModelContext).fragment<SoonTMFragment>().viewModelFactory
+            return fragment.create(state)
+        }
     }
 }

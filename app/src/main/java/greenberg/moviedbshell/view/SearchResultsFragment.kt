@@ -242,6 +242,10 @@ class SearchResultsFragment : BaseFragment() {
         Timber.d(message)
     }
 
+    override fun log(throwable: Throwable) {
+        Timber.e(throwable)
+    }
+
     companion object {
         @JvmField
         val TAG: String = SearchResultsFragment::class.java.simpleName

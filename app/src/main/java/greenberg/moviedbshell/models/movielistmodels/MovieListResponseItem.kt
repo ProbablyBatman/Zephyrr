@@ -1,8 +1,8 @@
-package greenberg.moviedbshell.models.popularmoviesmodels
+package greenberg.moviedbshell.models.movielistmodels
 
 import com.google.gson.annotations.SerializedName
 
-data class PopularMovieResultsItem(
+data class MovieListResponseItem(
     @field:SerializedName("overview")
     val overview: String? = null,
 
@@ -30,11 +30,11 @@ data class PopularMovieResultsItem(
     @field:SerializedName("release_date")
     val releaseDate: String? = null,
 
-    @field:SerializedName("vote_average")
-    val voteAverage: Double? = null,
-
     @field:SerializedName("popularity")
     val popularity: Double? = null,
+
+    @field:SerializedName("vote_average")
+    val voteAverage: Double? = null,
 
     @field:SerializedName("id")
     val id: Int? = null,

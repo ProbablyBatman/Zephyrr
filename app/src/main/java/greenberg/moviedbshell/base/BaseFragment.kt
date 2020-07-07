@@ -53,6 +53,7 @@ abstract class BaseFragment : BaseMvRxFragment() {
      * in the logs.
      */
     abstract fun log(message: String)
+    abstract fun log(throwable: Throwable)
 
     protected fun navigate(@IdRes id: Int, args: Parcelable? = null) {
         findNavController().navigate(id, Bundle().apply { putParcelable(MvRx.KEY_ARG, args) })

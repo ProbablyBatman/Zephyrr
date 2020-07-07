@@ -6,9 +6,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
-import greenberg.moviedbshell.models.recentlyreleasedmodels.RecentlyReleasedResponse
-import greenberg.moviedbshell.models.soontmmodels.SoonTMResponse
 import greenberg.moviedbshell.models.ui.LandingItem
 
 data class LandingState(

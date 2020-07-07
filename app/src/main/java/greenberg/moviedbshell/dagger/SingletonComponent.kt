@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.dagger
 
 import dagger.Component
+import greenberg.moviedbshell.view.PopularMoviesFragment
 import greenberg.moviedbshell.view.RecentlyReleasedFragment
 import greenberg.moviedbshell.view.SoonTMFragment
 import greenberg.moviedbshell.viewmodel.BackdropImageGalleryViewModel
@@ -28,4 +29,5 @@ interface SingletonComponent {
     val soonTMViewModelFactory: SoonTMViewModel.Factory
     fun inject(fragment: RecentlyReleasedFragment)
     fun inject(fragment: SoonTMFragment)
+    fun inject(fragment: PopularMoviesFragment)
 }

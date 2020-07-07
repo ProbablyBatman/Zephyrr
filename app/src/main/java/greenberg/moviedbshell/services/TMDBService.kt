@@ -2,13 +2,12 @@ package greenberg.moviedbshell.services
 
 import greenberg.moviedbshell.models.imagegallerymodels.ImageGalleryResponse
 import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
+import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
 import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
 import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
-import greenberg.moviedbshell.models.recentlyreleasedmodels.RecentlyReleasedResponse
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
-import greenberg.moviedbshell.models.soontmmodels.SoonTMResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -26,7 +25,7 @@ interface TMDBService {
     fun queryMovieImages(@Path("id") id: Int): Single<ImageGalleryResponse>
 
     @GET("movie/popular")
-    fun queryPopularMovies(@Query("page") page: Int): Single<PopularMovieResponse>
+    fun queryPopularMovies(@Query("page") page: Int): Single<MovieListResponse>
 
     @GET("search/multi")
     fun querySearchMulti(@Query("query") query: String, @Query("page") page: Int): Single<SearchResponse>
@@ -50,12 +49,12 @@ interface TMDBService {
     fun queryRecentlyReleased(
             @Query("page") page: Int,
             @Query("language") language: String = "en-US"
-    ): Single<RecentlyReleasedResponse>
+    ): Single<MovieListResponse>
 
     @GET("movie/upcoming")
     fun querySoonTM(
         @Query("page") page: Int,
         @Query("language") language: String = "en-US",
         @Query("region") region: String = "US"
-    ): Single<SoonTMResponse>
+    ): Single<MovieListResponse>
 }

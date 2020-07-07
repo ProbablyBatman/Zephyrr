@@ -1,8 +1,7 @@
 package greenberg.moviedbshell.models.container
 
+import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
-import greenberg.moviedbshell.models.recentlyreleasedmodels.RecentlyReleasedResponse
-import greenberg.moviedbshell.models.soontmmodels.SoonTMResponse
 
 /*
  * Part of a class of objects that exist as a sort of "wrapper"
@@ -13,7 +12,7 @@ import greenberg.moviedbshell.models.soontmmodels.SoonTMResponse
  * and clean enough stopgap.
  */
 data class LandingContainer(
-    val recentlyReleasedResponse: RecentlyReleasedResponse,
-    val popularMovieResponse: PopularMovieResponse,
-    val soonTMResponse: SoonTMResponse
+    val recentlyReleasedResponse: MovieListResponse,
+    val popularMovieResponse: MovieListResponse,
+    val soonTMResponse: MovieListResponse
 )
