@@ -9,7 +9,6 @@ import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.LandingMapper
 import greenberg.moviedbshell.models.container.LandingContainer
 import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
-import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
 import greenberg.moviedbshell.models.ui.LandingItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.LandingState

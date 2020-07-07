@@ -1,7 +1,6 @@
 package greenberg.moviedbshell.models.container
 
 import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
-import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
 
 /*
  * Part of a class of objects that exist as a sort of "wrapper"

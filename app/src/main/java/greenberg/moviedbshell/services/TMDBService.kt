@@ -5,7 +5,6 @@ import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
 import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
-import greenberg.moviedbshell.models.popularmoviesmodels.PopularMovieResponse
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse

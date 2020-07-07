@@ -86,14 +86,11 @@ abstract class BaseMovieListFragment<T: BaseMovieListViewModel<S>, S: BaseMovieL
         gridListToggle = view.findViewById(R.id.movie_grid_list_toggle)
         gridListToggle.setOnClickListener {
             (activity?.application as ZephyrrApplication).toggleGridListView()
-            log("${gridListToggleState.invoke()} value is this")
             when (movieListAdapter.switchViewType()) {
                 MovieListAdapter.ViewType.VIEW_TYPE_GRID -> movieRecycler.layoutManager = gridLayoutManager
                 MovieListAdapter.ViewType.VIEW_TYPE_LIST -> movieRecycler.layoutManager = linearLayoutManager
             }
         }
-
-        log("$gridListToggleState value is this")
         viewModel.subscribe { log("State's page number is ${it.pageNumber}")}
     }
 
@@ -183,7 +180,7 @@ abstract class BaseMovieListFragment<T: BaseMovieListViewModel<S>, S: BaseMovieL
                     log("Loading")
                     hideError()
                     hideMaxPages()
-                    if (state.pageNumber < 1) {
+                    if (state.pageNumber <= 1) {
                         hideMovies()
                         showLoading()
                     } else {

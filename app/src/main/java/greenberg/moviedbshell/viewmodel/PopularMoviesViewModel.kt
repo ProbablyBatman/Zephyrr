@@ -33,31 +33,31 @@ class PopularMoviesViewModel
     }
 
     override fun fetchMovies() {
-        Timber.d("sag am I in trouble")
         withState { state ->
+            val totalPages = state.movieListResponse.invoke()?.totalPages
+            if (totalPages != null && state.pageNumber >= totalPages) {
+                state.copy(shouldShowMaxPages = true)
+                return@withState
+            }
             TMDBService
                 .queryPopularMovies(state.pageNumber)
                 .subscribeOn(Schedulers.io())
                 .execute {
-                    val totalPages = it.invoke()?.totalPages
-                    when {
-                        totalPages != null && state.pageNumber > totalPages -> {
-                            copy(
-                                shouldShowMaxPages = true
-                            )
-                        }
-                        it is Fail -> {
+                    when (it) {
+                        is Fail -> {
                             copy(
                                 pageNumber = state.pageNumber,
                                 movieListResponse = it,
                                 movieList = state.movieList
                             )
                         }
-                        it is Success -> {
+                        is Success -> {
+                            val pages = it.invoke()?.totalPages
                             copy(
                                 pageNumber = state.pageNumber + 1,
                                 movieListResponse = it,
-                                movieList = state.movieList + mapper.mapToEntity(it())
+                                movieList = state.movieList + mapper.mapToEntity(it()),
+                                shouldShowMaxPages = pages != null && pages <= state.pageNumber
                             )
                         }
                         else -> copy(
