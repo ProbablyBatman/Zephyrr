@@ -16,6 +16,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import com.google.android.material.snackbar.Snackbar
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.MovieListAdapter
@@ -44,6 +45,9 @@ class RecentlyReleasedFragment : BaseFragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var title: TextView
     private lateinit var gridListToggle: ImageView
+    private var loadingSnackbar: Snackbar? = null
+    private var maxPagesSnackbar: Snackbar? = null
+    private var errorSnackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +64,7 @@ class RecentlyReleasedFragment : BaseFragment() {
 
         recentlyReleasedRecycler = view.findViewById(R.id.recently_released_paged_recycler)
         recentlyReleasedAdapter = MovieListAdapter(onClickListener = this::onClickListener)
-        Timber.d("toggle is $gridListToggleState")
+        log("toggle is $gridListToggleState")
         gridLayoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
         linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         if (gridListToggleState.invoke() == ZephyrrApplication.GRID_LIST_GRID_VALUE) {
@@ -95,31 +99,44 @@ class RecentlyReleasedFragment : BaseFragment() {
         gridListToggle = view.findViewById(R.id.movie_grid_list_toggle)
         gridListToggle.setOnClickListener {
             (activity?.application as ZephyrrApplication).toggleGridListView()
-            Timber.d("${gridListToggleState.invoke()} value is this")
+            log("${gridListToggleState.invoke()} value is this")
             when (recentlyReleasedAdapter.switchViewType()) {
                 MovieListAdapter.ViewType.VIEW_TYPE_GRID -> recentlyReleasedRecycler.layoutManager = gridLayoutManager
                 MovieListAdapter.ViewType.VIEW_TYPE_LIST -> recentlyReleasedRecycler.layoutManager = linearLayoutManager
             }
         }
 
-        Timber.d("$gridListToggleState value is this")
-        viewModel.subscribe { Timber.d("State's page number is ${it.pageNumber}")}
+        log("$gridListToggleState value is this")
+        viewModel.subscribe { log("State's page number is ${it.pageNumber}")}
     }
 
     private fun hideMaxPages() {
-
+        log("Hide max pages")
+        maxPagesSnackbar?.dismiss()
     }
 
     private fun showMaxPages() {
-
+        log("Show max pages")
+        maxPagesSnackbar = Snackbar.make(recentlyReleasedRecycler, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
+        if (maxPagesSnackbar?.isShown == false) {
+            maxPagesSnackbar?.show()
+        }
     }
 
     private fun hideError() {
-
+        errorSnackbar?.dismiss()
     }
 
-    private fun showError(state: RecentlyReleasedState) {
-
+    private fun showError(throwable: Throwable) {
+        log("Showing Error")
+        Timber.e(throwable)
+        errorSnackbar = Snackbar.make(recentlyReleasedRecycler, getString(R.string.generic_error_text), Snackbar.LENGTH_INDEFINITE)
+            .setAction(getString(R.string.retry)) {
+                errorSnackbar?.dismiss()
+                viewModel.fetchRecentlyReleased()
+            }
+        errorSnackbar?.show()
     }
 
     private fun hideLoading() {
@@ -131,15 +148,18 @@ class RecentlyReleasedFragment : BaseFragment() {
     }
 
     private fun hidePageLoad() {
-
+        log("Hide page load")
+        loadingSnackbar?.dismiss()
     }
 
     private fun showPageLoad() {
-
+        log("Show page load")
+        loadingSnackbar = Snackbar.make(recentlyReleasedRecycler, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
+        loadingSnackbar?.show()
     }
 
     private fun showMovies(state: RecentlyReleasedState) {
-        Timber.d("Showing movies")
+        log("Showing movies")
         title.visibility = View.VISIBLE
         recentlyReleasedRecycler.visibility = View.VISIBLE
         recentlyReleasedAdapter.items = state.recentlyReleasedMovies
@@ -158,28 +178,29 @@ class RecentlyReleasedFragment : BaseFragment() {
             }
 
             when (state.recentlyReleasedResponse) {
-                Uninitialized -> Timber.d("uninitialized")
+                Uninitialized -> log("uninitialized")
                 is Loading -> {
-                    Timber.d("Loading")
+                    log("Loading")
                     hideError()
                     hideMaxPages()
                     if (state.pageNumber < 1) {
+                        hideMovies()
                         showLoading()
                     } else {
                         showPageLoad()
                     }
                 }
                 is Success -> {
-                    Timber.d("Success")
+                    log("Success")
                     hidePageLoad()
                     hideMaxPages()
                     hideLoading()
                     showMovies(state)
                 }
                 is Fail -> {
-                    Timber.d("Fail")
+                    log("Fail")
                     hideMovies()
-                    showError(state)
+                    showError(state.recentlyReleasedResponse.error)
                 }
             }
         }
