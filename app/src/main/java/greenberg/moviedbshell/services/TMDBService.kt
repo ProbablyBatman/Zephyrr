@@ -46,8 +46,8 @@ interface TMDBService {
      */
     @GET("movie/now_playing")
     fun queryRecentlyReleased(
-            @Query("page") page: Int,
-            @Query("language") language: String = "en-US"
+        @Query("page") page: Int,
+        @Query("language") language: String = "en-US"
     ): Single<MovieListResponse>
 
     @GET("movie/upcoming")

@@ -53,7 +53,7 @@ class MovieListAdapter(
         }
     }
 
-    //TODO: questionable
+    // TODO: questionable
     override fun getItemViewType(position: Int) = currentViewType.ordinal
 
     private fun bindGridItem(holder: RecyclerView.ViewHolder, item: MovieItem) {

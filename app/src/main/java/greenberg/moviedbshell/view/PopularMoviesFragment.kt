@@ -2,7 +2,6 @@ package greenberg.moviedbshell.view
 
 import android.os.Bundle
 import android.view.View
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.mvrx.fragmentViewModel
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication

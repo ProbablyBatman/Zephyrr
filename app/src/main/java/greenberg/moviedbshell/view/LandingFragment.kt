@@ -23,9 +23,9 @@ import greenberg.moviedbshell.state.shouldShowLoading
 import greenberg.moviedbshell.viewmodel.LandingViewModel
 import timber.log.Timber
 
-class LandingFragment  : BaseFragment() {
+class LandingFragment : BaseFragment() {
 
-    //TODO: INVESTIGATE REPLACING THIS WITH LATEINIT VAR INJECT
+    // TODO: INVESTIGATE REPLACING THIS WITH LATEINIT VAR INJECT
     val landingViewModelFactory by lazy {
         (activity?.application as ZephyrrApplication).component.landingViewModelFactory
     }

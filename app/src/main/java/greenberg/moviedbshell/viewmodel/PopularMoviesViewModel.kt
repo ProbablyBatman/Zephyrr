@@ -13,7 +13,6 @@ import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.view.PopularMoviesFragment
 import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 
 class PopularMoviesViewModel
 @AssistedInject constructor(

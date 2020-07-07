@@ -24,7 +24,7 @@ import greenberg.moviedbshell.state.base.BaseMovieListState
 import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import javax.inject.Inject
 
-abstract class BaseMovieListFragment<T: BaseMovieListViewModel<S>, S: BaseMovieListState> : BaseFragment() {
+abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovieListState> : BaseFragment() {
     @Inject
     lateinit var gridListToggleState: () -> String
 
@@ -91,7 +91,7 @@ abstract class BaseMovieListFragment<T: BaseMovieListViewModel<S>, S: BaseMovieL
                 MovieListAdapter.ViewType.VIEW_TYPE_LIST -> movieRecycler.layoutManager = linearLayoutManager
             }
         }
-        viewModel.subscribe { log("State's page number is ${it.pageNumber}")}
+        viewModel.subscribe { log("State's page number is ${it.pageNumber}") }
     }
 
     override fun onPause() {
