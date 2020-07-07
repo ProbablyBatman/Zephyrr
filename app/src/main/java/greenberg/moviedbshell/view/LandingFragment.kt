@@ -97,7 +97,7 @@ class LandingFragment  : BaseFragment() {
         soonTMContainer = view.findViewById(R.id.soon_tm_container)
         soonTMSeeAllButton = view.findViewById(R.id.soon_tm_see_all_button)
         soonTMSeeAllButton.setOnClickListener {
-            navigate(R.id.action_landingFragment_to_popularMovieFragment)
+            navigate(R.id.action_landingFragment_to_soonTMFragment)
         }
     }
 

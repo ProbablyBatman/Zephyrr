@@ -53,5 +53,9 @@ interface TMDBService {
     ): Single<RecentlyReleasedResponse>
 
     @GET("movie/upcoming")
-    fun querySoonTM(@Query("page") page: Int): Single<SoonTMResponse>
+    fun querySoonTM(
+        @Query("page") page: Int,
+        @Query("language") language: String = "en-US",
+        @Query("region") region: String = "US"
+    ): Single<SoonTMResponse>
 }

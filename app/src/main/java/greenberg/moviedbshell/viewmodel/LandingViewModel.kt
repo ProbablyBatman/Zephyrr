@@ -61,11 +61,7 @@ class LandingViewModel
                     .execute {
                         // If this call fails, should be retry-able
                         copy(
-//                            recentlyReleasedResponse = recentlyReleasedResponse,
-//                            popularMovieResponse = popularMovieResponse,
-//                            soonTMResponse = soonTMResponse,
                             landingItem = it
-//                            recentlyReleasedMovies = it.invoke()?.recentlyReleasedItems.orEmpty()
                         )
                     }
                     .disposeOnClear()

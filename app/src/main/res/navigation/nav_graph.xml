@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_landingFragment_to_recentlyReleasedFragment"
             app:destination="@id/recentlyReleasedFragment"/>
+        <action
+            android:id="@+id/action_landingFragment_to_soonTMFragment"
+            app:destination="@id/soonTMFragment"/>
     </fragment>
 
     <fragment
@@ -75,6 +78,14 @@
         android:name="greenberg.moviedbshell.view.RecentlyReleasedFragment">
         <action
             android:id="@+id/action_recentlyReleasedFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/soonTMFragment"
+        android:name="greenberg.moviedbshell.view.SoonTMFragment">
+        <action
+            android:id="@+id/action_soonTMFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment"/>
     </fragment>
 
