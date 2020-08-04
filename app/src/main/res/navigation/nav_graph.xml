@@ -50,8 +50,11 @@
             android:id="@+id/movieDetailFragment"
             android:name="greenberg.moviedbshell.view.MovieDetailFragment">
         <action
-                android:id="@+id/action_movieDetailFragment_to_personDetailFragment"
-                app:destination="@id/personDetailFragment"/>
+            android:id="@+id/action_movieDetailFragment_to_personDetailFragment"
+            app:destination="@id/personDetailFragment"/>
+        <action
+            android:id="@+id/action_movieDetailFragment_to_castFragment"
+            app:destination="@id/castFragment"/>
     </fragment>
 
     <fragment
@@ -92,6 +95,14 @@
     <fragment
             android:id="@+id/aboutFragment"
             android:name="greenberg.moviedbshell.view.AboutFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/castFragment"
+        android:name="greenberg.moviedbshell.view.CastFragment">
+        <action
+            android:id="@+id/action_castFragment_to_personDetailFragment"
+            app:destination="@id/personDetailFragment"/>
     </fragment>
 
     <action android:id="@+id/action_global_aboutFragment"

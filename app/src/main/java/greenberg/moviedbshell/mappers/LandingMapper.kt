@@ -9,9 +9,9 @@ class LandingMapper
     private val movieListMapper: MovieListMapper
 ) : Mapper<LandingContainer, LandingItem> {
     override fun mapToEntity(item: LandingContainer?): LandingItem =
-            LandingItem(
-                movieListMapper.mapToEntity(item?.recentlyReleasedResponse),
-                movieListMapper.mapToEntity(item?.popularMovieResponse),
-                movieListMapper.mapToEntity(item?.soonTMResponse)
-            )
+        LandingItem(
+            movieListMapper.mapToEntity(item?.recentlyReleasedResponse),
+            movieListMapper.mapToEntity(item?.popularMovieResponse),
+            movieListMapper.mapToEntity(item?.soonTMResponse)
+        )
 }

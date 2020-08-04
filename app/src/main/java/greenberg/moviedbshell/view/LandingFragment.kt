@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,11 +41,11 @@ class LandingFragment : BaseFragment() {
     private lateinit var soonTMRecycler: RecyclerView
     private lateinit var soonTMLayoutManager: LinearLayoutManager
     private lateinit var soonTMAdapter: LandingAdapter
-    private lateinit var recentlyReleasedSeeAllButton: ImageView
+    private lateinit var recentlyReleasedSeeAllButton: FrameLayout
     private lateinit var recentlyReleasedContainer: View
-    private lateinit var popularSeeAllButton: ImageView
+    private lateinit var popularSeeAllButton: FrameLayout
     private lateinit var popularContainer: View
-    private lateinit var soonTMSeeAllButton: ImageView
+    private lateinit var soonTMSeeAllButton: FrameLayout
     private lateinit var soonTMContainer: View
     private lateinit var progressBar: ProgressBar
     private lateinit var contentContainer: ScrollView

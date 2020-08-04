@@ -7,21 +7,21 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.models.ui.BackdropPosterItem
+import greenberg.moviedbshell.models.ui.PosterItem
 import greenberg.moviedbshell.viewHolders.ImageGalleryViewHolder
 
 class ImageGalleryAdapter(
-    var backdrops: List<BackdropPosterItem> = listOf()
+    var posters: List<PosterItem> = listOf()
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ImageGalleryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.image_gallery_single_layout, parent, false))
     }
 
-    override fun getItemCount() = backdrops.size
+    override fun getItemCount() = posters.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val currentItem = backdrops[position]
+        val currentItem = posters[position]
         if (holder is ImageGalleryViewHolder) {
             resetView(holder)
             Glide.with(holder.imageView)

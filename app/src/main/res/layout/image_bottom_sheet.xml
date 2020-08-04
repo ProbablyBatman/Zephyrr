@@ -1,46 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
-        android:id="@+id/image_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/bottom_sheet_behavior">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/image_bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/bottom_sheet_behavior">
 
-    <ImageView
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bottom_scrim"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
             android:id="@+id/image_bottom_sheet_expand"
             android:layout_width="wrap_content"
-            android:layout_height="56dp"
+            android:layout_height="60dp"
             android:layout_gravity="end"
             android:padding="5dp"
             android:layout_margin="10dp"
             android:src="@drawable/ic_expand_menu" />
 
-    <TextView
+        <TextView
             android:id="@+id/image_bottom_sheet_copy"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="start"
             android:drawableStart="@drawable/ic_content_copy"
             android:drawablePadding="10dp"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
             android:text="@string/copy_image"
             android:textSize="@dimen/text_size_small"
             android:maxLines="1"
             android:ellipsize="end"
             android:gravity="center"/>
 
-    <TextView
+        <TextView
             android:id="@+id/image_bottom_sheet_download"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="start"
             android:drawableStart="@drawable/ic_file_download"
             android:drawablePadding="10dp"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
             android:text="@string/image_download"
             android:textSize="@dimen/text_size_small"
             android:maxLines="1"
             android:ellipsize="end"
             android:gravity="center"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

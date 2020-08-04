@@ -43,8 +43,17 @@
     <string name="runtime_substitution">%1$s minutes</string>
     <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>
     <string name="toggle_dark_mode_text">Toggle Dark Mode</string>
-    <string name="cast_tab">Cast</string>
+    <string name="cast_title">Cast</string>
     <string name="crew_tab">Crew</string>
+    <string name="production_title">Production</string>
+    <string name="director_title">Director</string>
+    <string name="production_companies_title">Production Companies</string>
+    <string name="filming_locations_title">Filming Locations</string>
+    <string name="budget_title">Budget</string>
+    <string name="budget_substitution">$%1$s</string>
+    <string name="performance_title">Performance</string>
+    <string name="revenue_title">Revenue</string>
+    <string name="poster_title">Posters</string>
 
     <!-- Search -->
     <string name="search">Search</string>
@@ -73,4 +82,9 @@
     <string name="popular_row">Popular</string>
     <string name="soon_tm_row">Soonᵗᵐ</string>
     <string name="see_all_button">See All</string>
+
+    <!-- Permission requests -->
+    <string name="permission_request_title">Permissions Required</string>
+    <string name="permission_request_description">We need that to allow you to download. Turn this on at
+    any time by visiting the settings.</string>
 </resources>

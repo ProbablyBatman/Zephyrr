@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.models.container
 
+import greenberg.moviedbshell.models.imagegallerymodels.ImageGalleryResponse
 import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 
@@ -13,5 +14,6 @@ import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
  */
 data class MovieDetailResponseContainer(
     val movieDetailResponse: MovieDetailResponse,
-    val creditsResponse: CreditsResponse
+    val creditsResponse: CreditsResponse,
+    val posterResponse: ImageGalleryResponse
 )

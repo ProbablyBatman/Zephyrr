@@ -54,30 +54,15 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/recently_released_recycler"/>
 
-                    <FrameLayout
-                        android:layout_width="75dp"
-                        android:layout_height="25dp"
+                    <include
+                        layout="@layout/see_all_button"
+                        android:id="@+id/recently_released_see_all_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/recently_released_recycler"
-                        android:layout_marginEnd="@dimen/margin_small">
-
-                        <ImageView
-                            android:id="@+id/recently_released_see_all_button"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/ic_see_all_button_blue"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/see_all_button"
-                            android:textSize="@dimen/text_size_small"
-                            android:textColor="#49A6EA"
-                            android:layout_gravity="center"/>
-
-                    </FrameLayout>
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recently_released_recycler"
@@ -116,30 +101,15 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/popular_movie_recycler"/>
 
-                    <FrameLayout
-                        android:layout_width="75dp"
-                        android:layout_height="25dp"
+                    <include
+                        layout="@layout/see_all_button"
+                        android:id="@+id/popular_see_all_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/popular_movie_recycler"
-                        android:layout_marginEnd="@dimen/margin_small">
-
-                        <ImageView
-                            android:id="@+id/popular_see_all_button"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/ic_see_all_button_blue"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/see_all_button"
-                            android:textSize="@dimen/text_size_small"
-                            android:textColor="#49A6EA"
-                            android:layout_gravity="center"/>
-
-                    </FrameLayout>
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/popular_movie_recycler"
@@ -178,30 +148,15 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/soon_tm_recycler"/>
 
-                    <FrameLayout
-                        android:layout_width="75dp"
-                        android:layout_height="25dp"
+                    <include
+                        layout="@layout/see_all_button"
+                        android:id="@+id/soon_tm_see_all_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/soon_tm_recycler"
-                        android:layout_marginEnd="@dimen/margin_small">
-
-                        <ImageView
-                            android:id="@+id/soon_tm_see_all_button"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/ic_see_all_button_blue"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/see_all_button"
-                            android:textSize="@dimen/text_size_small"
-                            android:textColor="#49A6EA"
-                            android:layout_gravity="center"/>
-
-                    </FrameLayout>
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/soon_tm_recycler"

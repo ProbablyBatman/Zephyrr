@@ -14,6 +14,10 @@ data class MovieDetailItem(
     val posterImageUrl: String,
     val backdropImageUrl: String,
     val overview: String,
+    val revenue: Long,
     val castMembers: List<CastMemberItem>,
-    val crewMembers: List<CrewMemberItem>
+    val crewMembers: List<CrewMemberItem>,
+    val productionCompanies: List<ProductionCompanyItem>,
+    val productionCountries: List<ProductionCountryItem>,
+    val posterUrls: List<PosterItem>
 )

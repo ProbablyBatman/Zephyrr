@@ -1,6 +1,6 @@
 package greenberg.moviedbshell.models.ui
 
-data class BackdropPosterItem(
+data class PosterItem(
     val aspectRatio: Double,
     val filePath: String,
     val voteAverage: Double,
