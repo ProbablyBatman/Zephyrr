@@ -10,3 +10,11 @@ data class CrewMemberItem(
     val posterUrl: String,
     val id: Int?
 ) : Parcelable
+
+@Parcelize
+data class CollapsedCrewMemberItem(
+    var job: String,
+    val name: String,
+    val posterUrl: String,
+    val id: Int?
+) : Parcelable

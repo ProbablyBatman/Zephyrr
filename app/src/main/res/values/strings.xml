@@ -44,7 +44,7 @@
     <string name="poster_url_substitution">https://image.tmdb.org/t/p/original%1$s</string>
     <string name="toggle_dark_mode_text">Toggle Dark Mode</string>
     <string name="cast_title">Cast</string>
-    <string name="crew_tab">Crew</string>
+    <string name="crew_title">Crew</string>
     <string name="production_title">Production</string>
     <string name="director_title">Director</string>
     <string name="production_companies_title">Production Companies</string>

@@ -215,20 +215,20 @@ class SearchResultsFragment : BaseFragment() {
         when (mediaType) {
             MediaType.MOVIE -> {
                 navigate(
-                        R.id.action_searchResultsFragment_to_movieDetailFragment,
-                        MovieDetailArgs(itemId)
+                    R.id.action_searchResultsFragment_to_movieDetailFragment,
+                    MovieDetailArgs(itemId)
                 )
             }
             MediaType.TV -> {
                 navigate(
-                        R.id.action_searchResultsFragment_to_tvDetailFragment,
-                        TvDetailArgs(itemId)
+                    R.id.action_searchResultsFragment_to_tvDetailFragment,
+                    TvDetailArgs(itemId)
                 )
             }
             MediaType.PERSON -> {
                 navigate(
-                        R.id.action_searchResultsFragment_to_tvDetailFragment,
-                        PersonDetailArgs(itemId)
+                    R.id.action_searchResultsFragment_to_personDetailFragment,
+                    PersonDetailArgs(itemId)
                 )
             }
             MediaType.UNKNOWN -> {

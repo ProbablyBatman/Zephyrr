@@ -39,12 +39,10 @@ import greenberg.moviedbshell.extensions.processRatingInfo
 import greenberg.moviedbshell.extensions.processRuntime
 import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.ui.CastMemberItem
+import greenberg.moviedbshell.models.ui.CrewMemberItem
 import greenberg.moviedbshell.models.ui.ProductionCompanyItem
 import greenberg.moviedbshell.models.ui.ProductionCountryItem
-import greenberg.moviedbshell.state.CastStateArgs
-import greenberg.moviedbshell.state.MovieDetailState
-import greenberg.moviedbshell.state.PersonDetailArgs
-import greenberg.moviedbshell.state.PosterImageGalleryArgs
+import greenberg.moviedbshell.state.*
 import greenberg.moviedbshell.view.ImageGalleryDialog.Companion.BACKDROP_KEY
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
 import timber.log.Timber
@@ -249,7 +247,7 @@ class MovieDetailFragment : BaseFragment() {
                     .show(parentFragmentManager, ImageGalleryDialog.TAG)
             }
             castSeeAllButton.setOnClickListener { castSeeAllOnClickListener(state.movieDetailItem.castMembers) }
-            productionSeeAllButton.setOnClickListener { }
+            productionSeeAllButton.setOnClickListener { productionSeeAllOnClickListener(state.movieDetailItem.crewMembers) }
             // TODO: potentially scrape other rating information
         }
     }
@@ -316,6 +314,13 @@ class MovieDetailFragment : BaseFragment() {
         navigate(
             R.id.action_movieDetailFragment_to_castFragment,
             CastStateArgs(castList)
+        )
+    }
+
+    private fun productionSeeAllOnClickListener(crewList: List<CrewMemberItem>) {
+        navigate(
+            R.id.action_movieDetailFragment_to_crewFragment,
+            CrewStateArgs(crewList)
         )
     }
 

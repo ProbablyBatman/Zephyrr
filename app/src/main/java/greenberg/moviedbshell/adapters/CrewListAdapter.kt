@@ -33,15 +33,15 @@ class CrewListAdapter(
             val validUrl = holder.crewImage.context.getString(R.string.poster_url_substitution, currentItem.posterUrl)
             if (validUrl.isNotEmpty()) {
                 Glide.with(holder.crewImage)
-                        .load(validUrl)
-                        .apply(
-                                RequestOptions()
-                                        .placeholder(ColorDrawable(Color.LTGRAY))
-                                        .fallback(ColorDrawable(Color.LTGRAY))
-                                        .centerCrop()
-                        )
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(holder.crewImage)
+                    .load(validUrl)
+                    .apply(
+                        RequestOptions()
+                            .placeholder(ColorDrawable(Color.LTGRAY))
+                            .fallback(ColorDrawable(Color.LTGRAY))
+                            .centerCrop()
+                    )
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(holder.crewImage)
             }
             holder.cardView.setOnClickListener { onClickListener.invoke(currentItem.id ?: -1) }
         }

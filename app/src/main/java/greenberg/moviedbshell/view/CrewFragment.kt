@@ -4,17 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.adapters.CrewListAdapter
 import greenberg.moviedbshell.base.BaseFragment
-import greenberg.moviedbshell.models.ui.CrewMemberItem
 import greenberg.moviedbshell.state.CrewState
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.viewmodel.CrewViewModel
@@ -35,19 +31,15 @@ class CrewFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         crewRecycler = view.findViewById(R.id.crew_members_recycler)
-        layoutManager = GridLayoutManager(activity, 3)
+        layoutManager = LinearLayoutManager(activity)
         crewRecycler.layoutManager = layoutManager
         crewAdapter = CrewListAdapter(onClickListener = this::onClickListener)
         crewRecycler.adapter = crewAdapter
     }
 
     private fun showDetails(state: CrewState) {
-        if (state.crewMembersJson.isNotEmpty()) {
-            val castList = Gson().fromJson<List<CrewMemberItem>>(
-                    state.crewMembersJson,
-                    object : TypeToken<List<CrewMemberItem>>() {}.type
-            )
-            crewAdapter.crewMemberList = castList
+        if (state.crewMembers.isNotEmpty()) {
+            crewAdapter.crewMemberList = state.crewMembers
             crewAdapter.notifyDataSetChanged()
         }
     }
@@ -60,8 +52,8 @@ class CrewFragment : BaseFragment() {
 
     private fun onClickListener(personId: Int) {
         navigate(
-                R.id.action_movieDetailFragment_to_personDetailFragment,
-                PersonDetailArgs(personId)
+            R.id.action_crewFragment_to_personDetailFragment,
+            PersonDetailArgs(personId)
         )
     }
 
