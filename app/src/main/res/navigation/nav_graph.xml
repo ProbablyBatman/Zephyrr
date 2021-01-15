@@ -99,8 +99,9 @@
     </fragment>
 
     <fragment
-            android:id="@+id/aboutFragment"
-            android:name="greenberg.moviedbshell.view.AboutFragment">
+        android:id="@+id/aboutFragment"
+        android:label="@string/about_menu_item"
+        android:name="greenberg.moviedbshell.view.AboutFragment">
     </fragment>
 
     <fragment

@@ -11,6 +11,7 @@ import android.widget.TextView
 import greenberg.moviedbshell.R
 import android.content.Intent
 import android.net.Uri
+import android.view.Menu
 import androidx.fragment.app.Fragment
 import greenberg.moviedbshell.BuildConfig
 import java.util.Calendar
@@ -25,11 +26,16 @@ class AboutFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(false)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.about_layout, container, false)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.aboutFragment).isVisible = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
