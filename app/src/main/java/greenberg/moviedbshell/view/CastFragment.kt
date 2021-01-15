@@ -47,9 +47,7 @@ class CastFragment : BaseFragment() {
     override fun invalidate() {
         withState(viewModel) { state ->
             log("Invalidating")
-            if (castAdapter.castMemberList.isEmpty()) {
-                showDetails(state)
-            }
+            showDetails(state)
         }
     }
 

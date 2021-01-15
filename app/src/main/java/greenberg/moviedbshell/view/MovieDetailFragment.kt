@@ -12,8 +12,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +40,11 @@ import greenberg.moviedbshell.models.ui.CastMemberItem
 import greenberg.moviedbshell.models.ui.CrewMemberItem
 import greenberg.moviedbshell.models.ui.ProductionCompanyItem
 import greenberg.moviedbshell.models.ui.ProductionCountryItem
-import greenberg.moviedbshell.state.*
+import greenberg.moviedbshell.state.CastStateArgs
+import greenberg.moviedbshell.state.MovieDetailState
+import greenberg.moviedbshell.state.PersonDetailArgs
+import greenberg.moviedbshell.state.PosterImageGalleryArgs
+import greenberg.moviedbshell.state.ProductionDetailStateArgs
 import greenberg.moviedbshell.view.ImageGalleryDialog.Companion.BACKDROP_KEY
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
 import timber.log.Timber
@@ -97,8 +99,6 @@ class MovieDetailFragment : BaseFragment() {
     private lateinit var posterRecycler: RecyclerView
     private lateinit var posterSeeAllButton: FrameLayout
     private lateinit var posterListAdapter: PosterListAdapter
-
-    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,8 +167,6 @@ class MovieDetailFragment : BaseFragment() {
             adapter = posterListAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
-
-        navController = findNavController()
     }
 
     private fun showLoading() {
@@ -246,8 +244,8 @@ class MovieDetailFragment : BaseFragment() {
                     }
                     .show(parentFragmentManager, ImageGalleryDialog.TAG)
             }
-            castSeeAllButton.setOnClickListener { castSeeAllOnClickListener(state.movieDetailItem.castMembers) }
-            productionSeeAllButton.setOnClickListener { productionSeeAllOnClickListener(state.movieDetailItem.crewMembers) }
+            castSeeAllButton.setOnClickListener { castSeeAllOnClickListener(movieDetailItem.castMembers) }
+            productionSeeAllButton.setOnClickListener { productionSeeAllOnClickListener(movieDetailItem.crewMembers) }
             // TODO: potentially scrape other rating information
         }
     }
@@ -318,10 +316,12 @@ class MovieDetailFragment : BaseFragment() {
     }
 
     private fun productionSeeAllOnClickListener(crewList: List<CrewMemberItem>) {
-        navigate(
-            R.id.action_movieDetailFragment_to_crewFragment,
-            CrewStateArgs(crewList)
-        )
+        withState(viewModel) { state ->
+            navigate(
+                R.id.action_movieDetailFragment_to_productionDetailFragment,
+                state.productionDetailItem?.let { ProductionDetailStateArgs(it) }
+            )
+        }
     }
 
     override fun log(message: String) {

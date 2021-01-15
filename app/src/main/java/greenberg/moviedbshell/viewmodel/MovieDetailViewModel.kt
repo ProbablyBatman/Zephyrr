@@ -8,6 +8,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.MovieDetailMapper
+import greenberg.moviedbshell.mappers.ProductionDetailMapper
 import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.container.MovieDetailResponseContainer
 import greenberg.moviedbshell.models.imagegallerymodels.ImageGalleryResponse
@@ -24,7 +25,8 @@ class MovieDetailViewModel
 @AssistedInject constructor(
     @Assisted var state: MovieDetailState,
     private val TMDBService: TMDBService,
-    private val mapper: MovieDetailMapper
+    private val mapper: MovieDetailMapper,
+    private val productionDetailMapper: ProductionDetailMapper
 ) : ZephyrrMvRxViewModel<MovieDetailState>(state) {
 
     @AssistedInject.Factory
@@ -55,6 +57,7 @@ class MovieDetailViewModel
                     copy(
                         movieId = state.movieId,
                         movieDetailItem = it(),
+                        productionDetailItem = productionDetailMapper.mapToEntity(it()),
                         movieDetailResponse = it
                     )
                 }

@@ -55,6 +55,14 @@
         <item name="android:textAlignment">textEnd</item>
     </style>
 
+    <style name="ProductionListItemStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin_small</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
     <style name="CardItemPeople">
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:minLines">2</item>
