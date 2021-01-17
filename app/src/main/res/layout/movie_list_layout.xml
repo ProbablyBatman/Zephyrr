@@ -34,15 +34,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/movie_list_paged_recycler"/>
 
-    <ImageView
-        android:id="@+id/movie_grid_list_toggle"
+    <ViewSwitcher
+        android:id="@+id/movie_grid_list_holder"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:src="@drawable/ic_view_list"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_small"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/movie_list_paged_recycler"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out">
+
+        <ImageView
+            android:id="@+id/movie_grid_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_view_grid"/>
+
+        <ImageView
+            android:id="@+id/movie_list_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_view_list"/>
+
+    </ViewSwitcher>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/movie_list_paged_recycler"

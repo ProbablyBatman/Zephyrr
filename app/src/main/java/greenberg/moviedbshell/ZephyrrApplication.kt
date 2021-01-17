@@ -11,9 +11,8 @@ import greenberg.moviedbshell.logging.NoLogTree
 import timber.log.Timber
 
 class ZephyrrApplication : Application() {
-
     lateinit var component: SingletonComponent
-    private var nightMode = false
+    private var nightMode = true
     private var gridListMode = "grid"
 
     override fun onCreate() {
@@ -29,7 +28,7 @@ class ZephyrrApplication : Application() {
                 .applicationModule(ApplicationModule(this))
                 .build()
 
-        nightMode = retrieveSharedPreferences().getBoolean(NIGHT_MODE, false)
+        nightMode = retrieveSharedPreferences().getBoolean(NIGHT_MODE, true)
         gridListMode = retrieveSharedPreferences().getString(GRID_LIST_TOGGLE, GRID_LIST_DEFAULT_VALUE).orEmpty()
         Timber.d("$nightMode Status")
         if (nightMode) {
@@ -42,7 +41,7 @@ class ZephyrrApplication : Application() {
         Timber.d("$nightMode Status update")
         retrieveSharedPreferences().edit().putBoolean(NIGHT_MODE, nightMode).apply()
         AppCompatDelegate.setDefaultNightMode(
-                if (nightMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            if (nightMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
         )
     }
 
