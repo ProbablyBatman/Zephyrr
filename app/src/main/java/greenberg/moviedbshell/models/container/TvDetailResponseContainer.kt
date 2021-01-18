@@ -1,7 +1,7 @@
 package greenberg.moviedbshell.models.container
 
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
+import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
 
 /*
  * Part of a class of objects that exist as a sort of "wrapper"
@@ -12,6 +12,6 @@ import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
  * and clean enough stopgap.
  */
 data class TvDetailResponseContainer(
-    val tvDetailResponse: TvDetailResponse,
+    val tvShowResponse: TvShowResponse,
     val creditsResponse: CreditsResponse
 )

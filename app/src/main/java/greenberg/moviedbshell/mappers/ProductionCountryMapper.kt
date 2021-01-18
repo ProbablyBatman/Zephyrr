@@ -1,6 +1,6 @@
 package greenberg.moviedbshell.mappers
 
-import greenberg.moviedbshell.models.moviedetailmodels.ProductionCountriesItem
+import greenberg.moviedbshell.models.sharedmodels.ProductionCountriesItem
 import greenberg.moviedbshell.models.ui.ProductionCountryItem
 import javax.inject.Inject
 

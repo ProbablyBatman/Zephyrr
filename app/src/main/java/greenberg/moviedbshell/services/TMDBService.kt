@@ -7,7 +7,7 @@ import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
 import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
+import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -30,7 +30,7 @@ interface TMDBService {
     fun querySearchMulti(@Query("query") query: String, @Query("page") page: Int): Single<SearchResponse>
 
     @GET("tv/{id}")
-    fun queryTvDetail(@Path("id") id: Int): Single<TvDetailResponse>
+    fun queryTvDetail(@Path("id") id: Int): Single<TvShowResponse>
 
     @GET("tv/{id}/credits")
     fun queryTvCredits(@Path("id") id: Int): Single<CreditsResponse>

@@ -3,9 +3,10 @@ package greenberg.moviedbshell.models.tvdetailmodels
 import com.google.gson.annotations.SerializedName
 import greenberg.moviedbshell.models.sharedmodels.GenresItem
 import greenberg.moviedbshell.models.sharedmodels.ProductionCompaniesItem
+import greenberg.moviedbshell.models.sharedmodels.ProductionCountriesItem
+import greenberg.moviedbshell.models.sharedmodels.SpokenLanguagesItem
 
-data class TvDetailResponse(
-
+data class TvShowResponse(
     @field:SerializedName("original_language")
     val originalLanguage: String? = null,
 
@@ -26,6 +27,9 @@ data class TvDetailResponse(
 
     @field:SerializedName("popularity")
     val popularity: Double? = null,
+
+    @field:SerializedName("production_countries")
+    val productionCountries: List<ProductionCountriesItem?>? = null,
 
     @field:SerializedName("id")
     val id: Int? = null,
@@ -52,13 +56,16 @@ data class TvDetailResponse(
     val createdBy: List<CreatedByItem?>? = null,
 
     @field:SerializedName("last_episode_to_air")
-    val airingEpisode: AiringEpisode? = null,
+    val lastEpisodeToAir: LastEpisodeToAir? = null,
 
     @field:SerializedName("poster_path")
     val posterPath: String? = null,
 
     @field:SerializedName("origin_country")
     val originCountry: List<String?>? = null,
+
+    @field:SerializedName("spoken_languages")
+    val spokenLanguages: List<SpokenLanguagesItem?>? = null,
 
     @field:SerializedName("production_companies")
     val productionCompanies: List<ProductionCompaniesItem?>? = null,
@@ -72,11 +79,14 @@ data class TvDetailResponse(
     @field:SerializedName("name")
     val name: String? = null,
 
+    @field:SerializedName("tagline")
+    val tagline: String? = null,
+
     @field:SerializedName("episode_run_time")
     val episodeRunTime: List<Int?>? = null,
 
     @field:SerializedName("next_episode_to_air")
-    val nextEpisodeToAir: AiringEpisode? = null,
+    val nextEpisodeToAir: Any? = null,
 
     @field:SerializedName("in_production")
     val inProduction: Boolean? = null,

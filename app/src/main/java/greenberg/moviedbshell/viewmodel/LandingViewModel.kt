@@ -42,27 +42,27 @@ class LandingViewModel
     fun fetchLandingResults() {
         withState { state ->
             Single.zip(
-                    TMDBService.queryRecentlyReleased(1),
-                    TMDBService.queryPopularMovies(1),
-                    TMDBService.querySoonTM(1),
-                    Function3<MovieListResponse, MovieListResponse, MovieListResponse, LandingItem> { recentlyReleasedResponse, popularMovieResponse, soonTMResponse ->
-                        mapper.mapToEntity(
-                            LandingContainer(
-                                recentlyReleasedResponse,
-                                popularMovieResponse,
-                                soonTMResponse
-                            )
+                TMDBService.queryRecentlyReleased(1),
+                TMDBService.queryPopularMovies(1),
+                TMDBService.querySoonTM(1),
+                Function3<MovieListResponse, MovieListResponse, MovieListResponse, LandingItem> { recentlyReleasedResponse, popularMovieResponse, soonTMResponse ->
+                    mapper.mapToEntity(
+                        LandingContainer(
+                            recentlyReleasedResponse,
+                            popularMovieResponse,
+                            soonTMResponse
                         )
-                    }
+                    )
+                }
             )
-                    .subscribeOn(Schedulers.io())
-                    .execute {
-                        // TODO: If this call fails, should be retry-able. Might wanna match with other fragments
-                        copy(
-                            landingItem = it
-                        )
-                    }
-                    .disposeOnClear()
+                .subscribeOn(Schedulers.io())
+                .execute {
+                    // TODO: If this call fails, should be retry-able. Might wanna match with other fragments
+                    copy(
+                        landingItem = it
+                    )
+                }
+                .disposeOnClear()
         }
     }
 

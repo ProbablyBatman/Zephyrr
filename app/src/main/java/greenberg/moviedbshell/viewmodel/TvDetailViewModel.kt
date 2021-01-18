@@ -8,7 +8,7 @@ import com.squareup.inject.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.TvDetailMapper
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
+import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
 import greenberg.moviedbshell.models.container.TvDetailResponseContainer
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.services.TMDBService
@@ -40,7 +40,7 @@ class TvDetailViewModel
             Single.zip(
                     TMDBService.queryTvDetail(state.tvId).subscribeOn(Schedulers.io()),
                     TMDBService.queryTvCredits(state.tvId).subscribeOn(Schedulers.io()),
-                    BiFunction<TvDetailResponse, CreditsResponse, TvDetailItem> { tvDetail, tvCredits ->
+                    BiFunction<TvShowResponse, CreditsResponse, TvDetailItem> { tvDetail, tvCredits ->
                         mapper.mapToEntity(TvDetailResponseContainer(tvDetail, tvCredits))
                     }
             )

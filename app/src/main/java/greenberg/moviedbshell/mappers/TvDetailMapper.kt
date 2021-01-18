@@ -7,7 +7,7 @@ import javax.inject.Inject
 class TvDetailMapper
 @Inject constructor(private val castMemberMapper: CastMemberMapper) : Mapper<TvDetailResponseContainer, TvDetailItem> {
     override fun mapToEntity(item: TvDetailResponseContainer?): TvDetailItem {
-        val tvDetail = item?.tvDetailResponse
+        val tvDetail = item?.tvShowResponse
         val creditsDetail = item?.creditsResponse
         return TvDetailItem(
                 title = tvDetail?.name.orEmpty(),
