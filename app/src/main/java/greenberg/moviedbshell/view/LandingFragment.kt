@@ -187,6 +187,7 @@ class LandingFragment : BaseFragment() {
                 // TODO: bug here. Technically because I can't measure the title height in time to do this,
                 // the entire row shifts a little bit after the images load in. For now, this will suffice.
                 setContainerParamsLoading(recentlyReleasedContainer)
+                recentlyReleasedErrorContainer.visibility = View.GONE
                 recentlyReleasedLoadingBar.visibility = View.VISIBLE
                 recentlyReleasedRecycler.visibility = View.GONE
             }
@@ -217,6 +218,7 @@ class LandingFragment : BaseFragment() {
                 // load row
                 log("popular movie load")
                 setContainerParamsLoading(popularMovieContainer)
+                popularMovieErrorContainer.visibility = View.GONE
                 popularMovieLoadingBar.visibility = View.VISIBLE
                 popularMovieRecycler.visibility = View.GONE
             }
@@ -247,6 +249,7 @@ class LandingFragment : BaseFragment() {
                 // load row
                 log("soontm load")
                 setContainerParamsLoading(soonTMContainer)
+                soonTMErrorContainer.visibility = View.GONE
                 soonTMLoadingBar.visibility = View.VISIBLE
                 soonTMRecycler.visibility = View.GONE
             }
@@ -277,6 +280,7 @@ class LandingFragment : BaseFragment() {
                 // load row
                 log("popular tv load")
                 setContainerParamsLoading(popularTvContainer)
+                popularTvErrorContainer.visibility = View.GONE
                 popularTvLoadingBar.visibility = View.VISIBLE
                 popularTvRecycler.visibility = View.GONE
             }
@@ -306,6 +310,7 @@ class LandingFragment : BaseFragment() {
             is Incomplete -> {
                 // load row
                 setContainerParamsLoading(topRatedTvContainer)
+                topRatedTvErrorContainer.visibility = View.GONE
                 topRatedLoadingBar.visibility = View.VISIBLE
                 topRatedTvRecycler.visibility = View.GONE
             }
