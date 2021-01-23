@@ -37,7 +37,7 @@ class RecentlyReleasedViewModel
                 .queryRecentlyReleased(state.pageNumber)
                 .subscribeOn(Schedulers.io())
                 .execute {
-                    val totalPages = it.invoke()?.totalPages
+                    val totalPages = it()?.totalPages
                     when {
                         totalPages != null && state.pageNumber > totalPages -> {
                             copy(

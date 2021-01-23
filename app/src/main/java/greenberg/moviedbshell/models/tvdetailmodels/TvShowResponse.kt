@@ -86,7 +86,7 @@ data class TvShowResponse(
     val episodeRunTime: List<Int?>? = null,
 
     @field:SerializedName("next_episode_to_air")
-    val nextEpisodeToAir: Any? = null,
+    val nextEpisodeToAir: AiringEpisode? = null,
 
     @field:SerializedName("in_production")
     val inProduction: Boolean? = null,

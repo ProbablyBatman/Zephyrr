@@ -10,10 +10,11 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.ui.MovieItem
+import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.viewHolders.LandingViewHolder
 
 class LandingAdapter(
-    var items: List<MovieItem> = emptyList(),
+    var items: List<PreviewItem> = emptyList(),
     val posterClickListener: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_landingFragment_to_soonTMFragment"
             app:destination="@id/soonTMFragment"/>
+        <action
+            android:id="@+id/action_landingFragment_to_tvDetailFragment"
+            app:destination="@id/tvDetailFragment"/>
     </fragment>
 
     <fragment

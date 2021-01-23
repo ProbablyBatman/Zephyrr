@@ -21,6 +21,7 @@
 
     <string name="generic_loading_text">Loading more results…</string>
     <string name="generic_error_text">An error has occurred.</string>
+    <string name="landing_row_error_retry">Tap to retry.</string>
     <string name="dismiss">DISMISS</string>
     <string name="retry">RETRY</string>
     <string name="about_menu_item">About</string>
@@ -81,6 +82,8 @@
     <string name="recently_released_row">Recently Released</string>
     <string name="popular_row">Popular</string>
     <string name="soon_tm_row">Soonᵗᵐ</string>
+    <string name="popular_tv_row">Popular TV</string>
+    <string name="top_rated_tv_row">Top Rated</string>
     <string name="see_all_button">See All</string>
 
     <!-- Permission requests -->

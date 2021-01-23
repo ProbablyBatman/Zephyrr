@@ -33,7 +33,7 @@ class PopularMoviesViewModel
 
     override fun fetchMovies() {
         withState { state ->
-            val totalPages = state.movieListResponse.invoke()?.totalPages
+            val totalPages = state.movieListResponse()?.totalPages
             if (totalPages != null && state.pageNumber >= totalPages) {
                 state.copy(shouldShowMaxPages = true)
                 return@withState
@@ -51,7 +51,7 @@ class PopularMoviesViewModel
                             )
                         }
                         is Success -> {
-                            val pages = it.invoke()?.totalPages
+                            val pages = it()?.totalPages
                             copy(
                                 pageNumber = state.pageNumber + 1,
                                 movieListResponse = it,

@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.models.container
 
 import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
+import greenberg.moviedbshell.models.tvlistmodels.TvListResponse
 
 /*
  * Part of a class of objects that exist as a sort of "wrapper"
@@ -13,5 +14,7 @@ import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 data class LandingContainer(
     val recentlyReleasedResponse: MovieListResponse,
     val popularMovieResponse: MovieListResponse,
-    val soonTMResponse: MovieListResponse
+    val soonTMResponse: MovieListResponse,
+    val popularTvResponse: TvListResponse,
+    val topRatedTvResponse: TvListResponse
 )

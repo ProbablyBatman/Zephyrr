@@ -6,24 +6,21 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
+import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
+import greenberg.moviedbshell.models.tvlistmodels.TvListResponse
 import greenberg.moviedbshell.models.ui.LandingItem
+import greenberg.moviedbshell.models.ui.MovieItem
+import greenberg.moviedbshell.models.ui.TvItem
 
 data class LandingState(
-    val landingItem: Async<LandingItem> = Uninitialized
+    val recentlyReleasedResponse: Async<MovieListResponse> = Uninitialized,
+    val popularMovieResponse: Async<MovieListResponse> = Uninitialized,
+    val soonTMResponse: Async<MovieListResponse> = Uninitialized,
+    val popularTvResponse: Async<TvListResponse> = Uninitialized,
+    val topRatedTvResponse: Async<TvListResponse> = Uninitialized,
+    val recentlyReleasedItems: List<MovieItem> = emptyList(),
+    val popularMovieItems: List<MovieItem> = emptyList(),
+    val soonTMItems: List<MovieItem> = emptyList(),
+    val popularTvItems: List<TvItem> = emptyList(),
+    val topRatedTvItems: List<TvItem> = emptyList()
 ) : MvRxState
-
-// These two functions are part of inherently concating all the responses here.
-// Should probably look into some other method of this
-fun LandingState.shouldShowLoading(): Boolean =
-    when (this.landingItem) {
-        Uninitialized -> true
-        is Loading -> true
-        is Success -> false
-        else -> false
-    }
-
-fun LandingState.shouldShowError(): Boolean =
-    when (this.landingItem) {
-        is Fail -> true
-        else -> false
-    }

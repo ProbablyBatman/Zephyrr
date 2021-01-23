@@ -8,6 +8,7 @@ import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
+import greenberg.moviedbshell.models.tvlistmodels.TvListResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -56,4 +57,18 @@ interface TMDBService {
         @Query("language") language: String = "en-US",
         @Query("region") region: String = "US"
     ): Single<MovieListResponse>
+
+    @GET("tv/popular")
+    fun queryPopularTv(
+        @Query("page") page: Int,
+        @Query("language") language: String = "en-US",
+        @Query("region") region: String = "US"
+    ): Single<TvListResponse>
+
+    @GET("tv/top_rated")
+    fun queryTopRatedTv(
+        @Query("page") page: Int,
+        @Query("language") language: String = "en-US",
+        @Query("region") region: String = "US"
+    ): Single<TvListResponse>
 }
