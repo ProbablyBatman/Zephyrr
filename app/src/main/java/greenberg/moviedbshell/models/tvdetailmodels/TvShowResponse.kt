@@ -56,7 +56,7 @@ data class TvShowResponse(
     val createdBy: List<CreatedByItem?>? = null,
 
     @field:SerializedName("last_episode_to_air")
-    val lastEpisodeToAir: LastEpisodeToAir? = null,
+    val lastEpisodeToAir: LastEpisodeToAirItem? = null,
 
     @field:SerializedName("poster_path")
     val posterPath: String? = null,

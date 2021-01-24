@@ -55,6 +55,7 @@
     <string name="performance_title">Performance</string>
     <string name="revenue_title">Revenue</string>
     <string name="poster_title">Posters</string>
+    <string name="overview_title">Overview</string>
 
     <!-- Search -->
     <string name="search">Search</string>

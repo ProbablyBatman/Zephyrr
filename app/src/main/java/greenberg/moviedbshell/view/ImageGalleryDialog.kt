@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -34,7 +35,6 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.button.MaterialButton
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.ImageGalleryAdapter
@@ -62,7 +62,7 @@ class ImageGalleryDialog : BaseDialogFragment() {
     private var bottomSheetDownload: TextView? = null
     private var coordinatorLayout: CoordinatorLayout? = null
     private lateinit var errorTextView: TextView
-    private lateinit var errorRetryButton: MaterialButton
+    private lateinit var errorRetryButton: Button
     private lateinit var bottomSheet: FrameLayout
     private lateinit var constraintLayout: ConstraintLayout
     private lateinit var bottomSheetContainer: LinearLayout

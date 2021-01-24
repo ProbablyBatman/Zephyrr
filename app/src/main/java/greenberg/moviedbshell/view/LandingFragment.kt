@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -49,23 +49,23 @@ class LandingFragment : BaseFragment() {
     private lateinit var topRatedTvRecycler: RecyclerView
     private lateinit var topRatedTvLayoutManager: LinearLayoutManager
     private lateinit var topRatedAdapter: LandingAdapter
-    private lateinit var recentlyReleasedSeeAllButton: FrameLayout
+    private lateinit var recentlyReleasedSeeAllButton: Button
     private lateinit var recentlyReleasedContainer: View
     private lateinit var recentlyReleasedErrorContainer: ConstraintLayout
     private lateinit var recentlyReleasedLoadingBar: ProgressBar
-    private lateinit var popularMovieSeeAllButton: FrameLayout
+    private lateinit var popularMovieSeeAllButton: Button
     private lateinit var popularMovieContainer: View
     private lateinit var popularMovieErrorContainer: ConstraintLayout
     private lateinit var popularMovieLoadingBar: ProgressBar
-    private lateinit var soonTMSeeAllButton: FrameLayout
+    private lateinit var soonTMSeeAllButton: Button
     private lateinit var soonTMContainer: View
     private lateinit var soonTMErrorContainer: ConstraintLayout
     private lateinit var soonTMLoadingBar: ProgressBar
-    private lateinit var popularTvSeeAllButton: FrameLayout
+    private lateinit var popularTvSeeAllButton: Button
     private lateinit var popularTvContainer: View
     private lateinit var popularTvLoadingBar: ProgressBar
     private lateinit var popularTvErrorContainer: ConstraintLayout
-    private lateinit var topRatedTvSeeAllButton: FrameLayout
+    private lateinit var topRatedTvSeeAllButton: Button
     private lateinit var topRatedTvContainer: View
     private lateinit var topRatedTvErrorContainer: ConstraintLayout
     private lateinit var topRatedLoadingBar: ProgressBar
@@ -309,6 +309,7 @@ class LandingFragment : BaseFragment() {
         when (response) {
             is Incomplete -> {
                 // load row
+                log("top rated load")
                 setContainerParamsLoading(topRatedTvContainer)
                 topRatedTvErrorContainer.visibility = View.GONE
                 topRatedLoadingBar.visibility = View.VISIBLE
@@ -316,6 +317,7 @@ class LandingFragment : BaseFragment() {
             }
             is Success -> {
                 // show row
+                log("top rated success")
                 setContainerParamsNormal(topRatedTvContainer)
                 topRatedAdapter.items = tvList
                 topRatedAdapter.notifyDataSetChanged()

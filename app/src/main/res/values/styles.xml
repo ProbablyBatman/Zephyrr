@@ -1,31 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
-    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:titleTextStyle">@style/AppTheme.ActionBarStyle.TitleTextStyle</item>
-    </style>-->
-
-    <!--<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
-        <!--<item name="android:titleTextStyle">@style/AppTheme.ActionBarStyle.TitleTextStyle</item>-->
-    <!--</style>-->
-
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar.Bridge">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="actionBarPopupTheme">@style/PopUpMenu</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="AppTheme.ActionBarStyle.TitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Dialog">

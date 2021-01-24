@@ -2,7 +2,7 @@ package greenberg.moviedbshell.models.tvdetailmodels
 
 import com.google.gson.annotations.SerializedName
 
-data class LastEpisodeToAir(
+data class LastEpisodeToAirItem(
 
     @field:SerializedName("production_code")
     val productionCode: String? = null,

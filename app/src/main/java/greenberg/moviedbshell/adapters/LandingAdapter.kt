@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.viewHolders.LandingViewHolder
 

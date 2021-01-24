@@ -47,6 +47,8 @@
                         android:id="@+id/recently_released_row_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_small"
+                        android:paddingBottom="@dimen/margin_small"
                         android:text="@string/recently_released_row"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
@@ -54,15 +56,17 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/recently_released_recycler"/>
 
-                    <include
-                        layout="@layout/see_all_button"
+                    <Button
                         android:id="@+id/recently_released_see_all_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_small"
+                        android:text="@string/see_all_button"
+                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@android:color/white"
+                        android:gravity="center"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/recently_released_recycler"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/recently_released_recycler"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recently_released_recycler"
@@ -114,6 +118,8 @@
                         android:id="@+id/popular_movie_row_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_small"
+                        android:paddingBottom="@dimen/margin_small"
                         android:text="@string/popular_row"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
@@ -121,12 +127,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/popular_movie_recycler"/>
 
-                    <include
-                        layout="@layout/see_all_button"
+                    <Button
                         android:id="@+id/popular_see_all_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@android:color/white"
+                        android:text="@string/see_all_button"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/popular_movie_recycler"
                         app:layout_constraintEnd_toEndOf="parent"/>
@@ -182,6 +190,8 @@
                         android:id="@+id/soon_tm_row_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_small"
+                        android:paddingBottom="@dimen/margin_small"
                         android:text="@string/soon_tm_row"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
@@ -189,12 +199,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/soon_tm_recycler"/>
 
-                    <include
-                        layout="@layout/see_all_button"
+                    <Button
                         android:id="@+id/soon_tm_see_all_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@android:color/white"
+                        android:text="@string/see_all_button"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/soon_tm_recycler"
                         app:layout_constraintEnd_toEndOf="parent"/>
@@ -251,6 +263,8 @@
                         android:id="@+id/popular_tv_row_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_small"
+                        android:paddingBottom="@dimen/margin_small"
                         android:text="@string/popular_tv_row"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
@@ -258,12 +272,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/popular_tv_recycler"/>
 
-                    <include
-                        layout="@layout/see_all_button"
+                    <Button
                         android:id="@+id/popular_tv_see_all_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@android:color/white"
+                        android:text="@string/see_all_button"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/popular_tv_recycler"
                         app:layout_constraintEnd_toEndOf="parent"/>
@@ -319,6 +335,8 @@
                         android:id="@+id/top_rated_tv_row_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_small"
+                        android:paddingBottom="@dimen/margin_small"
                         android:text="@string/top_rated_tv_row"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
@@ -326,12 +344,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/top_rated_tv_recycler"/>
 
-                    <include
-                        layout="@layout/see_all_button"
+                    <Button
                         android:id="@+id/top_rated_tv_see_all_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_size_small"
+                        android:textColor="@android:color/white"
+                        android:text="@string/see_all_button"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/top_rated_tv_recycler"
                         app:layout_constraintEnd_toEndOf="parent"/>

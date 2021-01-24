@@ -6,7 +6,6 @@ import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
-import greenberg.moviedbshell.mappers.LandingMapper
 import greenberg.moviedbshell.mappers.MovieListMapper
 import greenberg.moviedbshell.mappers.TvListMapper
 

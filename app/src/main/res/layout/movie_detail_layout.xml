@@ -32,33 +32,44 @@
             android:layout_height="match_parent"
             android:paddingBottom="@dimen/margin_medium">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/movie_detail_error_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintGuide_percent="0.5"
+                tools:visibility="visible"/>
+
             <TextView
                 android:id="@+id/movie_detail_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:textSize="@dimen/text_size_medium"
                 android:text="@string/generic_error_text"
                 android:visibility="gone"
+                android:paddingBottom="@dimen/margin_small"
                 app:layout_constraintBottom_toTopOf="@id/movie_detail_retry_button"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@id/movie_detail_error_guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:visibility="visible"/>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/movie_detail_retry_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@color/colorAccent"
                 android:textSize="@dimen/text_size_small"
-                android:textColor="#fff"
+                android:textColor="@android:color/white"
                 android:text="@string/retry"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/movie_detail_error"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:visibility="visible"/>
 
             <FrameLayout
                 android:id="@+id/movie_detail_background_image_container"
@@ -93,34 +104,50 @@
                     android:src="@drawable/ic_image_gallery" />
             </FrameLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movie_detail_genre_recycler"
-                android:layout_width="0dp"
+            <HorizontalScrollView
+                android:id="@+id/chip_scroller"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginTop="@dimen/margin_small"
+                android:paddingEnd="@dimen/margin_small"
+                android:paddingStart="@dimen/margin_small"
                 app:layout_constraintTop_toBottomOf="@id/movie_detail_background_image_container"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:clipToPadding="false">
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/movie_genre_chips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleLine="true" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/overview_row_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/overview_title"
+                android:textSize="@dimen/text_size_large"
                 android:layout_margin="@dimen/margin_small"
-                tools:orientation="horizontal"
-                tools:layoutManager="LinearLayoutManager"/>
+                app:layout_constraintTop_toBottomOf="@id/chip_scroller"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
                 android:id="@+id/movie_detail_overview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:lineSpacingMultiplier="1.25"
-                android:layout_marginTop="@dimen/margin_small"
                 android:padding="@dimen/margin_medium"
                 android:textSize="@dimen/text_size_small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/movie_detail_genre_recycler"/>
+                app:layout_constraintTop_toBottomOf="@id/overview_row_title"/>
 
             <include layout="@layout/cast_recycler_container"
                 android:id="@+id/cast_recycler_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/movie_detail_overview"/>
@@ -135,12 +162,15 @@
                 app:layout_constraintTop_toBottomOf="@id/cast_recycler_container"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <include
-                layout="@layout/see_all_button"
+            <Button
                 android:id="@+id/production_see_all_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginEnd="@dimen/margin_small"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@android:color/white"
+                android:text="@string/see_all_button"
                 app:layout_constraintTop_toTopOf="@id/production_row_title"
                 app:layout_constraintBottom_toTopOf="@id/detail_director_title"
                 app:layout_constraintEnd_toEndOf="parent"/>

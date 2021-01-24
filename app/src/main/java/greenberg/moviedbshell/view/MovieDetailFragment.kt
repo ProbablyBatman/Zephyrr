@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Guideline
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,11 +27,11 @@ import com.airbnb.mvrx.withState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.CastListAdapter
-import greenberg.moviedbshell.adapters.GenreListAdapter
 import greenberg.moviedbshell.adapters.PosterListAdapter
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.extensions.processAsReleaseDate
@@ -60,16 +62,16 @@ class MovieDetailFragment : BaseFragment() {
     private val viewModel: MovieDetailViewModel by fragmentViewModel()
 
     private lateinit var progressBar: ProgressBar
-    private lateinit var posterImageView: ImageView
+    private lateinit var posterGalleryContainer: ConstraintLayout
     private lateinit var backdropImageView: ImageView
     private lateinit var backdropImageContainer: FrameLayout
     private lateinit var titleBar: TextView
     private lateinit var scrollView: NestedScrollView
     private lateinit var castContainer: ConstraintLayout
     private lateinit var castRecyclerView: RecyclerView
-    private lateinit var castSeeAllButton: FrameLayout
+    private lateinit var castSeeAllButton: Button
     private lateinit var productionRowTitle: TextView
-    private lateinit var productionSeeAllButton: FrameLayout
+    private lateinit var productionSeeAllButton: Button
     private lateinit var directorTitle: TextView
     private lateinit var directorTextView: TextView
     private lateinit var productionCompaniesTitle: TextView
@@ -91,13 +93,13 @@ class MovieDetailFragment : BaseFragment() {
     private lateinit var revenueTextView: TextView
     private lateinit var overviewTextView: TextView
     private lateinit var errorTextView: TextView
-    private lateinit var errorRetryButton: MaterialButton
+    private lateinit var errorRetryButton: Button
+    private lateinit var errorGuideline: Guideline
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var castListAdapter: CastListAdapter
-    private lateinit var genreRecycler: RecyclerView
-    private lateinit var genreListAdapter: GenreListAdapter
+    private lateinit var genreChipGroup: ChipGroup
     private lateinit var posterRecycler: RecyclerView
-    private lateinit var posterSeeAllButton: FrameLayout
+    private lateinit var posterSeeAllButton: Button
     private lateinit var posterListAdapter: PosterListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,6 +119,7 @@ class MovieDetailFragment : BaseFragment() {
         // some of these movies lack any of this data, I want to selectively remove views from visibility
         progressBar = view.findViewById(R.id.movie_detail_progress_bar)
         backdropImageContainer = view.findViewById(R.id.movie_detail_background_image_container)
+        posterGalleryContainer = view.findViewById(R.id.poster_gallery_container)
         titleBar = view.findViewById(R.id.movie_detail_title)
         backdropImageView = view.findViewById(R.id.movie_detail_background_image)
         scrollView = view.findViewById(R.id.movie_detail_scroll)
@@ -144,19 +147,15 @@ class MovieDetailFragment : BaseFragment() {
         runtimeTitle = view.findViewById(R.id.detail_runtime_title)
         errorTextView = view.findViewById(R.id.movie_detail_error)
         errorRetryButton = view.findViewById(R.id.movie_detail_retry_button)
+        errorGuideline = view.findViewById(R.id.movie_detail_error_guideline)
         performanceTitle = view.findViewById(R.id.performance_row_title)
         revenueTitle = view.findViewById(R.id.detail_revenue_title)
         revenueTextView = view.findViewById(R.id.detail_revenue)
-        genreRecycler = view.findViewById(R.id.movie_detail_genre_recycler)
+        genreChipGroup = view.findViewById(R.id.movie_genre_chips)
         posterRecycler = view.findViewById(R.id.poster_recycler)
         posterSeeAllButton = view.findViewById(R.id.poster_see_all_button)
 
         linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        genreListAdapter = GenreListAdapter()
-        genreRecycler.apply {
-            adapter = genreListAdapter
-            layoutManager = linearLayoutManager
-        }
         castListAdapter = CastListAdapter(onClickListener = this::highlightedCastOnClickListener, isBubble = true)
         castRecyclerView.apply {
             adapter = castListAdapter
@@ -180,6 +179,8 @@ class MovieDetailFragment : BaseFragment() {
         Timber.d("Showing Error")
         Timber.e(throwable)
         hideLoadingBar()
+        hideContent()
+        showAllViews()
         showErrorState()
         errorRetryButton.setOnClickListener {
             viewModel.fetchMovieDetail()
@@ -210,7 +211,16 @@ class MovieDetailFragment : BaseFragment() {
             }
 
             castListAdapter.castMemberList = movieDetailItem.castMembers.take(CAST_PREVIEW_VALUE)
-            genreListAdapter.genreList = movieDetailItem.genres
+            // TODO: one day, clicking a genre will lead to a genre filtered screen
+            if (genreChipGroup.childCount == 0) {
+                movieDetailItem.genres.forEach {
+                    val chip = Chip(requireContext())
+                        .apply {
+                            text = it
+                        }
+                    genreChipGroup.addView(chip)
+                }
+            }
 
             titleBar.text = movieDetailItem.movieTitle
             // TODO: investigate just hiding this view if it's null
@@ -269,13 +279,75 @@ class MovieDetailFragment : BaseFragment() {
     }
 
     private fun hideErrorState() {
+        errorGuideline.visibility = View.GONE
         errorTextView.visibility = View.GONE
         errorRetryButton.visibility = View.GONE
     }
 
     private fun showErrorState() {
+        errorGuideline.visibility = View.VISIBLE
         errorTextView.visibility = View.VISIBLE
         errorRetryButton.visibility = View.VISIBLE
+    }
+
+    private fun hideContent() {
+        backdropImageContainer.visibility = View.GONE
+//        genreRecycler.visibility = View.GONE
+        genreChipGroup.visibility = View.GONE
+        overviewTextView.visibility = View.GONE
+        castContainer.visibility = View.GONE
+        productionRowTitle.visibility = View.GONE
+        productionSeeAllButton.visibility = View.GONE
+        directorTitle.visibility = View.GONE
+        directorTextView.visibility = View.GONE
+        productionCompaniesTitle.visibility = View.GONE
+        productionCompaniesTextView.visibility = View.GONE
+        filmingLocationsTitle.visibility = View.GONE
+        filmingLocationsTextView.visibility = View.GONE
+        releaseDateTitle.visibility = View.GONE
+        releaseDateTextView.visibility = View.GONE
+        runtimeTitle.visibility = View.GONE
+        runtimeTextView.visibility = View.GONE
+        statusTitle.visibility = View.GONE
+        statusTextView.visibility = View.GONE
+        budgetTitle.visibility = View.GONE
+        budgetTextView.visibility = View.GONE
+        performanceTitle.visibility = View.GONE
+        revenueTitle.visibility = View.GONE
+        revenueTextView.visibility = View.GONE
+        ratingTitle.visibility = View.GONE
+        ratingTextView.visibility = View.GONE
+        posterGalleryContainer.visibility = View.GONE
+    }
+
+    private fun showContent() {
+        backdropImageContainer.visibility = View.VISIBLE
+//        genreRecycler.visibility = View.VISIBLE
+        genreChipGroup.visibility = View.VISIBLE
+        overviewTextView.visibility = View.VISIBLE
+        castContainer.visibility = View.VISIBLE
+        productionRowTitle.visibility = View.VISIBLE
+        productionSeeAllButton.visibility = View.VISIBLE
+        directorTitle.visibility = View.VISIBLE
+        directorTextView.visibility = View.VISIBLE
+        productionCompaniesTitle.visibility = View.VISIBLE
+        productionCompaniesTextView.visibility = View.VISIBLE
+        filmingLocationsTitle.visibility = View.VISIBLE
+        filmingLocationsTextView.visibility = View.VISIBLE
+        releaseDateTitle.visibility = View.VISIBLE
+        releaseDateTextView.visibility = View.VISIBLE
+        runtimeTitle.visibility = View.VISIBLE
+        runtimeTextView.visibility = View.VISIBLE
+        statusTitle.visibility = View.VISIBLE
+        statusTextView.visibility = View.VISIBLE
+        budgetTitle.visibility = View.VISIBLE
+        budgetTextView.visibility = View.VISIBLE
+        performanceTitle.visibility = View.VISIBLE
+        revenueTitle.visibility = View.VISIBLE
+        revenueTextView.visibility = View.VISIBLE
+        ratingTitle.visibility = View.VISIBLE
+        ratingTextView.visibility = View.VISIBLE
+        posterGalleryContainer.visibility = View.VISIBLE
     }
 
     override fun invalidate() {
@@ -291,6 +363,7 @@ class MovieDetailFragment : BaseFragment() {
                     showMovieDetails(state)
                     hideLoadingBar()
                     showAllViews()
+                    showContent()
                 }
                 is Fail -> {
                     hideAllViews()

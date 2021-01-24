@@ -3,13 +3,13 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import com.google.android.material.button.MaterialButton
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -76,7 +76,7 @@ class TvDetailFragment : BaseFragment() {
     private var overviewText: TextView? = null
     private var castRecyclerView: RecyclerView? = null
     private var errorTextView: TextView? = null
-    private var errorRetryButton: MaterialButton? = null
+    private var errorRetryButton: Button? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var castListAdapter: CastListAdapter
 
