@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/movie_grid_card"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/aggregate_cast_item_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -13,37 +13,39 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/movie_list_card_poster"
+            android:id="@+id/cast_list_item_image"
             android:layout_width="@dimen/grid_poster_width"
             android:layout_height="@dimen/grid_poster_height"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/movie_list_card_title"
+            android:id="@+id/cast_list_item_actor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="@dimen/margin_tiny"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/movie_list_card_poster"
+            app:layout_constraintStart_toEndOf="@id/cast_list_item_image"
             app:layout_constraintEnd_toEndOf="parent"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
-            android:maxLines="2"
+            android:maxLines="1"
             android:ellipsize="end"/>
 
+        <!-- Making an assumption no one will ever have more than 6 roles -->
         <TextView
-            android:id="@+id/movie_list_card_overview"
+            android:id="@+id/cast_list_item_role"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            app:layout_constraintStart_toEndOf="@id/movie_list_card_poster"
+            app:layout_constraintStart_toEndOf="@id/cast_list_item_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/movie_list_card_title"
-            app:layout_constraintBottom_toBottomOf="@id/movie_list_card_poster"
-            android:maxLines="4"
+            app:layout_constraintTop_toBottomOf="@id/cast_list_item_actor"
+            app:layout_constraintBottom_toBottomOf="@id/cast_list_item_image"
+            android:maxLines="6"
             android:ellipsize="end"
-            android:textSize="@dimen/text_size_small"/>
+            android:textSize="@dimen/text_size_small"
+            tools:text="1\n2\n3\n4\n5\n\6\n7\n8"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

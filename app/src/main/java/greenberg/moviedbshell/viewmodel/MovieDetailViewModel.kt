@@ -8,25 +8,18 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.MovieDetailMapper
-import greenberg.moviedbshell.mappers.ProductionDetailMapper
-import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
 import greenberg.moviedbshell.models.container.MovieDetailResponseContainer
-import greenberg.moviedbshell.models.imagegallerymodels.ImageGalleryResponse
-import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
-import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.view.MovieDetailFragment
 import io.reactivex.Single
-import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 
 class MovieDetailViewModel
 @AssistedInject constructor(
     @Assisted var state: MovieDetailState,
     private val TMDBService: TMDBService,
-    private val mapper: MovieDetailMapper,
-    private val productionDetailMapper: ProductionDetailMapper
+    private val mapper: MovieDetailMapper
 ) : ZephyrrMvRxViewModel<MovieDetailState>(state) {
 
     @AssistedInject.Factory
@@ -47,7 +40,7 @@ class MovieDetailViewModel
                 TMDBService.queryMovieDetail(state.movieId),
                 TMDBService.queryMovieCredits(state.movieId),
                 TMDBService.queryMovieImages(state.movieId),
-                Function3<MovieDetailResponse, CreditsResponse, ImageGalleryResponse, MovieDetailItem> { movieDetail, movieCredits, imageGallery ->
+                { movieDetail, movieCredits, imageGallery ->
                     mapper.mapToEntity(MovieDetailResponseContainer(movieDetail, movieCredits, imageGallery))
                 }
             )
@@ -57,7 +50,6 @@ class MovieDetailViewModel
                     copy(
                         movieId = state.movieId,
                         movieDetailItem = it(),
-                        productionDetailItem = productionDetailMapper.mapToEntity(it()),
                         movieDetailResponse = it
                     )
                 }

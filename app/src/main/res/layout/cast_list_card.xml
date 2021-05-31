@@ -28,7 +28,7 @@
             app:layout_constraintStart_toEndOf="@id/cast_list_item_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/cast_list_item_role"
-            android:textSize="@dimen/text_size_small"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end"/>

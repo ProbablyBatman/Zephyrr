@@ -68,7 +68,16 @@
     <string name="next_air_date_title">Next Air Date</string>
     <string name="last_aired_title">Last Aired</string>
     <string name="number_of_episodes_title">Episodes</string>
-    <string name="number_of_seasons_title">Seasons</string>
+    <string name="seasons_title">Seasons</string>
+    <string name="created_by_title">Created By</string>
+    <plurals name="episode_runtime_title">
+        <item quantity="one">Episode Runtime</item>
+        <item quantity="other">Episode Runtimes</item>
+    </plurals>
+    <plurals name="networks_title">
+        <item quantity="one">Network</item>
+        <item quantity="other">Networks</item>
+    </plurals>
 
     <!-- Image Gallery -->
     <string name="copy_image">Copy image URL to clipboard</string>

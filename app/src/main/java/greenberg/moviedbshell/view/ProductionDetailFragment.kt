@@ -14,6 +14,8 @@ import greenberg.moviedbshell.adapters.ProductionDetailAdapter
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.extensions.processAsReleaseDate
 import greenberg.moviedbshell.extensions.processRuntime
+import greenberg.moviedbshell.models.ui.MovieDetailItem
+import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.state.ProductionDetailState
 import greenberg.moviedbshell.viewmodel.ProductionDetailViewModel
@@ -65,16 +67,22 @@ class ProductionDetailFragment : BaseFragment() {
     }
 
     private fun showDetails(state: ProductionDetailState) {
-        val detailItem = state.productionDetailItem
-        productionCompaniesList.text = detailItem.productionCompanies.joinToString(", ") { it.name }
-        filmingLocationsList.text = detailItem.productionCountries.joinToString(", ") { it.name }
-        releaseDateTextView.text = detailItem.releaseDate.processAsReleaseDate()
-        runtimeTextView.text = requireContext().processRuntime(detailItem.runtime)
-        statusTextView.text = detailItem.status
-        budgetTextView.text = resources.getString(R.string.budget_substitution, NumberFormat.getInstance(Locale.US).format(detailItem.budget))
-        revenueTextView.text = resources.getString(R.string.budget_substitution, NumberFormat.getInstance(Locale.US).format(detailItem.revenue))
-        productionDetailAdapter.crewMemberList = detailItem.crewMembers
-        productionDetailAdapter.notifyDataSetChanged()
+        when (val detailItem = state.productionDetailItem) {
+            is MovieDetailItem -> {
+                productionCompaniesList.text = detailItem.productionCompanies.joinToString(", ") { it.name }
+                filmingLocationsList.text = detailItem.productionCountries.joinToString(", ") { it.name }
+                statusTextView.text = detailItem.status
+                productionDetailAdapter.crewMemberList = detailItem.crewMembers
+                productionDetailAdapter.notifyDataSetChanged()
+                releaseDateTextView.text = detailItem.releaseDate.processAsReleaseDate()
+                runtimeTextView.text = requireContext().processRuntime(detailItem.runtime)
+                budgetTextView.text = resources.getString(R.string.budget_substitution, NumberFormat.getInstance(Locale.US).format(detailItem.budget))
+                revenueTextView.text = resources.getString(R.string.budget_substitution, NumberFormat.getInstance(Locale.US).format(detailItem.revenue))
+            }
+            is TvDetailItem -> {
+                // todo
+            }
+        }
     }
 
     // TODO: might have to make recycler cards here instead of just letting them tap?

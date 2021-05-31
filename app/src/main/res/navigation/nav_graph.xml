@@ -67,11 +67,17 @@
     </fragment>
 
     <fragment
-            android:id="@+id/tvDetailFragment"
-            android:name="greenberg.moviedbshell.view.TvDetailFragment">
+        android:id="@+id/tvDetailFragment"
+        android:name="greenberg.moviedbshell.view.TvDetailFragment">
         <action
-                android:id="@+id/action_tvDetailFragment_to_personDetailFragment"
-                app:destination="@id/personDetailFragment"/>
+            android:id="@+id/action_tvDetailFragment_to_personDetailFragment"
+            app:destination="@id/personDetailFragment"/>
+        <action
+            android:id="@+id/action_tvDetailFragment_to_castFragment"
+            app:destination="@id/castFragment"/>
+        <action
+            android:id="@+id/action_tvDetailFragment_to_productionDetailFragment"
+            app:destination="@id/productionDetailFragment"/>
     </fragment>
 
     <fragment

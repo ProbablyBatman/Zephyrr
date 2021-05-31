@@ -7,6 +7,7 @@ import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
 import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
+import greenberg.moviedbshell.models.tvdetailmodels.AggregateCreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
 import greenberg.moviedbshell.models.tvlistmodels.TvListResponse
 import io.reactivex.Single
@@ -35,6 +36,12 @@ interface TMDBService {
 
     @GET("tv/{id}/credits")
     fun queryTvCredits(@Path("id") id: Int): Single<CreditsResponse>
+
+    @GET("tv/{id}/aggregate_credits")
+    fun queryTvAggregateCredits(@Path("id") id: Int): Single<AggregateCreditsResponse>
+
+    @GET("tv/{id}/images")
+    fun queryTvImages(@Path("id") id: Int): Single<ImageGalleryResponse>
 
     @GET("person/{id}")
     fun queryPersonDetail(@Path("id") id: Int): Single<PersonDetailResponse>

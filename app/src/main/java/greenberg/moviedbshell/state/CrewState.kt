@@ -3,7 +3,7 @@ package greenberg.moviedbshell.state
 import android.os.Parcelable
 import com.airbnb.mvrx.MvRxState
 import greenberg.moviedbshell.models.ui.CrewMemberItem
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 data class CrewState(
     val crewMembers: List<CrewMemberItem> = emptyList()

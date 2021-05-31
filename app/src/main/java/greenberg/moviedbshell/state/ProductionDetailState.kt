@@ -3,7 +3,7 @@ package greenberg.moviedbshell.state
 import android.os.Parcelable
 import com.airbnb.mvrx.MvRxState
 import greenberg.moviedbshell.models.ui.ProductionDetailItem
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 data class ProductionDetailState(
     val productionDetailItem: ProductionDetailItem

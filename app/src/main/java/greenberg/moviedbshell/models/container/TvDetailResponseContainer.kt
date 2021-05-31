@@ -1,6 +1,8 @@
 package greenberg.moviedbshell.models.container
 
+import greenberg.moviedbshell.models.imagegallerymodels.ImageGalleryResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
+import greenberg.moviedbshell.models.tvdetailmodels.AggregateCreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
 
 /*
@@ -13,5 +15,7 @@ import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
  */
 data class TvDetailResponseContainer(
     val tvShowResponse: TvShowResponse,
-    val creditsResponse: CreditsResponse
+    val creditsResponse: CreditsResponse,
+    val aggregateCreditsResponse: AggregateCreditsResponse,
+    val posterResponse: ImageGalleryResponse
 )

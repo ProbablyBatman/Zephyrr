@@ -8,12 +8,15 @@
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="card_corner_radius">5dp</dimen>
 
+    <!-- Background Image Container -->
+    <dimen name="background_image_container_height">288dp</dimen>
+    <dimen name="background_image_height">288dp</dimen>
+    <dimen name="background_image_container_scrim_height">160dp</dimen>
+    <dimen name="background_image_gallery_icon_size">24dp</dimen>
+
     <!-- Cast/Credit recycler -->
     <dimen name="people_recycler_poster_width">132dp</dimen>
     <dimen name="people_recycler_poster_height">198dp</dimen>
-
-    <!-- Movie Detail Cast Recycler -->
-
 
     <!-- Landing recyclers -->
     <dimen name="generic_poster_width">150dp</dimen>

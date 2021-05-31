@@ -7,7 +7,7 @@ import com.airbnb.mvrx.Uninitialized
 import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.imagegallerymodels.ImageGalleryResponse
 import greenberg.moviedbshell.models.ui.PosterItem
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 data class ImageGalleryState(
     val itemId: Int = -1,

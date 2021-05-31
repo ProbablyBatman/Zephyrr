@@ -74,19 +74,19 @@
             <FrameLayout
                 android:id="@+id/movie_detail_background_image_container"
                 android:layout_width="match_parent"
-                android:layout_height="288dp"
+                android:layout_height="@dimen/background_image_container_height"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/movie_detail_background_image"
                     android:layout_width="match_parent"
-                    android:layout_height="288dp"
+                    android:layout_height="@dimen/background_image_height"
                     android:scaleType="centerCrop"/>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
+                    android:layout_height="@dimen/background_image_container_scrim_height"
                     android:layout_gravity="bottom"
                     android:background="@drawable/scrim"/>
 
@@ -97,8 +97,8 @@
                     android:layout_height="wrap_content"/>
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/background_image_gallery_icon_size"
+                    android:layout_height="@dimen/background_image_gallery_icon_size"
                     android:layout_gravity="bottom|end"
                     android:layout_margin="@dimen/margin_small"
                     android:src="@drawable/ic_image_gallery" />

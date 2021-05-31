@@ -36,20 +36,37 @@ class ImageGalleryViewModel
     fun fetchPosters() {
         withState { state ->
             if (state.imageGalleryResponse is Loading) return@withState
-            if (state.mediaType == MediaType.MOVIE) {
-                TMDBService
-                    .queryMovieImages(state.itemId)
-                    .subscribeOn(Schedulers.io())
-                    .execute {
-                        // Assume success for now
-                        copy(
-                            itemId = state.itemId,
-                            mediaType = state.mediaType,
-                            posterItems = mapper.mapToEntity(it()),
-                            backdropItems = backdropMapper.mapToEntity(it()),
-                            imageGalleryResponse = it
-                        )
-                    }
+            when (state.mediaType) {
+                MediaType.MOVIE -> {
+                    TMDBService
+                        .queryMovieImages(state.itemId)
+                        .subscribeOn(Schedulers.io())
+                        .execute {
+                            // Assume success for now
+                            copy(
+                                itemId = state.itemId,
+                                mediaType = state.mediaType,
+                                posterItems = mapper.mapToEntity(it()),
+                                backdropItems = backdropMapper.mapToEntity(it()),
+                                imageGalleryResponse = it
+                            )
+                        }
+                }
+                MediaType.TV -> {
+                    TMDBService
+                        .queryTvImages(state.itemId)
+                        .subscribeOn(Schedulers.io())
+                        .execute {
+                            // Assume success for now
+                            copy(
+                                itemId = state.itemId,
+                                mediaType = state.mediaType,
+                                posterItems = mapper.mapToEntity(it()),
+                                backdropItems = backdropMapper.mapToEntity(it()),
+                                imageGalleryResponse = it
+                            )
+                        }
+                }
             }
         }
     }

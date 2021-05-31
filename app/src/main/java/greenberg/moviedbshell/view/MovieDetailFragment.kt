@@ -39,7 +39,6 @@ import greenberg.moviedbshell.extensions.processRatingInfo
 import greenberg.moviedbshell.extensions.processRuntime
 import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.ui.CastMemberItem
-import greenberg.moviedbshell.models.ui.CrewMemberItem
 import greenberg.moviedbshell.models.ui.ProductionCompanyItem
 import greenberg.moviedbshell.models.ui.ProductionCountryItem
 import greenberg.moviedbshell.state.CastStateArgs
@@ -95,7 +94,6 @@ class MovieDetailFragment : BaseFragment() {
     private lateinit var errorTextView: TextView
     private lateinit var errorRetryButton: Button
     private lateinit var errorGuideline: Guideline
-    private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var castListAdapter: CastListAdapter
     private lateinit var genreChipGroup: ChipGroup
     private lateinit var posterRecycler: RecyclerView
@@ -155,7 +153,6 @@ class MovieDetailFragment : BaseFragment() {
         posterRecycler = view.findViewById(R.id.poster_recycler)
         posterSeeAllButton = view.findViewById(R.id.poster_see_all_button)
 
-        linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         castListAdapter = CastListAdapter(onClickListener = this::highlightedCastOnClickListener, isBubble = true)
         castRecyclerView.apply {
             adapter = castListAdapter
@@ -194,6 +191,7 @@ class MovieDetailFragment : BaseFragment() {
         log("MovieDetails: $movieDetailItem")
         if (movieDetailItem != null) {
             posterListAdapter.posterItems = movieDetailItem.posterUrls.take(POSTER_PREVIEW_VALUE)
+            posterListAdapter.notifyDataSetChanged()
 
             log("backdropURL: ${movieDetailItem.backdropImageUrl}")
             if (movieDetailItem.backdropImageUrl.isNotEmpty()) {
@@ -210,7 +208,8 @@ class MovieDetailFragment : BaseFragment() {
                     .into(backdropImageView)
             }
 
-            castListAdapter.castMemberList = movieDetailItem.castMembers.take(CAST_PREVIEW_VALUE)
+            castListAdapter.setCastMembers(movieDetailItem.castMembers.take(CAST_PREVIEW_VALUE))
+            castListAdapter.notifyDataSetChanged()
             // TODO: one day, clicking a genre will lead to a genre filtered screen
             if (genreChipGroup.childCount == 0) {
                 movieDetailItem.genres.forEach {
@@ -222,7 +221,7 @@ class MovieDetailFragment : BaseFragment() {
                 }
             }
 
-            titleBar.text = movieDetailItem.movieTitle
+            titleBar.text = movieDetailItem.title
             // TODO: investigate just hiding this view if it's null
             directorTextView.text = movieDetailItem.crewMembers.find { it.job.toLowerCase(Locale.getDefault()) == "director" }?.name
             productionCompaniesTextView.text = movieDetailItem.productionCompanies.getOrElse(0) { ProductionCompanyItem.generateDummy() }.name
@@ -255,7 +254,7 @@ class MovieDetailFragment : BaseFragment() {
                     .show(parentFragmentManager, ImageGalleryDialog.TAG)
             }
             castSeeAllButton.setOnClickListener { castSeeAllOnClickListener(movieDetailItem.castMembers) }
-            productionSeeAllButton.setOnClickListener { productionSeeAllOnClickListener(movieDetailItem.crewMembers) }
+            productionSeeAllButton.setOnClickListener { productionSeeAllOnClickListener() }
             // TODO: potentially scrape other rating information
         }
     }
@@ -292,7 +291,6 @@ class MovieDetailFragment : BaseFragment() {
 
     private fun hideContent() {
         backdropImageContainer.visibility = View.GONE
-//        genreRecycler.visibility = View.GONE
         genreChipGroup.visibility = View.GONE
         overviewTextView.visibility = View.GONE
         castContainer.visibility = View.GONE
@@ -322,7 +320,6 @@ class MovieDetailFragment : BaseFragment() {
 
     private fun showContent() {
         backdropImageContainer.visibility = View.VISIBLE
-//        genreRecycler.visibility = View.VISIBLE
         genreChipGroup.visibility = View.VISIBLE
         overviewTextView.visibility = View.VISIBLE
         castContainer.visibility = View.VISIBLE
@@ -388,11 +385,11 @@ class MovieDetailFragment : BaseFragment() {
         )
     }
 
-    private fun productionSeeAllOnClickListener(crewList: List<CrewMemberItem>) {
+    private fun productionSeeAllOnClickListener() {
         withState(viewModel) { state ->
             navigate(
                 R.id.action_movieDetailFragment_to_productionDetailFragment,
-                state.productionDetailItem?.let { ProductionDetailStateArgs(it) }
+                state.movieDetailItem?.let { ProductionDetailStateArgs(it) }
             )
         }
     }

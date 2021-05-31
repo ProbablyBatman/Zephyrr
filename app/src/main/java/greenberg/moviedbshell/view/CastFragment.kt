@@ -39,7 +39,7 @@ class CastFragment : BaseFragment() {
 
     private fun showDetails(state: CastState) {
         if (state.castMembers.isNotEmpty()) {
-            castAdapter.castMemberList = state.castMembers
+            castAdapter.setCastMembers(state.castMembers)
             castAdapter.notifyDataSetChanged()
         }
     }

@@ -18,7 +18,7 @@ class MovieDetailMapper
         val imageGallery = item?.posterResponse
         return MovieDetailItem(
                 movieId = movieDetail?.id ?: 0,
-                movieTitle = movieDetail?.title.orEmpty(),
+                title = movieDetail?.title.orEmpty(),
                 originalTitle = movieDetail?.originalTitle.orEmpty(),
                 releaseDate = movieDetail?.releaseDate.orEmpty(),
                 voteAverage = movieDetail?.voteAverage ?: 0.0,
