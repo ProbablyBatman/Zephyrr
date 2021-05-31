@@ -5,18 +5,17 @@ import android.os.Parcelable
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.navigation.fragment.findNavController
-import androidx.transition.TransitionInflater
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRx
-import greenberg.moviedbshell.R
 
 abstract class BaseFragment : BaseMvRxFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         log("onCreate")
-        val inflater = TransitionInflater.from(requireContext())
-        enterTransition = inflater.inflateTransition(R.transition.slide_bottom)
-        exitTransition = inflater.inflateTransition(R.transition.fade)
+        // TODO: these are so broken, I hate how they look. turning them off.
+//        val inflater = TransitionInflater.from(requireContext())
+//        enterTransition = inflater.inflateTransition(R.transition.slide_bottom)
+//        exitTransition = inflater.inflateTransition(R.transition.fade)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

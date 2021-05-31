@@ -74,8 +74,6 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.33'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     implementation 'com.airbnb.android:mvrx:1.5.1'
-    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.5.1'
-    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.1'
 
     implementation 'com.google.firebase:firebase-core:19.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.0.0'

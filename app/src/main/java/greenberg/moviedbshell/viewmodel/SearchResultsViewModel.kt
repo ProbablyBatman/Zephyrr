@@ -5,8 +5,9 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.SearchResultsMapper
 import greenberg.moviedbshell.services.TMDBService
@@ -21,7 +22,7 @@ class SearchResultsViewModel
     private val mapper: SearchResultsMapper
 ) : ZephyrrMvRxViewModel<SearchResultsState>(state) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(state: SearchResultsState): SearchResultsViewModel
     }

@@ -16,7 +16,7 @@ import greenberg.moviedbshell.viewmodel.TvDetailViewModel
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [(ApplicationModule::class), (ServicesModule::class), (AssistedInjectModule::class)])
+@Component(modules = [(ApplicationModule::class), (ServicesModule::class)])
 interface SingletonComponent {
     val popularViewModelFactory: PopularMoviesViewModel.Factory
     val movieDetailViewModelFactory: MovieDetailViewModel.Factory

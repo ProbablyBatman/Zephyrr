@@ -5,8 +5,9 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.mappers.MovieListMapper
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.MovieListState
@@ -21,7 +22,7 @@ class PopularMoviesViewModel
     private val mapper: MovieListMapper
 ) : BaseMovieListViewModel<MovieListState>(state) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory : BaseMovieListViewModel.Factory {
         fun create(state: MovieListState): PopularMoviesViewModel
     }
