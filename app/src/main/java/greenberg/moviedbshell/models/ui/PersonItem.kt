@@ -10,4 +10,5 @@ data class PersonItem(
 ) : PreviewItem(
         posterImageUrl,
         id,
-        MediaType.PERSON)
+        MediaType.PERSON
+)

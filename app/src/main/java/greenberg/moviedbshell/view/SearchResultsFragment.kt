@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
@@ -16,7 +17,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
@@ -49,7 +49,7 @@ class SearchResultsFragment : BaseFragment() {
     private var maxPagesSnackbar: Snackbar? = null
     private var emptyStateText: TextView? = null
     private var errorTextView: TextView? = null
-    private var errorRetryButton: MaterialButton? = null
+    private var errorRetryButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -215,20 +215,20 @@ class SearchResultsFragment : BaseFragment() {
         when (mediaType) {
             MediaType.MOVIE -> {
                 navigate(
-                        R.id.action_searchResultsFragment_to_movieDetailFragment,
-                        MovieDetailArgs(itemId)
+                    R.id.action_searchResultsFragment_to_movieDetailFragment,
+                    MovieDetailArgs(itemId)
                 )
             }
             MediaType.TV -> {
                 navigate(
-                        R.id.action_searchResultsFragment_to_tvDetailFragment,
-                        TvDetailArgs(itemId)
+                    R.id.action_searchResultsFragment_to_tvDetailFragment,
+                    TvDetailArgs(itemId)
                 )
             }
             MediaType.PERSON -> {
                 navigate(
-                        R.id.action_searchResultsFragment_to_tvDetailFragment,
-                        PersonDetailArgs(itemId)
+                    R.id.action_searchResultsFragment_to_personDetailFragment,
+                    PersonDetailArgs(itemId)
                 )
             }
             MediaType.UNKNOWN -> {
@@ -240,6 +240,10 @@ class SearchResultsFragment : BaseFragment() {
 
     override fun log(message: String) {
         Timber.d(message)
+    }
+
+    override fun log(throwable: Throwable) {
+        Timber.e(throwable)
     }
 
     companion object {

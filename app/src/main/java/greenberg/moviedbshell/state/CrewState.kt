@@ -2,15 +2,16 @@ package greenberg.moviedbshell.state
 
 import android.os.Parcelable
 import com.airbnb.mvrx.MvRxState
-import kotlinx.android.parcel.Parcelize
+import greenberg.moviedbshell.models.ui.CrewMemberItem
+import kotlinx.parcelize.Parcelize
 
 data class CrewState(
-    val crewMembersJson: String = ""
+    val crewMembers: List<CrewMemberItem> = emptyList()
 ) : MvRxState {
-    constructor(args: CrewStateArgs) : this(crewMembersJson = args.crewMembersJson)
+    constructor(args: CrewStateArgs) : this(crewMembers = args.crewMembers)
 }
 
 @Parcelize
 data class CrewStateArgs(
-    val crewMembersJson: String
+    val crewMembers: List<CrewMemberItem>
 ) : Parcelable

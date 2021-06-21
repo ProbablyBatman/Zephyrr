@@ -4,19 +4,16 @@ import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.MovieDetailMapper
-import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponse
-import greenberg.moviedbshell.models.moviedetailmodels.MovieDetailResponseContainer
-import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
-import greenberg.moviedbshell.models.ui.MovieDetailItem
+import greenberg.moviedbshell.models.container.MovieDetailResponseContainer
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.view.MovieDetailFragment
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class MovieDetailViewModel
@@ -26,7 +23,7 @@ class MovieDetailViewModel
     private val mapper: MovieDetailMapper
 ) : ZephyrrMvRxViewModel<MovieDetailState>(state) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(state: MovieDetailState): MovieDetailViewModel
     }
@@ -41,22 +38,23 @@ class MovieDetailViewModel
             // Swallows requests if there's already one loading
             if (state.movieDetailResponse is Loading) return@withState
             Single.zip(
-                    TMDBService.queryMovieDetail(state.movieId),
-                    TMDBService.queryMovieCredits(state.movieId),
-                    BiFunction<MovieDetailResponse, CreditsResponse, MovieDetailItem> { movieDetail, movieCredits ->
-                        mapper.mapToEntity(MovieDetailResponseContainer(movieDetail, movieCredits))
-                    }
+                TMDBService.queryMovieDetail(state.movieId),
+                TMDBService.queryMovieCredits(state.movieId),
+                TMDBService.queryMovieImages(state.movieId),
+                { movieDetail, movieCredits, imageGallery ->
+                    mapper.mapToEntity(MovieDetailResponseContainer(movieDetail, movieCredits, imageGallery))
+                }
             )
-                    .subscribeOn(Schedulers.io())
-                    .execute {
-                        // If call fails, should be retry-able
-                        copy(
-                                movieId = state.movieId,
-                                movieDetailItem = it(),
-                                movieDetailResponse = it
-                        )
-                    }
-                    .disposeOnClear()
+                .subscribeOn(Schedulers.io())
+                .execute {
+                    // If call fails, should be retry-able
+                    copy(
+                        movieId = state.movieId,
+                        movieDetailItem = it(),
+                        movieDetailResponse = it
+                    )
+                }
+                .disposeOnClear()
         }
     }
 

@@ -1,13 +1,13 @@
 package greenberg.moviedbshell.models.ui
 
-class CreditsDetailItem(
+data class CreditsDetailItem(
     val title: String,
     val releaseDate: String,
     val role: String,
     val type: String,
-    posterImageUrl: String,
-    mediaType: String,
-    id: Int?
+    override val posterImageUrl: String,
+    override val mediaType: String,
+    override val id: Int?
 ) : PreviewItem(
         posterImageUrl = posterImageUrl,
         mediaType = mediaType,

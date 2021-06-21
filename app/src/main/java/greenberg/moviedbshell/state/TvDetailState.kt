@@ -5,7 +5,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import greenberg.moviedbshell.models.ui.TvDetailItem
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 data class TvDetailState(
     val tvId: Int = -1,

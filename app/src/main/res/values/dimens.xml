@@ -3,11 +3,26 @@
     <dimen name="text_size_small">16sp</dimen>
     <dimen name="text_size_medium">24sp</dimen>
     <dimen name="text_size_large">32sp</dimen>
+    <dimen name="margin_tiny">5dp</dimen>
     <dimen name="margin_small">10dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="card_corner_radius">5dp</dimen>
 
+    <!-- Background Image Container -->
+    <dimen name="background_image_container_height">288dp</dimen>
+    <dimen name="background_image_height">288dp</dimen>
+    <dimen name="background_image_container_scrim_height">160dp</dimen>
+    <dimen name="background_image_gallery_icon_size">24dp</dimen>
+
     <!-- Cast/Credit recycler -->
     <dimen name="people_recycler_poster_width">132dp</dimen>
     <dimen name="people_recycler_poster_height">198dp</dimen>
+
+    <!-- Landing recyclers -->
+    <dimen name="generic_poster_width">150dp</dimen>
+    <dimen name="generic_poster_height">225dp</dimen>
+
+    <!-- Movie Item recyclers -->
+    <dimen name="grid_poster_width">125dp</dimen>
+    <dimen name="grid_poster_height">187dp</dimen>
 </resources>

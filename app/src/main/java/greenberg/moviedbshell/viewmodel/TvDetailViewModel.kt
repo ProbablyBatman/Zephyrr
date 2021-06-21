@@ -3,19 +3,16 @@ package greenberg.moviedbshell.viewmodel
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.TvDetailMapper
-import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponse
-import greenberg.moviedbshell.models.tvdetailmodels.TvDetailResponseContainer
-import greenberg.moviedbshell.models.ui.TvDetailItem
+import greenberg.moviedbshell.models.container.TvDetailResponseContainer
 import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.TvDetailState
 import greenberg.moviedbshell.view.TvDetailFragment
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class TvDetailViewModel
@@ -25,7 +22,7 @@ class TvDetailViewModel
     private val mapper: TvDetailMapper
 ) : ZephyrrMvRxViewModel<TvDetailState>(state) {
 
-    @AssistedInject.Factory
+    @AssistedFactory
     interface Factory {
         fun create(state: TvDetailState): TvDetailViewModel
     }
@@ -38,21 +35,23 @@ class TvDetailViewModel
     fun fetchTvDetail() {
         withState { state ->
             Single.zip(
-                    TMDBService.queryTvDetail(state.tvId).subscribeOn(Schedulers.io()),
-                    TMDBService.queryTvCredits(state.tvId).subscribeOn(Schedulers.io()),
-                    BiFunction<TvDetailResponse, CreditsResponse, TvDetailItem> { tvDetail, tvCredits ->
-                        mapper.mapToEntity(TvDetailResponseContainer(tvDetail, tvCredits))
-                    }
+                TMDBService.queryTvDetail(state.tvId),
+                TMDBService.queryTvCredits(state.tvId),
+                TMDBService.queryTvImages(state.tvId),
+                TMDBService.queryTvAggregateCredits(state.tvId),
+                { tvDetail, tvCredits, imageGalleryResponse, aggregateCredits ->
+                    mapper.mapToEntity(TvDetailResponseContainer(tvDetail, tvCredits, aggregateCredits, imageGalleryResponse))
+                }
             )
-                    .subscribeOn(Schedulers.io())
-                    .execute {
-                        copy(
-                                tvId = state.tvId,
-                                tvDetailItem = it(),
-                                tvDetailResponse = it
-                        )
-                    }
-                    .disposeOnClear()
+                .subscribeOn(Schedulers.io())
+                .execute {
+                    copy(
+                        tvId = state.tvId,
+                        tvDetailItem = it(),
+                        tvDetailResponse = it
+                    )
+                }
+                .disposeOnClear()
         }
     }
 

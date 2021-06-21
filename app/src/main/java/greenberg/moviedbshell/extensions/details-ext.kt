@@ -3,8 +3,8 @@ package greenberg.moviedbshell.extensions
 import android.content.Context
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.models.ui.MovieItem
+import greenberg.moviedbshell.models.ui.NetworkItem
 import greenberg.moviedbshell.models.ui.PreviewItem
-import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.models.ui.TvItem
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -30,10 +30,11 @@ fun Context.processRuntimes(runtime: List<Int>): String {
     return this.getString(R.string.runtime_substitution, allRuntimes)
 }
 
-fun Context.processGenreTitle(genresListSize: Int): String = this.resources.getQuantityString(R.plurals.genres_title, genresListSize)
+fun Context.processRuntimeTitle(runtime: List<Int>): String = this.resources.getQuantityString(R.plurals.episode_runtime_title, runtime.size)
 
-// TODO: I have future plans for this. For now it stays stupid.
-fun Context.processGenres(genres: List<String?>): String = genres.joinToString(", ")
+fun Context.processNetworksTitle(networks: List<NetworkItem>): String = this.resources.getQuantityString(R.plurals.networks_title, networks.size)
+
+fun processNetworks(networks: List<NetworkItem>): String = networks.joinToString(", ") { it.name }
 
 // TODO: Investigate if there's a less dumb way to do this
 fun String.processAsReleaseDate(): String =
@@ -87,22 +88,6 @@ fun processAge(birthday: String, deathday: String = ""): Int {
         }
     }
     return age
-}
-
-fun Context.processLastOrNextAirDateTitle(tvDetailItem: TvDetailItem): String? {
-    return when {
-        tvDetailItem.nextAirDate != null -> this.getString(R.string.next_air_date_title)
-        tvDetailItem.lastAirDate != null -> this.getString(R.string.last_aired_title)
-        else -> null
-    }
-}
-
-fun TvDetailItem.processLastOrNextAirDate(): String? {
-    return when {
-        this.nextAirDate != null -> this.nextAirDate.processDate()
-        this.lastAirDate != null -> this.lastAirDate.processDate()
-        else -> null
-    }
 }
 
 fun List<PreviewItem>.processKnownForItems(): String {

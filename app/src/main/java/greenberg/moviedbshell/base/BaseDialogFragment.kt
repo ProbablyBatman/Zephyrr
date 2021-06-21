@@ -58,6 +58,7 @@ abstract class BaseDialogFragment : DialogFragment(), MvRxView {
     }
 
     abstract fun log(message: String)
+    abstract fun log(exception: Throwable)
 
     companion object {
         private const val DIALOG_KEY = "DIALOG_KEY"

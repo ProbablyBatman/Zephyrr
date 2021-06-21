@@ -1,6 +1,6 @@
 package greenberg.moviedbshell.models.ui
 
-class PersonDetailItem(
+data class PersonDetailItem(
     val name: String,
     val birthday: String,
     val deathday: String,

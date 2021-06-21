@@ -5,7 +5,7 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import greenberg.moviedbshell.models.ui.PersonDetailItem
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 data class PersonDetailState(
     val personId: Int = -1,

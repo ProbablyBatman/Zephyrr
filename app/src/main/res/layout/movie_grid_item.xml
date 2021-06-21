@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/movie_grid_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="@dimen/card_corner_radius">
+
+    <ImageView
+        android:id="@+id/movie_grid_poster"
+        android:layout_width="@dimen/grid_poster_width"
+        android:layout_height="@dimen/grid_poster_height"/>
+
+</com.google.android.material.card.MaterialCardView>

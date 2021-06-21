@@ -1,8 +1,12 @@
 package greenberg.moviedbshell.models.ui
 
-data class CastMemberItem(
-    val role: String,
-    val name: String,
-    val posterUrl: String,
-    val id: Int?
-)
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+open class CastMemberItem(
+    open val role: String,
+    open val name: String,
+    open val posterUrl: String,
+    open val id: Int?
+) : Parcelable

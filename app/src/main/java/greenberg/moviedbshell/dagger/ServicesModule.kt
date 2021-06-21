@@ -17,7 +17,6 @@ import javax.inject.Singleton
 
 @Module
 class ServicesModule {
-
     @Provides
     @Singleton
     fun provideTMDBService(retrofit: Retrofit): TMDBService {

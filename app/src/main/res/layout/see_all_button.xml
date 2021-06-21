@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:background="@drawable/ic_see_all_button_blue"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/see_all_button"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="#49A6EA"
+        android:layout_gravity="center"/>
+
+</FrameLayout>

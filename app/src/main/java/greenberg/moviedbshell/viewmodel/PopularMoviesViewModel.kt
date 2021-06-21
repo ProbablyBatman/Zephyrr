@@ -3,87 +3,97 @@ package greenberg.moviedbshell.viewmodel
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
-import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
-import greenberg.moviedbshell.mappers.PopularMovieMapper
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.mappers.MovieListMapper
 import greenberg.moviedbshell.services.TMDBService
-import greenberg.moviedbshell.state.PopularMovieState
+import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.view.PopularMoviesFragment
+import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import io.reactivex.schedulers.Schedulers
 
 class PopularMoviesViewModel
 @AssistedInject constructor(
-    @Assisted var state: PopularMovieState,
+    @Assisted override var state: MovieListState,
     private val TMDBService: TMDBService,
-    private val mapper: PopularMovieMapper
-) : ZephyrrMvRxViewModel<PopularMovieState>(state) {
+    private val mapper: MovieListMapper
+) : BaseMovieListViewModel<MovieListState>(state) {
 
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(state: PopularMovieState): PopularMoviesViewModel
+    @AssistedFactory
+    interface Factory : BaseMovieListViewModel.Factory {
+        fun create(state: MovieListState): PopularMoviesViewModel
     }
 
     init {
         logStateChanges()
-        fetchPopularMovies()
+        fetchFirstPage()
     }
 
-    // TODO: do I need this like this
-//    init {
-//        fetchPopularMovies()
-//    }
-
-    fun fetchPopularMovies() {
+    override fun fetchMovies() {
         withState { state ->
+            val totalPages = state.movieListResponse()?.totalPages
+            if (totalPages != null && state.pageNumber >= totalPages) {
+                state.copy(shouldShowMaxPages = true)
+                return@withState
+            }
             TMDBService
-                    .queryPopularMovies(state.pageNumber)
-                    .subscribeOn(Schedulers.io())
-                    .execute {
-                        // If call fails, pass the same state through, but it's a copy with the Async
-                        // where Async is of Fail type.
-                        if (it is Fail) {
+                .queryPopularMovies(state.pageNumber)
+                .subscribeOn(Schedulers.io())
+                .execute {
+                    when (it) {
+                        is Fail -> {
                             copy(
-                                    popularMovieResponse = it,
-                                    pageNumber = state.pageNumber,
-                                    popularMovies = state.popularMovies
-                            )
-                        } else {
-                            copy(
-                                    popularMovieResponse = it,
-                                    pageNumber = state.pageNumber + 1,
-                                    popularMovies = state.popularMovies + mapper.mapToEntity(it())
+                                pageNumber = state.pageNumber,
+                                movieListResponse = it,
+                                movieList = state.movieList
                             )
                         }
+                        is Success -> {
+                            val pages = it()?.totalPages
+                            copy(
+                                pageNumber = state.pageNumber + 1,
+                                movieListResponse = it,
+                                movieList = state.movieList + mapper.mapToEntity(it()),
+                                shouldShowMaxPages = pages != null && pages <= state.pageNumber
+                            )
+                        }
+                        else -> copy(
+                            movieListResponse = it
+                        )
                     }
-                    .disposeOnClear()
+                }
+                .disposeOnClear()
         }
     }
 
     fun fetchFirstPage() {
         withState { state ->
             TMDBService
-                    .queryPopularMovies(1)
-                    .subscribeOn(Schedulers.io())
-                    .execute {
-                        // If call fails, pass the same state through, but it's a copy with the Async
-                        // where Async is of Fail type.
-                        if (it is Fail) {
+                .queryPopularMovies(1)
+                .subscribeOn(Schedulers.io())
+                .execute {
+                    when (it) {
+                        is Fail -> {
                             copy(
-                                    popularMovieResponse = it,
-                                    pageNumber = 1,
-                                    popularMovies = emptyList()
-                            )
-                        } else {
-                            copy(
-                                    popularMovieResponse = it,
-                                    pageNumber = 2,
-                                    popularMovies = mapper.mapToEntity(it())
+                                pageNumber = 1,
+                                movieListResponse = it,
+                                movieList = state.movieList
                             )
                         }
+                        is Success -> {
+                            copy(
+                                pageNumber = state.pageNumber + 1,
+                                movieListResponse = it,
+                                movieList = state.movieList + mapper.mapToEntity(it())
+                            )
+                        }
+                        else -> copy()
                     }
-                    .disposeOnClear()
+                }
+                .disposeOnClear()
         }
     }
 
@@ -99,10 +109,10 @@ class PopularMoviesViewModel
 //        }
 //    }
 
-    companion object : MvRxViewModelFactory<PopularMoviesViewModel, PopularMovieState> {
+    companion object : MvRxViewModelFactory<PopularMoviesViewModel, MovieListState> {
         @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: PopularMovieState): PopularMoviesViewModel {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<PopularMoviesFragment>().popularMoviesViewModelFactory
+        override fun create(viewModelContext: ViewModelContext, state: MovieListState): PopularMoviesViewModel {
+            val fragment = (viewModelContext as FragmentViewModelContext).fragment<PopularMoviesFragment>().viewModelFactory
             return fragment.create(state)
         }
     }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/production_detail_crew_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:textStyle="bold"
+        tools:text="Super long crew title for testing"/>
+
+    <TextView
+        android:id="@+id/production_detail_crew_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_small"
+        android:layout_marginBottom="@dimen/margin_small"
+        tools:text="Super long crew title name for testing"/>
+
+</LinearLayout>

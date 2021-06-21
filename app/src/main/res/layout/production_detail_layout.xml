@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/production_detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:text="@string/production_title"
+                android:textSize="@dimen/text_size_large"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/detail_production_companies_title"
+                style="@style/TopInfoTitleStyle"
+                android:text="@string/production_companies_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/production_detail_title"/>
+
+            <TextView
+                android:id="@+id/detail_production_companies"
+                style="@style/ProductionListItemStyle"
+                app:layout_constraintTop_toBottomOf="@id/detail_production_companies_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/detail_filming_locations_title"
+                style="@style/TopInfoTitleStyle"
+                android:text="@string/filming_locations_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_production_companies"/>
+
+            <TextView
+                android:id="@+id/detail_filming_locations"
+                style="@style/ProductionListItemStyle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_filming_locations_title"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/detail_release_date_title"
+                style="@style/TopInfoTitleStyle"
+                android:text="@string/release_date_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_filming_locations" />
+
+            <TextView
+                android:id="@+id/detail_release_date"
+                style="@style/ProductionListItemStyle"
+                app:layout_constraintTop_toBottomOf="@id/detail_release_date_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/detail_runtime_title"
+                style="@style/TopInfoTitleStyle"
+                android:text="@string/runtime_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_release_date" />
+
+            <TextView
+                android:id="@+id/detail_runtime"
+                style="@style/ProductionListItemStyle"
+                app:layout_constraintTop_toBottomOf="@id/detail_runtime_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/detail_status_title"
+                style="@style/TopInfoTitleStyle"
+                android:text="@string/status_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_runtime"/>
+
+            <TextView
+                android:id="@+id/detail_status"
+                style="@style/ProductionListItemStyle"
+                app:layout_constraintTop_toBottomOf="@id/detail_status_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/detail_budget_title"
+                style="@style/TopInfoTitleStyle"
+                android:text="@string/budget_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_status"/>
+
+            <TextView
+                android:id="@+id/detail_budget"
+                style="@style/ProductionListItemStyle"
+                app:layout_constraintTop_toBottomOf="@id/detail_budget_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/detail_revenue_title"
+                style="@style/TopInfoTitleStyle"
+                android:text="@string/revenue_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_budget"/>
+
+            <TextView
+                android:id="@+id/detail_revenue"
+                style="@style/ProductionListItemStyle"
+                app:layout_constraintTop_toBottomOf="@id/detail_revenue_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/production_detail_recycler"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                app:layout_constraintTop_toBottomOf="@id/detail_revenue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:listitem="@layout/production_detail_crew_item"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

@@ -12,6 +12,10 @@ abstract class BaseFragment : BaseMvRxFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         log("onCreate")
+        // TODO: these are so broken, I hate how they look. turning them off.
+//        val inflater = TransitionInflater.from(requireContext())
+//        enterTransition = inflater.inflateTransition(R.transition.slide_bottom)
+//        exitTransition = inflater.inflateTransition(R.transition.fade)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,6 +57,7 @@ abstract class BaseFragment : BaseMvRxFragment() {
      * in the logs.
      */
     abstract fun log(message: String)
+    abstract fun log(throwable: Throwable)
 
     protected fun navigate(@IdRes id: Int, args: Parcelable? = null) {
         findNavController().navigate(id, Bundle().apply { putParcelable(MvRx.KEY_ARG, args) })
