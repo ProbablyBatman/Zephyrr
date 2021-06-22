@@ -1,7 +1,6 @@
 package greenberg.moviedbshell.base
 
-import com.airbnb.mvrx.BaseMvRxViewModel
-import com.airbnb.mvrx.MvRxState
-import greenberg.moviedbshell.BuildConfig
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModel
 
-abstract class ZephyrrMvRxViewModel<S : MvRxState>(initialState: S) : BaseMvRxViewModel<S>(initialState, debugMode = BuildConfig.DEBUG)
+abstract class ZephyrrMvRxViewModel<S : MavericksState>(initialState: S) : MavericksViewModel<S>(initialState)

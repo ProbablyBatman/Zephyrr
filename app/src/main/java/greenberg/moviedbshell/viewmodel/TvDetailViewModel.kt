@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.viewmodel
 
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -28,11 +29,11 @@ class TvDetailViewModel
     }
 
     init {
-        logStateChanges()
         fetchTvDetail()
     }
 
     fun fetchTvDetail() {
+        viewModelScope
         withState { state ->
             Single.zip(
                 TMDBService.queryTvDetail(state.tvId),
@@ -55,8 +56,7 @@ class TvDetailViewModel
         }
     }
 
-    companion object : MvRxViewModelFactory<TvDetailViewModel, TvDetailState> {
-        @JvmStatic
+    companion object : MavericksViewModelFactory<TvDetailViewModel, TvDetailState> {
         override fun create(viewModelContext: ViewModelContext, state: TvDetailState): TvDetailViewModel {
             val fragment = (viewModelContext as FragmentViewModelContext).fragment<TvDetailFragment>().tvDetailViewModelFactory
             return fragment.create(state)

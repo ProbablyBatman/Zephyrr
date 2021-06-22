@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
@@ -237,7 +237,7 @@ class MovieDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-                            putParcelable(MvRx.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
+                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
                             putBoolean(BACKDROP_KEY, true)
                         }
                     }
@@ -247,7 +247,7 @@ class MovieDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-                            putParcelable(MvRx.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
+                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
                             putBoolean(BACKDROP_KEY, false)
                         }
                     }

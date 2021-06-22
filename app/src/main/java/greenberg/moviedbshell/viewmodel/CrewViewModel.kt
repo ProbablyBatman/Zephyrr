@@ -5,8 +5,4 @@ import greenberg.moviedbshell.state.CrewState
 
 class CrewViewModel(
     state: CrewState
-) : ZephyrrMvRxViewModel<CrewState>(state) {
-    init {
-        logStateChanges()
-    }
-}
+) : ZephyrrMvRxViewModel<CrewState>(state)

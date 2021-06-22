@@ -2,7 +2,7 @@ package greenberg.moviedbshell.viewmodel
 
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -28,7 +28,6 @@ class PopularMoviesViewModel
     }
 
     init {
-        logStateChanges()
         fetchFirstPage()
     }
 
@@ -109,8 +108,7 @@ class PopularMoviesViewModel
 //        }
 //    }
 
-    companion object : MvRxViewModelFactory<PopularMoviesViewModel, MovieListState> {
-        @JvmStatic
+    companion object : MavericksViewModelFactory<PopularMoviesViewModel, MovieListState> {
         override fun create(viewModelContext: ViewModelContext, state: MovieListState): PopularMoviesViewModel {
             val fragment = (viewModelContext as FragmentViewModelContext).fragment<PopularMoviesFragment>().viewModelFactory
             return fragment.create(state)

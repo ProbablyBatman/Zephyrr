@@ -18,7 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
@@ -240,7 +240,7 @@ class TvDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-                            putParcelable(MvRx.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
+                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
                             putBoolean(ImageGalleryDialog.BACKDROP_KEY, true)
                         }
                     }
@@ -250,7 +250,7 @@ class TvDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-                            putParcelable(MvRx.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
+                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
                             putBoolean(ImageGalleryDialog.BACKDROP_KEY, false)
                         }
                     }

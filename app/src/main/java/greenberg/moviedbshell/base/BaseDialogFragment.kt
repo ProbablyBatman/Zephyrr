@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
-import com.airbnb.mvrx.MvRxView
+import com.airbnb.mvrx.MavericksView
 import java.util.UUID
 
-abstract class BaseDialogFragment : DialogFragment(), MvRxView {
+abstract class BaseDialogFragment : DialogFragment(), MavericksView {
     override val mvrxViewId by lazy { backdropViewUUID }
     private lateinit var backdropViewUUID: String
 

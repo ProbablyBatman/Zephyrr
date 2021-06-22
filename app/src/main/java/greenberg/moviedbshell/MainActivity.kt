@@ -8,7 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import greenberg.moviedbshell.base.BaseActivity
 import greenberg.moviedbshell.extensions.hideKeyboard
 import greenberg.moviedbshell.state.SearchResultsArgs
@@ -35,8 +35,8 @@ class MainActivity : BaseActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.aboutFragment -> {
                 navController.navigate(R.id.action_global_aboutFragment)
                 true
@@ -56,7 +56,7 @@ class MainActivity : BaseActivity() {
                         searchView.hideKeyboard()
                         searchView.clearFocus()
                         navController.navigate(R.id.action_global_searchResultsFragment, Bundle().apply {
-                            putParcelable(MvRx.KEY_ARG, SearchResultsArgs(query))
+                            putParcelable(Mavericks.KEY_ARG, SearchResultsArgs(query))
                         }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true).build())
                     }
                     return true

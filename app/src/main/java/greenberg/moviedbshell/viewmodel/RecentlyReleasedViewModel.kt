@@ -2,7 +2,7 @@ package greenberg.moviedbshell.viewmodel
 
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -28,7 +28,6 @@ class RecentlyReleasedViewModel
     }
 
     init {
-        logStateChanges()
         fetchMovies()
     }
 
@@ -68,8 +67,7 @@ class RecentlyReleasedViewModel
         }
     }
 
-    companion object : MvRxViewModelFactory<RecentlyReleasedViewModel, MovieListState> {
-        @JvmStatic
+    companion object : MavericksViewModelFactory<RecentlyReleasedViewModel, MovieListState> {
         override fun create(viewModelContext: ViewModelContext, state: MovieListState): RecentlyReleasedViewModel {
             val fragment = (viewModelContext as FragmentViewModelContext).fragment<RecentlyReleasedFragment>().viewModelFactory
             return fragment.create(state)

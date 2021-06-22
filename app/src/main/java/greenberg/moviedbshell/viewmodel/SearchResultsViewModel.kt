@@ -3,6 +3,7 @@ package greenberg.moviedbshell.viewmodel
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -28,7 +29,6 @@ class SearchResultsViewModel
     }
 
     init {
-        logStateChanges()
         fetchSearchResults()
     }
 
@@ -90,8 +90,7 @@ class SearchResultsViewModel
         }
     }
 
-    companion object : MvRxViewModelFactory<SearchResultsViewModel, SearchResultsState> {
-        @JvmStatic
+    companion object : MavericksViewModelFactory<SearchResultsViewModel, SearchResultsState> {
         override fun create(viewModelContext: ViewModelContext, state: SearchResultsState): SearchResultsViewModel {
             val fragment = (viewModelContext as FragmentViewModelContext).fragment<SearchResultsFragment>().searchResultsViewModelFactory
             return fragment.create(state)

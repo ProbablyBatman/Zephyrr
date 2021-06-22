@@ -1,7 +1,7 @@
 package greenberg.moviedbshell.state
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 import greenberg.moviedbshell.models.tvlistmodels.TvListResponse
@@ -19,4 +19,4 @@ data class LandingState(
     val soonTMItems: List<MovieItem> = emptyList(),
     val popularTvItems: List<TvItem> = emptyList(),
     val topRatedTvItems: List<TvItem> = emptyList()
-) : MvRxState
+) : MavericksState

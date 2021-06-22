@@ -11,7 +11,7 @@
     tools:context=".MainActivity">
 
     <!-- Currently there's a bug preventing me from changing this to a FragmentContainerView -->
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/nav_host_fragment"

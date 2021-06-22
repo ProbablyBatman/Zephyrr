@@ -1,6 +1,7 @@
 package greenberg.moviedbshell.viewmodel
 
 import com.airbnb.mvrx.FragmentViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
@@ -28,7 +29,6 @@ class LandingViewModel
     }
 
     init {
-        logStateChanges()
         fetchLandingResults()
     }
 
@@ -102,8 +102,7 @@ class LandingViewModel
             .disposeOnClear()
     }
 
-    companion object : MvRxViewModelFactory<LandingViewModel, LandingState> {
-        @JvmStatic
+    companion object : MavericksViewModelFactory<LandingViewModel, LandingState> {
         override fun create(viewModelContext: ViewModelContext, state: LandingState): LandingViewModel {
             val fragment = (viewModelContext as FragmentViewModelContext).fragment<LandingFragment>().landingViewModelFactory
             return fragment.create(state)

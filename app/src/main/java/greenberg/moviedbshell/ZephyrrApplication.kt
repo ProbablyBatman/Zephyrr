@@ -3,6 +3,7 @@ package greenberg.moviedbshell
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import com.airbnb.mvrx.Mavericks
 import greenberg.moviedbshell.dagger.ApplicationModule
 import greenberg.moviedbshell.dagger.DaggerSingletonComponent
 import greenberg.moviedbshell.dagger.SingletonComponent
@@ -23,6 +24,8 @@ class ZephyrrApplication : Application() {
         } else {
             Timber.plant(NoLogTree())
         }
+
+        Mavericks.initialize(this)
 
         component = DaggerSingletonComponent.builder()
                 .applicationModule(ApplicationModule(this))

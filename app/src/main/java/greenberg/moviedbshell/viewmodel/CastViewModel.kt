@@ -5,8 +5,4 @@ import greenberg.moviedbshell.state.CastState
 
 class CastViewModel(
     state: CastState
-) : ZephyrrMvRxViewModel<CastState>(state) {
-    init {
-        logStateChanges()
-    }
-}
+) : ZephyrrMvRxViewModel<CastState>(state)

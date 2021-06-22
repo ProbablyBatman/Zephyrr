@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.airbnb.mvrx.BaseMvRxFragment
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.MavericksView
 
-abstract class BaseFragment : BaseMvRxFragment() {
+abstract class BaseFragment : Fragment(), MavericksView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         log("onCreate")
@@ -60,6 +61,6 @@ abstract class BaseFragment : BaseMvRxFragment() {
     abstract fun log(throwable: Throwable)
 
     protected fun navigate(@IdRes id: Int, args: Parcelable? = null) {
-        findNavController().navigate(id, Bundle().apply { putParcelable(MvRx.KEY_ARG, args) })
+        findNavController().navigate(id, Bundle().apply { putParcelable(Mavericks.KEY_ARG, args) })
     }
 }

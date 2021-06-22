@@ -151,7 +151,7 @@ class ImageGalleryDialog : BaseDialogFragment() {
                 bottomSheetCopier?.setOnClickListener {
                     val clipboard = getSystemService(requireContext(), ClipboardManager::class.java)
                     val clip = ClipData.newPlainText("zephyrr_image_gallery_link", getCurrentImageLink())
-                    clipboard?.primaryClip = clip
+                    clipboard?.setPrimaryClip(clip)
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     Toast.makeText(requireContext(), R.string.copy_image_toast, Toast.LENGTH_SHORT).show()
                 }
