@@ -16,7 +16,7 @@ abstract class BaseDialogFragment : DialogFragment(), MavericksView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         backdropViewUUID = savedInstanceState?.getString(DIALOG_KEY)
-                ?: "${this.javaClass.name}.${UUID.randomUUID()}"
+            ?: "${this.javaClass.name}.${UUID.randomUUID()}"
         super.onCreate(savedInstanceState)
         log("onCreate")
     }

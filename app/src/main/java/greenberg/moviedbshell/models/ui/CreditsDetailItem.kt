@@ -9,7 +9,7 @@ data class CreditsDetailItem(
     override val mediaType: String,
     override val id: Int?
 ) : PreviewItem(
-        posterImageUrl = posterImageUrl,
-        mediaType = mediaType,
-        id = id
+    posterImageUrl = posterImageUrl,
+    mediaType = mediaType,
+    id = id
 )

@@ -27,8 +27,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.card.MaterialCardView
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
-import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.adapters.CreditsAdapter
+import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.extensions.processAge
 import greenberg.moviedbshell.extensions.processDate
 import greenberg.moviedbshell.models.MediaType
@@ -127,33 +127,43 @@ class PersonDetailFragment : BaseFragment() {
 
         if (personDetailItem != null) {
             if (personDetailItem.posterImageUrl.isNotEmpty() && posterImageView != null) {
-                val validUrl = resources.getString(R.string.poster_url_substitution, personDetailItem.posterImageUrl)
+                val validUrl = resources.getString(
+                    R.string.poster_url_substitution,
+                    personDetailItem.posterImageUrl
+                )
                 Glide.with(this)
-                        .load(validUrl)
-                        .apply(
-                                RequestOptions()
-                                        .placeholder(ColorDrawable(Color.LTGRAY))
-                                        .fallback(ColorDrawable(Color.LTGRAY))
-                                        .centerCrop()
-                        )
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(posterImageView!!)
+                    .load(validUrl)
+                    .apply(
+                        RequestOptions()
+                            .placeholder(ColorDrawable(Color.LTGRAY))
+                            .fallback(ColorDrawable(Color.LTGRAY))
+                            .centerCrop()
+                    )
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(posterImageView!!)
             }
 
             name?.text = personDetailItem.name
             when {
                 personDetailItem.deathday.isNotEmpty() -> {
-                    birthday?.text = resources.getString(R.string.birthday_no_age_substitution, personDetailItem.birthday.processDate())
-                    deathday?.text = resources.getString(R.string.day_and_age_substitution,
-                            personDetailItem.deathday.processDate(),
-                            processAge(personDetailItem.birthday, personDetailItem.deathday))
+                    birthday?.text = resources.getString(
+                        R.string.birthday_no_age_substitution,
+                        personDetailItem.birthday.processDate()
+                    )
+                    deathday?.text = resources.getString(
+                        R.string.day_and_age_substitution,
+                        personDetailItem.deathday.processDate(),
+                        processAge(personDetailItem.birthday, personDetailItem.deathday)
+                    )
                     deathday?.visibility = View.VISIBLE
                     deathdayTitle?.visibility = View.VISIBLE
                 }
                 personDetailItem.birthday.isNotEmpty() -> {
-                    birthday?.text = resources.getString(R.string.day_and_age_substitution,
-                            personDetailItem.birthday.processDate(),
-                            processAge(personDetailItem.birthday))
+                    birthday?.text = resources.getString(
+                        R.string.day_and_age_substitution,
+                        personDetailItem.birthday.processDate(),
+                        processAge(personDetailItem.birthday)
+                    )
                 }
                 else -> {
                     birthdayTitle?.visibility = View.GONE
@@ -244,14 +254,14 @@ class PersonDetailFragment : BaseFragment() {
         when (mediaType) {
             MediaType.MOVIE -> {
                 navigate(
-                        R.id.action_personDetailFragment_to_movieDetailFragment,
-                        MovieDetailArgs(itemId)
+                    R.id.action_personDetailFragment_to_movieDetailFragment,
+                    MovieDetailArgs(itemId)
                 )
             }
             MediaType.TV -> {
                 navigate(
-                        R.id.action_personDetailFragment_to_tvDetailFragment,
-                        TvDetailArgs(itemId)
+                    R.id.action_personDetailFragment_to_tvDetailFragment,
+                    TvDetailArgs(itemId)
                 )
             }
         }

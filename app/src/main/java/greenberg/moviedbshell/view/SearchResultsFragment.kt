@@ -139,7 +139,7 @@ class SearchResultsFragment : BaseFragment() {
         Timber.d("Show max pages")
         maxPagesSnackbar = searchResultsRecycler?.let { view ->
             Snackbar.make(view, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
+                .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
         }
         if (maxPagesSnackbar?.isShown == false) {
             maxPagesSnackbar?.show()

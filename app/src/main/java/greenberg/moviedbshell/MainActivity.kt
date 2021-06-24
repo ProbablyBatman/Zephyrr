@@ -1,12 +1,11 @@
 package greenberg.moviedbshell
 
 import android.os.Bundle
-import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.airbnb.mvrx.Mavericks
@@ -24,7 +23,7 @@ class MainActivity : BaseActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        //navController = findNavController(this, R.id.nav_host_fragment)
+        // navController = findNavController(this, R.id.nav_host_fragment)
         setupActionBarWithNavController(navController)
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -47,6 +46,7 @@ class MainActivity : BaseActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     private fun setUpSearchListener(item: MenuItem) {
         val searchView = item.actionView as? SearchView
         searchView?.apply {
@@ -58,9 +58,14 @@ class MainActivity : BaseActivity() {
                         item.collapseActionView()
                         searchView.hideKeyboard()
                         searchView.clearFocus()
-                        navController.navigate(R.id.action_global_searchResultsFragment, Bundle().apply {
-                            putParcelable(Mavericks.KEY_ARG, SearchResultsArgs(query))
-                        }, NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true).build())
+                        navController.navigate(
+                            R.id.action_global_searchResultsFragment,
+                            Bundle().apply {
+                                putParcelable(Mavericks.KEY_ARG, SearchResultsArgs(query))
+                            },
+                            NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true)
+                                .build()
+                        )
                     }
                     return true
                 }

@@ -48,7 +48,7 @@ class ImageGalleryViewModel
         }
     }
 
-    private fun fetchMovieImages( dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+    private fun fetchMovieImages(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
         withState { state ->
             suspend { tmdbRepository.fetchMovieImages(state.itemId) }
                 .execute(dispatcher) {

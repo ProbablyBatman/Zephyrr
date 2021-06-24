@@ -11,10 +11,8 @@ import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.TmdbRepository
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.SearchResultsMapper
-import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.SearchResultsState
 import greenberg.moviedbshell.view.SearchResultsFragment
-import io.reactivex.schedulers.Schedulers
 
 class SearchResultsViewModel
 @AssistedInject constructor(

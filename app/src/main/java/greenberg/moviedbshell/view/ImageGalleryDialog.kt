@@ -160,7 +160,8 @@ class ImageGalleryDialog : BaseDialogFragment() {
                     if (ContextCompat.checkSelfPermission(
                             this@ImageGalleryDialog.requireContext(),
                             Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ) == PackageManager.PERMISSION_GRANTED) {
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
                         startDownload()
                     } else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -38,26 +38,26 @@ fun processNetworks(networks: List<NetworkItem>): String = networks.joinToString
 
 // TODO: Investigate if there's a less dumb way to do this
 fun String.processAsReleaseDate(): String =
-        if (this.isNotBlank()) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val date = inputFormat.parse(this)
-            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            outputFormat.format(date)
-        } else {
-            ""
-        }
+    if (this.isNotBlank()) {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = inputFormat.parse(this)
+        val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        outputFormat.format(date)
+    } else {
+        ""
+    }
 
 // TODO: Investigate if there's a less way to do this, it's identical to processDate for now
 // it should be different
 fun String.processDate(): String =
-        if (this.isNotBlank()) {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val formattedDate = inputFormat.parse(this)
-            val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            outputFormat.format(formattedDate)
-        } else {
-            ""
-        }
+    if (this.isNotBlank()) {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formattedDate = inputFormat.parse(this)
+        val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        outputFormat.format(formattedDate)
+    } else {
+        ""
+    }
 
 // TODO: probably make sure every date is like this?
 // there has to be a better way to do this
@@ -92,15 +92,15 @@ fun processAge(birthday: String, deathday: String = ""): Int {
 
 fun List<PreviewItem>.processKnownForItems(): String {
     return "Most Known for: \n" +
-            this.joinToString(separator = "\n") { item ->
-                when (item) {
-                    is MovieItem -> {
-                        "Movie: ${item.movieTitle}, ${item.releaseDate.processAsReleaseDate()}"
-                    }
-                    is TvItem -> {
-                        "TV show: ${item.name}, ${item.firstAirDate.processAsReleaseDate()}"
-                    }
-                    else -> ""
+        this.joinToString(separator = "\n") { item ->
+            when (item) {
+                is MovieItem -> {
+                    "Movie: ${item.movieTitle}, ${item.releaseDate.processAsReleaseDate()}"
                 }
+                is TvItem -> {
+                    "TV show: ${item.name}, ${item.firstAirDate.processAsReleaseDate()}"
+                }
+                else -> ""
             }
+        }
 }

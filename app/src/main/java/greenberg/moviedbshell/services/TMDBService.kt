@@ -10,7 +10,6 @@ import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.AggregateCreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
 import greenberg.moviedbshell.models.tvlistmodels.TvListResponse
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

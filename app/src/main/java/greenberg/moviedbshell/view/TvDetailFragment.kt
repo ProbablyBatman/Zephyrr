@@ -3,9 +3,6 @@ package greenberg.moviedbshell.view
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.core.widget.NestedScrollView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +12,10 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Mavericks
@@ -30,9 +30,9 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
-import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.adapters.CastListAdapter
 import greenberg.moviedbshell.adapters.PosterListAdapter
+import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.extensions.processDate
 import greenberg.moviedbshell.extensions.processNetworks
 import greenberg.moviedbshell.extensions.processNetworksTitle

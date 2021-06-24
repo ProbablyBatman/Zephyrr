@@ -189,7 +189,7 @@ class LandingFragment : BaseFragment() {
                 log("recent release load")
                 // TODO: bug here. Technically because I can't measure the title height in time to do this,
                 // the entire row shifts a little bit after the images load in. For now, this will suffice.
-                //setContainerParamsLoading(recentlyReleasedContainer)
+                setContainerParamsLoading(recentlyReleasedContainer)
                 recentlyReleasedErrorContainer.visibility = View.GONE
                 recentlyReleasedLoadingBar.visibility = View.VISIBLE
                 recentlyReleasedRecycler.visibility = View.GONE
@@ -197,7 +197,7 @@ class LandingFragment : BaseFragment() {
             is Success -> {
                 // show row
                 log("recent release success")
-//                setContainerParamsNormal(recentlyReleasedContainer)
+                setContainerParamsNormal(recentlyReleasedContainer)
                 recentlyReleasedAdapter.setItems(movieList)
                 recentlyReleasedLoadingBar.visibility = View.GONE
                 recentlyReleasedRecycler.visibility = View.VISIBLE

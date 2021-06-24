@@ -9,10 +9,10 @@ class CastMemberMapper
     override fun mapToEntity(item: List<CastResponseItem?>?): List<CastMemberItem> {
         val mappedItems = item?.map { castResponseItem ->
             CastMemberItem(
-                    role = castResponseItem?.character.orEmpty(),
-                    name = castResponseItem?.name.orEmpty(),
-                    posterUrl = castResponseItem?.profilePath.orEmpty(),
-                    id = castResponseItem?.id
+                role = castResponseItem?.character.orEmpty(),
+                name = castResponseItem?.name.orEmpty(),
+                posterUrl = castResponseItem?.profilePath.orEmpty(),
+                id = castResponseItem?.id
             )
         }
         return mappedItems ?: emptyList()

@@ -25,10 +25,10 @@ class ImageGalleryAdapter(
         if (holder is ImageGalleryViewHolder) {
             resetView(holder)
             Glide.with(holder.imageView)
-                    .load(holder.imageView.context.getString(R.string.poster_url_substitution, currentItem.filePath))
-                    .apply(RequestOptions().fitCenter())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(holder.imageView)
+                .load(holder.imageView.context.getString(R.string.poster_url_substitution, currentItem.filePath))
+                .apply(RequestOptions().fitCenter())
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(holder.imageView)
             // Show the current position / number of items
             holder.counter.text = holder.counter.context.getString(R.string.image_gallery_counter, position + 1, itemCount)
         }

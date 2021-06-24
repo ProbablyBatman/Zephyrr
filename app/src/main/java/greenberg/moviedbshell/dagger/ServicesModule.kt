@@ -27,11 +27,11 @@ class ServicesModule {
     @Singleton
     fun provideRetrofit(context: Context, httpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(context.getString(R.string.tmdb_url))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
-                .build()
+            .baseUrl(context.getString(R.string.tmdb_url))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(httpClient)
+            .build()
     }
 
     @Provides
@@ -48,21 +48,24 @@ class ServicesModule {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
-                .cache(cache)
-                .apply {
-                    addInterceptor(loggingInterceptor)
-                    addInterceptor { chain ->
-                        val original = chain.request()
-                        val originalHttpUrl = original.url
-                        val url = originalHttpUrl.newBuilder()
-                                .addQueryParameter(context.getString(R.string.api_key), BuildConfig.TMDB_API_KEY)
-                                .build()
-                        val request = original.newBuilder().url(url).build()
-                        val response = chain.proceed(request)
-                        if (response.networkResponse == null) Timber.d("call hit the cache")
-                        else Timber.d("call hit the network")
-                        response
+            .cache(cache)
+            .apply {
+                addInterceptor(loggingInterceptor)
+                addInterceptor { chain ->
+                    val original = chain.request()
+                    val originalHttpUrl = original.url
+                    val url = originalHttpUrl.newBuilder()
+                        .addQueryParameter(context.getString(R.string.api_key), BuildConfig.TMDB_API_KEY)
+                        .build()
+                    val request = original.newBuilder().url(url).build()
+                    val response = chain.proceed(request)
+                    if (response.networkResponse == null) {
+                        Timber.d("call hit the cache")
+                    } else {
+                        Timber.d("call hit the network")
                     }
-                }.build()
+                    response
+                }
+            }.build()
     }
 }

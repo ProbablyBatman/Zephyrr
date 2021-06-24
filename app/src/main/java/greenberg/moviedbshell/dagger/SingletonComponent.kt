@@ -4,11 +4,11 @@ import dagger.Component
 import greenberg.moviedbshell.view.PopularMoviesFragment
 import greenberg.moviedbshell.view.RecentlyReleasedFragment
 import greenberg.moviedbshell.view.SoonTMFragment
+import greenberg.moviedbshell.viewmodel.ImageGalleryViewModel
 import greenberg.moviedbshell.viewmodel.LandingViewModel
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
 import greenberg.moviedbshell.viewmodel.PersonDetailViewModel
 import greenberg.moviedbshell.viewmodel.PopularMoviesViewModel
-import greenberg.moviedbshell.viewmodel.ImageGalleryViewModel
 import greenberg.moviedbshell.viewmodel.RecentlyReleasedViewModel
 import greenberg.moviedbshell.viewmodel.SearchResultsViewModel
 import greenberg.moviedbshell.viewmodel.SoonTMViewModel

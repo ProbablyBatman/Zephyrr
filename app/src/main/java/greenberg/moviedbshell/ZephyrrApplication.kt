@@ -28,8 +28,8 @@ class ZephyrrApplication : Application() {
         Mavericks.initialize(this)
 
         component = DaggerSingletonComponent.builder()
-                .applicationModule(ApplicationModule(this))
-                .build()
+            .applicationModule(ApplicationModule(this))
+            .build()
 
         nightMode = retrieveSharedPreferences().getBoolean(NIGHT_MODE, true)
         gridListMode = retrieveSharedPreferences().getString(GRID_LIST_TOGGLE, GRID_LIST_DEFAULT_VALUE).orEmpty()

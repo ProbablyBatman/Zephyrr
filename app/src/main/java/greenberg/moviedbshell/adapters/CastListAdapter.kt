@@ -29,12 +29,12 @@ class CastListAdapter(
             else -> R.layout.cast_list_card
         }
         return CastListViewHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    layout,
-                    parent,
-                    false
-                )
+            LayoutInflater.from(parent.context).inflate(
+                layout,
+                parent,
+                false
             )
+        )
     }
 
     override fun getItemCount() = castMemberList.size

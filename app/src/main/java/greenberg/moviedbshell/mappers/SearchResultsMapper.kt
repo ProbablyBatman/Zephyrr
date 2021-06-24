@@ -15,27 +15,27 @@ class SearchResultsMapper
             when (result?.mediaType) {
                 MediaType.MOVIE ->
                     MovieItem(
-                            movieTitle = result.title.orEmpty(),
-                            overview = result.overview.orEmpty(),
-                            releaseDate = result.releaseDate.orEmpty(),
-                            posterImageUrl = result.posterPath.orEmpty(),
-                            id = result.id
+                        movieTitle = result.title.orEmpty(),
+                        overview = result.overview.orEmpty(),
+                        releaseDate = result.releaseDate.orEmpty(),
+                        posterImageUrl = result.posterPath.orEmpty(),
+                        id = result.id
                     )
                 MediaType.TV -> {
                     TvItem(
-                            name = result.name.orEmpty(),
-                            overview = result.overview.orEmpty(),
-                            firstAirDate = result.firstAirDate.orEmpty(),
-                            posterImageUrl = result.posterPath.orEmpty(),
-                            id = result.id
+                        name = result.name.orEmpty(),
+                        overview = result.overview.orEmpty(),
+                        firstAirDate = result.firstAirDate.orEmpty(),
+                        posterImageUrl = result.posterPath.orEmpty(),
+                        id = result.id
                     )
                 }
                 MediaType.PERSON -> {
                     PersonItem(
-                            name = result.name.orEmpty(),
-                            posterImageUrl = result.profilePath.orEmpty(),
-                            knownForItems = knownForMapper.mapToEntity(result.knownFor),
-                            id = result.id
+                        name = result.name.orEmpty(),
+                        posterImageUrl = result.profilePath.orEmpty(),
+                        knownForItems = knownForMapper.mapToEntity(result.knownFor),
+                        id = result.id
                     )
                 }
                 else -> PreviewItem(mediaType = MediaType.UNKNOWN)

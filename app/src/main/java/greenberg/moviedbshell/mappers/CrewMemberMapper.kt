@@ -28,12 +28,12 @@ class CrewMemberMapper
                 // Find all the jobs this person had associated with their name
                 val filteredItemsByName = mappedItems.filter { it.name == crewItem.name }
                 val newCrewMemberItem =
-                        CollapsedCrewMemberItem(
-                            crewItem.job,
-                            crewItem.name,
-                            crewItem.posterUrl,
-                            crewItem.id
-                        )
+                    CollapsedCrewMemberItem(
+                        crewItem.job,
+                        crewItem.name,
+                        crewItem.posterUrl,
+                        crewItem.id
+                    )
                 // Append them to the new list
                 filteredItemsByName.forEach {
                     if (!newCrewMemberItem.job.contains(it.job)) {

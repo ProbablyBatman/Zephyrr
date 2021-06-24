@@ -9,7 +9,7 @@ data class TvItem(
     override val posterImageUrl: String,
     override val id: Int?
 ) : PreviewItem(
-        posterImageUrl,
-        id,
-        MediaType.TV
+    posterImageUrl,
+    id,
+    MediaType.TV
 )

@@ -10,13 +10,13 @@ class PersonDetailMapper
         val personDetailResponse = item?.personDetailResponse
         val creditsResponse = item?.creditsResponse
         return PersonDetailItem(
-                name = personDetailResponse?.name.orEmpty(),
-                birthday = personDetailResponse?.birthday.orEmpty(),
-                deathday = personDetailResponse?.deathday.orEmpty(),
-                placeOfBirth = personDetailResponse?.placeOfBirth.orEmpty(),
-                biography = personDetailResponse?.biography.orEmpty(),
-                posterImageUrl = personDetailResponse?.profilePath.orEmpty(),
-                combinedCredits = creditMapper.mapToEntity(creditsResponse)
+            name = personDetailResponse?.name.orEmpty(),
+            birthday = personDetailResponse?.birthday.orEmpty(),
+            deathday = personDetailResponse?.deathday.orEmpty(),
+            placeOfBirth = personDetailResponse?.placeOfBirth.orEmpty(),
+            biography = personDetailResponse?.biography.orEmpty(),
+            posterImageUrl = personDetailResponse?.profilePath.orEmpty(),
+            combinedCredits = creditMapper.mapToEntity(creditsResponse)
         )
     }
 }
