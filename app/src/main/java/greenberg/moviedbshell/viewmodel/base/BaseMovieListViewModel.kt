@@ -2,6 +2,8 @@ package greenberg.moviedbshell.viewmodel.base
 
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.state.base.BaseMovieListState
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 abstract class BaseMovieListViewModel<T : BaseMovieListState>(
     open var state: T
@@ -9,5 +11,5 @@ abstract class BaseMovieListViewModel<T : BaseMovieListState>(
 
     interface Factory
 
-    abstract fun fetchMovies()
+    abstract fun fetchMovies(dispatcher: CoroutineDispatcher = Dispatchers.IO)
 }

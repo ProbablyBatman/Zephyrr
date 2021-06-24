@@ -7,19 +7,20 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.TmdbRepository
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.BackdropGalleryMapper
 import greenberg.moviedbshell.mappers.PosterGalleryMapper
 import greenberg.moviedbshell.models.MediaType
-import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.ImageGalleryState
 import greenberg.moviedbshell.view.ImageGalleryDialog
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 class ImageGalleryViewModel
 @AssistedInject constructor(
     @Assisted var state: ImageGalleryState,
-    private val TMDBService: TMDBService,
+    private val tmdbRepository: TmdbRepository,
     private val mapper: PosterGalleryMapper,
     private val backdropMapper: BackdropGalleryMapper
 ) : ZephyrrMvRxViewModel<ImageGalleryState>(state) {
@@ -38,36 +39,44 @@ class ImageGalleryViewModel
             if (state.imageGalleryResponse is Loading) return@withState
             when (state.mediaType) {
                 MediaType.MOVIE -> {
-                    TMDBService
-                        .queryMovieImages(state.itemId)
-                        .subscribeOn(Schedulers.io())
-                        .execute {
-                            // Assume success for now
-                            copy(
-                                itemId = state.itemId,
-                                mediaType = state.mediaType,
-                                posterItems = mapper.mapToEntity(it()),
-                                backdropItems = backdropMapper.mapToEntity(it()),
-                                imageGalleryResponse = it
-                            )
-                        }
+                    fetchMovieImages()
                 }
                 MediaType.TV -> {
-                    TMDBService
-                        .queryTvImages(state.itemId)
-                        .subscribeOn(Schedulers.io())
-                        .execute {
-                            // Assume success for now
-                            copy(
-                                itemId = state.itemId,
-                                mediaType = state.mediaType,
-                                posterItems = mapper.mapToEntity(it()),
-                                backdropItems = backdropMapper.mapToEntity(it()),
-                                imageGalleryResponse = it
-                            )
-                        }
+                    fetchTvImages()
                 }
             }
+        }
+    }
+
+    private fun fetchMovieImages( dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        withState { state ->
+            suspend { tmdbRepository.fetchMovieImages(state.itemId) }
+                .execute(dispatcher) {
+                    // Assume success for now
+                    copy(
+                        itemId = state.itemId,
+                        mediaType = state.mediaType,
+                        posterItems = mapper.mapToEntity(it()),
+                        backdropItems = backdropMapper.mapToEntity(it()),
+                        imageGalleryResponse = it
+                    )
+                }
+        }
+    }
+
+    private fun fetchTvImages(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
+        withState { state ->
+            suspend { tmdbRepository.fetchTvImages(state.itemId) }
+                .execute(dispatcher) {
+                    // Assume success for now
+                    copy(
+                        itemId = state.itemId,
+                        mediaType = state.mediaType,
+                        posterItems = mapper.mapToEntity(it()),
+                        backdropItems = backdropMapper.mapToEntity(it()),
+                        imageGalleryResponse = it
+                    )
+                }
         }
     }
 

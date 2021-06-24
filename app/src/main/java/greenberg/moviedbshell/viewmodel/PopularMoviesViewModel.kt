@@ -8,17 +8,18 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.TmdbRepository
 import greenberg.moviedbshell.mappers.MovieListMapper
-import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.view.PopularMoviesFragment
 import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 class PopularMoviesViewModel
 @AssistedInject constructor(
     @Assisted override var state: MovieListState,
-    private val TMDBService: TMDBService,
+    private val tmdbRepository: TmdbRepository,
     private val mapper: MovieListMapper
 ) : BaseMovieListViewModel<MovieListState>(state) {
 
@@ -31,32 +32,27 @@ class PopularMoviesViewModel
         fetchFirstPage()
     }
 
-    override fun fetchMovies() {
+    override fun fetchMovies(dispatcher: CoroutineDispatcher) {
         withState { state ->
-            val totalPages = state.movieListResponse()?.totalPages
-            if (totalPages != null && state.pageNumber >= totalPages) {
-                state.copy(shouldShowMaxPages = true)
-                return@withState
-            }
-            TMDBService
-                .queryPopularMovies(state.pageNumber)
-                .subscribeOn(Schedulers.io())
-                .execute {
+            suspend { tmdbRepository.fetchPopularMovies(state.pageNumber) }
+                .execute(dispatcher) {
+                    val totalPages = it()?.totalPages
                     when (it) {
                         is Fail -> {
                             copy(
                                 pageNumber = state.pageNumber,
                                 movieListResponse = it,
-                                movieList = state.movieList
+                                movieList = state.movieList,
+                                // TODO: move this to the view like in search?
+                                shouldShowMaxPages = totalPages != null && state.pageNumber <= totalPages
                             )
                         }
                         is Success -> {
-                            val pages = it()?.totalPages
                             copy(
                                 pageNumber = state.pageNumber + 1,
                                 movieListResponse = it,
                                 movieList = state.movieList + mapper.mapToEntity(it()),
-                                shouldShowMaxPages = pages != null && pages <= state.pageNumber
+                                shouldShowMaxPages = totalPages != null && state.pageNumber <= totalPages
                             )
                         }
                         else -> copy(
@@ -64,16 +60,13 @@ class PopularMoviesViewModel
                         )
                     }
                 }
-                .disposeOnClear()
         }
     }
 
-    fun fetchFirstPage() {
+    private fun fetchFirstPage(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
         withState { state ->
-            TMDBService
-                .queryPopularMovies(1)
-                .subscribeOn(Schedulers.io())
-                .execute {
+            suspend { tmdbRepository.fetchPopularMovies(1) }
+                .execute(dispatcher) {
                     when (it) {
                         is Fail -> {
                             copy(
@@ -92,7 +85,6 @@ class PopularMoviesViewModel
                         else -> copy()
                     }
                 }
-                .disposeOnClear()
         }
     }
 

@@ -13,7 +13,7 @@ import greenberg.moviedbshell.models.ui.CrewMemberItem
 import greenberg.moviedbshell.viewHolders.CrewListViewHolder
 
 class CrewListAdapter(
-    var crewMemberList: List<CrewMemberItem> = listOf(),
+    private var crewMemberList: List<CrewMemberItem> = listOf(),
     val onClickListener: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -45,6 +45,11 @@ class CrewListAdapter(
             }
             holder.cardView.setOnClickListener { onClickListener.invoke(currentItem.id ?: -1) }
         }
+    }
+
+    fun setMembersList(items: List<CrewMemberItem>) {
+        crewMemberList = items
+        notifyDataSetChanged()
     }
 
     private fun resetView(holder: CrewListViewHolder) {

@@ -7,24 +7,17 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.TmdbRepository
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
-import greenberg.moviedbshell.mappers.PersonDetailMapper
-import greenberg.moviedbshell.models.peopledetailmodels.CombinedCreditsResponse
-import greenberg.moviedbshell.models.peopledetailmodels.PersonDetailResponse
-import greenberg.moviedbshell.models.container.PersonDetailResponseContainer
-import greenberg.moviedbshell.models.ui.PersonDetailItem
-import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.PersonDetailState
 import greenberg.moviedbshell.view.PersonDetailFragment
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 class PersonDetailViewModel
 @AssistedInject constructor(
     @Assisted var state: PersonDetailState,
-    private val TMDBService: TMDBService,
-    private val mapper: PersonDetailMapper
+    private val tmdbRepository: TmdbRepository,
 ) : ZephyrrMvRxViewModel<PersonDetailState>(state) {
 
     @AssistedFactory
@@ -36,32 +29,23 @@ class PersonDetailViewModel
         fetchPersonDetail()
     }
 
-    fun fetchPersonDetail() {
+    fun fetchPersonDetail(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
         withState { state ->
             // Swallows requests if there's already one loading
             if (state.personDetailResponse is Loading) return@withState
-            // TODO: reevaluate if these need subscribeOn
-            Single.zip(
-                            TMDBService.queryPersonDetail(state.personId).subscribeOn(Schedulers.io()),
-                            TMDBService.queryPersonCombinedCredits(state.personId).subscribeOn(Schedulers.io()),
-                            BiFunction<PersonDetailResponse, CombinedCreditsResponse, PersonDetailItem> { personDetail, personCredits ->
-                                mapper.mapToEntity(PersonDetailResponseContainer(personDetail, personCredits))
-                            }
+            suspend { tmdbRepository.fetchPersonDetail(state.personId) }
+                .execute(dispatcher) {
+                    copy(
+                        personId = state.personId,
+                        personDetailItem = it(),
+                        personDetailResponse = it
                     )
-                    .subscribeOn(Schedulers.io())
-                    .execute {
-                        copy(
-                                personId = state.personId,
-                                personDetailItem = it(),
-                                personDetailResponse = it
-                        )
-                    }
-                    .disposeOnClear()
+                }
         }
     }
 
     companion object : MavericksViewModelFactory<PersonDetailViewModel, PersonDetailState> {
-        override fun create(viewModelContext: ViewModelContext, state: PersonDetailState): PersonDetailViewModel? {
+        override fun create(viewModelContext: ViewModelContext, state: PersonDetailState): PersonDetailViewModel {
             val fragment = (viewModelContext as FragmentViewModelContext).fragment<PersonDetailFragment>().personDetailViewModelFactory
             return fragment.create(state)
         }

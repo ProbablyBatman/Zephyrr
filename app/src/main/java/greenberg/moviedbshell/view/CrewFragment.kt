@@ -39,8 +39,7 @@ class CrewFragment : BaseFragment() {
 
     private fun showDetails(state: CrewState) {
         if (state.crewMembers.isNotEmpty()) {
-            crewAdapter.crewMemberList = state.crewMembers
-            crewAdapter.notifyDataSetChanged()
+            crewAdapter.setMembersList(state.crewMembers)
         }
     }
 

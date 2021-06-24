@@ -8,17 +8,17 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.TmdbRepository
 import greenberg.moviedbshell.mappers.MovieListMapper
-import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.view.RecentlyReleasedFragment
 import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
 
 class RecentlyReleasedViewModel
 @AssistedInject constructor(
     @Assisted override var state: MovieListState,
-    private val TMDBService: TMDBService,
+    private val tmdbRepository: TmdbRepository,
     private val mapper: MovieListMapper
 ) : BaseMovieListViewModel<MovieListState>(state) {
 
@@ -31,31 +31,26 @@ class RecentlyReleasedViewModel
         fetchMovies()
     }
 
-    override fun fetchMovies() {
+    override fun fetchMovies(dispatcher: CoroutineDispatcher) {
         withState { state ->
-            TMDBService
-                .queryRecentlyReleased(state.pageNumber)
-                .subscribeOn(Schedulers.io())
-                .execute {
+            suspend { tmdbRepository.fetchRecentlyReleased(state.pageNumber) }
+                .execute(dispatcher) {
                     val totalPages = it()?.totalPages
-                    when {
-                        totalPages != null && state.pageNumber > totalPages -> {
-                            copy(
-                                shouldShowMaxPages = true
-                            )
-                        }
-                        it is Fail -> {
+                    when (it) {
+                        is Fail -> {
                             copy(
                                 pageNumber = state.pageNumber,
                                 movieListResponse = it,
-                                movieList = state.movieList
+                                movieList = state.movieList,
+                                shouldShowMaxPages = totalPages != null && state.pageNumber <= totalPages
                             )
                         }
-                        it is Success -> {
+                        is Success -> {
                             copy(
                                 pageNumber = state.pageNumber + 1,
                                 movieListResponse = it,
-                                movieList = state.movieList + mapper.mapToEntity(it())
+                                movieList = state.movieList + mapper.mapToEntity(it()),
+                                shouldShowMaxPages = totalPages != null && state.pageNumber <= totalPages
                             )
                         }
                         else -> copy(
@@ -63,7 +58,6 @@ class RecentlyReleasedViewModel
                         )
                     }
                 }
-                .disposeOnClear()
         }
     }
 

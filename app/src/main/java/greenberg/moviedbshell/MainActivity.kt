@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.airbnb.mvrx.Mavericks
 import greenberg.moviedbshell.base.BaseActivity
@@ -21,7 +22,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_activity_layout)
 
-        navController = findNavController(this, R.id.nav_host_fragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        //navController = findNavController(this, R.id.nav_host_fragment)
         setupActionBarWithNavController(navController)
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }

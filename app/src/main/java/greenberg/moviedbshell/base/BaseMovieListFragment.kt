@@ -108,7 +108,7 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
                 }
             }
         }
-        viewModel.subscribe { log("State's page number is ${it.pageNumber}") }
+//        viewModel.subscribe { log("State's page number is ${it.pageNumber}") }
     }
 
     private fun rerunAnim(isGrid: Boolean) {
@@ -227,7 +227,11 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
                 is Fail -> {
                     log("Fail")
                     hideMovies()
-                    showError((state.movieListResponse as Fail<MovieListResponse>).error)
+                    if (state.shouldShowMaxPages) {
+                        showMaxPages(state.shouldShowMaxPages)
+                    } else {
+                        showError((state.movieListResponse as Fail<MovieListResponse>).error)
+                    }
                 }
             }
         }

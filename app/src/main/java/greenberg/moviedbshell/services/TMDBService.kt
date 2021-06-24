@@ -17,65 +17,65 @@ import retrofit2.http.Query
 
 interface TMDBService {
     @GET("movie/{id}")
-    fun queryMovieDetail(@Path("id") id: Int): Single<MovieDetailResponse>
+    suspend fun queryMovieDetail(@Path("id") id: Int): MovieDetailResponse
 
     @GET("movie/{id}/credits")
-    fun queryMovieCredits(@Path("id") id: Int): Single<CreditsResponse>
+    suspend fun queryMovieCredits(@Path("id") id: Int): CreditsResponse
 
     @GET("movie/{id}/images")
-    fun queryMovieImages(@Path("id") id: Int): Single<ImageGalleryResponse>
+    suspend fun queryMovieImages(@Path("id") id: Int): ImageGalleryResponse
 
     @GET("movie/popular")
-    fun queryPopularMovies(@Query("page") page: Int): Single<MovieListResponse>
+    suspend fun queryPopularMovies(@Query("page") page: Int): MovieListResponse
 
     @GET("search/multi")
-    fun querySearchMulti(@Query("query") query: String, @Query("page") page: Int): Single<SearchResponse>
+    suspend fun querySearchMulti(@Query("query") query: String, @Query("page") page: Int): SearchResponse
 
     @GET("tv/{id}")
-    fun queryTvDetail(@Path("id") id: Int): Single<TvShowResponse>
+    suspend fun queryTvDetail(@Path("id") id: Int): TvShowResponse
 
     @GET("tv/{id}/credits")
-    fun queryTvCredits(@Path("id") id: Int): Single<CreditsResponse>
+    suspend fun queryTvCredits(@Path("id") id: Int): CreditsResponse
 
     @GET("tv/{id}/aggregate_credits")
-    fun queryTvAggregateCredits(@Path("id") id: Int): Single<AggregateCreditsResponse>
+    suspend fun queryTvAggregateCredits(@Path("id") id: Int): AggregateCreditsResponse
 
     @GET("tv/{id}/images")
-    fun queryTvImages(@Path("id") id: Int): Single<ImageGalleryResponse>
+    suspend fun queryTvImages(@Path("id") id: Int): ImageGalleryResponse
 
     @GET("person/{id}")
-    fun queryPersonDetail(@Path("id") id: Int): Single<PersonDetailResponse>
+    suspend fun queryPersonDetail(@Path("id") id: Int): PersonDetailResponse
 
     @GET("person/{id}/combined_credits")
-    fun queryPersonCombinedCredits(@Path("id") id: Int): Single<CombinedCreditsResponse>
+    suspend fun queryPersonCombinedCredits(@Path("id") id: Int): CombinedCreditsResponse
 
     /**
      * This is implemented for now only against English releases. It is probably a bit complex to go global.
      */
     @GET("movie/now_playing")
-    fun queryRecentlyReleased(
+    suspend fun queryRecentlyReleased(
         @Query("page") page: Int,
         @Query("language") language: String = "en-US"
-    ): Single<MovieListResponse>
+    ): MovieListResponse
 
     @GET("movie/upcoming")
-    fun querySoonTM(
+    suspend fun querySoonTM(
         @Query("page") page: Int,
         @Query("language") language: String = "en-US",
         @Query("region") region: String = "US"
-    ): Single<MovieListResponse>
+    ): MovieListResponse
 
     @GET("tv/popular")
-    fun queryPopularTv(
+    suspend fun queryPopularTv(
         @Query("page") page: Int,
         @Query("language") language: String = "en-US",
         @Query("region") region: String = "US"
-    ): Single<TvListResponse>
+    ): TvListResponse
 
     @GET("tv/top_rated")
-    fun queryTopRatedTv(
+    suspend fun queryTopRatedTv(
         @Query("page") page: Int,
         @Query("language") language: String = "en-US",
         @Query("region") region: String = "US"
-    ): Single<TvListResponse>
+    ): TvListResponse
 }

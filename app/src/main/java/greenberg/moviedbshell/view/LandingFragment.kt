@@ -11,8 +11,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Incomplete
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import greenberg.moviedbshell.R
@@ -119,7 +120,7 @@ class LandingFragment : BaseFragment() {
         recentlyReleasedLoadingBar = view.findViewById(R.id.recently_released_progress_bar)
         recentlyReleasedErrorContainer = view.findViewById(R.id.recently_released_error_container)
         recentlyReleasedErrorContainer.setOnClickListener {
-            viewModel.getRecentlyReleased()
+            viewModel.retryRecentlyReleased()
         }
         recentlyReleasedSeeAllButton = view.findViewById(R.id.recently_released_see_all_button)
         recentlyReleasedSeeAllButton.setOnClickListener {
@@ -129,7 +130,7 @@ class LandingFragment : BaseFragment() {
         popularMovieLoadingBar = view.findViewById(R.id.popular_movie_progress_bar)
         popularMovieErrorContainer = view.findViewById(R.id.popular_movie_error_container)
         popularMovieErrorContainer.setOnClickListener {
-            viewModel.getPopularMovies()
+            viewModel.retryPopularMovies()
         }
         popularMovieSeeAllButton = view.findViewById(R.id.popular_see_all_button)
         popularMovieSeeAllButton.setOnClickListener {
@@ -139,7 +140,7 @@ class LandingFragment : BaseFragment() {
         soonTMLoadingBar = view.findViewById(R.id.soon_tm_progress_bar)
         soonTMErrorContainer = view.findViewById(R.id.soon_tm_error_container)
         soonTMErrorContainer.setOnClickListener {
-            viewModel.getSoonTM()
+            viewModel.retrySoonTM()
         }
         soonTMSeeAllButton = view.findViewById(R.id.soon_tm_see_all_button)
         soonTMSeeAllButton.setOnClickListener {
@@ -149,7 +150,7 @@ class LandingFragment : BaseFragment() {
         popularTvLoadingBar = view.findViewById(R.id.popular_tv_progress_bar)
         popularTvErrorContainer = view.findViewById(R.id.popular_tv_error_container)
         popularTvErrorContainer.setOnClickListener {
-            viewModel.getPopularTv()
+            viewModel.retryPopularTv()
         }
         popularTvSeeAllButton = view.findViewById(R.id.popular_tv_see_all_button)
         popularTvSeeAllButton.setOnClickListener {
@@ -159,12 +160,14 @@ class LandingFragment : BaseFragment() {
         topRatedLoadingBar = view.findViewById(R.id.top_rated_tv_progress_bar)
         topRatedTvErrorContainer = view.findViewById(R.id.top_rated_tv_error_container)
         topRatedTvErrorContainer.setOnClickListener {
-            viewModel.getTopRatedTv()
+            viewModel.retryTopRatedTv()
         }
         topRatedTvSeeAllButton = view.findViewById(R.id.top_rated_tv_see_all_button)
         topRatedTvSeeAllButton.setOnClickListener {
             // TODO
         }
+
+        viewModel.onEach { log("state is $it") }
     }
 
     override fun invalidate() {
@@ -181,12 +184,12 @@ class LandingFragment : BaseFragment() {
         val response = state.recentlyReleasedResponse
         val movieList = state.recentlyReleasedItems
         when (response) {
-            is Incomplete -> {
+            Uninitialized, is Loading -> {
                 // load row
                 log("recent release load")
                 // TODO: bug here. Technically because I can't measure the title height in time to do this,
                 // the entire row shifts a little bit after the images load in. For now, this will suffice.
-                setContainerParamsLoading(recentlyReleasedContainer)
+                //setContainerParamsLoading(recentlyReleasedContainer)
                 recentlyReleasedErrorContainer.visibility = View.GONE
                 recentlyReleasedLoadingBar.visibility = View.VISIBLE
                 recentlyReleasedRecycler.visibility = View.GONE
@@ -194,15 +197,14 @@ class LandingFragment : BaseFragment() {
             is Success -> {
                 // show row
                 log("recent release success")
-                setContainerParamsNormal(recentlyReleasedContainer)
-                recentlyReleasedAdapter.items = movieList
-                recentlyReleasedAdapter.notifyDataSetChanged()
+//                setContainerParamsNormal(recentlyReleasedContainer)
+                recentlyReleasedAdapter.setItems(movieList)
                 recentlyReleasedLoadingBar.visibility = View.GONE
                 recentlyReleasedRecycler.visibility = View.VISIBLE
             }
             is Fail -> {
                 // error for row
-                setContainerParamsNormal(recentlyReleasedContainer)
+//                setContainerParamsNormal(recentlyReleasedContainer)
                 recentlyReleasedErrorContainer.visibility = View.VISIBLE
                 recentlyReleasedLoadingBar.visibility = View.GONE
                 recentlyReleasedRecycler.visibility = View.GONE
@@ -214,7 +216,8 @@ class LandingFragment : BaseFragment() {
         val response = state.popularMovieResponse
         val movieList = state.popularMovieItems
         when (response) {
-            is Incomplete -> {
+            // TODO I would use Incomplete here as Mavericks suggests, but kotlin gives me a warning
+            Uninitialized, is Loading -> {
                 // load row
                 log("popular movie load")
                 setContainerParamsLoading(popularMovieContainer)
@@ -226,8 +229,7 @@ class LandingFragment : BaseFragment() {
                 log("popular movie success")
                 // show row
                 setContainerParamsNormal(popularMovieContainer)
-                popularMovieAdapter.items = movieList
-                popularMovieAdapter.notifyDataSetChanged()
+                popularMovieAdapter.setItems(movieList)
                 popularMovieLoadingBar.visibility = View.GONE
                 popularMovieRecycler.visibility = View.VISIBLE
             }
@@ -245,7 +247,7 @@ class LandingFragment : BaseFragment() {
         val response = state.soonTMResponse
         val movieList = state.soonTMItems
         when (response) {
-            is Incomplete -> {
+            Uninitialized, is Loading -> {
                 // load row
                 log("soontm load")
                 setContainerParamsLoading(soonTMContainer)
@@ -257,8 +259,7 @@ class LandingFragment : BaseFragment() {
                 // show row
                 log("soontm success")
                 setContainerParamsNormal(soonTMContainer)
-                soonTMAdapter.items = movieList
-                soonTMAdapter.notifyDataSetChanged()
+                soonTMAdapter.setItems(movieList)
                 soonTMLoadingBar.visibility = View.GONE
                 soonTMRecycler.visibility = View.VISIBLE
             }
@@ -276,7 +277,7 @@ class LandingFragment : BaseFragment() {
         val response = state.popularTvResponse
         val tvList = state.popularTvItems
         when (response) {
-            is Incomplete -> {
+            Uninitialized, is Loading -> {
                 // load row
                 log("popular tv load")
                 setContainerParamsLoading(popularTvContainer)
@@ -288,8 +289,7 @@ class LandingFragment : BaseFragment() {
                 // show row
                 log("popular tv success")
                 setContainerParamsNormal(popularTvContainer)
-                popularTvAdapter.items = tvList
-                popularTvAdapter.notifyDataSetChanged()
+                popularTvAdapter.setItems(tvList)
                 popularTvLoadingBar.visibility = View.GONE
                 popularTvRecycler.visibility = View.VISIBLE
             }
@@ -307,7 +307,7 @@ class LandingFragment : BaseFragment() {
         val response = state.topRatedTvResponse
         val tvList = state.topRatedTvItems
         when (response) {
-            is Incomplete -> {
+            Uninitialized, is Loading -> {
                 // load row
                 log("top rated load")
                 setContainerParamsLoading(topRatedTvContainer)
@@ -319,8 +319,7 @@ class LandingFragment : BaseFragment() {
                 // show row
                 log("top rated success")
                 setContainerParamsNormal(topRatedTvContainer)
-                topRatedAdapter.items = tvList
-                topRatedAdapter.notifyDataSetChanged()
+                topRatedAdapter.setItems(tvList)
                 topRatedLoadingBar.visibility = View.GONE
                 topRatedTvRecycler.visibility = View.VISIBLE
             }

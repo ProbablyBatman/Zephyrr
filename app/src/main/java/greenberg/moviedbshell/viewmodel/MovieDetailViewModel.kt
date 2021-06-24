@@ -7,20 +7,17 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.TmdbRepository
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
-import greenberg.moviedbshell.mappers.MovieDetailMapper
-import greenberg.moviedbshell.models.container.MovieDetailResponseContainer
-import greenberg.moviedbshell.services.TMDBService
 import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.view.MovieDetailFragment
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 class MovieDetailViewModel
 @AssistedInject constructor(
     @Assisted var state: MovieDetailState,
-    private val TMDBService: TMDBService,
-    private val mapper: MovieDetailMapper
+    private val tmdbRepository: TmdbRepository
 ) : ZephyrrMvRxViewModel<MovieDetailState>(state) {
 
     @AssistedFactory
@@ -32,28 +29,18 @@ class MovieDetailViewModel
         fetchMovieDetail()
     }
 
-    fun fetchMovieDetail() {
+    fun fetchMovieDetail(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
         withState { state ->
             // Swallows requests if there's already one loading
             if (state.movieDetailResponse is Loading) return@withState
-            Single.zip(
-                TMDBService.queryMovieDetail(state.movieId),
-                TMDBService.queryMovieCredits(state.movieId),
-                TMDBService.queryMovieImages(state.movieId),
-                { movieDetail, movieCredits, imageGallery ->
-                    mapper.mapToEntity(MovieDetailResponseContainer(movieDetail, movieCredits, imageGallery))
-                }
-            )
-                .subscribeOn(Schedulers.io())
-                .execute {
-                    // If call fails, should be retry-able
+            suspend { tmdbRepository.fetchMovieDetail(viewModelScope, state.movieId) }
+                .execute(dispatcher) {
                     copy(
                         movieId = state.movieId,
                         movieDetailItem = it(),
                         movieDetailResponse = it
                     )
                 }
-                .disposeOnClear()
         }
     }
 

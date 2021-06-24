@@ -13,7 +13,7 @@ import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.viewHolders.LandingViewHolder
 
 class LandingAdapter(
-    var items: List<PreviewItem> = emptyList(),
+    private var items: List<PreviewItem> = emptyList(),
     val posterClickListener: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -40,5 +40,10 @@ class LandingAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return LandingViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.landing_poster_layout, parent, false))
+    }
+
+    fun setItems(newItems: List<PreviewItem>) {
+        items = newItems
+        notifyDataSetChanged()
     }
 }

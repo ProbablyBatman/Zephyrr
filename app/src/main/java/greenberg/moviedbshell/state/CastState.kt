@@ -2,7 +2,6 @@ package greenberg.moviedbshell.state
 
 import android.os.Parcelable
 import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MvRxState
 import greenberg.moviedbshell.models.ui.CastMemberItem
 import kotlinx.parcelize.Parcelize
 
