@@ -44,7 +44,7 @@ class PopularMoviesViewModel
                                 movieListResponse = it,
                                 movieList = state.movieList,
                                 // TODO: move this to the view like in search?
-                                shouldShowMaxPages = totalPages != null && state.pageNumber <= totalPages
+                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
                             )
                         }
                         is Success -> {
@@ -52,7 +52,7 @@ class PopularMoviesViewModel
                                 pageNumber = state.pageNumber + 1,
                                 movieListResponse = it,
                                 movieList = state.movieList + mapper.mapToEntity(it()),
-                                shouldShowMaxPages = totalPages != null && state.pageNumber <= totalPages
+                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
                             )
                         }
                         else -> copy(

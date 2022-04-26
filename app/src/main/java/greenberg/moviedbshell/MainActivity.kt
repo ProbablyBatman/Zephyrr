@@ -28,12 +28,12 @@ class MainActivity : BaseActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         Timber.d("onCreateOptionsMenu")
-        menu?.clear()
+        menu.clear()
         menuInflater.inflate(R.menu.base_menu, menu)
-        menu?.findItem(R.id.searchResultsFragment)?.let { setUpSearchListener(it) }
-        menu?.findItem(R.id.toggleDarkMode)?.let { setUpDarkModeToggle(it) }
+        menu.findItem(R.id.searchResultsFragment)?.let { setUpSearchListener(it) }
+        menu.findItem(R.id.toggleDarkMode)?.let { setUpDarkModeToggle(it) }
         return true
     }
 

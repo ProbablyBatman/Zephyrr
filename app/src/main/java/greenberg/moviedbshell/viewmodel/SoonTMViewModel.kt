@@ -42,7 +42,7 @@ class SoonTMViewModel
                                 pageNumber = state.pageNumber,
                                 movieListResponse = it,
                                 movieList = state.movieList,
-                                shouldShowMaxPages = totalPages != null && state.pageNumber <= totalPages
+                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
                             )
                         }
                         is Success -> {
@@ -50,7 +50,7 @@ class SoonTMViewModel
                                 pageNumber = state.pageNumber + 1,
                                 movieListResponse = it,
                                 movieList = state.movieList + mapper.mapToEntity(it()),
-                                shouldShowMaxPages = totalPages != null && state.pageNumber <= totalPages
+                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
                             )
                         }
                         else -> copy(
