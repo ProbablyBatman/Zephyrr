@@ -2,7 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/nav_graph"
-            app:startDestination="@id/landingFragment">
+            app:startDestination="@id/landingFragmentV2">
+
+    <fragment
+        android:id="@+id/landingFragmentV2"
+        android:name="greenberg.moviedbshell.view.LandingFragmentV2">
+    </fragment>
 
     <fragment
         android:id="@+id/landingFragment"

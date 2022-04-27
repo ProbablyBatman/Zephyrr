@@ -3,6 +3,8 @@ package greenberg.moviedbshell.dagger
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import greenberg.moviedbshell.BuildConfig
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.services.TMDBService
@@ -15,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
 class ServicesModule {
     @Provides

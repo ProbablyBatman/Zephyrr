@@ -33,7 +33,7 @@ class LandingFragment : BaseFragment() {
         (activity?.application as ZephyrrApplication).component.landingViewModelFactory
     }
 
-    private val viewModel: LandingViewModel by fragmentViewModel()
+//    private val viewModel: LandingViewModel by fragmentViewModel()
 
     private lateinit var recentlyReleasedRecycler: RecyclerView
     private lateinit var recentlyReleasedLayoutManager: LinearLayoutManager
@@ -120,7 +120,7 @@ class LandingFragment : BaseFragment() {
         recentlyReleasedLoadingBar = view.findViewById(R.id.recently_released_progress_bar)
         recentlyReleasedErrorContainer = view.findViewById(R.id.recently_released_error_container)
         recentlyReleasedErrorContainer.setOnClickListener {
-            viewModel.retryRecentlyReleased()
+//            viewModel.retryRecentlyReleased()
         }
         recentlyReleasedSeeAllButton = view.findViewById(R.id.recently_released_see_all_button)
         recentlyReleasedSeeAllButton.setOnClickListener {
@@ -130,7 +130,7 @@ class LandingFragment : BaseFragment() {
         popularMovieLoadingBar = view.findViewById(R.id.popular_movie_progress_bar)
         popularMovieErrorContainer = view.findViewById(R.id.popular_movie_error_container)
         popularMovieErrorContainer.setOnClickListener {
-            viewModel.retryPopularMovies()
+//            viewModel.retryPopularMovies()
         }
         popularMovieSeeAllButton = view.findViewById(R.id.popular_see_all_button)
         popularMovieSeeAllButton.setOnClickListener {
@@ -140,7 +140,7 @@ class LandingFragment : BaseFragment() {
         soonTMLoadingBar = view.findViewById(R.id.soon_tm_progress_bar)
         soonTMErrorContainer = view.findViewById(R.id.soon_tm_error_container)
         soonTMErrorContainer.setOnClickListener {
-            viewModel.retrySoonTM()
+//            viewModel.retrySoonTM()
         }
         soonTMSeeAllButton = view.findViewById(R.id.soon_tm_see_all_button)
         soonTMSeeAllButton.setOnClickListener {
@@ -150,7 +150,7 @@ class LandingFragment : BaseFragment() {
         popularTvLoadingBar = view.findViewById(R.id.popular_tv_progress_bar)
         popularTvErrorContainer = view.findViewById(R.id.popular_tv_error_container)
         popularTvErrorContainer.setOnClickListener {
-            viewModel.retryPopularTv()
+//            viewModel.retryPopularTv()
         }
         popularTvSeeAllButton = view.findViewById(R.id.popular_tv_see_all_button)
         popularTvSeeAllButton.setOnClickListener {
@@ -160,25 +160,25 @@ class LandingFragment : BaseFragment() {
         topRatedLoadingBar = view.findViewById(R.id.top_rated_tv_progress_bar)
         topRatedTvErrorContainer = view.findViewById(R.id.top_rated_tv_error_container)
         topRatedTvErrorContainer.setOnClickListener {
-            viewModel.retryTopRatedTv()
+//            viewModel.retryTopRatedTv()
         }
         topRatedTvSeeAllButton = view.findViewById(R.id.top_rated_tv_see_all_button)
         topRatedTvSeeAllButton.setOnClickListener {
             // TODO
         }
 
-        viewModel.onEach { log("state is $it") }
+//        viewModel.onEach { log("state is $it") }
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            updatePopularMoviesRow(state)
-            updateRecentlyReleasedRow(state)
-            updateSoonTMRow(state)
-            updatePopularTvRow(state)
-            updateTopRatedTvRow(state)
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            updatePopularMoviesRow(state)
+//            updateRecentlyReleasedRow(state)
+//            updateSoonTMRow(state)
+//            updatePopularTvRow(state)
+//            updateTopRatedTvRow(state)
+//        }
+//    }
 
     private fun updateRecentlyReleasedRow(state: LandingState) {
         val response = state.recentlyReleasedResponse

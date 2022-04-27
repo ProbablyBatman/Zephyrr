@@ -18,7 +18,7 @@ import timber.log.Timber
 
 class CrewFragment : BaseFragment() {
 
-    private val viewModel: CrewViewModel by fragmentViewModel()
+//    private val viewModel: CrewViewModel by fragmentViewModel()
 
     private lateinit var crewRecycler: RecyclerView
     private lateinit var crewAdapter: CrewListAdapter
@@ -43,11 +43,11 @@ class CrewFragment : BaseFragment() {
         }
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            showDetails(state)
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            showDetails(state)
+//        }
+//    }
 
     private fun onClickListener(personId: Int) {
         navigate(

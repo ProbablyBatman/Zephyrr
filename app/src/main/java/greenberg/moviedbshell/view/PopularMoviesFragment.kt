@@ -17,7 +17,7 @@ class PopularMoviesFragment : BaseMovieListFragment<PopularMoviesViewModel, Movi
         (activity?.application as ZephyrrApplication).component.popularViewModelFactory
     }
 
-    override val viewModel: PopularMoviesViewModel by fragmentViewModel()
+//    override val viewModel: PopularMoviesViewModel by fragmentViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

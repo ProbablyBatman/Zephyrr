@@ -18,7 +18,7 @@ import timber.log.Timber
 
 class CastFragment : BaseFragment() {
 
-    private val viewModel: CastViewModel by fragmentViewModel()
+//    private val viewModel: CastViewModel by fragmentViewModel()
 
     private lateinit var castRecycler: RecyclerView
     private lateinit var castAdapter: CastListAdapter
@@ -43,12 +43,12 @@ class CastFragment : BaseFragment() {
         }
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            log("Invalidating")
-            showDetails(state)
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            log("Invalidating")
+//            showDetails(state)
+//        }
+//    }
 
     private fun onClickListener(personId: Int) {
         navigate(

@@ -17,7 +17,7 @@ class RecentlyReleasedFragment : BaseMovieListFragment<RecentlyReleasedViewModel
         (activity?.application as ZephyrrApplication).component.recentlyReleasedViewModelFactory
     }
 
-    override val viewModel: RecentlyReleasedViewModel by fragmentViewModel()
+//    override val viewModel: RecentlyReleasedViewModel by fragmentViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

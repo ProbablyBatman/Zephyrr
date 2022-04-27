@@ -1,6 +1,10 @@
 package greenberg.moviedbshell.dagger
 
 import dagger.Component
+import dagger.Module
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import greenberg.moviedbshell.view.PopularMoviesFragment
 import greenberg.moviedbshell.view.RecentlyReleasedFragment
 import greenberg.moviedbshell.view.SoonTMFragment
@@ -15,8 +19,12 @@ import greenberg.moviedbshell.viewmodel.SoonTMViewModel
 import greenberg.moviedbshell.viewmodel.TvDetailViewModel
 import javax.inject.Singleton
 
-@Singleton
-@Component(modules = [(ApplicationModule::class), (ServicesModule::class)])
+@InstallIn(SingletonComponent::class)
+@EntryPoint
+//@Module(includes = [
+//    ApplicationModule::class,
+//    ServicesModule::class
+//])
 interface SingletonComponent {
     val popularViewModelFactory: PopularMoviesViewModel.Factory
     val movieDetailViewModelFactory: MovieDetailViewModel.Factory

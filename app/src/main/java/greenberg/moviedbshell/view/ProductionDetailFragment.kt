@@ -25,7 +25,7 @@ import java.util.Locale
 
 class ProductionDetailFragment : BaseFragment() {
 
-    private val viewModel: ProductionDetailViewModel by fragmentViewModel()
+//    private val viewModel: ProductionDetailViewModel by fragmentViewModel()
 
     private lateinit var productionCompaniesList: TextView
     private lateinit var filmingLocationsList: TextView
@@ -60,11 +60,11 @@ class ProductionDetailFragment : BaseFragment() {
         }
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            showDetails(state)
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            showDetails(state)
+//        }
+//    }
 
     private fun showDetails(state: ProductionDetailState) {
         when (val detailItem = state.productionDetailItem) {

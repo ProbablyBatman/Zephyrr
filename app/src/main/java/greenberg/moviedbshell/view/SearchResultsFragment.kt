@@ -36,7 +36,7 @@ class SearchResultsFragment : BaseFragment() {
         (activity?.application as ZephyrrApplication).component.searchResultsViewModelFactory
     }
 
-    private val viewModel: SearchResultsViewModel by fragmentViewModel()
+//    private val viewModel: SearchResultsViewModel by fragmentViewModel()
 
     private var navController: NavController? = null
 
@@ -79,7 +79,7 @@ class SearchResultsFragment : BaseFragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1) {
-                    viewModel.fetchSearchResults()
+//                    viewModel.fetchSearchResults()
                 }
             }
         })
@@ -115,7 +115,7 @@ class SearchResultsFragment : BaseFragment() {
         hideResultsView()
         showErrorState()
         errorRetryButton?.setOnClickListener {
-            viewModel.fetchSearchResults()
+//            viewModel.fetchSearchResults()
             hideErrorState()
         }
     }
@@ -185,31 +185,31 @@ class SearchResultsFragment : BaseFragment() {
         errorRetryButton?.visibility = View.VISIBLE
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            when (state.searchResultsResponse) {
-                Uninitialized -> Timber.d("uninitialized")
-                is Loading -> {
-                    hideMaxPages()
-                    if (state.pageNumber > 1) {
-                        showPageLoad()
-                    } else {
-                        showLoading()
-                    }
-                }
-                is Success -> {
-                    if (state.totalPages == state.pageNumber) {
-                        showMaxPages()
-                    } else {
-                        showResults(state)
-                    }
-                }
-                is Fail -> {
-                    showError(state.searchResultsResponse.error)
-                }
-            }
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            when (state.searchResultsResponse) {
+//                Uninitialized -> Timber.d("uninitialized")
+//                is Loading -> {
+//                    hideMaxPages()
+//                    if (state.pageNumber > 1) {
+//                        showPageLoad()
+//                    } else {
+//                        showLoading()
+//                    }
+//                }
+//                is Success -> {
+//                    if (state.totalPages == state.pageNumber) {
+//                        showMaxPages()
+//                    } else {
+//                        showResults(state)
+//                    }
+//                }
+//                is Fail -> {
+//                    showError(state.searchResultsResponse.error)
+//                }
+//            }
+//        }
+//    }
 
     private fun onClickListener(itemId: Int, mediaType: String) {
         when (mediaType) {

@@ -4,13 +4,15 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.airbnb.mvrx.Mavericks
+import dagger.hilt.EntryPoints
+import dagger.hilt.android.HiltAndroidApp
 import greenberg.moviedbshell.dagger.ApplicationModule
-import greenberg.moviedbshell.dagger.DaggerSingletonComponent
 import greenberg.moviedbshell.dagger.SingletonComponent
 import greenberg.moviedbshell.logging.DebuggingTree
 import greenberg.moviedbshell.logging.NoLogTree
 import timber.log.Timber
 
+@HiltAndroidApp
 class ZephyrrApplication : Application() {
     lateinit var component: SingletonComponent
     private var nightMode = true
@@ -26,10 +28,6 @@ class ZephyrrApplication : Application() {
         }
 
         Mavericks.initialize(this)
-
-        component = DaggerSingletonComponent.builder()
-            .applicationModule(ApplicationModule(this))
-            .build()
 
         nightMode = retrieveSharedPreferences().getBoolean(NIGHT_MODE, true)
         gridListMode = retrieveSharedPreferences().getString(GRID_LIST_TOGGLE, GRID_LIST_DEFAULT_VALUE).orEmpty()
@@ -55,6 +53,10 @@ class ZephyrrApplication : Application() {
     }
 
     private fun retrieveSharedPreferences() = this.getSharedPreferences(this.packageName, Context.MODE_PRIVATE)
+
+    fun component(): dagger.hilt.components.SingletonComponent {
+        return EntryPoints.get(this, dagger.hilt.components.SingletonComponent::class.java)
+    }
 
     companion object {
         private const val NIGHT_MODE = "night_mode"

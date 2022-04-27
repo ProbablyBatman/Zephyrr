@@ -17,7 +17,7 @@ class SoonTMFragment : BaseMovieListFragment<SoonTMViewModel, MovieListState>() 
         (activity?.application as ZephyrrApplication).component.soonTMViewModelFactory
     }
 
-    override val viewModel: SoonTMViewModel by fragmentViewModel()
+//    override val viewModel: SoonTMViewModel by fragmentViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

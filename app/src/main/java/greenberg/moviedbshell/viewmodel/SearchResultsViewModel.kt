@@ -8,7 +8,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import greenberg.moviedbshell.TmdbRepository
+import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.SearchResultsMapper
 import greenberg.moviedbshell.state.SearchResultsState

@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksView
 
-abstract class BaseFragment : Fragment(), MavericksView {
+abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         log("onCreate")

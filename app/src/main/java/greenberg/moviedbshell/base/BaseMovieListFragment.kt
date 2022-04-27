@@ -30,7 +30,7 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
     @Inject
     lateinit var gridListToggleState: () -> String
 
-    abstract val viewModel: T
+//    abstract val viewModel: T
     abstract val viewModelFactory: BaseMovieListViewModel.Factory
 
     private lateinit var movieRecycler: RecyclerView
@@ -81,12 +81,12 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
                 when (movieListAdapter.currentViewType) {
                     MovieListAdapter.ViewType.VIEW_TYPE_GRID -> {
                         if (gridLayoutManager.findLastVisibleItemPosition() == gridLayoutManager.itemCount - 1) {
-                            viewModel.fetchMovies()
+//                            viewModel.fetchMovies()
                         }
                     }
                     MovieListAdapter.ViewType.VIEW_TYPE_LIST -> {
                         if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1) {
-                            viewModel.fetchMovies()
+//                            viewModel.fetchMovies()
                         }
                     }
                 }
@@ -160,7 +160,7 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
         errorSnackbar = Snackbar.make(movieRecycler, getString(R.string.generic_error_text), Snackbar.LENGTH_INDEFINITE)
             .setAction(getString(R.string.retry)) {
                 errorSnackbar?.dismiss()
-                viewModel.fetchMovies()
+//                viewModel.fetchMovies()
             }
         errorSnackbar?.show()
     }
@@ -202,38 +202,38 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
 
     protected abstract fun onClickListener(movieId: Int)
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            when (state.movieListResponse) {
-                Uninitialized -> log("uninitialized")
-                is Loading -> {
-                    log("Loading")
-                    hideError()
-                    hideMaxPages()
-                    if (state.pageNumber <= 1) {
-                        hideMovies()
-                        showLoading()
-                    } else {
-                        showPageLoad()
-                    }
-                }
-                is Success -> {
-                    log("Success")
-                    hidePageLoad()
-                    showMaxPages(state.shouldShowMaxPages)
-                    hideLoading()
-                    showMovies(state)
-                }
-                is Fail -> {
-                    log("Fail")
-                    hideMovies()
-                    if (state.shouldShowMaxPages) {
-                        showMaxPages(state.shouldShowMaxPages)
-                    } else {
-                        showError((state.movieListResponse as Fail<MovieListResponse>).error)
-                    }
-                }
-            }
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            when (state.movieListResponse) {
+//                Uninitialized -> log("uninitialized")
+//                is Loading -> {
+//                    log("Loading")
+//                    hideError()
+//                    hideMaxPages()
+//                    if (state.pageNumber <= 1) {
+//                        hideMovies()
+//                        showLoading()
+//                    } else {
+//                        showPageLoad()
+//                    }
+//                }
+//                is Success -> {
+//                    log("Success")
+//                    hidePageLoad()
+//                    showMaxPages(state.shouldShowMaxPages)
+//                    hideLoading()
+//                    showMovies(state)
+//                }
+//                is Fail -> {
+//                    log("Fail")
+//                    hideMovies()
+//                    if (state.shouldShowMaxPages) {
+//                        showMaxPages(state.shouldShowMaxPages)
+//                    } else {
+//                        showError((state.movieListResponse as Fail<MovieListResponse>).error)
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

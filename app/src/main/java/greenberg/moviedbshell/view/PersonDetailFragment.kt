@@ -44,7 +44,7 @@ class PersonDetailFragment : BaseFragment() {
         (activity?.application as ZephyrrApplication).component.personDetailViewModelFactory
     }
 
-    private val viewModel: PersonDetailViewModel by fragmentViewModel()
+//    private val viewModel: PersonDetailViewModel by fragmentViewModel()
 
     private var progressBar: ProgressBar? = null
     private var scrollView: NestedScrollView? = null
@@ -117,7 +117,7 @@ class PersonDetailFragment : BaseFragment() {
         hideLoadingBar()
         showErrorState()
         errorRetryButton?.setOnClickListener {
-            viewModel.fetchPersonDetail()
+//            viewModel.fetchPersonDetail()
             hideErrorState()
         }
     }
@@ -231,24 +231,24 @@ class PersonDetailFragment : BaseFragment() {
         scrollView?.visibility = View.VISIBLE
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            when (state.personDetailResponse) {
-                Uninitialized -> Timber.d("uninitialized")
-                is Loading -> {
-                    showLoading()
-                }
-                is Success -> {
-                    showPersonDetails(state)
-                    hideLoadingBar()
-                    showAllViews()
-                }
-                is Fail -> {
-                    showError(state.personDetailResponse.error)
-                }
-            }
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            when (state.personDetailResponse) {
+//                Uninitialized -> Timber.d("uninitialized")
+//                is Loading -> {
+//                    showLoading()
+//                }
+//                is Success -> {
+//                    showPersonDetails(state)
+//                    hideLoadingBar()
+//                    showAllViews()
+//                }
+//                is Fail -> {
+//                    showError(state.personDetailResponse.error)
+//                }
+//            }
+//        }
+//    }
 
     private fun onClickListener(itemId: Int, mediaType: String) {
         when (mediaType) {

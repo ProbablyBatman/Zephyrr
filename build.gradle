@@ -3,7 +3,8 @@ buildscript {
     ext.appCompat_version = '1.6.0-alpha01'
     ext.media_version = '1.6.0'
     ext.nav_version = "1.0.0"
-    ext.ktx_version = "2.4.2"
+    ext.ktx_version = "2.4.1"
+    ext.hilt_version = "2.41"
     repositories {
         google()
         mavenCentral()
@@ -16,6 +17,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.10'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 }
 

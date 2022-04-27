@@ -1,4 +1,4 @@
-package greenberg.moviedbshell
+package greenberg.moviedbshell.repository
 
 import greenberg.moviedbshell.mappers.MovieDetailMapper
 import greenberg.moviedbshell.mappers.PersonDetailMapper

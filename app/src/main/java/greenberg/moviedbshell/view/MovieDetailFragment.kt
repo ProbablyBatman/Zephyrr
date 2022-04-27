@@ -58,7 +58,7 @@ class MovieDetailFragment : BaseFragment() {
         (activity?.application as ZephyrrApplication).component.movieDetailViewModelFactory
     }
 
-    private val viewModel: MovieDetailViewModel by fragmentViewModel()
+//    private val viewModel: MovieDetailViewModel by fragmentViewModel()
 
     private lateinit var progressBar: ProgressBar
     private lateinit var posterGalleryContainer: ConstraintLayout
@@ -180,7 +180,7 @@ class MovieDetailFragment : BaseFragment() {
         showAllViews()
         showErrorState()
         errorRetryButton.setOnClickListener {
-            viewModel.fetchMovieDetail()
+//            viewModel.fetchMovieDetail()
             hideErrorState()
         }
     }
@@ -347,28 +347,28 @@ class MovieDetailFragment : BaseFragment() {
         posterGalleryContainer.visibility = View.VISIBLE
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            Timber.d("Invalidating")
-            when (state.movieDetailResponse) {
-                Uninitialized -> Timber.d("uninitialized")
-                is Loading -> {
-                    hideAllViews()
-                    showLoading()
-                }
-                is Success -> {
-                    showMovieDetails(state)
-                    hideLoadingBar()
-                    showAllViews()
-                    showContent()
-                }
-                is Fail -> {
-                    hideAllViews()
-                    showError(state.movieDetailResponse.error)
-                }
-            }
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            Timber.d("Invalidating")
+//            when (state.movieDetailResponse) {
+//                Uninitialized -> Timber.d("uninitialized")
+//                is Loading -> {
+//                    hideAllViews()
+//                    showLoading()
+//                }
+//                is Success -> {
+//                    showMovieDetails(state)
+//                    hideLoadingBar()
+//                    showAllViews()
+//                    showContent()
+//                }
+//                is Fail -> {
+//                    hideAllViews()
+//                    showError(state.movieDetailResponse.error)
+//                }
+//            }
+//        }
+//    }
 
     // Intended for the preview cast members shown in the fragment
     private fun highlightedCastOnClickListener(personId: Int) {
@@ -386,12 +386,12 @@ class MovieDetailFragment : BaseFragment() {
     }
 
     private fun productionSeeAllOnClickListener() {
-        withState(viewModel) { state ->
-            navigate(
-                R.id.action_movieDetailFragment_to_productionDetailFragment,
-                state.movieDetailItem?.let { ProductionDetailStateArgs(it) }
-            )
-        }
+//        withState(viewModel) { state ->
+//            navigate(
+//                R.id.action_movieDetailFragment_to_productionDetailFragment,
+//                state.movieDetailItem?.let { ProductionDetailStateArgs(it) }
+//            )
+//        }
     }
 
     override fun log(message: String) {

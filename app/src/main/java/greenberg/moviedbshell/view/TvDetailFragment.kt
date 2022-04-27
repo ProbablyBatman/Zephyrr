@@ -58,7 +58,7 @@ class TvDetailFragment : BaseFragment() {
         (activity?.application as ZephyrrApplication).component.tvDetailViewModelFactory
     }
 
-    private val viewModel: TvDetailViewModel by fragmentViewModel()
+//    private val viewModel: TvDetailViewModel by fragmentViewModel()
 
     private lateinit var progressBar: ProgressBar
     private lateinit var scrollView: NestedScrollView
@@ -267,7 +267,7 @@ class TvDetailFragment : BaseFragment() {
         hideLoadingBar()
         showErrorState()
         errorRetryButton.setOnClickListener {
-            viewModel.fetchTvDetail()
+//            viewModel.fetchTvDetail()
             hideErrorState()
         }
     }
@@ -333,24 +333,24 @@ class TvDetailFragment : BaseFragment() {
         scrollView.visibility = View.VISIBLE
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            when (state.tvDetailResponse) {
-                Uninitialized -> Timber.d("uninitialized")
-                is Loading -> {
-                    showLoading()
-                }
-                is Success -> {
-                    showTvDetails(state)
-                    hideLoadingBar()
-                    showAllViews()
-                }
-                is Fail -> {
-                    showError(state.tvDetailResponse.error)
-                }
-            }
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            when (state.tvDetailResponse) {
+//                Uninitialized -> Timber.d("uninitialized")
+//                is Loading -> {
+//                    showLoading()
+//                }
+//                is Success -> {
+//                    showTvDetails(state)
+//                    hideLoadingBar()
+//                    showAllViews()
+//                }
+//                is Fail -> {
+//                    showError(state.tvDetailResponse.error)
+//                }
+//            }
+//        }
+//    }
 
     private fun onClickListener(personId: Int) {
         navigate(

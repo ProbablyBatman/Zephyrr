@@ -9,11 +9,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.airbnb.mvrx.Mavericks
+import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.base.BaseActivity
 import greenberg.moviedbshell.extensions.hideKeyboard
 import greenberg.moviedbshell.state.SearchResultsArgs
 import timber.log.Timber
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     private lateinit var navController: NavController
