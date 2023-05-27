@@ -118,7 +118,7 @@ class LandingFragment : BaseFragment() {
         contentContainer = view.findViewById(R.id.content_container)
         recentlyReleasedContainer = view.findViewById(R.id.recently_released_container)
         recentlyReleasedLoadingBar = view.findViewById(R.id.recently_released_progress_bar)
-        recentlyReleasedErrorContainer = view.findViewById(R.id.recently_released_error_container)
+//        recentlyReleasedErrorContainer = view.findViewById(R.id.recently_released_error_container)
         recentlyReleasedErrorContainer.setOnClickListener {
 //            viewModel.retryRecentlyReleased()
         }
@@ -128,7 +128,7 @@ class LandingFragment : BaseFragment() {
         }
         popularMovieContainer = view.findViewById(R.id.popular_movie_container)
         popularMovieLoadingBar = view.findViewById(R.id.popular_movie_progress_bar)
-        popularMovieErrorContainer = view.findViewById(R.id.popular_movie_error_container)
+//        popularMovieErrorContainer = view.findViewById(R.id.popular_movie_error_container)
         popularMovieErrorContainer.setOnClickListener {
 //            viewModel.retryPopularMovies()
         }
@@ -138,7 +138,7 @@ class LandingFragment : BaseFragment() {
         }
         soonTMContainer = view.findViewById(R.id.soon_tm_container)
         soonTMLoadingBar = view.findViewById(R.id.soon_tm_progress_bar)
-        soonTMErrorContainer = view.findViewById(R.id.soon_tm_error_container)
+//        soonTMErrorContainer = view.findViewById(R.id.soon_tm_error_container)
         soonTMErrorContainer.setOnClickListener {
 //            viewModel.retrySoonTM()
         }
@@ -148,7 +148,7 @@ class LandingFragment : BaseFragment() {
         }
         popularTvContainer = view.findViewById(R.id.popular_tv_container)
         popularTvLoadingBar = view.findViewById(R.id.popular_tv_progress_bar)
-        popularTvErrorContainer = view.findViewById(R.id.popular_tv_error_container)
+//        popularTvErrorContainer = view.findViewById(R.id.popular_tv_error_container)
         popularTvErrorContainer.setOnClickListener {
 //            viewModel.retryPopularTv()
         }
@@ -158,7 +158,7 @@ class LandingFragment : BaseFragment() {
         }
         topRatedTvContainer = view.findViewById(R.id.top_rated_tv_container)
         topRatedLoadingBar = view.findViewById(R.id.top_rated_tv_progress_bar)
-        topRatedTvErrorContainer = view.findViewById(R.id.top_rated_tv_error_container)
+//        topRatedTvErrorContainer = view.findViewById(R.id.top_rated_tv_error_container)
         topRatedTvErrorContainer.setOnClickListener {
 //            viewModel.retryTopRatedTv()
         }

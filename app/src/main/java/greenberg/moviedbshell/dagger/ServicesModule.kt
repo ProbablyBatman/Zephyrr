@@ -31,7 +31,6 @@ class ServicesModule {
     fun provideRetrofit(context: Context, httpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(context.getString(R.string.tmdb_url))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
             .build()
