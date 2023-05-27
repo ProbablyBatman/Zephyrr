@@ -3,27 +3,18 @@ package greenberg.moviedbshell.base
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.LifecycleOwner
-import com.airbnb.mvrx.MavericksView
 import java.util.UUID
 
-abstract class BaseDialogFragment : DialogFragment(), MavericksView {
-    override val mvrxViewId by lazy { backdropViewUUID }
+abstract class BaseDialogFragment : DialogFragment() {
     private lateinit var backdropViewUUID: String
 
-    override val subscriptionLifecycleOwner: LifecycleOwner
-        get() = this.viewLifecycleOwnerLiveData.value ?: this
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        backdropViewUUID = savedInstanceState?.getString(DIALOG_KEY)
-            ?: "${this.javaClass.name}.${UUID.randomUUID()}"
         super.onCreate(savedInstanceState)
         log("onCreate")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(DIALOG_KEY, backdropViewUUID)
         log("onSaveInstanceState")
     }
 

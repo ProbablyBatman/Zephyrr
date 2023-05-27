@@ -1,6 +1,5 @@
 package greenberg.moviedbshell.viewmodel.base
 
-import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.state.base.BaseMovieListState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

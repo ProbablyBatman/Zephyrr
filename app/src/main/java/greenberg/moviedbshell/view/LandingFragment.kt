@@ -10,12 +10,6 @@ import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.LandingAdapter

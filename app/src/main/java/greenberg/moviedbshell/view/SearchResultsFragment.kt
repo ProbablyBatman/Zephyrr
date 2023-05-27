@@ -11,12 +11,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication

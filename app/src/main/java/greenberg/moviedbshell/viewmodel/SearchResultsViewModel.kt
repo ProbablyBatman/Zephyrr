@@ -1,15 +1,9 @@
 package greenberg.moviedbshell.viewmodel
 
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.repository.TmdbRepository
-import greenberg.moviedbshell.base.ZephyrrMvRxViewModel
 import greenberg.moviedbshell.mappers.SearchResultsMapper
 import greenberg.moviedbshell.state.SearchResultsState
 import greenberg.moviedbshell.view.SearchResultsFragment

@@ -3,7 +3,6 @@ package greenberg.moviedbshell
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.airbnb.mvrx.Mavericks
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
 import greenberg.moviedbshell.dagger.ApplicationModule
@@ -26,8 +25,6 @@ class ZephyrrApplication : Application() {
         } else {
             Timber.plant(NoLogTree())
         }
-
-        Mavericks.initialize(this)
 
         nightMode = retrieveSharedPreferences().getBoolean(NIGHT_MODE, true)
         gridListMode = retrieveSharedPreferences().getString(GRID_LIST_TOGGLE, GRID_LIST_DEFAULT_VALUE).orEmpty()

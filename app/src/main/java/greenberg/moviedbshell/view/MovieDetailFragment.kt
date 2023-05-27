@@ -17,13 +17,6 @@ import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Mavericks
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
@@ -237,7 +230,7 @@ class MovieDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
+//                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
                             putBoolean(BACKDROP_KEY, true)
                         }
                     }
@@ -247,7 +240,7 @@ class MovieDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
+//                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
                             putBoolean(BACKDROP_KEY, false)
                         }
                     }

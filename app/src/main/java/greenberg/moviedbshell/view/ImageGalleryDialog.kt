@@ -28,12 +28,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.viewpager2.widget.ViewPager2
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
@@ -45,7 +39,6 @@ import timber.log.Timber
 
 class ImageGalleryDialog : BaseDialogFragment() {
 
-    override val mvrxViewId by lazy { backdropViewUUID }
     private lateinit var backdropViewUUID: String
 
     val imageGalleryViewModelFactory by lazy {

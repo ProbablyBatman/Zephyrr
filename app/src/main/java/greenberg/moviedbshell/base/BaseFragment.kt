@@ -6,8 +6,6 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.airbnb.mvrx.Mavericks
-import com.airbnb.mvrx.MavericksView
 
 abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +59,6 @@ abstract class BaseFragment : Fragment() {
     abstract fun log(throwable: Throwable)
 
     protected fun navigate(@IdRes id: Int, args: Parcelable? = null) {
-        findNavController().navigate(id, Bundle().apply { putParcelable(Mavericks.KEY_ARG, args) })
+//        findNavController().navigate(id, Bundle().apply { putParcelable(Mavericks.KEY_ARG, args) })
     }
 }

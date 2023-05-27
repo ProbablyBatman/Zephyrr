@@ -12,11 +12,6 @@ import android.widget.ViewSwitcher
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.withState
 import com.google.android.material.snackbar.Snackbar
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication

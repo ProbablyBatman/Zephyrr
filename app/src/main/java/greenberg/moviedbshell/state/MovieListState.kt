@@ -1,7 +1,5 @@
 package greenberg.moviedbshell.state
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Uninitialized
 import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.state.base.BaseMovieListState
