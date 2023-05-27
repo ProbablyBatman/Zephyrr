@@ -62,7 +62,7 @@ class MainActivity : BaseActivity() {
                         navController.navigate(
                             R.id.action_global_searchResultsFragment,
                             Bundle().apply {
-                                putParcelable(Mavericks.KEY_ARG, SearchResultsArgs(query))
+//                                putParcelable(Mavericks.KEY_ARG, SearchResultsArgs(query))
                             },
                             NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true)
                                 .build()

@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.viewmodel
 
+import androidx.lifecycle.ViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -13,7 +14,8 @@ class MovieDetailViewModel
 @AssistedInject constructor(
     @Assisted var state: MovieDetailState,
     private val tmdbRepository: TmdbRepository
-) : ZephyrrMvRxViewModel<MovieDetailState>(state) {
+//) : ZephyrrMvRxViewModel<MovieDetailState>(state) {
+) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
@@ -25,24 +27,24 @@ class MovieDetailViewModel
     }
 
     fun fetchMovieDetail(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-        withState { state ->
-            // Swallows requests if there's already one loading
-            if (state.movieDetailResponse is Loading) return@withState
-            suspend { tmdbRepository.fetchMovieDetail(viewModelScope, state.movieId) }
-                .execute(dispatcher) {
-                    copy(
-                        movieId = state.movieId,
-                        movieDetailItem = it(),
-                        movieDetailResponse = it
-                    )
-                }
-        }
+//        withState { state ->
+//            // Swallows requests if there's already one loading
+//            if (state.movieDetailResponse is Loading) return@withState
+//            suspend { tmdbRepository.fetchMovieDetail(viewModelScope, state.movieId) }
+//                .execute(dispatcher) {
+//                    copy(
+//                        movieId = state.movieId,
+//                        movieDetailItem = it(),
+//                        movieDetailResponse = it
+//                    )
+//                }
+//        }
     }
 
-    companion object : MavericksViewModelFactory<MovieDetailViewModel, MovieDetailState> {
-        override fun create(viewModelContext: ViewModelContext, state: MovieDetailState): MovieDetailViewModel {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<MovieDetailFragment>().movieDetailViewModelFactory
-            return fragment.create(state)
-        }
-    }
+//    companion object : MavericksViewModelFactory<MovieDetailViewModel, MovieDetailState> {
+//        override fun create(viewModelContext: ViewModelContext, state: MovieDetailState): MovieDetailViewModel {
+//            val fragment = (viewModelContext as FragmentViewModelContext).fragment<MovieDetailFragment>().movieDetailViewModelFactory
+//            return fragment.create(state)
+//        }
+//    }
 }

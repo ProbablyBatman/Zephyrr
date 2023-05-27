@@ -18,6 +18,7 @@ class PopularMoviesViewModel
     private val mapper: MovieListMapper
 ) : BaseMovieListViewModel<MovieListState>(state) {
 
+
     @AssistedFactory
     interface Factory : BaseMovieListViewModel.Factory {
         fun create(state: MovieListState): PopularMoviesViewModel
@@ -28,59 +29,59 @@ class PopularMoviesViewModel
     }
 
     override fun fetchMovies(dispatcher: CoroutineDispatcher) {
-        withState { state ->
-            suspend { tmdbRepository.fetchPopularMovies(state.pageNumber) }
-                .execute(dispatcher) {
-                    val totalPages = it()?.totalPages
-                    when (it) {
-                        is Fail -> {
-                            copy(
-                                pageNumber = state.pageNumber,
-                                movieListResponse = it,
-                                movieList = state.movieList,
-                                // TODO: move this to the view like in search?
-                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
-                            )
-                        }
-                        is Success -> {
-                            copy(
-                                pageNumber = state.pageNumber + 1,
-                                movieListResponse = it,
-                                movieList = state.movieList + mapper.mapToEntity(it()),
-                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
-                            )
-                        }
-                        else -> copy(
-                            movieListResponse = it
-                        )
-                    }
-                }
-        }
+//        withState { state ->
+//            suspend { tmdbRepository.fetchPopularMovies(state.pageNumber) }
+//                .execute(dispatcher) {
+//                    val totalPages = it()?.totalPages
+//                    when (it) {
+//                        is Fail -> {
+//                            copy(
+//                                pageNumber = state.pageNumber,
+//                                movieListResponse = it,
+//                                movieList = state.movieList,
+//                                // TODO: move this to the view like in search?
+//                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
+//                            )
+//                        }
+//                        is Success -> {
+//                            copy(
+//                                pageNumber = state.pageNumber + 1,
+//                                movieListResponse = it,
+//                                movieList = state.movieList + mapper.mapToEntity(it()),
+//                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
+//                            )
+//                        }
+//                        else -> copy(
+//                            movieListResponse = it
+//                        )
+//                    }
+//                }
+//        }
     }
 
     private fun fetchFirstPage(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-        withState { state ->
-            suspend { tmdbRepository.fetchPopularMovies(1) }
-                .execute(dispatcher) {
-                    when (it) {
-                        is Fail -> {
-                            copy(
-                                pageNumber = 1,
-                                movieListResponse = it,
-                                movieList = state.movieList
-                            )
-                        }
-                        is Success -> {
-                            copy(
-                                pageNumber = state.pageNumber + 1,
-                                movieListResponse = it,
-                                movieList = state.movieList + mapper.mapToEntity(it())
-                            )
-                        }
-                        else -> copy()
-                    }
-                }
-        }
+//        withState { state ->
+//            suspend { tmdbRepository.fetchPopularMovies(1) }
+//                .execute(dispatcher) {
+//                    when (it) {
+//                        is Fail -> {
+//                            copy(
+//                                pageNumber = 1,
+//                                movieListResponse = it,
+//                                movieList = state.movieList
+//                            )
+//                        }
+//                        is Success -> {
+//                            copy(
+//                                pageNumber = state.pageNumber + 1,
+//                                movieListResponse = it,
+//                                movieList = state.movieList + mapper.mapToEntity(it())
+//                            )
+//                        }
+//                        else -> copy()
+//                    }
+//                }
+//        }
     }
 
     // TODO: Determine if this is still necessary
@@ -95,10 +96,10 @@ class PopularMoviesViewModel
 //        }
 //    }
 
-    companion object : MavericksViewModelFactory<PopularMoviesViewModel, MovieListState> {
-        override fun create(viewModelContext: ViewModelContext, state: MovieListState): PopularMoviesViewModel {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<PopularMoviesFragment>().viewModelFactory
-            return fragment.create(state)
-        }
-    }
+//    companion object : MavericksViewModelFactory<PopularMoviesViewModel, MovieListState> {
+//        override fun create(viewModelContext: ViewModelContext, state: MovieListState): PopularMoviesViewModel {
+//            val fragment = (viewModelContext as FragmentViewModelContext).fragment<PopularMoviesFragment>().viewModelFactory
+//            return fragment.create(state)
+//        }
+//    }
 }

@@ -5,7 +5,7 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.google.gms.google-services'
 
-def rawBuildNumber = System.getenv("BITRISE_BUILD_NUMBER") ?: "1"
+def rawBuildNumber = System.getenv("BITRISE_BUILD_NUMBER") ?: "99999"
 def buildNumber = Integer.parseInt(rawBuildNumber)
 
 android {

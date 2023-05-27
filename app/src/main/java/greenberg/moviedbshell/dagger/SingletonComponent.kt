@@ -21,10 +21,6 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @EntryPoint
-//@Module(includes = [
-//    ApplicationModule::class,
-//    ServicesModule::class
-//])
 interface SingletonComponent {
     val popularViewModelFactory: PopularMoviesViewModel.Factory
     val movieDetailViewModelFactory: MovieDetailViewModel.Factory

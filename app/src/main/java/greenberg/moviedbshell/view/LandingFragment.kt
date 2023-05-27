@@ -8,26 +8,41 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.ScrollView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.LandingAdapter
 import greenberg.moviedbshell.base.BaseFragment
-import greenberg.moviedbshell.state.LandingState
 import greenberg.moviedbshell.state.MovieDetailArgs
+import greenberg.moviedbshell.state.MovieLandingState
 import greenberg.moviedbshell.state.TvDetailArgs
+import greenberg.moviedbshell.state.TvLandingState
 import greenberg.moviedbshell.viewmodel.LandingViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LandingFragment : BaseFragment() {
 
     // TODO: INVESTIGATE REPLACING THIS WITH LATEINIT VAR INJECT
-    val landingViewModelFactory by lazy {
-        (activity?.application as ZephyrrApplication).component.landingViewModelFactory
-    }
+//    val landingViewModelFactory by lazy {
+//        (activity?.application as ZephyrrApplication).component.landingViewModelFactory
+//    }
 
-//    private val viewModel: LandingViewModel by fragmentViewModel()
+//    private val viewModel: LandingViewModel by viewModels { landingViewModelFactory.create(Dispatchers.IO) }
+    @Inject
+    lateinit var landingViewModelFactory: LandingViewModel.Factory
+
+    private val viewModel: LandingViewModel by viewModels {
+        LandingViewModel.provideFactory(landingViewModelFactory, Dispatchers.IO)
+    }
 
     private lateinit var recentlyReleasedRecycler: RecyclerView
     private lateinit var recentlyReleasedLayoutManager: LinearLayoutManager
@@ -43,27 +58,23 @@ class LandingFragment : BaseFragment() {
     private lateinit var popularTvAdapter: LandingAdapter
     private lateinit var topRatedTvRecycler: RecyclerView
     private lateinit var topRatedTvLayoutManager: LinearLayoutManager
-    private lateinit var topRatedAdapter: LandingAdapter
+    private lateinit var topRatedTvAdapter: LandingAdapter
     private lateinit var recentlyReleasedSeeAllButton: Button
     private lateinit var recentlyReleasedContainer: View
-    private lateinit var recentlyReleasedErrorContainer: ConstraintLayout
     private lateinit var recentlyReleasedLoadingBar: ProgressBar
     private lateinit var popularMovieSeeAllButton: Button
     private lateinit var popularMovieContainer: View
-    private lateinit var popularMovieErrorContainer: ConstraintLayout
     private lateinit var popularMovieLoadingBar: ProgressBar
     private lateinit var soonTMSeeAllButton: Button
     private lateinit var soonTMContainer: View
-    private lateinit var soonTMErrorContainer: ConstraintLayout
     private lateinit var soonTMLoadingBar: ProgressBar
     private lateinit var popularTvSeeAllButton: Button
     private lateinit var popularTvContainer: View
     private lateinit var popularTvLoadingBar: ProgressBar
-    private lateinit var popularTvErrorContainer: ConstraintLayout
     private lateinit var topRatedTvSeeAllButton: Button
     private lateinit var topRatedTvContainer: View
-    private lateinit var topRatedTvErrorContainer: ConstraintLayout
-    private lateinit var topRatedLoadingBar: ProgressBar
+    private lateinit var topRatedTvLoadingBar: ProgressBar
+    private lateinit var errorContainer: View
     private lateinit var contentContainer: ScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +93,11 @@ class LandingFragment : BaseFragment() {
         soonTMRecycler = view.findViewById(R.id.soon_tm_recycler)
         popularTvRecycler = view.findViewById(R.id.popular_tv_recycler)
         topRatedTvRecycler = view.findViewById(R.id.top_rated_tv_recycler)
+        // TODO: Add single row retries
+//        errorContainer = view.findViewById(R.id.landing_row_error_container)
+//        errorContainer.setOnClickListener {
+////            viewModel.retryLandingPageLists()
+//        }
 
         recentlyReleasedLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         popularMovieLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -92,7 +108,7 @@ class LandingFragment : BaseFragment() {
         popularMovieAdapter = LandingAdapter(posterClickListener = this::movieOnClickListener)
         soonTMAdapter = LandingAdapter(posterClickListener = this::movieOnClickListener)
         popularTvAdapter = LandingAdapter(posterClickListener = this::tvOnClickListener)
-        topRatedAdapter = LandingAdapter(posterClickListener = this::tvOnClickListener)
+        topRatedTvAdapter = LandingAdapter(posterClickListener = this::tvOnClickListener)
 
         recentlyReleasedRecycler.adapter = recentlyReleasedAdapter
         recentlyReleasedRecycler.layoutManager = recentlyReleasedLayoutManager
@@ -106,223 +122,177 @@ class LandingFragment : BaseFragment() {
         popularTvRecycler.adapter = popularTvAdapter
         popularTvRecycler.layoutManager = popularTvLayoutManager
 
-        topRatedTvRecycler.adapter = topRatedAdapter
+        topRatedTvRecycler.adapter = topRatedTvAdapter
         topRatedTvRecycler.layoutManager = topRatedTvLayoutManager
 
         contentContainer = view.findViewById(R.id.content_container)
         recentlyReleasedContainer = view.findViewById(R.id.recently_released_container)
         recentlyReleasedLoadingBar = view.findViewById(R.id.recently_released_progress_bar)
-//        recentlyReleasedErrorContainer = view.findViewById(R.id.recently_released_error_container)
-        recentlyReleasedErrorContainer.setOnClickListener {
-//            viewModel.retryRecentlyReleased()
-        }
         recentlyReleasedSeeAllButton = view.findViewById(R.id.recently_released_see_all_button)
         recentlyReleasedSeeAllButton.setOnClickListener {
-            navigate(R.id.action_landingFragment_to_recentlyReleasedFragment)
+//            navigate(R.id.action_landingFragment_to_recentlyReleasedFragment)
         }
         popularMovieContainer = view.findViewById(R.id.popular_movie_container)
         popularMovieLoadingBar = view.findViewById(R.id.popular_movie_progress_bar)
-//        popularMovieErrorContainer = view.findViewById(R.id.popular_movie_error_container)
-        popularMovieErrorContainer.setOnClickListener {
-//            viewModel.retryPopularMovies()
-        }
         popularMovieSeeAllButton = view.findViewById(R.id.popular_see_all_button)
         popularMovieSeeAllButton.setOnClickListener {
-            navigate(R.id.action_landingFragment_to_popularMovieFragment)
+//            navigate(R.id.action_landingFragment_to_popularMovieFragment)
         }
         soonTMContainer = view.findViewById(R.id.soon_tm_container)
         soonTMLoadingBar = view.findViewById(R.id.soon_tm_progress_bar)
-//        soonTMErrorContainer = view.findViewById(R.id.soon_tm_error_container)
-        soonTMErrorContainer.setOnClickListener {
-//            viewModel.retrySoonTM()
-        }
         soonTMSeeAllButton = view.findViewById(R.id.soon_tm_see_all_button)
         soonTMSeeAllButton.setOnClickListener {
             navigate(R.id.action_landingFragment_to_soonTMFragment)
         }
         popularTvContainer = view.findViewById(R.id.popular_tv_container)
         popularTvLoadingBar = view.findViewById(R.id.popular_tv_progress_bar)
-//        popularTvErrorContainer = view.findViewById(R.id.popular_tv_error_container)
-        popularTvErrorContainer.setOnClickListener {
-//            viewModel.retryPopularTv()
-        }
         popularTvSeeAllButton = view.findViewById(R.id.popular_tv_see_all_button)
         popularTvSeeAllButton.setOnClickListener {
             // TODO
         }
         topRatedTvContainer = view.findViewById(R.id.top_rated_tv_container)
-        topRatedLoadingBar = view.findViewById(R.id.top_rated_tv_progress_bar)
-//        topRatedTvErrorContainer = view.findViewById(R.id.top_rated_tv_error_container)
-        topRatedTvErrorContainer.setOnClickListener {
-//            viewModel.retryTopRatedTv()
-        }
+        topRatedTvLoadingBar = view.findViewById(R.id.top_rated_tv_progress_bar)
         topRatedTvSeeAllButton = view.findViewById(R.id.top_rated_tv_see_all_button)
         topRatedTvSeeAllButton.setOnClickListener {
             // TODO
         }
 
 //        viewModel.onEach { log("state is $it") }
+        registerObservers()
     }
 
-//    override fun invalidate() {
-//        withState(viewModel) { state ->
-//            updatePopularMoviesRow(state)
-//            updateRecentlyReleasedRow(state)
-//            updateSoonTMRow(state)
-//            updatePopularTvRow(state)
-//            updateTopRatedTvRow(state)
-//        }
-//    }
+    private fun registerObservers() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.recentlyReleasedLandingState.collect {
+                        updateRecentlyReleasedRow(it)
+                    }
+                }
 
-    private fun updateRecentlyReleasedRow(state: LandingState) {
-        val response = state.recentlyReleasedResponse
-        val movieList = state.recentlyReleasedItems
-        when (response) {
-            Uninitialized, is Loading -> {
-                // load row
-                log("recent release load")
-                // TODO: bug here. Technically because I can't measure the title height in time to do this,
-                // the entire row shifts a little bit after the images load in. For now, this will suffice.
-                setContainerParamsLoading(recentlyReleasedContainer)
-                recentlyReleasedErrorContainer.visibility = View.GONE
-                recentlyReleasedLoadingBar.visibility = View.VISIBLE
-                recentlyReleasedRecycler.visibility = View.GONE
-            }
-            is Success -> {
-                // show row
-                log("recent release success")
-                setContainerParamsNormal(recentlyReleasedContainer)
-                recentlyReleasedAdapter.setItems(movieList)
-                recentlyReleasedLoadingBar.visibility = View.GONE
-                recentlyReleasedRecycler.visibility = View.VISIBLE
-            }
-            is Fail -> {
-                // error for row
-//                setContainerParamsNormal(recentlyReleasedContainer)
-                recentlyReleasedErrorContainer.visibility = View.VISIBLE
-                recentlyReleasedLoadingBar.visibility = View.GONE
-                recentlyReleasedRecycler.visibility = View.GONE
+                launch {
+                    viewModel.popularMoviesLandingState.collect {
+                        updatePopularMoviesRow(it)
+                    }
+                }
+
+                launch {
+                    viewModel.soonTMMoviesLandingState.collect {
+                        updateSoonTMRow(it)
+                    }
+                }
+
+                launch {
+                    viewModel.popularTvLandingState.collect {
+                        updatePopularTvRow(it)
+                    }
+                }
+
+                launch {
+                    viewModel.topRatedTvLandingState.collect {
+                        updateTopRatedTvRow(it)
+                    }
+                }
             }
         }
     }
 
-    private fun updatePopularMoviesRow(state: LandingState) {
-        val response = state.popularMovieResponse
-        val movieList = state.popularMovieItems
-        when (response) {
-            // TODO I would use Incomplete here as Mavericks suggests, but kotlin gives me a warning
-            Uninitialized, is Loading -> {
-                // load row
-                log("popular movie load")
+    private fun updatePopularMoviesRow(state: MovieLandingState) {
+        log("landing popular state is $state")
+        when {
+            state.isLoading -> {
                 setContainerParamsLoading(popularMovieContainer)
-                popularMovieErrorContainer.visibility = View.GONE
                 popularMovieLoadingBar.visibility = View.VISIBLE
                 popularMovieRecycler.visibility = View.GONE
             }
-            is Success -> {
-                log("popular movie success")
-                // show row
+            state.error != null -> {
+                // TODO: display error
+            }
+            else -> {
                 setContainerParamsNormal(popularMovieContainer)
-                popularMovieAdapter.setItems(movieList)
+                popularMovieAdapter.setItems(state.response)
                 popularMovieLoadingBar.visibility = View.GONE
                 popularMovieRecycler.visibility = View.VISIBLE
             }
-            is Fail -> {
-                // error for row
-                setContainerParamsNormal(popularMovieContainer)
-                popularMovieErrorContainer.visibility = View.VISIBLE
-                popularMovieLoadingBar.visibility = View.GONE
-                popularMovieRecycler.visibility = View.GONE
+        }
+    }
+
+    private fun updateRecentlyReleasedRow(state: MovieLandingState) {
+        log("landing recently released state is $state")
+        when {
+            state.isLoading -> {
+                setContainerParamsLoading(recentlyReleasedContainer)
+                recentlyReleasedLoadingBar.visibility = View.VISIBLE
+                recentlyReleasedRecycler.visibility = View.GONE
+            }
+            state.error != null -> {
+                // TODO: display error
+            }
+            else -> {
+                setContainerParamsNormal(recentlyReleasedContainer)
+                recentlyReleasedAdapter.setItems(state.response)
+                recentlyReleasedLoadingBar.visibility = View.GONE
+                recentlyReleasedRecycler.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun updateSoonTMRow(state: LandingState) {
-        val response = state.soonTMResponse
-        val movieList = state.soonTMItems
-        when (response) {
-            Uninitialized, is Loading -> {
-                // load row
-                log("soontm load")
+    private fun updateSoonTMRow(state: MovieLandingState) {
+        log("landing soon TM state is $state")
+        when {
+            state.isLoading -> {
                 setContainerParamsLoading(soonTMContainer)
-                soonTMErrorContainer.visibility = View.GONE
                 soonTMLoadingBar.visibility = View.VISIBLE
                 soonTMRecycler.visibility = View.GONE
             }
-            is Success -> {
-                // show row
-                log("soontm success")
+            state.error != null -> {
+                // TODO: display error
+            }
+            else -> {
                 setContainerParamsNormal(soonTMContainer)
-                soonTMAdapter.setItems(movieList)
+                soonTMAdapter.setItems(state.response)
                 soonTMLoadingBar.visibility = View.GONE
                 soonTMRecycler.visibility = View.VISIBLE
             }
-            is Fail -> {
-                // error for row
-                setContainerParamsNormal(soonTMContainer)
-                soonTMErrorContainer.visibility = View.VISIBLE
-                soonTMLoadingBar.visibility = View.GONE
-                soonTMRecycler.visibility = View.GONE
-            }
         }
     }
 
-    private fun updatePopularTvRow(state: LandingState) {
-        val response = state.popularTvResponse
-        val tvList = state.popularTvItems
-        when (response) {
-            Uninitialized, is Loading -> {
-                // load row
-                log("popular tv load")
+    private fun updatePopularTvRow(state: TvLandingState) {
+        log("landing popular tv state is $state")
+        when {
+            state.isLoading -> {
                 setContainerParamsLoading(popularTvContainer)
-                popularTvErrorContainer.visibility = View.GONE
                 popularTvLoadingBar.visibility = View.VISIBLE
                 popularTvRecycler.visibility = View.GONE
             }
-            is Success -> {
-                // show row
-                log("popular tv success")
+            state.error != null -> {
+                // TODO: display error
+            }
+            else -> {
                 setContainerParamsNormal(popularTvContainer)
-                popularTvAdapter.setItems(tvList)
+                popularTvAdapter.setItems(state.response)
                 popularTvLoadingBar.visibility = View.GONE
                 popularTvRecycler.visibility = View.VISIBLE
-            }
-            is Fail -> {
-                // error for row
-                setContainerParamsNormal(popularTvContainer)
-                popularTvErrorContainer.visibility = View.VISIBLE
-                popularTvLoadingBar.visibility = View.GONE
-                popularTvRecycler.visibility = View.GONE
             }
         }
     }
 
-    private fun updateTopRatedTvRow(state: LandingState) {
-        val response = state.topRatedTvResponse
-        val tvList = state.topRatedTvItems
-        when (response) {
-            Uninitialized, is Loading -> {
-                // load row
-                log("top rated load")
+    private fun updateTopRatedTvRow(state: TvLandingState) {
+        log("landing top rated tv state is $state")
+        when {
+            state.isLoading -> {
                 setContainerParamsLoading(topRatedTvContainer)
-                topRatedTvErrorContainer.visibility = View.GONE
-                topRatedLoadingBar.visibility = View.VISIBLE
+                topRatedTvLoadingBar.visibility = View.VISIBLE
                 topRatedTvRecycler.visibility = View.GONE
             }
-            is Success -> {
-                // show row
-                log("top rated success")
+            state.error != null -> {
+                // TODO: display error
+            }
+            else -> {
                 setContainerParamsNormal(topRatedTvContainer)
-                topRatedAdapter.setItems(tvList)
-                topRatedLoadingBar.visibility = View.GONE
+                topRatedTvAdapter.setItems(state.response)
+                topRatedTvLoadingBar.visibility = View.GONE
                 topRatedTvRecycler.visibility = View.VISIBLE
-            }
-            is Fail -> {
-                // error for row
-                setContainerParamsNormal(topRatedTvContainer)
-                topRatedTvErrorContainer.visibility = View.VISIBLE
-                topRatedLoadingBar.visibility = View.GONE
-                topRatedTvRecycler.visibility = View.GONE
             }
         }
     }

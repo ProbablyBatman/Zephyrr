@@ -7,9 +7,10 @@ import kotlinx.parcelize.Parcelize
 data class TvDetailState(
     val tvId: Int = -1,
     val tvDetailItem: TvDetailItem? = null,
-    val tvDetailResponse: Async<TvDetailItem> = Uninitialized
+//    val tvDetailResponse: Async<TvDetailItem> = Uninitialized
+    val tvDetailResponse: Any
 ) {
-    constructor(args: TvDetailArgs) : this(tvId = args.tvId)
+//    constructor(args: TvDetailArgs) : this(tvId = args.tvId)
 }
 
 @Parcelize

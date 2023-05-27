@@ -11,9 +11,10 @@ data class ImageGalleryState(
     val mediaType: String = MediaType.UNKNOWN,
     val posterItems: List<PosterItem> = emptyList(),
     val backdropItems: List<PosterItem> = emptyList(),
-    val imageGalleryResponse: Async<ImageGalleryResponse> = Uninitialized
+//    val imageGalleryResponse: Async<ImageGalleryResponse> = Uninitialized
+    val imageGalleryResponse: Any
 ) {
-    constructor(args: PosterImageGalleryArgs) : this(itemId = args.itemId, mediaType = args.mediaType)
+//    constructor(args: PosterImageGalleryArgs) : this(itemId = args.itemId, mediaType = args.mediaType)
 }
 
 @Parcelize

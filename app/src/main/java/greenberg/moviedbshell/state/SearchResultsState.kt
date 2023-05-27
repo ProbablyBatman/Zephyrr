@@ -9,10 +9,11 @@ data class SearchResultsState(
     val query: String = "",
     val pageNumber: Int = 1,
     val totalPages: Int = -1,
-    val searchResultsResponse: Async<SearchResponse> = Uninitialized,
+//    val searchResultsResponse: Async<SearchResponse> = Uninitialized,
+    val searchResultsResponse: Any,
     val searchResults: List<PreviewItem> = emptyList()
 ) {
-    constructor(args: SearchResultsArgs) : this(query = args.query)
+//    constructor(args: SearchResultsArgs) : this(query = args.query)
 }
 
 @Parcelize

@@ -233,7 +233,7 @@ class TvDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
+//                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
                             putBoolean(ImageGalleryDialog.BACKDROP_KEY, true)
                         }
                     }
@@ -243,7 +243,7 @@ class TvDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
+//                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
                             putBoolean(ImageGalleryDialog.BACKDROP_KEY, false)
                         }
                     }

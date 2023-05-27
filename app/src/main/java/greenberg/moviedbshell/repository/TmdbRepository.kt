@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.repository
 
+import greenberg.moviedbshell.base.ZephyrrResponse
 import greenberg.moviedbshell.mappers.MovieDetailMapper
 import greenberg.moviedbshell.mappers.PersonDetailMapper
 import greenberg.moviedbshell.mappers.TvDetailMapper
@@ -122,19 +123,27 @@ class TmdbRepository
         )
     }
 
-    suspend fun fetchRecentlyReleased(page: Int) = tmdbService.queryRecentlyReleased(page)
+    suspend fun fetchRecentlyReleased(page: Int) = safeFetch { tmdbService.queryRecentlyReleased(page) }
 
-    suspend fun fetchPopularMovies(page: Int) = tmdbService.queryPopularMovies(page)
+    suspend fun fetchPopularMovies(page: Int) = safeFetch { tmdbService.queryPopularMovies(page) }
 
-    suspend fun fetchSoonTM(page: Int) = tmdbService.querySoonTM(page)
+    suspend fun fetchSoonTM(page: Int) = safeFetch { tmdbService.querySoonTM(page) }
 
-    suspend fun fetchPopularTv(page: Int) = tmdbService.queryPopularTv(page)
+    suspend fun fetchPopularTv(page: Int) = safeFetch { tmdbService.queryPopularTv(page) }
 
-    suspend fun fetchTopRatedTv(page: Int) = tmdbService.queryTopRatedTv(page)
+    suspend fun fetchTopRatedTv(page: Int) = safeFetch { tmdbService.queryTopRatedTv(page) }
 
     suspend fun fetchMovieImages(id: Int) = tmdbService.queryMovieImages(id)
 
     suspend fun fetchTvImages(id: Int) = tmdbService.queryTvImages(id)
 
     suspend fun fetchSearchMulti(query: String, page: Int) = tmdbService.querySearchMulti(query, page)
+
+    private suspend fun <T> safeFetch(call: suspend () -> T): ZephyrrResponse<T> {
+        return try {
+            ZephyrrResponse.Success(call.invoke())
+        } catch (throwable: Throwable) {
+            ZephyrrResponse.Failure(throwable)
+        }
+    }
 }

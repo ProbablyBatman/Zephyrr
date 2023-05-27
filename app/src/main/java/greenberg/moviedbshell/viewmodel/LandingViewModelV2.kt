@@ -51,20 +51,26 @@ class LandingViewModelV2
                             val topRatedTVResponse = async { tmdbRepository.fetchTopRatedTv(1) }
 
                             emit(
-                                LandingPageUiState.Success(
-                                    false,
-                                    popularMovieList = movieListMapper.mapToEntity(
-                                        popularMovieResponse.await()
-                                    ),
-                                    recentlyReleasedMovieList = movieListMapper.mapToEntity(
-                                        recentlyReleasedMovieResponse.await()
-                                    ),
-                                    soonTMMovieList = movieListMapper.mapToEntity(
-                                        soonTMMovieResponse.await()
-                                    ),
-                                    popularTVList = tvListMapper.mapToEntity(popularTVResponse.await()),
-                                    topRatedTVList = tvListMapper.mapToEntity(topRatedTVResponse.await())
-                                )
+//                                LandingPageUiState.Success(
+//                                    false,
+//                                    popularMovieList = movieListMapper.mapToEntity(
+////                                        popularMovieResponse.await()
+//                                        null
+//                                    ),
+//                                    recentlyReleasedMovieList = movieListMapper.mapToEntity(
+////                                        recentlyReleasedMovieResponse.await()
+//                                    ),
+//                                    soonTMMovieList = movieListMapper.mapToEntity(
+////                                        soonTMMovieResponse.await()
+//                                    ),
+//                                    popularTVList = tvListMapper.mapToEntity(
+//                                        popularTVResponse.await()
+//                                    ),
+//                                    topRatedTVList = tvListMapper.mapToEntity(
+//                                        topRatedTVResponse.await()
+//                                    )
+//                                )
+                                LandingPageUiState.Loading
                             )
                         } catch (t: Throwable) {
                             Timber.e(t, "Emitting error from initial get 3")

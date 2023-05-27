@@ -45,7 +45,7 @@ class ImageGalleryDialog : BaseDialogFragment() {
         (activity?.application as ZephyrrApplication).component.imageGalleryViewModelFactory
     }
 
-    private val viewModel: ImageGalleryViewModel by fragmentViewModel()
+//    private val viewModel: ImageGalleryViewModel by fragmentViewModel()
 
     private var progressBar: ProgressBar? = null
     private lateinit var viewPager: ViewPager2
@@ -180,7 +180,7 @@ class ImageGalleryDialog : BaseDialogFragment() {
         })
 
         errorRetryButton.setOnClickListener {
-            viewModel.fetchPosters()
+//            viewModel.fetchPosters()
         }
     }
 
@@ -278,25 +278,25 @@ class ImageGalleryDialog : BaseDialogFragment() {
         return downloadManager?.enqueue(request) ?: -1
     }
 
-    override fun invalidate() {
-        withState(viewModel) { state ->
-            when (state.imageGalleryResponse) {
-                Uninitialized -> log("uninitialized")
-                is Loading -> {
-                    showLoading()
-                }
-                is Success -> {
-                    hideLoadingBar()
-                    hideErrorState()
-                    showBottomSheet()
-                    showImages(state)
-                }
-                is Fail -> {
-                    showError(state.imageGalleryResponse.error)
-                }
-            }
-        }
-    }
+//    override fun invalidate() {
+//        withState(viewModel) { state ->
+//            when (state.imageGalleryResponse) {
+//                Uninitialized -> log("uninitialized")
+//                is Loading -> {
+//                    showLoading()
+//                }
+//                is Success -> {
+//                    hideLoadingBar()
+//                    hideErrorState()
+//                    showBottomSheet()
+//                    showImages(state)
+//                }
+//                is Fail -> {
+//                    showError(state.imageGalleryResponse.error)
+//                }
+//            }
+//        }
+//    }
 
     override fun log(message: String) {
         Timber.d(message)

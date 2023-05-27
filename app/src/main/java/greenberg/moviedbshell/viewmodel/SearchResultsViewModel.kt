@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.viewmodel
 
+import androidx.lifecycle.ViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -13,7 +14,8 @@ class SearchResultsViewModel
     @Assisted state: SearchResultsState,
     private val tmdbRepository: TmdbRepository,
     private val mapper: SearchResultsMapper
-) : ZephyrrMvRxViewModel<SearchResultsState>(state) {
+//) : ZephyrrMvRxViewModel<SearchResultsState>(state) {
+) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
@@ -25,30 +27,30 @@ class SearchResultsViewModel
     }
 
     fun fetchSearchResults() {
-        withState { state ->
-            if (state.searchResultsResponse is Loading) return@withState
-            suspend { tmdbRepository.fetchSearchMulti(state.query, state.pageNumber) }
-                .execute {
-                    if (it is Fail) {
-                        // Set results and pageNumber to the same thing so call can be retried
-                        copy(
-                            query = state.query,
-                            pageNumber = state.pageNumber,
-                            totalPages = state.totalPages,
-                            searchResults = state.searchResults,
-                            searchResultsResponse = it
-                        )
-                    } else {
-                        copy(
-                            query = state.query,
-                            pageNumber = state.pageNumber + 1,
-                            totalPages = it()?.totalPages ?: -1,
-                            searchResults = state.searchResults + mapper.mapToEntity(it()),
-                            searchResultsResponse = it
-                        )
-                    }
-                }
-        }
+//        withState { state ->
+//            if (state.searchResultsResponse is Loading) return@withState
+//            suspend { tmdbRepository.fetchSearchMulti(state.query, state.pageNumber) }
+//                .execute {
+//                    if (it is Fail) {
+//                        // Set results and pageNumber to the same thing so call can be retried
+//                        copy(
+//                            query = state.query,
+//                            pageNumber = state.pageNumber,
+//                            totalPages = state.totalPages,
+//                            searchResults = state.searchResults,
+//                            searchResultsResponse = it
+//                        )
+//                    } else {
+//                        copy(
+//                            query = state.query,
+//                            pageNumber = state.pageNumber + 1,
+//                            totalPages = it()?.totalPages ?: -1,
+//                            searchResults = state.searchResults + mapper.mapToEntity(it()),
+//                            searchResultsResponse = it
+//                        )
+//                    }
+//                }
+//        }
     }
 
     fun fetchFirstPage() {
@@ -79,10 +81,10 @@ class SearchResultsViewModel
 //        }
     }
 
-    companion object : MavericksViewModelFactory<SearchResultsViewModel, SearchResultsState> {
-        override fun create(viewModelContext: ViewModelContext, state: SearchResultsState): SearchResultsViewModel {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<SearchResultsFragment>().searchResultsViewModelFactory
-            return fragment.create(state)
-        }
-    }
+//    companion object : MavericksViewModelFactory<SearchResultsViewModel, SearchResultsState> {
+//        override fun create(viewModelContext: ViewModelContext, state: SearchResultsState): SearchResultsViewModel {
+//            val fragment = (viewModelContext as FragmentViewModelContext).fragment<SearchResultsFragment>().searchResultsViewModelFactory
+//            return fragment.create(state)
+//        }
+//    }
 }

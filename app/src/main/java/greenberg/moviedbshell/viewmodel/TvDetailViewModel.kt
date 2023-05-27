@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.viewmodel
 
+import androidx.lifecycle.ViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -11,7 +12,8 @@ class TvDetailViewModel
 @AssistedInject constructor(
     @Assisted var state: TvDetailState,
     private val tmdbRepository: TmdbRepository,
-) : ZephyrrMvRxViewModel<TvDetailState>(state) {
+//) : ZephyrrMvRxViewModel<TvDetailState>(state) {
+) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
@@ -23,22 +25,22 @@ class TvDetailViewModel
     }
 
     fun fetchTvDetail() {
-        withState { state ->
-            suspend { tmdbRepository.fetchTvDetail(viewModelScope, state.tvId) }
-                .execute {
-                    copy(
-                        tvId = state.tvId,
-                        tvDetailItem = it(),
-                        tvDetailResponse = it
-                    )
-                }
-        }
+//        withState { state ->
+//            suspend { tmdbRepository.fetchTvDetail(viewModelScope, state.tvId) }
+//                .execute {
+//                    copy(
+//                        tvId = state.tvId,
+//                        tvDetailItem = it(),
+//                        tvDetailResponse = it
+//                    )
+//                }
+//        }
     }
 
-    companion object : MavericksViewModelFactory<TvDetailViewModel, TvDetailState> {
-        override fun create(viewModelContext: ViewModelContext, state: TvDetailState): TvDetailViewModel {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<TvDetailFragment>().tvDetailViewModelFactory
-            return fragment.create(state)
-        }
-    }
+//    companion object : MavericksViewModelFactory<TvDetailViewModel, TvDetailState> {
+//        override fun create(viewModelContext: ViewModelContext, state: TvDetailState): TvDetailViewModel {
+//            val fragment = (viewModelContext as FragmentViewModelContext).fragment<TvDetailFragment>().tvDetailViewModelFactory
+//            return fragment.create(state)
+//        }
+//    }
 }

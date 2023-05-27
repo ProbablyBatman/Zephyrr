@@ -7,9 +7,10 @@ import kotlinx.parcelize.Parcelize
 data class PersonDetailState(
     val personId: Int = -1,
     val personDetailItem: PersonDetailItem? = null,
-    val personDetailResponse: Async<PersonDetailItem> = Uninitialized
+//    val personDetailResponse: Async<PersonDetailItem> = Uninitialized
+    val personDetailResponse: Any
 ) {
-    constructor(args: PersonDetailArgs) : this(personId = args.personId)
+//    constructor(args: PersonDetailArgs) : this(personId = args.personId)
 }
 
 @Parcelize

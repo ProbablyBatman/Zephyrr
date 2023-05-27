@@ -7,9 +7,10 @@ import kotlinx.parcelize.Parcelize
 data class MovieDetailState(
     val movieId: Int = -1,
     val movieDetailItem: MovieDetailItem? = null,
-    val movieDetailResponse: Async<MovieDetailItem> = Uninitialized
+//    val movieDetailResponse: Async<MovieDetailItem> = Uninitialized
+    val movieDetailResponse: Any
 ) {
-    constructor(args: MovieDetailArgs) : this(movieId = args.movieId)
+//    constructor(args: MovieDetailArgs) : this(movieId = args.movieId)
 }
 
 @Parcelize

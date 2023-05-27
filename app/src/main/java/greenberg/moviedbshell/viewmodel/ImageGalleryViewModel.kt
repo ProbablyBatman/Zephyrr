@@ -1,5 +1,6 @@
 package greenberg.moviedbshell.viewmodel
 
+import androidx.lifecycle.ViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -18,7 +19,8 @@ class ImageGalleryViewModel
     private val tmdbRepository: TmdbRepository,
     private val mapper: PosterGalleryMapper,
     private val backdropMapper: BackdropGalleryMapper
-) : ZephyrrMvRxViewModel<ImageGalleryState>(state) {
+//) : ZephyrrMvRxViewModel<ImageGalleryState>(state) {
+) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
@@ -30,55 +32,55 @@ class ImageGalleryViewModel
     }
 
     fun fetchPosters() {
-        withState { state ->
-            if (state.imageGalleryResponse is Loading) return@withState
-            when (state.mediaType) {
-                MediaType.MOVIE -> {
-                    fetchMovieImages()
-                }
-                MediaType.TV -> {
-                    fetchTvImages()
-                }
-            }
-        }
+//        withState { state ->
+//            if (state.imageGalleryResponse is Loading) return@withState
+//            when (state.mediaType) {
+//                MediaType.MOVIE -> {
+//                    fetchMovieImages()
+//                }
+//                MediaType.TV -> {
+//                    fetchTvImages()
+//                }
+//            }
+//        }
     }
 
     private fun fetchMovieImages(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-        withState { state ->
-            suspend { tmdbRepository.fetchMovieImages(state.itemId) }
-                .execute(dispatcher) {
-                    // Assume success for now
-                    copy(
-                        itemId = state.itemId,
-                        mediaType = state.mediaType,
-                        posterItems = mapper.mapToEntity(it()),
-                        backdropItems = backdropMapper.mapToEntity(it()),
-                        imageGalleryResponse = it
-                    )
-                }
-        }
+//        withState { state ->
+//            suspend { tmdbRepository.fetchMovieImages(state.itemId) }
+//                .execute(dispatcher) {
+//                    // Assume success for now
+//                    copy(
+//                        itemId = state.itemId,
+//                        mediaType = state.mediaType,
+//                        posterItems = mapper.mapToEntity(it()),
+//                        backdropItems = backdropMapper.mapToEntity(it()),
+//                        imageGalleryResponse = it
+//                    )
+//                }
+//        }
     }
 
     private fun fetchTvImages(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-        withState { state ->
-            suspend { tmdbRepository.fetchTvImages(state.itemId) }
-                .execute(dispatcher) {
-                    // Assume success for now
-                    copy(
-                        itemId = state.itemId,
-                        mediaType = state.mediaType,
-                        posterItems = mapper.mapToEntity(it()),
-                        backdropItems = backdropMapper.mapToEntity(it()),
-                        imageGalleryResponse = it
-                    )
-                }
-        }
+//        withState { state ->
+//            suspend { tmdbRepository.fetchTvImages(state.itemId) }
+//                .execute(dispatcher) {
+//                    // Assume success for now
+//                    copy(
+//                        itemId = state.itemId,
+//                        mediaType = state.mediaType,
+//                        posterItems = mapper.mapToEntity(it()),
+//                        backdropItems = backdropMapper.mapToEntity(it()),
+//                        imageGalleryResponse = it
+//                    )
+//                }
+//        }
     }
 
-    companion object : MavericksViewModelFactory<ImageGalleryViewModel, ImageGalleryState> {
-        override fun create(viewModelContext: ViewModelContext, state: ImageGalleryState): ImageGalleryViewModel {
-            val fragment = (viewModelContext as FragmentViewModelContext).fragment<ImageGalleryDialog>().imageGalleryViewModelFactory
-            return fragment.create(state)
-        }
-    }
+//    companion object : MavericksViewModelFactory<ImageGalleryViewModel, ImageGalleryState> {
+//        override fun create(viewModelContext: ViewModelContext, state: ImageGalleryState): ImageGalleryViewModel {
+//            val fragment = (viewModelContext as FragmentViewModelContext).fragment<ImageGalleryDialog>().imageGalleryViewModelFactory
+//            return fragment.create(state)
+//        }
+//    }
 }

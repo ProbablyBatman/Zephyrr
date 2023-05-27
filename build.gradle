@@ -4,7 +4,7 @@ buildscript {
     ext.media_version = '1.6.0'
     ext.nav_ktx_version = "2.5.3"
     ext.lifecycle_ktx_version = "2.6.1"
-    ext.hilt_version = "2.41"
+    ext.hilt_version = "2.44"
     repositories {
         google()
         mavenCentral()
