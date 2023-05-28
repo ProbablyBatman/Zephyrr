@@ -10,12 +10,13 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.extensions.processAsReleaseDate
+import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.ui.CreditsDetailItem
 import greenberg.moviedbshell.viewHolders.CreditsViewHolder
 
 class CreditsAdapter(
     var creditsList: List<CreditsDetailItem> = listOf(),
-    val onClickListener: (Int, String) -> Unit
+    val onClickListener: (Int, MediaType) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CreditsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.credit_list_card, parent, false))

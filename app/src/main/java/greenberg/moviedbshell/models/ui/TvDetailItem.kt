@@ -4,6 +4,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TvDetailItem(
+    val tvId: Int,
     val title: String,
     val originalTitle: String,
     val status: String,

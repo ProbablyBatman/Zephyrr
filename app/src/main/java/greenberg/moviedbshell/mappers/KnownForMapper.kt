@@ -10,23 +10,23 @@ import javax.inject.Inject
 class KnownForMapper
 @Inject constructor() : Mapper<List<KnownForItem?>?, List<PreviewItem>> {
     override fun mapToEntity(item: List<KnownForItem?>?): List<PreviewItem> {
-        val mappedItems = item?.map {
-            when (it?.mediaType) {
+        val mappedItems = item?.map { knownForItem ->
+            when (knownForItem?.mediaType?.let { MediaType.valueOf(it) }) {
                 MediaType.MOVIE ->
                     MovieItem(
-                        movieTitle = it.title.orEmpty(),
-                        overview = it.overview.orEmpty(),
-                        releaseDate = it.releaseDate.orEmpty(),
-                        posterImageUrl = it.posterPath.orEmpty(),
-                        id = it.id
+                        movieTitle = knownForItem.title.orEmpty(),
+                        overview = knownForItem.overview.orEmpty(),
+                        releaseDate = knownForItem.releaseDate.orEmpty(),
+                        posterImageUrl = knownForItem.posterPath.orEmpty(),
+                        id = knownForItem.id
                     )
                 MediaType.TV -> {
                     TvItem(
-                        name = it.name.orEmpty(),
-                        overview = it.overview.orEmpty(),
-                        firstAirDate = it.firstAirDate.orEmpty(),
-                        posterImageUrl = it.posterPath.orEmpty(),
-                        id = it.id
+                        name = knownForItem.name.orEmpty(),
+                        overview = knownForItem.overview.orEmpty(),
+                        firstAirDate = knownForItem.firstAirDate.orEmpty(),
+                        posterImageUrl = knownForItem.posterPath.orEmpty(),
+                        id = knownForItem.id
                     )
                 }
                 else -> PreviewItem(mediaType = MediaType.UNKNOWN)

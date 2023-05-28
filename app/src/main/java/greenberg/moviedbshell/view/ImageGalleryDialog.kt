@@ -27,25 +27,41 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.ImageGalleryAdapter
 import greenberg.moviedbshell.base.BaseDialogFragment
+import greenberg.moviedbshell.base.BaseFragment.Companion.PAGE_ARGS
+import greenberg.moviedbshell.extensions.extractArguments
+import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.state.ImageGalleryState
+import greenberg.moviedbshell.state.PosterImageGalleryArgs
 import greenberg.moviedbshell.viewmodel.ImageGalleryViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ImageGalleryDialog : BaseDialogFragment() {
 
-    private lateinit var backdropViewUUID: String
+    @Inject
+    lateinit var imageGalleryViewModelFactory: ImageGalleryViewModel.Factory
 
-    val imageGalleryViewModelFactory by lazy {
-        (activity?.application as ZephyrrApplication).component.imageGalleryViewModelFactory
+    private val viewModel: ImageGalleryViewModel by viewModels {
+        ImageGalleryViewModel.provideFactory(
+            imageGalleryViewModelFactory,
+            arguments?.extractArguments<PosterImageGalleryArgs>(PAGE_ARGS)?.itemId ?: -1,
+            arguments?.extractArguments<PosterImageGalleryArgs>(PAGE_ARGS)?.mediaType ?: MediaType.UNKNOWN,
+            Dispatchers.IO
+        )
     }
-
-//    private val viewModel: ImageGalleryViewModel by fragmentViewModel()
 
     private var progressBar: ProgressBar? = null
     private lateinit var viewPager: ViewPager2
@@ -108,8 +124,11 @@ class ImageGalleryDialog : BaseDialogFragment() {
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         // TODO: this is bizarre but somehow correct
         bottomSheetContainer.viewTreeObserver.addOnGlobalLayoutListener {
+            // Sets the peek height to be the bottom of the initially exposed portion of the sheet (I think)
             bottomSheetBehavior.peekHeight = bottomSheetExpander.bottom
         }
+        // Ignores any gesture nav suggestions in terms of height
+        bottomSheetBehavior.isGestureInsetBottomIgnored = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.isHideable = false
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -180,7 +199,34 @@ class ImageGalleryDialog : BaseDialogFragment() {
         })
 
         errorRetryButton.setOnClickListener {
-//            viewModel.fetchPosters()
+            viewModel.fetchPosters()
+        }
+
+        registerObservers()
+    }
+
+    private fun registerObservers() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.imageGalleryState.collect {
+                        updateImages(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateImages(state: ImageGalleryState) {
+        when {
+            state.isLoading -> showLoading()
+            state.error != null -> showError(state.error)
+            state.backdropItems.isNotEmpty() || state.posterItems.isNotEmpty() -> {
+                hideLoadingBar()
+                hideErrorState()
+                showBottomSheet()
+                showImages(state)
+            }
         }
     }
 
@@ -212,7 +258,7 @@ class ImageGalleryDialog : BaseDialogFragment() {
             state.posterItems
         }
         imageGalleryAdapter.posters = items
-        imageGalleryAdapter.notifyDataSetChanged()
+        imageGalleryAdapter.notifyItemRangeChanged(0, imageGalleryAdapter.itemCount)
     }
 
     private fun preloadNextImage(right: String) {
@@ -255,6 +301,8 @@ class ImageGalleryDialog : BaseDialogFragment() {
     }
 
     private fun showBottomSheet() {
+        bottomSheetCopier?.visibility = View.VISIBLE
+        bottomSheetExpander.visibility = View.VISIBLE
         bottomSheet.visibility = View.VISIBLE
     }
 
@@ -277,26 +325,6 @@ class ImageGalleryDialog : BaseDialogFragment() {
             .setAllowedOverRoaming(false)
         return downloadManager?.enqueue(request) ?: -1
     }
-
-//    override fun invalidate() {
-//        withState(viewModel) { state ->
-//            when (state.imageGalleryResponse) {
-//                Uninitialized -> log("uninitialized")
-//                is Loading -> {
-//                    showLoading()
-//                }
-//                is Success -> {
-//                    hideLoadingBar()
-//                    hideErrorState()
-//                    showBottomSheet()
-//                    showImages(state)
-//                }
-//                is Fail -> {
-//                    showError(state.imageGalleryResponse.error)
-//                }
-//            }
-//        }
-//    }
 
     override fun log(message: String) {
         Timber.d(message)

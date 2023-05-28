@@ -205,7 +205,7 @@ class SearchResultsFragment : BaseFragment() {
 //        }
 //    }
 
-    private fun onClickListener(itemId: Int, mediaType: String) {
+    private fun onClickListener(itemId: Int, mediaType: MediaType) {
         when (mediaType) {
             MediaType.MOVIE -> {
                 navigate(

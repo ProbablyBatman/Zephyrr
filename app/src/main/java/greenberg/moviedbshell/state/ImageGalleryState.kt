@@ -8,17 +8,15 @@ import kotlinx.parcelize.Parcelize
 
 data class ImageGalleryState(
     val itemId: Int = -1,
-    val mediaType: String = MediaType.UNKNOWN,
+    val mediaType: MediaType = MediaType.UNKNOWN,
     val posterItems: List<PosterItem> = emptyList(),
     val backdropItems: List<PosterItem> = emptyList(),
-//    val imageGalleryResponse: Async<ImageGalleryResponse> = Uninitialized
-    val imageGalleryResponse: Any
-) {
-//    constructor(args: PosterImageGalleryArgs) : this(itemId = args.itemId, mediaType = args.mediaType)
-}
+    val error: Throwable? = null,
+    val isLoading: Boolean = true,
+)
 
 @Parcelize
 data class PosterImageGalleryArgs(
     val itemId: Int,
-    val mediaType: String
+    val mediaType: MediaType
 ) : Parcelable

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class MovieDetailViewModel
 @AssistedInject constructor(
@@ -40,6 +41,7 @@ class MovieDetailViewModel
 
     fun fetchMovieDetail() {
         viewModelScope.launch(dispatcher) {
+            Timber.d("launching fetchMovieDetail")
             when (val response = tmdbRepository.fetchMovieDetail(this, movieId)) {
                 is ZephyrrResponse.Success -> {
                     _movieDetailState.emit(_movieDetailState.value.copy(

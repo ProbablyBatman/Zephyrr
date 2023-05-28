@@ -244,7 +244,7 @@ class PersonDetailFragment : BaseFragment() {
 //        }
 //    }
 
-    private fun onClickListener(itemId: Int, mediaType: String) {
+    private fun onClickListener(itemId: Int, mediaType: MediaType) {
         when (mediaType) {
             MediaType.MOVIE -> {
                 navigate(
@@ -257,6 +257,11 @@ class PersonDetailFragment : BaseFragment() {
                     R.id.action_personDetailFragment_to_tvDetailFragment,
                     TvDetailArgs(itemId)
                 )
+            }
+
+            else -> {
+                // TODO: fix this no-op?
+                // no-op
             }
         }
     }

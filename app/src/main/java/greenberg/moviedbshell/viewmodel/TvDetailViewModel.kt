@@ -16,11 +16,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class TvDetailViewModel
 @AssistedInject constructor(
     @Assisted private val tvId: Int,
-    @Assisted private var dispatcher: CoroutineDispatcher,
+    @Assisted private val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
 ) : ViewModel() {
 
@@ -42,6 +43,7 @@ class TvDetailViewModel
 
     fun fetchTvDetail() {
         viewModelScope.launch(dispatcher) {
+            Timber.d("launching fetchTvDetail")
             when (val response = tmdbRepository.fetchTvDetail(this, tvId)) {
                 is ZephyrrResponse.Success -> {
                     _tvDetailState.emit(_tvDetailState.value.copy(

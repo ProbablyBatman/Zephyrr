@@ -42,6 +42,7 @@ class TvDetailMapper
             )
         }
         return TvDetailItem(
+            tvId = tvDetail?.id ?: -1,
             title = tvDetail?.name.orEmpty(),
             originalTitle = tvDetail?.originalName.orEmpty(),
             firstAirDate = tvDetail?.firstAirDate.orEmpty(),

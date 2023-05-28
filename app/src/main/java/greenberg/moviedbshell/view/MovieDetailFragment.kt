@@ -32,9 +32,11 @@ import greenberg.moviedbshell.R
 import greenberg.moviedbshell.adapters.CastListAdapter
 import greenberg.moviedbshell.adapters.PosterListAdapter
 import greenberg.moviedbshell.base.BaseFragment
+import greenberg.moviedbshell.extensions.extractArguments
 import greenberg.moviedbshell.extensions.processAsReleaseDate
 import greenberg.moviedbshell.extensions.processRatingInfo
 import greenberg.moviedbshell.extensions.processRuntime
+import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.ui.CastMemberItem
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.models.ui.ProductionCompanyItem
@@ -43,6 +45,7 @@ import greenberg.moviedbshell.state.CastStateArgs
 import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.state.PersonDetailArgs
+import greenberg.moviedbshell.state.PosterImageGalleryArgs
 import greenberg.moviedbshell.view.ImageGalleryDialog.Companion.BACKDROP_KEY
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
 import kotlinx.coroutines.Dispatchers
@@ -63,11 +66,7 @@ class MovieDetailFragment : BaseFragment() {
     private val viewModel: MovieDetailViewModel by viewModels {
         MovieDetailViewModel.provideFactory(
             movieDetailViewModelFactory,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments?.getParcelable(PAGE_ARGS, MovieDetailArgs::class.java)?.movieId
-            } else {
-                (arguments?.getParcelable(PAGE_ARGS) as? MovieDetailArgs)?.movieId
-            } ?: -1,
+            arguments?.extractArguments<MovieDetailArgs>(PAGE_ARGS)?.movieId ?: -1,
             Dispatchers.IO
         )
     }
@@ -281,7 +280,7 @@ class MovieDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-//                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
+                            putParcelable(PAGE_ARGS, PosterImageGalleryArgs(movieDetailItem.movieId, MediaType.MOVIE))
                             putBoolean(BACKDROP_KEY, true)
                         }
                     }
@@ -291,7 +290,7 @@ class MovieDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-//                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.movieId, MediaType.MOVIE))
+                            putParcelable(PAGE_ARGS, PosterImageGalleryArgs(movieDetailItem.movieId, MediaType.MOVIE))
                             putBoolean(BACKDROP_KEY, false)
                         }
                     }

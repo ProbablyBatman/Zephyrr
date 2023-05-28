@@ -34,7 +34,6 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_content_copy"
             android:drawablePadding="10dp"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_small"
@@ -42,14 +41,14 @@
             android:textSize="@dimen/text_size_small"
             android:maxLines="1"
             android:ellipsize="end"
-            android:gravity="center"/>
+            android:gravity="center"
+            app:drawableStartCompat="@drawable/ic_content_copy" />
 
         <TextView
             android:id="@+id/image_bottom_sheet_download"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="start"
-            android:drawableStart="@drawable/ic_file_download"
             android:drawablePadding="10dp"
             android:layout_marginStart="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_small"
@@ -57,7 +56,8 @@
             android:textSize="@dimen/text_size_small"
             android:maxLines="1"
             android:ellipsize="end"
-            android:gravity="center"/>
+            android:gravity="center"
+            app:drawableStartCompat="@drawable/ic_file_download" />
 
     </LinearLayout>
 

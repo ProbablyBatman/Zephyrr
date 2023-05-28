@@ -10,7 +10,7 @@ class CreditsCastMapper
 @Inject constructor() : Mapper<CombinedCreditsResponse, List<CreditsDetailItem>> {
     override fun mapToEntity(item: CombinedCreditsResponse?): List<CreditsDetailItem> {
         val castList = item?.personCastResponse?.mapNotNull { castItem ->
-            when (castItem?.mediaType) {
+            when (val castMediaType = castItem?.mediaType?.let { MediaType.valueOf(it) }) {
                 MediaType.MOVIE -> {
                     CreditsDetailItem(
                         title = castItem.title.orEmpty(),
@@ -18,7 +18,7 @@ class CreditsCastMapper
                         role = castItem.character.orEmpty(),
                         type = Person.CAST,
                         posterImageUrl = castItem.posterPath.orEmpty(),
-                        mediaType = castItem.mediaType,
+                        mediaType = castMediaType,
                         id = castItem.id
                     )
                 }
@@ -29,7 +29,7 @@ class CreditsCastMapper
                         role = castItem.character.orEmpty(),
                         type = Person.CAST,
                         posterImageUrl = castItem.posterPath.orEmpty(),
-                        mediaType = castItem.mediaType,
+                        mediaType = castMediaType,
                         id = castItem.id
                     )
                 }
@@ -39,7 +39,7 @@ class CreditsCastMapper
             }
         } ?: emptyList()
         val crewList = item?.personCrewResponse?.mapNotNull { crewItem ->
-            when (crewItem?.mediaType) {
+            when (val crewMediaType = crewItem?.mediaType?.let { MediaType.valueOf(it) }) {
                 MediaType.MOVIE -> {
                     CreditsDetailItem(
                         title = crewItem.title.orEmpty(),
@@ -47,7 +47,7 @@ class CreditsCastMapper
                         role = crewItem.job.orEmpty(),
                         type = Person.CREW,
                         posterImageUrl = crewItem.posterPath.orEmpty(),
-                        mediaType = crewItem.mediaType,
+                        mediaType = crewMediaType,
                         id = crewItem.id
                     )
                 }
@@ -58,7 +58,7 @@ class CreditsCastMapper
                         role = crewItem.job.orEmpty(),
                         type = Person.CREW,
                         posterImageUrl = crewItem.posterPath.orEmpty(),
-                        mediaType = crewItem.mediaType,
+                        mediaType = crewMediaType,
                         id = crewItem.id
                     )
                 }

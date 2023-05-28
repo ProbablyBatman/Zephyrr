@@ -1,8 +1,10 @@
 package greenberg.moviedbshell.models
 
-object MediaType {
-    const val PERSON = "person"
-    const val MOVIE = "movie"
-    const val TV = "tv"
-    const val UNKNOWN = "unknown"
+enum class MediaType(value: String) {
+
+    PERSON("person"),
+    MOVIE("movie"),
+    TV("tv"),
+    UNKNOWN("unknown")
+    ;
 }

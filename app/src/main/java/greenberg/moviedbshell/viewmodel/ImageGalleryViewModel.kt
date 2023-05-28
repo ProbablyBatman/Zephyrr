@@ -1,86 +1,122 @@
 package greenberg.moviedbshell.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.base.ZephyrrResponse
 import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.mappers.BackdropGalleryMapper
 import greenberg.moviedbshell.mappers.PosterGalleryMapper
 import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.state.ImageGalleryState
-import greenberg.moviedbshell.view.ImageGalleryDialog
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ImageGalleryViewModel
 @AssistedInject constructor(
-    @Assisted var state: ImageGalleryState,
+    @Assisted private val itemId: Int,
+    @Assisted private val mediaType: MediaType,
+    @Assisted private val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
-    private val mapper: PosterGalleryMapper,
+    private val posterMapper: PosterGalleryMapper,
     private val backdropMapper: BackdropGalleryMapper
-//) : ZephyrrMvRxViewModel<ImageGalleryState>(state) {
 ) : ViewModel() {
+
+    private val _imageGalleryState = MutableStateFlow(
+        ImageGalleryState(
+            itemId = itemId,
+            mediaType = mediaType,
+        )
+    )
+    val imageGalleryState: StateFlow<ImageGalleryState> = _imageGalleryState.asStateFlow()
 
     @AssistedFactory
     interface Factory {
-        fun create(state: ImageGalleryState): ImageGalleryViewModel
+        fun create(
+            itemId: Int,
+            mediaType: MediaType,
+            dispatcher: CoroutineDispatcher
+        ): ImageGalleryViewModel
     }
 
     init {
         fetchPosters()
     }
 
+    // TODO: Investigate no-op here?
     fun fetchPosters() {
-//        withState { state ->
-//            if (state.imageGalleryResponse is Loading) return@withState
-//            when (state.mediaType) {
-//                MediaType.MOVIE -> {
-//                    fetchMovieImages()
-//                }
-//                MediaType.TV -> {
-//                    fetchTvImages()
-//                }
-//            }
-//        }
+        when (mediaType) {
+            MediaType.MOVIE -> fetchMovieImages()
+            MediaType.TV -> fetchTvImages()
+            MediaType.PERSON, MediaType.UNKNOWN -> {
+                // no-op
+            }
+        }
     }
 
-    private fun fetchMovieImages(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-//        withState { state ->
-//            suspend { tmdbRepository.fetchMovieImages(state.itemId) }
-//                .execute(dispatcher) {
-//                    // Assume success for now
-//                    copy(
-//                        itemId = state.itemId,
-//                        mediaType = state.mediaType,
-//                        posterItems = mapper.mapToEntity(it()),
-//                        backdropItems = backdropMapper.mapToEntity(it()),
-//                        imageGalleryResponse = it
-//                    )
-//                }
-//        }
+    private fun fetchMovieImages() {
+        viewModelScope.launch(dispatcher) {
+            Timber.d("launching fetchMovieImages")
+            when (val response = tmdbRepository.fetchMovieImages(itemId)) {
+                is ZephyrrResponse.Success -> {
+                    _imageGalleryState.emit(_imageGalleryState.value.copy(
+                        posterItems = posterMapper.mapToEntity(response.value),
+                        backdropItems = backdropMapper.mapToEntity(response.value),
+                        isLoading = false,
+                    ))
+                }
+                is ZephyrrResponse.Failure -> {
+                    _imageGalleryState.emit(_imageGalleryState.value.copy(
+                        posterItems = emptyList(),
+                        backdropItems = emptyList(),
+                        error = response.throwable,
+                        isLoading = false,
+                    ))
+                }
+            }
+        }
     }
 
-    private fun fetchTvImages(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-//        withState { state ->
-//            suspend { tmdbRepository.fetchTvImages(state.itemId) }
-//                .execute(dispatcher) {
-//                    // Assume success for now
-//                    copy(
-//                        itemId = state.itemId,
-//                        mediaType = state.mediaType,
-//                        posterItems = mapper.mapToEntity(it()),
-//                        backdropItems = backdropMapper.mapToEntity(it()),
-//                        imageGalleryResponse = it
-//                    )
-//                }
-//        }
+    private fun fetchTvImages() {
+        viewModelScope.launch(dispatcher) {
+            Timber.d("launching fetchTvImages")
+            when (val response = tmdbRepository.fetchTvImages(itemId)) {
+                is ZephyrrResponse.Success -> {
+                    _imageGalleryState.emit(_imageGalleryState.value.copy(
+                        posterItems = posterMapper.mapToEntity(response.value),
+                        backdropItems = backdropMapper.mapToEntity(response.value),
+                        isLoading = false,
+                    ))
+                }
+                is ZephyrrResponse.Failure -> {
+                    _imageGalleryState.emit(_imageGalleryState.value.copy(
+                        posterItems = emptyList(),
+                        backdropItems = emptyList(),
+                        error = response.throwable,
+                        isLoading = false,
+                    ))
+                }
+            }
+        }
     }
 
-//    companion object : MavericksViewModelFactory<ImageGalleryViewModel, ImageGalleryState> {
-//        override fun create(viewModelContext: ViewModelContext, state: ImageGalleryState): ImageGalleryViewModel {
-//            val fragment = (viewModelContext as FragmentViewModelContext).fragment<ImageGalleryDialog>().imageGalleryViewModelFactory
-//            return fragment.create(state)
-//        }
-//    }
+    companion object {
+        fun provideFactory(
+            assistedFactory: Factory,
+            itemId: Int,
+            mediaType: MediaType,
+            dispatcher: CoroutineDispatcher
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(itemId, mediaType, dispatcher) as T
+            }
+        }
+    }
 }

@@ -31,12 +31,14 @@ import greenberg.moviedbshell.R
 import greenberg.moviedbshell.adapters.CastListAdapter
 import greenberg.moviedbshell.adapters.PosterListAdapter
 import greenberg.moviedbshell.base.BaseFragment
+import greenberg.moviedbshell.extensions.extractArguments
 import greenberg.moviedbshell.extensions.processDate
 import greenberg.moviedbshell.extensions.processNetworks
 import greenberg.moviedbshell.extensions.processNetworksTitle
 import greenberg.moviedbshell.extensions.processRatingInfo
 import greenberg.moviedbshell.extensions.processRuntimeTitle
 import greenberg.moviedbshell.extensions.processRuntimes
+import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.ui.AggregateCastMemberItem
 import greenberg.moviedbshell.models.ui.ProductionCompanyItem
 import greenberg.moviedbshell.models.ui.ProductionCountryItem
@@ -62,11 +64,7 @@ class TvDetailFragment : BaseFragment() {
     private val viewModel: TvDetailViewModel by viewModels {
         TvDetailViewModel.provideFactory(
             tvDetailViewModelFactory,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments?.getParcelable(PAGE_ARGS, TvDetailArgs::class.java)?.tvId
-            } else {
-                (arguments?.getParcelable(PAGE_ARGS) as? TvDetailArgs)?.tvId
-            } ?: -1,
+            arguments?.extractArguments<TvDetailArgs>(PAGE_ARGS)?.tvId ?: -1,
             Dispatchers.IO
         )
     }
@@ -281,7 +279,7 @@ class TvDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-//                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
+                            putParcelable(PAGE_ARGS, PosterImageGalleryArgs(tvDetailItem.tvId, MediaType.TV))
                             putBoolean(ImageGalleryDialog.BACKDROP_KEY, true)
                         }
                     }
@@ -291,7 +289,7 @@ class TvDetailFragment : BaseFragment() {
                 ImageGalleryDialog()
                     .apply {
                         arguments = Bundle().apply {
-//                            putParcelable(Mavericks.KEY_ARG, PosterImageGalleryArgs(state.tvId, MediaType.TV))
+                            putParcelable(PAGE_ARGS, PosterImageGalleryArgs(tvDetailItem.tvId, MediaType.TV))
                             putBoolean(ImageGalleryDialog.BACKDROP_KEY, false)
                         }
                     }
@@ -308,7 +306,7 @@ class TvDetailFragment : BaseFragment() {
         hideLoadingBar()
         showErrorState()
         errorRetryButton.setOnClickListener {
-//            viewModel.fetchTvDetail()
+            viewModel.fetchTvDetail()
             hideErrorState()
         }
     }
