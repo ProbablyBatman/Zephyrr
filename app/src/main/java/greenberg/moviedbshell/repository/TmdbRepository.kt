@@ -75,19 +75,22 @@ class TmdbRepository
         )
     }
 
-    suspend fun fetchTvDetail(scope: CoroutineScope, id: Int): TvDetailItem {
-        val details = scope.async { tmdbService.queryTvDetail(id) }
-        val credits = scope.async { tmdbService.queryTvCredits(id) }
-        val images = scope.async { tmdbService.queryTvImages(id) }
-        val aggregateCredits = scope.async { tmdbService.queryTvAggregateCredits(id) }
-        return tvDetailMapper.mapToEntity(
-            TvDetailResponseContainer(
-                details.await(),
-                credits.await(),
-                aggregateCredits.await(),
-                images.await()
+    suspend fun fetchTvDetail(scope: CoroutineScope, id: Int): ZephyrrResponse<TvDetailItem> {
+        return safeFetch {
+            val details = scope.async { tmdbService.queryTvDetail(id) }
+            val credits = scope.async { tmdbService.queryTvCredits(id) }
+            val images = scope.async { tmdbService.queryTvImages(id) }
+            val aggregateCredits = scope.async { tmdbService.queryTvAggregateCredits(id) }
+            tvDetailMapper.mapToEntity(
+                TvDetailResponseContainer(
+                    details.await(),
+                    credits.await(),
+                    aggregateCredits.await(),
+                    images.await()
+                )
             )
-        )
+        }
+
     }
 
     suspend fun fetchTvDetail2(id: Int) =

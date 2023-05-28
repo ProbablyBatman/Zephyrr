@@ -211,15 +211,15 @@ class MovieDetailFragment : BaseFragment() {
     }
 
     private fun showLoading() {
-        Timber.d("Show Loading")
+        log("Show Loading")
         hideAllViews()
         hideErrorState()
         showLoadingBar()
     }
 
     private fun showError(throwable: Throwable) {
-        Timber.d("Showing Error")
-        Timber.e(throwable)
+        log("Showing Error")
+        log(throwable)
         hideLoadingBar()
         hideContent()
         showAllViews()

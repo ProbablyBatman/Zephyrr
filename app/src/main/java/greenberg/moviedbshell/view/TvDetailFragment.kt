@@ -2,6 +2,7 @@ package greenberg.moviedbshell.view
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,8 +26,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.CastListAdapter
 import greenberg.moviedbshell.adapters.PosterListAdapter
 import greenberg.moviedbshell.base.BaseFragment
@@ -32,7 +37,6 @@ import greenberg.moviedbshell.extensions.processNetworksTitle
 import greenberg.moviedbshell.extensions.processRatingInfo
 import greenberg.moviedbshell.extensions.processRuntimeTitle
 import greenberg.moviedbshell.extensions.processRuntimes
-import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.ui.AggregateCastMemberItem
 import greenberg.moviedbshell.models.ui.ProductionCompanyItem
 import greenberg.moviedbshell.models.ui.ProductionCountryItem
@@ -41,17 +45,31 @@ import greenberg.moviedbshell.state.CastStateArgs
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.state.PosterImageGalleryArgs
 import greenberg.moviedbshell.state.ProductionDetailStateArgs
+import greenberg.moviedbshell.state.TvDetailArgs
 import greenberg.moviedbshell.state.TvDetailState
 import greenberg.moviedbshell.viewmodel.TvDetailViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class TvDetailFragment : BaseFragment() {
 
-    val tvDetailViewModelFactory by lazy {
-        (activity?.application as ZephyrrApplication).component.tvDetailViewModelFactory
-    }
+    @Inject
+    lateinit var tvDetailViewModelFactory: TvDetailViewModel.Factory
 
-//    private val viewModel: TvDetailViewModel by fragmentViewModel()
+    private val viewModel: TvDetailViewModel by viewModels {
+        TvDetailViewModel.provideFactory(
+            tvDetailViewModelFactory,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments?.getParcelable(PAGE_ARGS, TvDetailArgs::class.java)?.tvId
+            } else {
+                (arguments?.getParcelable(PAGE_ARGS) as? TvDetailArgs)?.tvId
+            } ?: -1,
+            Dispatchers.IO
+        )
+    }
 
     private lateinit var progressBar: ProgressBar
     private lateinit var scrollView: NestedScrollView
@@ -162,23 +180,53 @@ class TvDetailFragment : BaseFragment() {
             adapter = posterListAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
+
+        registerObservers()
+    }
+
+    private fun registerObservers() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.tvDetailState.collect {
+                        updateTvDetails(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateTvDetails(state: TvDetailState) {
+        when {
+            state.isLoading -> {
+                showLoading()
+            }
+            state.error != null -> {
+                showError(state.error)
+            }
+            state.tvDetailItem != null -> {
+                showTvDetails(state.tvDetailItem)
+                hideLoadingBar()
+                showAllViews()
+            }
+        }
     }
 
     private fun showLoading() {
-        Timber.d("Showing loading")
+        log("Showing loading")
         hideAllViews()
         hideErrorState()
         showLoadingBar()
     }
 
-    private fun showTvDetails(state: TvDetailState) {
-        Timber.d("Showing tv details")
-        val tvDetailItem = state.tvDetailItem
+    private fun showTvDetails(tvDetailItem: TvDetailItem?) {
+        log("Showing tv details")
+        log("TvDetails: $tvDetailItem")
 
         if (tvDetailItem != null) {
-            Timber.d("backdropURL: ${tvDetailItem.backgroundImageUrl}")
+            log("backdropURL: ${tvDetailItem.backgroundImageUrl}")
             posterListAdapter.posterItems = tvDetailItem.posterUrls.take(POSTER_PREVIEW_VALUE)
-            posterListAdapter.notifyDataSetChanged()
+            posterListAdapter.notifyItemRangeChanged(0, posterListAdapter.itemCount)
 
             if (tvDetailItem.posterImageUrl.isNotEmpty()) {
                 val validUrl = resources.getString(R.string.poster_url_substitution, tvDetailItem.backgroundImageUrl)
@@ -198,7 +246,7 @@ class TvDetailFragment : BaseFragment() {
             overviewText.text = tvDetailItem.overview
 
             castListAdapter.setCastMembers(tvDetailItem.castMembers.take(CAST_PREVIEW_VALUE))
-            castListAdapter.notifyDataSetChanged()
+            castListAdapter.notifyItemRangeChanged(0, castListAdapter.itemCount)
             // TODO: one day, clicking a genre will lead to a genre filtered screen
             if (genreChipGroup.childCount == 0) {
                 tvDetailItem.genres.forEach {
@@ -255,8 +303,8 @@ class TvDetailFragment : BaseFragment() {
     }
 
     private fun showError(throwable: Throwable) {
-        Timber.d("Showing Error")
-        Timber.e(throwable)
+        log("Showing Error")
+        log(throwable)
         hideLoadingBar()
         showErrorState()
         errorRetryButton.setOnClickListener {
@@ -326,25 +374,6 @@ class TvDetailFragment : BaseFragment() {
         scrollView.visibility = View.VISIBLE
     }
 
-//    override fun invalidate() {
-//        withState(viewModel) { state ->
-//            when (state.tvDetailResponse) {
-//                Uninitialized -> Timber.d("uninitialized")
-//                is Loading -> {
-//                    showLoading()
-//                }
-//                is Success -> {
-//                    showTvDetails(state)
-//                    hideLoadingBar()
-//                    showAllViews()
-//                }
-//                is Fail -> {
-//                    showError(state.tvDetailResponse.error)
-//                }
-//            }
-//        }
-//    }
-
     private fun onClickListener(personId: Int) {
         navigate(
             R.id.action_tvDetailFragment_to_personDetailFragment,
@@ -375,9 +404,6 @@ class TvDetailFragment : BaseFragment() {
     }
 
     companion object {
-        @JvmField
-        val TAG: String = MovieDetailFragment::class.java.simpleName
-
         private const val CAST_PREVIEW_VALUE = 6
         private const val POSTER_PREVIEW_VALUE = 8
     }
