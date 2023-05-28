@@ -2,6 +2,7 @@ package greenberg.moviedbshell.view
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,10 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,36 +27,50 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.CastListAdapter
 import greenberg.moviedbshell.adapters.PosterListAdapter
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.extensions.processAsReleaseDate
 import greenberg.moviedbshell.extensions.processRatingInfo
 import greenberg.moviedbshell.extensions.processRuntime
-import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.ui.CastMemberItem
+import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.models.ui.ProductionCompanyItem
 import greenberg.moviedbshell.models.ui.ProductionCountryItem
 import greenberg.moviedbshell.state.CastStateArgs
+import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.state.PersonDetailArgs
-import greenberg.moviedbshell.state.PosterImageGalleryArgs
-import greenberg.moviedbshell.state.ProductionDetailStateArgs
 import greenberg.moviedbshell.view.ImageGalleryDialog.Companion.BACKDROP_KEY
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.NumberFormat
 import java.util.Locale
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MovieDetailFragment : BaseFragment() {
 
-    val movieDetailViewModelFactory by lazy {
-        (activity?.application as ZephyrrApplication).component.movieDetailViewModelFactory
-    }
+    // TODO: gracefully handle crash that this will cause if ID isn't present
 
-//    private val viewModel: MovieDetailViewModel by fragmentViewModel()
+    @Inject
+    lateinit var movieDetailViewModelFactory: MovieDetailViewModel.Factory
+
+    private val viewModel: MovieDetailViewModel by viewModels {
+        MovieDetailViewModel.provideFactory(
+            movieDetailViewModelFactory,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments?.getParcelable(PAGE_ARGS, MovieDetailArgs::class.java)?.movieId
+            } else {
+                (arguments?.getParcelable(PAGE_ARGS) as? MovieDetailArgs)?.movieId
+            } ?: -1,
+            Dispatchers.IO
+        )
+    }
 
     private lateinit var progressBar: ProgressBar
     private lateinit var posterGalleryContainer: ConstraintLayout
@@ -156,6 +175,39 @@ class MovieDetailFragment : BaseFragment() {
             adapter = posterListAdapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
+
+        registerObservers()
+    }
+
+    private fun registerObservers() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.movieDetailState.collect {
+                        updateMovieDetails(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateMovieDetails(state: MovieDetailState) {
+        when {
+            state.isLoading -> {
+                showLoading()
+            }
+            state.error != null -> {
+                showError(state.error)
+            }
+            // TODO: handle if the item is empty?
+            // Also this order is dumb, fix this
+            state.movieDetailItem != null -> {
+                showMovieDetails(state.movieDetailItem)
+                hideLoadingBar()
+                showAllViews()
+                showContent()
+            }
+        }
     }
 
     private fun showLoading() {
@@ -173,18 +225,17 @@ class MovieDetailFragment : BaseFragment() {
         showAllViews()
         showErrorState()
         errorRetryButton.setOnClickListener {
-//            viewModel.fetchMovieDetail()
+            viewModel.fetchMovieDetail()
             hideErrorState()
         }
     }
 
-    private fun showMovieDetails(state: MovieDetailState) {
+    private fun showMovieDetails(movieDetailItem: MovieDetailItem?) {
         log("Showing Movie Details")
-        val movieDetailItem = state.movieDetailItem
         log("MovieDetails: $movieDetailItem")
         if (movieDetailItem != null) {
             posterListAdapter.posterItems = movieDetailItem.posterUrls.take(POSTER_PREVIEW_VALUE)
-            posterListAdapter.notifyDataSetChanged()
+            posterListAdapter.notifyItemRangeChanged(0, posterListAdapter.itemCount)
 
             log("backdropURL: ${movieDetailItem.backdropImageUrl}")
             if (movieDetailItem.backdropImageUrl.isNotEmpty()) {
@@ -202,7 +253,7 @@ class MovieDetailFragment : BaseFragment() {
             }
 
             castListAdapter.setCastMembers(movieDetailItem.castMembers.take(CAST_PREVIEW_VALUE))
-            castListAdapter.notifyDataSetChanged()
+            castListAdapter.notifyItemRangeChanged(0, castListAdapter.itemCount)
             // TODO: one day, clicking a genre will lead to a genre filtered screen
             if (genreChipGroup.childCount == 0) {
                 movieDetailItem.genres.forEach {
@@ -216,7 +267,7 @@ class MovieDetailFragment : BaseFragment() {
 
             titleBar.text = movieDetailItem.title
             // TODO: investigate just hiding this view if it's null
-            directorTextView.text = movieDetailItem.crewMembers.find { it.job.toLowerCase(Locale.getDefault()) == "director" }?.name
+            directorTextView.text = movieDetailItem.crewMembers.find { it.job.lowercase() == "director" }?.name
             productionCompaniesTextView.text = movieDetailItem.productionCompanies.getOrElse(0) { ProductionCompanyItem.generateDummy() }.name
             filmingLocationsTextView.text = movieDetailItem.productionCountries.getOrElse(0) { ProductionCountryItem.generateDummy() }.name
             overviewTextView.text = movieDetailItem.overview
@@ -340,29 +391,6 @@ class MovieDetailFragment : BaseFragment() {
         posterGalleryContainer.visibility = View.VISIBLE
     }
 
-//    override fun invalidate() {
-//        withState(viewModel) { state ->
-//            Timber.d("Invalidating")
-//            when (state.movieDetailResponse) {
-//                Uninitialized -> Timber.d("uninitialized")
-//                is Loading -> {
-//                    hideAllViews()
-//                    showLoading()
-//                }
-//                is Success -> {
-//                    showMovieDetails(state)
-//                    hideLoadingBar()
-//                    showAllViews()
-//                    showContent()
-//                }
-//                is Fail -> {
-//                    hideAllViews()
-//                    showError(state.movieDetailResponse.error)
-//                }
-//            }
-//        }
-//    }
-
     // Intended for the preview cast members shown in the fragment
     private fun highlightedCastOnClickListener(personId: Int) {
         navigate(
@@ -396,9 +424,6 @@ class MovieDetailFragment : BaseFragment() {
     }
 
     companion object {
-        @JvmField
-        val TAG: String = MovieDetailFragment::class.java.simpleName
-
         private const val CAST_PREVIEW_VALUE = 6
         private const val POSTER_PREVIEW_VALUE = 8
     }

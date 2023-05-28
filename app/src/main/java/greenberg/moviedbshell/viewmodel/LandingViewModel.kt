@@ -23,10 +23,10 @@ import timber.log.Timber
 
 class LandingViewModel
 @AssistedInject constructor(
+    @Assisted private val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
     private val movieListMapper: MovieListMapper,
     private val tvListMapper: TvListMapper,
-    @Assisted private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _popularMoviesLandingState = MutableStateFlow(MovieLandingState())
@@ -215,12 +215,6 @@ class LandingViewModel
         viewModelScope.launch {
             getTopRatedTv()
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        // TODO: is this necessary to cancel all jobs on exit?
-        viewModelScope.cancel()
     }
 
     companion object {

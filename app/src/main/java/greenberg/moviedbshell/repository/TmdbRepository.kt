@@ -44,17 +44,20 @@ class TmdbRepository
         )
     }
 
-    suspend fun fetchMovieDetail(scope: CoroutineScope, id: Int): MovieDetailItem {
-        val details = scope.async { tmdbService.queryMovieDetail(id) }
-        val credits = scope.async { tmdbService.queryMovieCredits(id) }
-        val images = scope.async { tmdbService.queryMovieImages(id) }
-        return movieDetailMapper.mapToEntity(
-            MovieDetailResponseContainer(
-                details.await(),
-                credits.await(),
-                images.await()
+    // TODO: investigate if this fetch is doing what I think
+    suspend fun fetchMovieDetail(scope: CoroutineScope, id: Int): ZephyrrResponse<MovieDetailItem> {
+        return safeFetch {
+            val details = scope.async { tmdbService.queryMovieDetail(id) }
+            val credits = scope.async { tmdbService.queryMovieCredits(id) }
+            val images = scope.async { tmdbService.queryMovieImages(id) }
+            movieDetailMapper.mapToEntity(
+                MovieDetailResponseContainer(
+                    details.await(),
+                    credits.await(),
+                    images.await()
+                )
             )
-        )
+        }
     }
 
     suspend fun fetchTvDetail(id: Int): TvDetailItem {
@@ -133,11 +136,11 @@ class TmdbRepository
 
     suspend fun fetchTopRatedTv(page: Int) = safeFetch { tmdbService.queryTopRatedTv(page) }
 
-    suspend fun fetchMovieImages(id: Int) = tmdbService.queryMovieImages(id)
+    suspend fun fetchMovieImages(id: Int) = safeFetch { tmdbService.queryMovieImages(id) }
 
-    suspend fun fetchTvImages(id: Int) = tmdbService.queryTvImages(id)
+    suspend fun fetchTvImages(id: Int) = safeFetch { tmdbService.queryTvImages(id) }
 
-    suspend fun fetchSearchMulti(query: String, page: Int) = tmdbService.querySearchMulti(query, page)
+    suspend fun fetchSearchMulti(query: String, page: Int) = safeFetch { tmdbService.querySearchMulti(query, page) }
 
     private suspend fun <T> safeFetch(call: suspend () -> T): ZephyrrResponse<T> {
         return try {

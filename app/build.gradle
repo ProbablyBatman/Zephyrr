@@ -73,9 +73,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_ktx_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_ktx_version"
 
-    implementation 'com.google.dagger:dagger:2.41'
+    implementation 'com.google.dagger:dagger:2.44'
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt 'com.google.dagger:dagger-compiler:2.41'
+    kapt 'com.google.dagger:dagger-compiler:2.44'
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 //    implementation 'androidx.hilt:hilt-*:1.0.0'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
@@ -114,3 +114,4 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'org.jetbrains.kotlin.android'

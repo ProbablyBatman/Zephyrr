@@ -59,6 +59,10 @@ abstract class BaseFragment : Fragment() {
     abstract fun log(throwable: Throwable)
 
     protected fun navigate(@IdRes id: Int, args: Parcelable? = null) {
-//        findNavController().navigate(id, Bundle().apply { putParcelable(Mavericks.KEY_ARG, args) })
+        findNavController().navigate(id, Bundle().apply { putParcelable(PAGE_ARGS, args) })
+    }
+
+    companion object {
+        const val PAGE_ARGS = "PAGE_ARGS"
     }
 }

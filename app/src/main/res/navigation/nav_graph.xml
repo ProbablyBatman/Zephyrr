@@ -5,11 +5,6 @@
             app:startDestination="@id/landingFragment">
 
     <fragment
-        android:id="@+id/landingFragmentV2"
-        android:name="greenberg.moviedbshell.view.LandingFragmentV2">
-    </fragment>
-
-    <fragment
         android:id="@+id/landingFragment"
         android:name="greenberg.moviedbshell.view.LandingFragment">
         <action
