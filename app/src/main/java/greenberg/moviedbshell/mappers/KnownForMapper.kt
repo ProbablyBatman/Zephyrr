@@ -11,7 +11,8 @@ class KnownForMapper
 @Inject constructor() : Mapper<List<KnownForItem?>?, List<PreviewItem>> {
     override fun mapToEntity(item: List<KnownForItem?>?): List<PreviewItem> {
         val mappedItems = item?.map { knownForItem ->
-            when (knownForItem?.mediaType?.let { MediaType.valueOf(it) }) {
+            // TODO: address this uppercase issue
+            when (knownForItem?.mediaType?.let { MediaType.valueOf(it.uppercase()) }) {
                 MediaType.MOVIE ->
                     MovieItem(
                         movieTitle = knownForItem.title.orEmpty(),

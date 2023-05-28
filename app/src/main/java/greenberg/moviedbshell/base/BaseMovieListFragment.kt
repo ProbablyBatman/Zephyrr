@@ -25,7 +25,6 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
     @Inject
     lateinit var gridListToggleState: () -> String
 
-//    abstract val viewModel: T
     abstract val viewModelFactory: BaseMovieListViewModel.Factory
 
     private lateinit var movieRecycler: RecyclerView

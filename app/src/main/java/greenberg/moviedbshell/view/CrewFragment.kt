@@ -4,19 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.adapters.CrewListAdapter
 import greenberg.moviedbshell.base.BaseFragment
+import greenberg.moviedbshell.extensions.extractArguments
+import greenberg.moviedbshell.state.CastStateArgs
 import greenberg.moviedbshell.state.CrewState
+import greenberg.moviedbshell.state.CrewStateArgs
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.viewmodel.CrewViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class CrewFragment : BaseFragment() {
 
-//    private val viewModel: CrewViewModel by fragmentViewModel()
+    // TODO: error handling for empty list?
+    private val viewModel: CrewViewModel by viewModels {
+        CrewViewModel.provideFactory(arguments?.extractArguments<CrewStateArgs>(PAGE_ARGS)?.crewMembers ?: emptyList())
+    }
 
     private lateinit var crewRecycler: RecyclerView
     private lateinit var crewAdapter: CrewListAdapter
@@ -33,6 +44,19 @@ class CrewFragment : BaseFragment() {
         crewRecycler.layoutManager = layoutManager
         crewAdapter = CrewListAdapter(onClickListener = this::onClickListener)
         crewRecycler.adapter = crewAdapter
+        registerObservers()
+    }
+
+    private fun registerObservers() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.crewMemberState.collect {
+                        showDetails(it)
+                    }
+                }
+            }
+        }
     }
 
     private fun showDetails(state: CrewState) {
@@ -40,12 +64,6 @@ class CrewFragment : BaseFragment() {
             crewAdapter.setMembersList(state.crewMembers)
         }
     }
-
-//    override fun invalidate() {
-//        withState(viewModel) { state ->
-//            showDetails(state)
-//        }
-//    }
 
     private fun onClickListener(personId: Int) {
         navigate(

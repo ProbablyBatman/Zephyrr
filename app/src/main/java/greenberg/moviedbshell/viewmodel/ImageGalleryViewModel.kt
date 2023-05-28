@@ -70,6 +70,7 @@ class ImageGalleryViewModel
                         posterItems = posterMapper.mapToEntity(response.value),
                         backdropItems = backdropMapper.mapToEntity(response.value),
                         isLoading = false,
+                        error = null,
                     ))
                 }
                 is ZephyrrResponse.Failure -> {
@@ -93,6 +94,7 @@ class ImageGalleryViewModel
                         posterItems = posterMapper.mapToEntity(response.value),
                         backdropItems = backdropMapper.mapToEntity(response.value),
                         isLoading = false,
+                        error = null,
                     ))
                 }
                 is ZephyrrResponse.Failure -> {

@@ -47,6 +47,7 @@ class MovieDetailViewModel
                     _movieDetailState.emit(_movieDetailState.value.copy(
                         movieDetailItem = response.value,
                         isLoading = false,
+                        error = null
                     ))
                 }
                 is ZephyrrResponse.Failure -> {

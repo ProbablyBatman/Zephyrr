@@ -10,7 +10,8 @@ class CreditsCastMapper
 @Inject constructor() : Mapper<CombinedCreditsResponse, List<CreditsDetailItem>> {
     override fun mapToEntity(item: CombinedCreditsResponse?): List<CreditsDetailItem> {
         val castList = item?.personCastResponse?.mapNotNull { castItem ->
-            when (val castMediaType = castItem?.mediaType?.let { MediaType.valueOf(it) }) {
+            // TODO: address this uppercase issue
+            when (val castMediaType = castItem?.mediaType?.let { MediaType.valueOf(it.uppercase()) }) {
                 MediaType.MOVIE -> {
                     CreditsDetailItem(
                         title = castItem.title.orEmpty(),
@@ -39,7 +40,8 @@ class CreditsCastMapper
             }
         } ?: emptyList()
         val crewList = item?.personCrewResponse?.mapNotNull { crewItem ->
-            when (val crewMediaType = crewItem?.mediaType?.let { MediaType.valueOf(it) }) {
+            // TODO: address this uppercase issue
+            when (val crewMediaType = crewItem?.mediaType?.let { MediaType.valueOf(it.uppercase()) }) {
                 MediaType.MOVIE -> {
                     CreditsDetailItem(
                         title = crewItem.title.orEmpty(),

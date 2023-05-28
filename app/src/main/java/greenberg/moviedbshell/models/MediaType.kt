@@ -1,10 +1,10 @@
 package greenberg.moviedbshell.models
 
-enum class MediaType(value: String) {
+enum class MediaType {
 
-    PERSON("person"),
-    MOVIE("movie"),
-    TV("tv"),
-    UNKNOWN("unknown")
+    PERSON,
+    MOVIE,
+    TV,
+    UNKNOWN
     ;
 }

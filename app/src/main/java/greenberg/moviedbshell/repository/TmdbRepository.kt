@@ -90,7 +90,19 @@ class TmdbRepository
                 )
             )
         }
+    }
 
+    suspend fun fetchPersonDetail(scope: CoroutineScope, id: Int): ZephyrrResponse<PersonDetailItem> {
+        return safeFetch {
+            val details = scope.async { tmdbService.queryPersonDetail(id) }
+            val credits = scope.async { tmdbService.queryPersonCombinedCredits(id) }
+            personDetailMapper.mapToEntity(
+                PersonDetailResponseContainer(
+                    details.await(),
+                    credits.await()
+                )
+            )
+        }
     }
 
     suspend fun fetchTvDetail2(id: Int) =
@@ -116,17 +128,6 @@ class TmdbRepository
             func.forEach { deferreds.add(async { it() }) }
             mapper.invoke(deferreds.awaitAll())
         }
-    }
-
-    suspend fun fetchPersonDetail(id: Int): PersonDetailItem {
-        val details = tmdbService.queryPersonDetail(id)
-        val credits = tmdbService.queryPersonCombinedCredits(id)
-        return personDetailMapper.mapToEntity(
-            PersonDetailResponseContainer(
-                details,
-                credits
-            )
-        )
     }
 
     suspend fun fetchRecentlyReleased(page: Int) = safeFetch { tmdbService.queryRecentlyReleased(page) }

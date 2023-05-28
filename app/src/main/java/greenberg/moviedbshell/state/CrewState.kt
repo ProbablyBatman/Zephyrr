@@ -6,9 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 data class CrewState(
     val crewMembers: List<CrewMemberItem> = emptyList()
-) {
-    constructor(args: CrewStateArgs) : this(crewMembers = args.crewMembers)
-}
+)
 
 @Parcelize
 data class CrewStateArgs(

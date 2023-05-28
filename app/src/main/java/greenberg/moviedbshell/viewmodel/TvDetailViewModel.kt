@@ -49,6 +49,7 @@ class TvDetailViewModel
                     _tvDetailState.emit(_tvDetailState.value.copy(
                         tvDetailItem = response.value,
                         isLoading = false,
+                        error = null,
                     ))
                 }
                 is ZephyrrResponse.Failure -> {

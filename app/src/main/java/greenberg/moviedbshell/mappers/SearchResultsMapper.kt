@@ -12,7 +12,8 @@ class SearchResultsMapper
 @Inject constructor(private val knownForMapper: KnownForMapper) : Mapper<SearchResponse, List<PreviewItem>> {
     override fun mapToEntity(item: SearchResponse?): List<PreviewItem> {
         val mappedItems = item?.results?.map { result ->
-            when (result?.mediaType?.let { MediaType.valueOf(it) }) {
+            // TODO: address this uppercase issue
+            when (result?.mediaType?.let { MediaType.valueOf(it.uppercase()) }) {
                 MediaType.MOVIE ->
                     MovieItem(
                         movieTitle = result.title.orEmpty(),

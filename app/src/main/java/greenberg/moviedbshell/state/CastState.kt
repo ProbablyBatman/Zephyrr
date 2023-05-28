@@ -6,9 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 data class CastState(
     val castMembers: List<CastMemberItem> = emptyList()
-) {
-    constructor(args: CastStateArgs) : this(castMembers = args.castMembers)
-}
+)
 
 @Parcelize
 data class CastStateArgs(
