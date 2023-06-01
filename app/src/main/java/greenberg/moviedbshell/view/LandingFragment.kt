@@ -130,13 +130,13 @@ class LandingFragment : BaseFragment() {
         recentlyReleasedLoadingBar = view.findViewById(R.id.recently_released_progress_bar)
         recentlyReleasedSeeAllButton = view.findViewById(R.id.recently_released_see_all_button)
         recentlyReleasedSeeAllButton.setOnClickListener {
-//            navigate(R.id.action_landingFragment_to_recentlyReleasedFragment)
+            navigate(R.id.action_landingFragment_to_recentlyReleasedFragment)
         }
         popularMovieContainer = view.findViewById(R.id.popular_movie_container)
         popularMovieLoadingBar = view.findViewById(R.id.popular_movie_progress_bar)
         popularMovieSeeAllButton = view.findViewById(R.id.popular_see_all_button)
         popularMovieSeeAllButton.setOnClickListener {
-//            navigate(R.id.action_landingFragment_to_popularMovieFragment)
+            navigate(R.id.action_landingFragment_to_popularMovieFragment)
         }
         soonTMContainer = view.findViewById(R.id.soon_tm_container)
         soonTMLoadingBar = view.findViewById(R.id.soon_tm_progress_bar)

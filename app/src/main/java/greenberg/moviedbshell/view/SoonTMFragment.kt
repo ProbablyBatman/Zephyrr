@@ -2,31 +2,95 @@ package greenberg.moviedbshell.view
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseMovieListFragment
+import greenberg.moviedbshell.extensions.extractArguments
 import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.MovieListState
+import greenberg.moviedbshell.state.base.BaseMovieListState
 import greenberg.moviedbshell.viewmodel.SoonTMViewModel
+import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SoonTMFragment : BaseMovieListFragment<SoonTMViewModel, MovieListState>() {
 
-    override val viewModelFactory by lazy {
-        (activity?.application as ZephyrrApplication).component.soonTMViewModelFactory
-    }
+    @Inject
+    lateinit var soonTMViewModelFactory: SoonTMViewModel.Factory
 
-//    override val viewModel: SoonTMViewModel by fragmentViewModel()
+    override val viewModel: SoonTMViewModel by viewModels {
+        SoonTMViewModel.provideFactory(
+            soonTMViewModelFactory,
+            arguments?.extractArguments<MovieDetailArgs>(PAGE_ARGS)?.movieId ?: -1,
+            Dispatchers.IO
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        (activity?.application as ZephyrrApplication).component.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         title.text = getString(R.string.soon_tm_row)
+    }
+
+    override fun registerObservers() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.soonTMState.collect {
+                        updateMovieList(it)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun updateMovieList(state: BaseMovieListState) {
+        log("updateMovieList state is $state")
+        when {
+            state.isLoading -> {
+                log("loading")
+                hideError()
+                hideMaxPages()
+                if (state.pageNumber <= 1) {
+                    hideMovies()
+                    showLoading()
+                } else {
+                    showPageLoad()
+                }
+            }
+            state.error != null -> {
+                log("error: ${state.error}")
+                // TODO: If there are already movies, don't hide the whole page? right?
+//                hideMovies()
+                if (state.shouldShowMaxPages) {
+                    showMaxPages()
+                } else {
+                    showError(state.error!!)
+                }
+            }
+            state.movieList.isNotEmpty() -> {
+                log("success")
+                hidePageLoad()
+                if (state.shouldShowMaxPages) {
+                    showMaxPages()
+                }
+                hideLoading()
+                showMovies(state)
+            }
+        }
     }
 
     override fun onClickListener(movieId: Int) {

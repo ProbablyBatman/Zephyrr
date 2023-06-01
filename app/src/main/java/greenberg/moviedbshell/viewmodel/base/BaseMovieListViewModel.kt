@@ -6,10 +6,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 abstract class BaseMovieListViewModel<T : BaseMovieListState>(
-    open var state: T
+    protected open val movieId: Int,
+    protected open val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     interface Factory
 
-    abstract fun fetchMovies(dispatcher: CoroutineDispatcher = Dispatchers.IO)
+    abstract fun fetchMovies()
 }

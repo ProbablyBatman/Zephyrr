@@ -16,7 +16,6 @@ import com.google.android.material.snackbar.Snackbar
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.MovieListAdapter
-import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 import greenberg.moviedbshell.state.base.BaseMovieListState
 import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import javax.inject.Inject
@@ -25,7 +24,7 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
     @Inject
     lateinit var gridListToggleState: () -> String
 
-    abstract val viewModelFactory: BaseMovieListViewModel.Factory
+    abstract val viewModel: BaseMovieListViewModel<S>
 
     private lateinit var movieRecycler: RecyclerView
     private lateinit var movieListAdapter: MovieListAdapter
@@ -75,12 +74,12 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
                 when (movieListAdapter.currentViewType) {
                     MovieListAdapter.ViewType.VIEW_TYPE_GRID -> {
                         if (gridLayoutManager.findLastVisibleItemPosition() == gridLayoutManager.itemCount - 1) {
-//                            viewModel.fetchMovies()
+                            viewModel.fetchMovies()
                         }
                     }
                     MovieListAdapter.ViewType.VIEW_TYPE_LIST -> {
                         if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1) {
-//                            viewModel.fetchMovies()
+                            viewModel.fetchMovies()
                         }
                     }
                 }
@@ -102,22 +101,26 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
                 }
             }
         }
-//        viewModel.subscribe { log("State's page number is ${it.pageNumber}") }
+
+        registerObservers()
     }
+
+    abstract fun registerObservers()
+
+    abstract fun updateMovieList(state: BaseMovieListState)
 
     private fun rerunAnim(isGrid: Boolean) {
-        if (isGrid) {
-//            movieRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.recycler_grid_anim_from_bottom)
-            movieRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.recycler_list_fall_down_anim)
-            movieListAdapter.notifyDataSetChanged()
-            movieRecycler.scheduleLayoutAnimation()
+        // TODO: why are these the same
+        movieRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(requireContext(), if (isGrid) {
+            R.anim.recycler_list_fall_down_anim
         } else {
-            movieRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.recycler_list_fall_down_anim)
-            movieListAdapter.notifyDataSetChanged()
-            movieRecycler.scheduleLayoutAnimation()
-        }
+            R.anim.recycler_list_fall_down_anim
+        })
+        movieListAdapter.notifyItemRangeChanged(0, movieListAdapter.itemCount)
+        movieRecycler.scheduleLayoutAnimation()
     }
 
+    // TODO: why did I do this
     override fun onPause() {
         super.onPause()
         hideMovies()
@@ -127,68 +130,66 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
         hideMaxPages()
     }
 
-    private fun hideMaxPages() {
+    protected fun hideMaxPages() {
         log("Hide max pages")
         maxPagesSnackbar?.dismiss()
     }
 
-    private fun showMaxPages(shouldShowMaxPages: Boolean) {
-        if (shouldShowMaxPages) {
-            log("Show max pages")
-            maxPagesSnackbar = Snackbar.make(movieRecycler, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
-            if (maxPagesSnackbar?.isShown == false) {
-                maxPagesSnackbar?.show()
-            }
+    protected fun showMaxPages() {
+        log("Show max pages")
+        maxPagesSnackbar = Snackbar.make(movieRecycler, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
+            .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
+        if (maxPagesSnackbar?.isShown == false) {
+            maxPagesSnackbar?.show()
         }
     }
 
-    private fun hideError() {
+    protected fun hideError() {
         log("Hide error")
         errorSnackbar?.dismiss()
     }
 
-    private fun showError(throwable: Throwable) {
+    protected fun showError(throwable: Throwable) {
         log("Showing Error")
         log(throwable)
         errorSnackbar = Snackbar.make(movieRecycler, getString(R.string.generic_error_text), Snackbar.LENGTH_INDEFINITE)
             .setAction(getString(R.string.retry)) {
                 errorSnackbar?.dismiss()
-//                viewModel.fetchMovies()
+                viewModel.fetchMovies()
             }
         errorSnackbar?.show()
     }
 
-    private fun hideLoading() {
+    protected fun hideLoading() {
         log("Hide loading")
         progressBar.visibility = View.GONE
     }
 
-    private fun showLoading() {
+    protected fun showLoading() {
         log("Show loading")
         progressBar.visibility = View.VISIBLE
     }
 
-    private fun hidePageLoad() {
+    protected fun hidePageLoad() {
         log("Hide page load")
         loadingSnackbar?.dismiss()
     }
 
-    private fun showPageLoad() {
+    protected fun showPageLoad() {
         log("Show page load")
         loadingSnackbar = Snackbar.make(movieRecycler, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
         loadingSnackbar?.show()
     }
 
-    private fun showMovies(state: BaseMovieListState) {
+    protected fun showMovies(state: BaseMovieListState) {
         log("Showing movies")
         title.visibility = View.VISIBLE
         movieRecycler.visibility = View.VISIBLE
         movieListAdapter.items = state.movieList
-        movieListAdapter.notifyDataSetChanged()
+        movieListAdapter.notifyItemRangeChanged(0, movieListAdapter.itemCount)
     }
 
-    private fun hideMovies() {
+    protected fun hideMovies() {
         log("Hide movies")
         movieRecycler.visibility = View.GONE
         title.visibility = View.GONE

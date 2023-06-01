@@ -1,8 +1,12 @@
 package greenberg.moviedbshell.viewmodel
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.base.ZephyrrResponse
 import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.mappers.MovieListMapper
 import greenberg.moviedbshell.state.MovieListState
@@ -10,78 +14,79 @@ import greenberg.moviedbshell.view.PopularMoviesFragment
 import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class PopularMoviesViewModel
 @AssistedInject constructor(
-    @Assisted override var state: MovieListState,
+    @Assisted override val movieId: Int,
+    @Assisted override val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
     private val mapper: MovieListMapper
-) : BaseMovieListViewModel<MovieListState>(state) {
+) : BaseMovieListViewModel<MovieListState>(movieId, dispatcher) {
 
+    private val _popularMoviesState = MutableStateFlow(MovieListState())
+    val popularMovieState: StateFlow<MovieListState> = _popularMoviesState.asStateFlow()
 
     @AssistedFactory
     interface Factory : BaseMovieListViewModel.Factory {
-        fun create(state: MovieListState): PopularMoviesViewModel
+        fun create(movieId: Int, dispatcher: CoroutineDispatcher): PopularMoviesViewModel
     }
 
     init {
         fetchFirstPage()
     }
 
-    override fun fetchMovies(dispatcher: CoroutineDispatcher) {
-//        withState { state ->
-//            suspend { tmdbRepository.fetchPopularMovies(state.pageNumber) }
-//                .execute(dispatcher) {
-//                    val totalPages = it()?.totalPages
-//                    when (it) {
-//                        is Fail -> {
-//                            copy(
-//                                pageNumber = state.pageNumber,
-//                                movieListResponse = it,
-//                                movieList = state.movieList,
-//                                // TODO: move this to the view like in search?
-//                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
-//                            )
-//                        }
-//                        is Success -> {
-//                            copy(
-//                                pageNumber = state.pageNumber + 1,
-//                                movieListResponse = it,
-//                                movieList = state.movieList + mapper.mapToEntity(it()),
-//                                shouldShowMaxPages = totalPages != null && state.pageNumber >= totalPages
-//                            )
-//                        }
-//                        else -> copy(
-//                            movieListResponse = it
-//                        )
-//                    }
-//                }
-//        }
+    override fun fetchMovies() {
+        viewModelScope.launch(dispatcher) {
+            val currentPageNumber = _popularMoviesState.value.pageNumber
+            val previousState = _popularMoviesState.value
+            _popularMoviesState.emit(previousState.copy(isLoading = true))
+            when (val response = tmdbRepository.fetchPopularMovies(currentPageNumber)) {
+                is ZephyrrResponse.Success -> {
+                    val totalPages = response.value.totalPages
+                    _popularMoviesState.emit(previousState.copy(
+                        pageNumber = currentPageNumber + 1,
+                        isLoading = false,
+                        movieList = previousState.movieList + mapper.mapToEntity(response.value),
+                        shouldShowMaxPages = totalPages != null && currentPageNumber >= totalPages,
+                    ))
+                }
+                is ZephyrrResponse.Failure -> {
+                    _popularMoviesState.emit(previousState.copy(
+                        pageNumber = previousState.pageNumber,
+                        isLoading = false,
+                        error = response.throwable
+                    ))
+                }
+            }
+        }
     }
 
-    private fun fetchFirstPage(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-//        withState { state ->
-//            suspend { tmdbRepository.fetchPopularMovies(1) }
-//                .execute(dispatcher) {
-//                    when (it) {
-//                        is Fail -> {
-//                            copy(
-//                                pageNumber = 1,
-//                                movieListResponse = it,
-//                                movieList = state.movieList
-//                            )
-//                        }
-//                        is Success -> {
-//                            copy(
-//                                pageNumber = state.pageNumber + 1,
-//                                movieListResponse = it,
-//                                movieList = state.movieList + mapper.mapToEntity(it())
-//                            )
-//                        }
-//                        else -> copy()
-//                    }
-//                }
-//        }
+    private fun fetchFirstPage() {
+        viewModelScope.launch(dispatcher) {
+            val previousState = _popularMoviesState.value
+            when (val response = tmdbRepository.fetchPopularMovies(1)) {
+                is ZephyrrResponse.Success -> {
+                    _popularMoviesState.emit(previousState.copy(
+                        pageNumber = previousState.pageNumber + 1,
+                        movieList = mapper.mapToEntity(response.value),
+                        isLoading = false,
+                        error = null,
+                    ))
+                }
+                is ZephyrrResponse.Failure -> {
+                    // Assumes the initial list is empty
+                    _popularMoviesState.emit(previousState.copy(
+                        pageNumber = 1,
+                        isLoading = false,
+                        error = response.throwable,
+                    ))
+                }
+            }
+        }
     }
 
     // TODO: Determine if this is still necessary
@@ -96,10 +101,15 @@ class PopularMoviesViewModel
 //        }
 //    }
 
-//    companion object : MavericksViewModelFactory<PopularMoviesViewModel, MovieListState> {
-//        override fun create(viewModelContext: ViewModelContext, state: MovieListState): PopularMoviesViewModel {
-//            val fragment = (viewModelContext as FragmentViewModelContext).fragment<PopularMoviesFragment>().viewModelFactory
-//            return fragment.create(state)
-//        }
-//    }
+    companion object {
+        fun provideFactory(
+            assistedFactory: Factory,
+            movieId: Int,
+            dispatcher: CoroutineDispatcher
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(movieId, dispatcher) as T
+            }
+        }
+    }
 }
