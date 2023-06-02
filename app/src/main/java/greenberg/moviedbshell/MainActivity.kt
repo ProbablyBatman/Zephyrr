@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.base.BaseActivity
+import greenberg.moviedbshell.base.BaseFragment.Companion.PAGE_ARGS
 import greenberg.moviedbshell.extensions.hideKeyboard
 import greenberg.moviedbshell.state.SearchResultsArgs
 import timber.log.Timber
@@ -33,7 +34,7 @@ class MainActivity : BaseActivity() {
         Timber.d("onCreateOptionsMenu")
         menu.clear()
         menuInflater.inflate(R.menu.base_menu, menu)
-        menu.findItem(R.id.searchResultsFragment)?.let { setUpSearchListener(it) }
+        menu.findItem(R.id.search_results_fragment)?.let { setUpSearchListener(it) }
         menu.findItem(R.id.toggleDarkMode)?.let { setUpDarkModeToggle(it) }
         return true
     }
@@ -62,7 +63,7 @@ class MainActivity : BaseActivity() {
                         navController.navigate(
                             R.id.action_global_searchResultsFragment,
                             Bundle().apply {
-//                                putParcelable(Mavericks.KEY_ARG, SearchResultsArgs(query))
+                                putParcelable(PAGE_ARGS, SearchResultsArgs(query))
                             },
                             NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true)
                                 .build()

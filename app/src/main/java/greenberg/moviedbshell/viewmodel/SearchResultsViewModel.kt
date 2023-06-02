@@ -1,25 +1,39 @@
 package greenberg.moviedbshell.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import greenberg.moviedbshell.base.ZephyrrResponse
 import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.mappers.SearchResultsMapper
 import greenberg.moviedbshell.state.SearchResultsState
 import greenberg.moviedbshell.view.SearchResultsFragment
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SearchResultsViewModel
 @AssistedInject constructor(
-    @Assisted state: SearchResultsState,
+    @Assisted private val query: String,
+    @Assisted private val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
     private val mapper: SearchResultsMapper
-//) : ZephyrrMvRxViewModel<SearchResultsState>(state) {
 ) : ViewModel() {
+
+    private val _searchResultState = MutableStateFlow(
+        SearchResultsState(query)
+    )
+    val searchResultState = _searchResultState.asStateFlow()
+
 
     @AssistedFactory
     interface Factory {
-        fun create(state: SearchResultsState): SearchResultsViewModel
+        fun create(query: String, dispatcher: CoroutineDispatcher): SearchResultsViewModel
     }
 
     init {
@@ -27,64 +41,44 @@ class SearchResultsViewModel
     }
 
     fun fetchSearchResults() {
-//        withState { state ->
-//            if (state.searchResultsResponse is Loading) return@withState
-//            suspend { tmdbRepository.fetchSearchMulti(state.query, state.pageNumber) }
-//                .execute {
-//                    if (it is Fail) {
-//                        // Set results and pageNumber to the same thing so call can be retried
-//                        copy(
-//                            query = state.query,
-//                            pageNumber = state.pageNumber,
-//                            totalPages = state.totalPages,
-//                            searchResults = state.searchResults,
-//                            searchResultsResponse = it
-//                        )
-//                    } else {
-//                        copy(
-//                            query = state.query,
-//                            pageNumber = state.pageNumber + 1,
-//                            totalPages = it()?.totalPages ?: -1,
-//                            searchResults = state.searchResults + mapper.mapToEntity(it()),
-//                            searchResultsResponse = it
-//                        )
-//                    }
-//                }
-//        }
+        viewModelScope.launch(dispatcher) {
+            Timber.d("launching fetchSearchResults")
+            _searchResultState.emit(_searchResultState.value.copy(
+                isLoading = true
+            ))
+            val previousState = _searchResultState.value
+            when (val response = tmdbRepository.fetchSearchMulti(query, previousState.pageNumber)) {
+                is ZephyrrResponse.Success -> {
+                    Timber.d("fetchSearchResults success:$response")
+                    _searchResultState.emit(_searchResultState.value.copy(
+                        searchResults = previousState.searchResults + mapper.mapToEntity(response.value),
+                        pageNumber = previousState.pageNumber + 1,
+                        isLoading = false,
+                        error = null,
+                    ))
+                }
+                is ZephyrrResponse.Failure -> {
+                    Timber.d("fetchSearchResults failure:$response")
+                    // TODO: do I copy the existing response if the new call fails?
+                    // Retryable errors?
+                    _searchResultState.emit(_searchResultState.value.copy(
+                        error = response.throwable,
+                        isLoading = false
+                    ))
+                }
+            }
+        }
     }
 
-    fun fetchFirstPage() {
-//        withState { state ->
-//            // if (state.searchResultsResponse is Loading) return@withState
-//            TMDBService
-//                    .querySearchMulti(state.query, 1)
-//                    .subscribeOn(Schedulers.io())
-//                    .execute {
-//                        if (it is Fail) {
-//                            copy(
-//                                    query = state.query,
-//                                    pageNumber = 1,
-//                                    searchResults = emptyList(),
-//                                    totalPages = -1,
-//                                    searchResultsResponse = state.searchResultsResponse
-//                            )
-//                        } else {
-//                            copy(
-//                                    query = state.query,
-//                                    pageNumber = state.pageNumber + 1,
-//                                    searchResults = mapper.mapToEntity(it()),
-//                                    totalPages = it()?.totalPages ?: -1,
-//                                    searchResultsResponse = it
-//                            )
-//                        }
-//                    }
-//        }
+    companion object {
+        fun provideFactory(
+            assistedFactory: Factory,
+            query: String,
+            dispatcher: CoroutineDispatcher,
+        ) = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(query, dispatcher) as T
+            }
+        }
     }
-
-//    companion object : MavericksViewModelFactory<SearchResultsViewModel, SearchResultsState> {
-//        override fun create(viewModelContext: ViewModelContext, state: SearchResultsState): SearchResultsViewModel {
-//            val fragment = (viewModelContext as FragmentViewModelContext).fragment<SearchResultsFragment>().searchResultsViewModelFactory
-//            return fragment.create(state)
-//        }
-//    }
 }

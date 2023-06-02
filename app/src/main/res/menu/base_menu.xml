@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
-        android:id="@+id/searchResultsFragment"
+        android:id="@+id/search_results_fragment"
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
+        app:showAsAction="ifRoom|collapseActionView" />
     <item
         android:id="@+id/toggleDarkMode"
         android:title="@string/toggle_dark_mode_text"

@@ -196,39 +196,4 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
     }
 
     protected abstract fun onClickListener(movieId: Int)
-
-//    override fun invalidate() {
-//        withState(viewModel) { state ->
-//            when (state.movieListResponse) {
-//                Uninitialized -> log("uninitialized")
-//                is Loading -> {
-//                    log("Loading")
-//                    hideError()
-//                    hideMaxPages()
-//                    if (state.pageNumber <= 1) {
-//                        hideMovies()
-//                        showLoading()
-//                    } else {
-//                        showPageLoad()
-//                    }
-//                }
-//                is Success -> {
-//                    log("Success")
-//                    hidePageLoad()
-//                    showMaxPages(state.shouldShowMaxPages)
-//                    hideLoading()
-//                    showMovies(state)
-//                }
-//                is Fail -> {
-//                    log("Fail")
-//                    hideMovies()
-//                    if (state.shouldShowMaxPages) {
-//                        showMaxPages(state.shouldShowMaxPages)
-//                    } else {
-//                        showError((state.movieListResponse as Fail<MovieListResponse>).error)
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

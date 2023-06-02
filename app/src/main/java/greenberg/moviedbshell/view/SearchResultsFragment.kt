@@ -8,43 +8,63 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.adapters.SearchResultsAdapter
 import greenberg.moviedbshell.base.BaseFragment
+import greenberg.moviedbshell.extensions.extractArguments
 import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.PersonDetailArgs
+import greenberg.moviedbshell.state.SearchResultsArgs
 import greenberg.moviedbshell.state.SearchResultsState
 import greenberg.moviedbshell.state.TvDetailArgs
 import greenberg.moviedbshell.viewmodel.SearchResultsViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
+
+// TODO: search via actors
+// Idea: have single box of input and recycler view. Let users type then hit add to add an actor to their search
+// make the call and if there are any intersections, display them in grid or list alternatign format
+@AndroidEntryPoint
 class SearchResultsFragment : BaseFragment() {
 
-    val searchResultsViewModelFactory by lazy {
-        (activity?.application as ZephyrrApplication).component.searchResultsViewModelFactory
+    @Inject
+    lateinit var searchResultsViewModelFactory: SearchResultsViewModel.Factory
+
+    private val viewModel: SearchResultsViewModel by viewModels {
+        SearchResultsViewModel.provideFactory(
+            searchResultsViewModelFactory,
+            arguments.extractArguments<SearchResultsArgs>(PAGE_ARGS)?.query ?: "",
+            Dispatchers.IO
+        )
     }
 
-//    private val viewModel: SearchResultsViewModel by fragmentViewModel()
 
     private var navController: NavController? = null
 
-    private var searchResultsRecycler: RecyclerView? = null
-    private lateinit var linearLayoutManager: androidx.recyclerview.widget.LinearLayoutManager
-    private var searchResultsAdapter: SearchResultsAdapter? = null
-    private var searchLoadingBar: ProgressBar? = null
-    private var loadingSnackbar: Snackbar? = null
-    private var zephyrrSearchView: SearchView? = null
+    private lateinit var searchResultsRecycler: RecyclerView
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var searchResultsAdapter: SearchResultsAdapter
+    private lateinit var searchLoadingBar: ProgressBar
+    private var loadingSnackbar: Snackbar?  = null
+    private lateinit var zephyrrSearchView: SearchView
     private var maxPagesSnackbar: Snackbar? = null
-    private var emptyStateText: TextView? = null
-    private var errorTextView: TextView? = null
-    private var errorRetryButton: Button? = null
-
+    private lateinit var emptyStateText: TextView
+    private lateinit var errorTextView: TextView
+    private lateinit var errorRetryButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
@@ -57,7 +77,7 @@ class SearchResultsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        zephyrrSearchView = view.findViewById(R.id.searchResultsFragment)
+//        zephyrrSearchView = view.findViewById(R.id.search_results_fragment)
 
         searchResultsRecycler = view.findViewById(R.id.search_results_recycler)
         searchLoadingBar = view.findViewById(R.id.search_results_progress_bar)
@@ -65,21 +85,58 @@ class SearchResultsFragment : BaseFragment() {
         errorTextView = view.findViewById(R.id.search_error)
         errorRetryButton = view.findViewById(R.id.search_error_retry_button)
 
-        linearLayoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
-        searchResultsRecycler?.layoutManager = linearLayoutManager
+        linearLayoutManager = LinearLayoutManager(activity)
+        searchResultsRecycler.layoutManager = linearLayoutManager
         searchResultsAdapter = SearchResultsAdapter(onClickListener = this::onClickListener)
-        searchResultsRecycler?.adapter = searchResultsAdapter
-        searchResultsRecycler?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        searchResultsRecycler.adapter = searchResultsAdapter
+        searchResultsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (linearLayoutManager.findLastVisibleItemPosition() == linearLayoutManager.itemCount - 1) {
-//                    viewModel.fetchSearchResults()
+                    viewModel.fetchSearchResults()
                 }
             }
         })
 
         // TODO: maybe change the title of the action bar to show the last performed search
         navController = findNavController()
+
+        registerObservers()
+    }
+
+    private fun registerObservers() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.searchResultState.collect {
+                        updateSearchResults(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateSearchResults(state: SearchResultsState) {
+        when {
+            state.isLoading -> {
+                hideMaxPages()
+                if (state.pageNumber > 1) {
+                    showPageLoad()
+                } else {
+                    showLoading()
+                }
+            }
+            state.error != null -> {
+                showError(state.error)
+            }
+            else -> {
+                if (state.totalPages == state.pageNumber) {
+                    showMaxPages()
+                } else {
+                    showResults(state)
+                }
+            }
+        }
     }
 
     private fun showLoading() {
@@ -94,8 +151,9 @@ class SearchResultsFragment : BaseFragment() {
         if (state.searchResults.isEmpty()) {
             showEmptyState(state.query)
         } else {
-            searchResultsAdapter?.searchResults = state.searchResults
-            searchResultsAdapter?.notifyDataSetChanged()
+            searchResultsAdapter.searchResults = state.searchResults
+            // TODO: magic number?
+            searchResultsAdapter.notifyItemRangeChanged(0, searchResultsAdapter.itemCount)
         }
         hideLoadingBar()
         hidePageLoad()
@@ -108,17 +166,15 @@ class SearchResultsFragment : BaseFragment() {
         hideLoadingBar()
         hideResultsView()
         showErrorState()
-        errorRetryButton?.setOnClickListener {
-//            viewModel.fetchSearchResults()
+        errorRetryButton.setOnClickListener {
+            viewModel.fetchSearchResults()
             hideErrorState()
         }
     }
 
     private fun showPageLoad() {
         Timber.d("Showing page load")
-        loadingSnackbar = searchResultsRecycler?.let {
-            Snackbar.make(it, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
-        }
+        loadingSnackbar = Snackbar.make(searchResultsRecycler, getString(R.string.generic_loading_text), Snackbar.LENGTH_INDEFINITE)
         if (loadingSnackbar?.isShown == false) {
             loadingSnackbar?.show()
         }
@@ -131,10 +187,12 @@ class SearchResultsFragment : BaseFragment() {
 
     private fun showMaxPages() {
         Timber.d("Show max pages")
-        maxPagesSnackbar = searchResultsRecycler?.let { view ->
-            Snackbar.make(view, getString(R.string.generic_max_pages_text), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
-        }
+        maxPagesSnackbar = Snackbar.make(
+            searchResultsRecycler,
+            getString(R.string.generic_max_pages_text),
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
         if (maxPagesSnackbar?.isShown == false) {
             maxPagesSnackbar?.show()
         }
@@ -148,62 +206,36 @@ class SearchResultsFragment : BaseFragment() {
     private fun showEmptyState(lastQuery: String?) {
         Timber.d("Showing empty state for $lastQuery")
         // TODO: look to get rid of storing the query in the view
-        emptyStateText?.text = getString(R.string.empty_state_search_text, lastQuery)
+        emptyStateText.text = getString(R.string.empty_state_search_text, lastQuery)
         hideLoadingBar()
-        emptyStateText?.visibility = View.VISIBLE
+        emptyStateText.visibility = View.VISIBLE
     }
 
     private fun showLoadingBar() {
-        searchLoadingBar?.visibility = View.VISIBLE
+        searchLoadingBar.visibility = View.VISIBLE
     }
 
     private fun hideLoadingBar() {
-        searchLoadingBar?.visibility = View.GONE
+        searchLoadingBar.visibility = View.GONE
     }
 
     private fun hideResultsView() {
-        searchResultsRecycler?.visibility = View.GONE
+        searchResultsRecycler.visibility = View.GONE
     }
 
     private fun showResultsView() {
-        searchResultsRecycler?.visibility = View.VISIBLE
+        searchResultsRecycler.visibility = View.VISIBLE
     }
 
     private fun hideErrorState() {
-        errorTextView?.visibility = View.GONE
-        errorRetryButton?.visibility = View.GONE
+        errorTextView.visibility = View.GONE
+        errorRetryButton.visibility = View.GONE
     }
 
     private fun showErrorState() {
-        errorTextView?.visibility = View.VISIBLE
-        errorRetryButton?.visibility = View.VISIBLE
+        errorTextView.visibility = View.VISIBLE
+        errorRetryButton.visibility = View.VISIBLE
     }
-
-//    override fun invalidate() {
-//        withState(viewModel) { state ->
-//            when (state.searchResultsResponse) {
-//                Uninitialized -> Timber.d("uninitialized")
-//                is Loading -> {
-//                    hideMaxPages()
-//                    if (state.pageNumber > 1) {
-//                        showPageLoad()
-//                    } else {
-//                        showLoading()
-//                    }
-//                }
-//                is Success -> {
-//                    if (state.totalPages == state.pageNumber) {
-//                        showMaxPages()
-//                    } else {
-//                        showResults(state)
-//                    }
-//                }
-//                is Fail -> {
-//                    showError(state.searchResultsResponse.error)
-//                }
-//            }
-//        }
-//    }
 
     private fun onClickListener(itemId: Int, mediaType: MediaType) {
         when (mediaType) {
@@ -238,10 +270,5 @@ class SearchResultsFragment : BaseFragment() {
 
     override fun log(throwable: Throwable) {
         Timber.e(throwable)
-    }
-
-    companion object {
-        @JvmField
-        val TAG: String = SearchResultsFragment::class.java.simpleName
     }
 }
