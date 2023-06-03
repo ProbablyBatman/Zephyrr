@@ -22,7 +22,7 @@ import greenberg.moviedbshell.viewHolders.SearchResultsViewHolder
 
 class SearchResultsAdapter(
     var searchResults: List<PreviewItem> = listOf(),
-    val onClickListener: (Int, MediaType) -> Unit
+    val onClickListener: (PreviewItem) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -36,10 +36,7 @@ class SearchResultsAdapter(
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
                     holder.cardItem.setOnClickListener {
-                        onClickListener(
-                            currentItem.id ?: -1,
-                            currentItem.mediaType
-                        )
+                        onClickListener(currentItem)
                     }
                 }
                 is TvItem -> {
@@ -48,10 +45,7 @@ class SearchResultsAdapter(
                     holder.searchItemOverview.text = currentItem.overview
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
                     holder.cardItem.setOnClickListener {
-                        onClickListener(
-                            currentItem.id ?: -1,
-                            currentItem.mediaType
-                        )
+                        onClickListener(currentItem)
                     }
                 }
                 is PersonItem -> {
@@ -66,10 +60,7 @@ class SearchResultsAdapter(
                     }
                     fetchPosterArt(holder.searchItemPosterImage, currentItem.posterImageUrl)
                     holder.cardItem.setOnClickListener {
-                        onClickListener(
-                            currentItem.id ?: -1,
-                            currentItem.mediaType
-                        )
+                        onClickListener(currentItem)
                     }
                 }
                 else -> {

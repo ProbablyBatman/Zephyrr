@@ -10,6 +10,10 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
     <item
+        android:id="@+id/multi_search_menu_option"
+        android:title="@string/combined_search"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/toggleDarkMode"
         android:title="@string/toggle_dark_mode_text"
         app:showAsAction="never"

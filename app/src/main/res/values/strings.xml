@@ -59,9 +59,13 @@
 
     <!-- Search -->
     <string name="search">Search</string>
+    <string name="combined_search">Combined Search</string>
     <string name="search_hint">Search for actors and movies here…</string>
     <string name="generic_max_pages_text">No more results available.</string>
     <string name="empty_state_search_text">No results found for %1$s.</string>
+    <string name="search_query_display_text">Results for: %1$s</string>
+    <string name="multi_search_add">Add</string>
+    <string name="multi_search_hint">Add actors to see if they have any TV show or movie overlap!</string>
 
     <!-- Tv Detail -->
     <string name="first_aired_title">First Aired</string>

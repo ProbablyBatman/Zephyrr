@@ -8,14 +8,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseMovieListFragment
 import greenberg.moviedbshell.extensions.extractArguments
 import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.state.base.BaseMovieListState
 import greenberg.moviedbshell.viewmodel.RecentlyReleasedViewModel
-import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber

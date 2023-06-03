@@ -48,6 +48,15 @@ interface TMDBService {
     @GET("person/{id}/combined_credits")
     suspend fun queryPersonCombinedCredits(@Path("id") id: Int): CombinedCreditsResponse
 
+    @GET("search/person")
+    suspend fun querySearchPerson(@Query("query") query: String, @Query("page") page: Int): SearchResponse
+
+    @GET("discover/movie")
+    suspend fun queryMovieDiscover(@Query("page") page: Int, @Query("with_cast", encoded = true) castList: String) : SearchResponse
+
+    @GET("discover/tv")
+    suspend fun queryTvDiscover(@Query("page") page: Int, @Query("with_cast", encoded = true) castList: String) : SearchResponse
+
     /**
      * This is implemented for now only against English releases. It is probably a bit complex to go global.
      */

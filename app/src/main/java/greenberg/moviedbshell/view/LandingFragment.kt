@@ -157,7 +157,6 @@ class LandingFragment : BaseFragment() {
             // TODO
         }
 
-//        viewModel.onEach { log("state is $it") }
         registerObservers()
     }
 

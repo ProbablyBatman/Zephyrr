@@ -40,6 +40,7 @@ class SearchResultsViewModel
         fetchSearchResults()
     }
 
+    // TODO: For multisearch, this should probably only search for people since that's all we're intersecting on
     fun fetchSearchResults() {
         viewModelScope.launch(dispatcher) {
             Timber.d("launching fetchSearchResults")

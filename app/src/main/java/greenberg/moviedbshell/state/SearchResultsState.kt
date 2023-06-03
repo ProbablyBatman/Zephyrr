@@ -16,5 +16,6 @@ data class SearchResultsState(
 
 @Parcelize
 data class SearchResultsArgs(
-    val query: String
+    val query: String = "",
+    val usingMultiSearch: Boolean = false
 ) : Parcelable

@@ -5,9 +5,11 @@ import greenberg.moviedbshell.mappers.MovieDetailMapper
 import greenberg.moviedbshell.mappers.PersonDetailMapper
 import greenberg.moviedbshell.mappers.TvDetailMapper
 import greenberg.moviedbshell.models.container.MovieDetailResponseContainer
+import greenberg.moviedbshell.models.container.MultiSearchResponseContainer
 import greenberg.moviedbshell.models.container.PersonDetailResponseContainer
 import greenberg.moviedbshell.models.container.TvDetailResponseContainer
 import greenberg.moviedbshell.models.imagegallerymodels.ImageGalleryResponse
+import greenberg.moviedbshell.models.searchmodels.SearchResponse
 import greenberg.moviedbshell.models.sharedmodels.CreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.AggregateCreditsResponse
 import greenberg.moviedbshell.models.tvdetailmodels.TvShowResponse
@@ -20,6 +22,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import timber.log.Timber
 import javax.inject.Inject
 
 class TmdbRepository
@@ -122,6 +125,33 @@ class TmdbRepository
             )
         }
 
+    suspend fun fetchIntersectingSearch(scope: CoroutineScope, ids: List<Int>, page: Int): ZephyrrResponse<MultiSearchResponseContainer> {
+        return safeFetch {
+            Timber.d("querying discover for ids: ${ids.joinToString(",") }")
+            val movies = scope.async { tmdbService.queryMovieDiscover(page, ids.joinToString(",")) }
+            val shows = scope.async { tmdbService.queryTvDiscover(page, ids.joinToString(",")) }
+
+            MultiSearchResponseContainer(
+                movies.await(),
+                shows.await()
+            )
+        }
+    }
+
+    suspend fun fetchMovieDiscover(scope: CoroutineScope, ids: List<Int>, page: Int): ZephyrrResponse<SearchResponse> {
+        return safeFetch {
+            Timber.d("querying movie discover for ids: ${ids.joinToString(",") }")
+            tmdbService.queryMovieDiscover(page, ids.joinToString(","))
+        }
+    }
+
+    suspend fun fetchTvDiscover(scope: CoroutineScope, ids: List<Int>, page: Int): ZephyrrResponse<SearchResponse> {
+        return safeFetch {
+            Timber.d("querying tv discover for ids: ${ids.joinToString(",") }")
+            tmdbService.queryTvDiscover(page, ids.joinToString(","))
+        }
+    }
+
     suspend fun <T> zipper(vararg func: suspend () -> Any, mapper: (List<Any>) -> T): T {
         return coroutineScope {
             val deferreds = mutableListOf<Deferred<Any>>()
@@ -145,6 +175,8 @@ class TmdbRepository
     suspend fun fetchTvImages(id: Int) = safeFetch { tmdbService.queryTvImages(id) }
 
     suspend fun fetchSearchMulti(query: String, page: Int) = safeFetch { tmdbService.querySearchMulti(query, page) }
+
+    suspend fun fetchSearchPerson(query: String, page: Int) = safeFetch { tmdbService.querySearchPerson(query, page) }
 
     private suspend fun <T> safeFetch(call: suspend () -> T): ZephyrrResponse<T> {
         return try {

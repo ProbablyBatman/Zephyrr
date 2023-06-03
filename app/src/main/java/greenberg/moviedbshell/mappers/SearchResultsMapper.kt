@@ -44,4 +44,18 @@ class SearchResultsMapper
         }
         return mappedItems ?: emptyList()
     }
+
+    // TODO: remove this because it shouldn't need to exist
+    fun mapUnmarkedMovies(item: SearchResponse?): List<PreviewItem> {
+        val mappedItems = item?.results?.map { result ->
+            MovieItem(
+                movieTitle = result?.title.orEmpty(),
+                overview = result?.overview.orEmpty(),
+                releaseDate = result?.releaseDate.orEmpty(),
+                posterImageUrl = result?.posterPath.orEmpty(),
+                id = result?.id
+            )
+        }
+        return mappedItems ?: emptyList()
+    }
 }

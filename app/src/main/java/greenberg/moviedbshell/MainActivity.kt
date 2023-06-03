@@ -45,6 +45,10 @@ class MainActivity : BaseActivity() {
                 navController.navigate(R.id.action_global_aboutFragment)
                 true
             }
+            R.id.multi_search_menu_option -> {
+                navController.navigate(R.id.action_global_multiSearchFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

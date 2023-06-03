@@ -8,12 +8,14 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -23,26 +25,28 @@ import greenberg.moviedbshell.adapters.SearchResultsAdapter
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.extensions.extractArguments
 import greenberg.moviedbshell.models.MediaType
+import greenberg.moviedbshell.models.ui.PersonItem
+import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.state.SearchResultsArgs
 import greenberg.moviedbshell.state.SearchResultsState
 import greenberg.moviedbshell.state.TvDetailArgs
+import greenberg.moviedbshell.viewmodel.MultiSearchViewModel
 import greenberg.moviedbshell.viewmodel.SearchResultsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-
-// TODO: search via actors
-// Idea: have single box of input and recycler view. Let users type then hit add to add an actor to their search
-// make the call and if there are any intersections, display them in grid or list alternatign format
 @AndroidEntryPoint
 class SearchResultsFragment : BaseFragment() {
 
     @Inject
     lateinit var searchResultsViewModelFactory: SearchResultsViewModel.Factory
+
+    @Inject
+    lateinit var multiSearchViewModelFactory: MultiSearchViewModel.Factory
 
     private val viewModel: SearchResultsViewModel by viewModels {
         SearchResultsViewModel.provideFactory(
@@ -52,6 +56,13 @@ class SearchResultsFragment : BaseFragment() {
         )
     }
 
+    // Essentially this gets a singleton instance of the viewmodel since this is a single activity app
+    private val multiSearchViewModel: MultiSearchViewModel by navGraphViewModels(R.id.nav_graph) {
+        MultiSearchViewModel.provideFactory(
+            multiSearchViewModelFactory,
+            Dispatchers.IO
+        )
+    }
 
     private var navController: NavController? = null
 
@@ -59,12 +70,14 @@ class SearchResultsFragment : BaseFragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var searchResultsAdapter: SearchResultsAdapter
     private lateinit var searchLoadingBar: ProgressBar
+    private lateinit var searchQueryDisplay: TextView
     private var loadingSnackbar: Snackbar?  = null
     private lateinit var zephyrrSearchView: SearchView
     private var maxPagesSnackbar: Snackbar? = null
     private lateinit var emptyStateText: TextView
     private lateinit var errorTextView: TextView
     private lateinit var errorRetryButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
@@ -79,6 +92,7 @@ class SearchResultsFragment : BaseFragment() {
 
 //        zephyrrSearchView = view.findViewById(R.id.search_results_fragment)
 
+        searchQueryDisplay = view.findViewById(R.id.search_query_display)
         searchResultsRecycler = view.findViewById(R.id.search_results_recycler)
         searchLoadingBar = view.findViewById(R.id.search_results_progress_bar)
         emptyStateText = view.findViewById(R.id.search_empty_state_text)
@@ -151,6 +165,7 @@ class SearchResultsFragment : BaseFragment() {
         if (state.searchResults.isEmpty()) {
             showEmptyState(state.query)
         } else {
+            searchQueryDisplay.text = resources.getString(R.string.search_query_display_text, state.query)
             searchResultsAdapter.searchResults = state.searchResults
             // TODO: magic number?
             searchResultsAdapter.notifyItemRangeChanged(0, searchResultsAdapter.itemCount)
@@ -220,10 +235,12 @@ class SearchResultsFragment : BaseFragment() {
     }
 
     private fun hideResultsView() {
+        searchQueryDisplay.visibility = View.GONE
         searchResultsRecycler.visibility = View.GONE
     }
 
     private fun showResultsView() {
+        searchQueryDisplay.visibility = View.VISIBLE
         searchResultsRecycler.visibility = View.VISIBLE
     }
 
@@ -237,7 +254,16 @@ class SearchResultsFragment : BaseFragment() {
         errorRetryButton.visibility = View.VISIBLE
     }
 
-    private fun onClickListener(itemId: Int, mediaType: MediaType) {
+    private fun onClickListener(previewItem: PreviewItem) {
+        val itemId = previewItem.id ?: -1
+        val mediaType = previewItem.mediaType
+        if (arguments.extractArguments<SearchResultsArgs>(PAGE_ARGS)?.usingMultiSearch == true) {
+            // TODO: this cast will always succeed since we're only looking up people?
+            multiSearchViewModel.addQuery(previewItem as? PersonItem)
+            navController?.popBackStack()
+            return
+        }
+
         when (mediaType) {
             MediaType.MOVIE -> {
                 navigate(

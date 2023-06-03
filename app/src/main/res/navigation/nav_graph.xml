@@ -44,10 +44,38 @@
         <action
                 android:id="@+id/action_searchResultsFragment_to_personDetailFragment"
                 app:destination="@id/personDetailFragment"/>
+        <action
+                android:id="@+id/action_searchResultsFragment_to_multiSearchFragment"
+                app:destination="@id/multiSearchFragment"/>
     </fragment>
 
     <action android:id="@+id/action_global_searchResultsFragment"
             app:destination="@id/searchResultsFragment"/>
+
+    <fragment
+            android:id="@+id/multiSearchFragment"
+            android:name="greenberg.moviedbshell.view.MultiSearchFragment">
+        <action
+                android:id="@+id/action_multiSearchFragment_to_searchResultsFragment"
+                app:destination="@id/searchResultsFragment"/>
+        <action
+            android:id="@+id/action_multiSearchFragment_to_combinedItemsListFragment"
+            app:destination="@id/combinedItemsListFragment"/>
+    </fragment>
+
+    <action android:id="@+id/action_global_multiSearchFragment"
+            app:destination="@id/multiSearchFragment"/>
+
+    <fragment
+            android:id="@+id/combinedItemsListFragment"
+            android:name="greenberg.moviedbshell.view.CombinedItemsListFragment">
+        <action
+            android:id="@+id/action_combinedItemsListFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment"/>
+        <action
+            android:id="@+id/action_combinedItemsListFragment_to_tvDetailFragment"
+            app:destination="@id/tvDetailFragment"/>
+    </fragment>
 
     <fragment
             android:id="@+id/movieDetailFragment"
