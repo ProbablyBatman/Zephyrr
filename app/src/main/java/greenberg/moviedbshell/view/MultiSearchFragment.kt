@@ -32,6 +32,12 @@ class MultiSearchFragment : BaseFragment() {
     @Inject
     lateinit var multiSearchViewModelFactory: MultiSearchViewModel.Factory
 
+//    private val viewModel: MultiSearchViewModel by navGraphViewModels(R.id.nav_graph) {
+//        MultiSearchViewModel.provideFactory(
+//            multiSearchViewModelFactory,
+//            Dispatchers.IO
+//        )
+//    }
     private val viewModel: MultiSearchViewModel by navGraphViewModels(R.id.nav_graph) {
         MultiSearchViewModel.provideFactory(
             multiSearchViewModelFactory,
@@ -87,7 +93,8 @@ class MultiSearchFragment : BaseFragment() {
             navigate(
                 R.id.action_multiSearchFragment_to_combinedItemsListFragment,
                 CombinedItemsArgs(
-                    viewModel.multiSearchState.value.queries.mapNotNull { it.id }
+                    viewModel.multiSearchState.value.queries.mapNotNull { it.id },
+                    PAGE_TITLE
                 )
             )
         }
@@ -125,8 +132,10 @@ class MultiSearchFragment : BaseFragment() {
         } else {
             View.GONE
         }
-        multiSearchQueryItemsAdapter.currentQueries = state.queries
-        multiSearchQueryItemsAdapter.notifyItemRangeChanged(0, multiSearchQueryItemsAdapter.itemCount)
+        if (multiSearchQueryItemsAdapter.currentQueries != state.queries) {
+            multiSearchQueryItemsAdapter.currentQueries = state.queries
+            multiSearchQueryItemsAdapter.notifyItemRangeChanged(0, multiSearchQueryItemsAdapter.itemCount)
+        }
     }
 
     private fun removeOnClickListener(position: Int) {
@@ -140,5 +149,9 @@ class MultiSearchFragment : BaseFragment() {
 
     override fun log(throwable: Throwable) {
         Timber.e(throwable)
+    }
+
+    companion object {
+        private const val PAGE_TITLE = "Combined Search Results"
     }
 }

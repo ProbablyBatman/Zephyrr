@@ -177,6 +177,7 @@ class CombinedItemsListFragment : BaseFragment() {
             state.combinedItemList.isNotEmpty() -> {
                 log("success")
                 hidePageLoad()
+                title.text = arguments?.extractArguments<CombinedItemsArgs>(PAGE_ARGS)?.pageTitle.orEmpty()
                 if (state.isMovieMaxPages && state.isTvMaxPages) {
                     showMaxPages()
                 }

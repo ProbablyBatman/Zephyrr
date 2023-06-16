@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -57,12 +58,15 @@ class SearchResultsFragment : BaseFragment() {
     }
 
     // Essentially this gets a singleton instance of the viewmodel since this is a single activity app
+    // TODO: Not sure this is the right way to do this at all
     private val multiSearchViewModel: MultiSearchViewModel by navGraphViewModels(R.id.nav_graph) {
         MultiSearchViewModel.provideFactory(
             multiSearchViewModelFactory,
             Dispatchers.IO
         )
     }
+
+    private var usingMultiSearch = false
 
     private var navController: NavController? = null
 
@@ -116,6 +120,8 @@ class SearchResultsFragment : BaseFragment() {
         navController = findNavController()
 
         registerObservers()
+
+        usingMultiSearch = arguments.extractArguments<SearchResultsArgs>(PAGE_ARGS)?.usingMultiSearch == true
     }
 
     private fun registerObservers() {
@@ -166,7 +172,12 @@ class SearchResultsFragment : BaseFragment() {
             showEmptyState(state.query)
         } else {
             searchQueryDisplay.text = resources.getString(R.string.search_query_display_text, state.query)
-            searchResultsAdapter.searchResults = state.searchResults
+            val results = if (usingMultiSearch) {
+                state.searchResults.filterIsInstance<PersonItem>()
+            } else {
+                state.searchResults
+            }
+            searchResultsAdapter.searchResults = results
             // TODO: magic number?
             searchResultsAdapter.notifyItemRangeChanged(0, searchResultsAdapter.itemCount)
         }
@@ -257,7 +268,7 @@ class SearchResultsFragment : BaseFragment() {
     private fun onClickListener(previewItem: PreviewItem) {
         val itemId = previewItem.id ?: -1
         val mediaType = previewItem.mediaType
-        if (arguments.extractArguments<SearchResultsArgs>(PAGE_ARGS)?.usingMultiSearch == true) {
+        if (usingMultiSearch) {
             // TODO: this cast will always succeed since we're only looking up people?
             multiSearchViewModel.addQuery(previewItem as? PersonItem)
             navController?.popBackStack()

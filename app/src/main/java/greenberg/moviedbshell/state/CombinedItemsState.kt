@@ -18,4 +18,5 @@ data class CombinedItemsState(
 @Parcelize
 data class CombinedItemsArgs(
     val ids: List<Int>,
+    val pageTitle: String,
 ) : Parcelable

@@ -18,9 +18,7 @@ import timber.log.Timber
 
 class MultiSearchViewModel
 @AssistedInject constructor(
-    @Assisted private val dispatcher: CoroutineDispatcher,
-    private val tmdbRepository: TmdbRepository,
-    private val mapper: SearchResultsMapper
+    @Assisted private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     @AssistedFactory
