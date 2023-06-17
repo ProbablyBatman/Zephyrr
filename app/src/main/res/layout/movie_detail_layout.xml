@@ -178,7 +178,7 @@
             <TextView
                 android:id="@+id/detail_director_title"
                 android:text="@string/director_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/production_row_title" />
 
@@ -191,7 +191,7 @@
 
             <TextView
                 android:id="@+id/detail_production_companies_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/production_companies_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_director_title"/>
@@ -206,7 +206,7 @@
 
             <TextView
                 android:id="@+id/detail_filming_locations_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/filming_locations_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_production_companies_preview" />
@@ -220,7 +220,7 @@
 
             <TextView
                 android:id="@+id/detail_release_date_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/release_date_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_filming_locations_title" />
@@ -234,7 +234,7 @@
 
             <TextView
                 android:id="@+id/detail_runtime_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/runtime_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_release_date_title" />
@@ -248,7 +248,7 @@
 
             <TextView
                 android:id="@+id/detail_status_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/status_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_runtime_title"/>
@@ -262,7 +262,7 @@
 
             <TextView
                 android:id="@+id/detail_budget_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/budget_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_status_title"/>
@@ -287,7 +287,7 @@
             <TextView
                 android:id="@+id/detail_revenue_title"
                 android:text="@string/revenue_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/performance_row_title" />
 
@@ -300,7 +300,7 @@
 
             <TextView
                 android:id="@+id/detail_user_rating_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/user_rating_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_revenue_title"/>

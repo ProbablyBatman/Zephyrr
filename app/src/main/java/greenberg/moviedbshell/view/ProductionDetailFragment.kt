@@ -5,25 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.adapters.ProductionDetailAdapter
 import greenberg.moviedbshell.base.BaseFragment
+import greenberg.moviedbshell.extensions.extractArguments
 import greenberg.moviedbshell.extensions.processAsReleaseDate
 import greenberg.moviedbshell.extensions.processRuntime
+import greenberg.moviedbshell.extensions.processRuntimes
 import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.state.ProductionDetailState
+import greenberg.moviedbshell.state.ProductionDetailStateArgs
 import greenberg.moviedbshell.viewmodel.ProductionDetailViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.NumberFormat
 import java.util.Locale
 
 class ProductionDetailFragment : BaseFragment() {
 
-//    private val viewModel: ProductionDetailViewModel by fragmentViewModel()
+    // Hate !! here, but it should always be here since there's no call made
+    private val viewModel: ProductionDetailViewModel by viewModels {
+        ProductionDetailViewModel.provideFactory(
+            arguments?.extractArguments<ProductionDetailStateArgs>(PAGE_ARGS)?.productionDetailItem!!
+        )
+    }
 
     private lateinit var productionCompaniesList: TextView
     private lateinit var filmingLocationsList: TextView
@@ -56,13 +69,21 @@ class ProductionDetailFragment : BaseFragment() {
             adapter = productionDetailAdapter
             layoutManager = linearLayoutManager
         }
+
+        registerObservers()
     }
 
-//    override fun invalidate() {
-//        withState(viewModel) { state ->
-//            showDetails(state)
-//        }
-//    }
+    private fun registerObservers() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.productionDetailState.collect {
+                        showDetails(it)
+                    }
+                }
+            }
+        }
+    }
 
     private fun showDetails(state: ProductionDetailState) {
         when (val detailItem = state.productionDetailItem) {
@@ -71,14 +92,21 @@ class ProductionDetailFragment : BaseFragment() {
                 filmingLocationsList.text = detailItem.productionCountries.joinToString(", ") { it.name }
                 statusTextView.text = detailItem.status
                 productionDetailAdapter.crewMemberList = detailItem.crewMembers
-                productionDetailAdapter.notifyDataSetChanged()
+                productionDetailAdapter.notifyItemRangeChanged(0, productionDetailAdapter.itemCount)
                 releaseDateTextView.text = detailItem.releaseDate.processAsReleaseDate()
                 runtimeTextView.text = requireContext().processRuntime(detailItem.runtime)
                 budgetTextView.text = resources.getString(R.string.budget_substitution, NumberFormat.getInstance(Locale.US).format(detailItem.budget))
                 revenueTextView.text = resources.getString(R.string.budget_substitution, NumberFormat.getInstance(Locale.US).format(detailItem.revenue))
             }
             is TvDetailItem -> {
-                // todo
+                productionCompaniesList.text = detailItem.productionCompanies.joinToString(", ") { it.name }
+                filmingLocationsList.text = detailItem.productionCountries.joinToString(", ") { it.name }
+                statusTextView.text = detailItem.status
+                productionDetailAdapter.crewMemberList = detailItem.crewMembers
+                productionDetailAdapter.notifyItemRangeChanged(0, productionDetailAdapter.itemCount)
+                releaseDateTextView.text = detailItem.firstAirDate.processAsReleaseDate()
+                runtimeTextView.text = requireContext().processRuntimes(detailItem.runtime)
+                // TODO: include TV specific ones
             }
         }
     }

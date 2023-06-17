@@ -6,9 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 data class ProductionDetailState(
     val productionDetailItem: ProductionDetailItem
-) {
-    constructor(args: ProductionDetailStateArgs) : this(productionDetailItem = args.productionDetailItem)
-}
+)
 
 @Parcelize
 data class ProductionDetailStateArgs(

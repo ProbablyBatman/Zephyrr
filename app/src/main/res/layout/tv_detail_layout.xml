@@ -174,7 +174,7 @@
             <TextView
                 android:id="@+id/detail_seasons_title"
                 android:text="@string/seasons_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/production_row_title" />
 
@@ -188,7 +188,7 @@
             <TextView
                 android:id="@+id/detail_episode_count_title"
                 android:text="@string/number_of_episodes_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_seasons_title" />
 
@@ -202,7 +202,7 @@
             <TextView
                 android:id="@+id/detail_created_by_title"
                 android:text="@string/created_by_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_episode_count_title" />
 
@@ -215,7 +215,7 @@
 
             <TextView
                 android:id="@+id/detail_first_episode_air_date_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/first_aired_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_created_by"/>
@@ -229,7 +229,7 @@
 
             <TextView
                 android:id="@+id/detail_next_episode_air_date_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/next_air_date_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_first_episode_air_date_title"
@@ -245,7 +245,7 @@
 
             <TextView
                 android:id="@+id/detail_last_episode_date_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/last_aired_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_next_episode_air_date_title"/>
@@ -259,7 +259,7 @@
 
             <TextView
                 android:id="@+id/detail_runtime_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_last_episode_date_title" />
 
@@ -272,7 +272,7 @@
 
             <TextView
                 android:id="@+id/detail_status_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/status_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_runtime_title"/>
@@ -286,7 +286,7 @@
 
             <TextView
                 android:id="@+id/detail_networks_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_status_title"/>
 
@@ -299,7 +299,7 @@
 
             <TextView
                 android:id="@+id/detail_production_companies_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/production_companies_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_networks" />
@@ -314,7 +314,7 @@
 
             <TextView
                 android:id="@+id/detail_filming_locations_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/filming_locations_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_production_companies_preview"/>
@@ -338,7 +338,7 @@
 
             <TextView
                 android:id="@+id/detail_user_rating_title"
-                style="@style/TopInfoTitleStyle"
+                style="@style/DetailTopInfoTitleStyle"
                 android:text="@string/user_rating_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/performance_row_title"/>

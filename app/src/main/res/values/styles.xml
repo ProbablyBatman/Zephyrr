@@ -23,8 +23,12 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/margin_small</item>
         <item name="android:layout_marginStart">@dimen/margin_small</item>
-        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DetailTopInfoTitleStyle" parent="TopInfoTitleStyle">
+        <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 
     <style name="TopInfoItemStyle">

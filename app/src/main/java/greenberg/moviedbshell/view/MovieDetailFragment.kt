@@ -45,6 +45,7 @@ import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.state.PersonDetailArgs
 import greenberg.moviedbshell.state.PosterImageGalleryArgs
+import greenberg.moviedbshell.state.ProductionDetailStateArgs
 import greenberg.moviedbshell.view.ImageGalleryDialog.Companion.BACKDROP_KEY
 import greenberg.moviedbshell.viewmodel.MovieDetailViewModel
 import kotlinx.coroutines.Dispatchers
@@ -296,7 +297,7 @@ class MovieDetailFragment : BaseFragment() {
                     .show(parentFragmentManager, ImageGalleryDialog.TAG)
             }
             castSeeAllButton.setOnClickListener { castSeeAllOnClickListener(movieDetailItem.castMembers) }
-            productionSeeAllButton.setOnClickListener { productionSeeAllOnClickListener() }
+            productionSeeAllButton.setOnClickListener { productionSeeAllOnClickListener(movieDetailItem) }
             // TODO: potentially scrape other rating information
         }
     }
@@ -404,13 +405,11 @@ class MovieDetailFragment : BaseFragment() {
         )
     }
 
-    private fun productionSeeAllOnClickListener() {
-//        withState(viewModel) { state ->
-//            navigate(
-//                R.id.action_movieDetailFragment_to_productionDetailFragment,
-//                state.movieDetailItem?.let { ProductionDetailStateArgs(it) }
-//            )
-//        }
+    private fun productionSeeAllOnClickListener(movieDetailItem: MovieDetailItem) {
+        navigate(
+            R.id.action_movieDetailFragment_to_productionDetailFragment,
+            ProductionDetailStateArgs(movieDetailItem)
+        )
     }
 
     override fun log(message: String) {

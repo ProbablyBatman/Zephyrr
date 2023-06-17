@@ -9,7 +9,7 @@
         android:id="@+id/production_detail_crew_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_small"
+        android:textSize="@dimen/text_size_medium"
         android:layout_marginBottom="@dimen/margin_small"
         android:textStyle="bold"
         tools:text="Super long crew title for testing"/>
