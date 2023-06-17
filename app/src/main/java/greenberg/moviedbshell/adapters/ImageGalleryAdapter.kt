@@ -11,7 +11,7 @@ import greenberg.moviedbshell.models.ui.PosterItem
 import greenberg.moviedbshell.viewHolders.ImageGalleryViewHolder
 
 class ImageGalleryAdapter(
-    var posters: List<PosterItem> = listOf()
+    var posters: List<PosterItem> = listOf(),
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

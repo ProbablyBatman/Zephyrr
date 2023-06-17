@@ -5,5 +5,5 @@ data class LandingItem(
     val popularMovieItems: List<MovieItem>,
     val soonTMItems: List<MovieItem>,
     val popularTvItems: List<TvItem>,
-    val topRatedTvItems: List<TvItem>
+    val topRatedTvItems: List<TvItem>,
 )

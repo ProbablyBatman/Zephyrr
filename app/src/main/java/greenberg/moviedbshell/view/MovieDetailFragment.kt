@@ -67,7 +67,7 @@ class MovieDetailFragment : BaseFragment() {
         MovieDetailViewModel.provideFactory(
             movieDetailViewModelFactory,
             arguments?.extractArguments<MovieDetailArgs>(PAGE_ARGS)?.movieId ?: -1,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -245,7 +245,7 @@ class MovieDetailFragment : BaseFragment() {
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(backdropImageView)
@@ -394,21 +394,21 @@ class MovieDetailFragment : BaseFragment() {
     private fun highlightedCastOnClickListener(personId: Int) {
         navigate(
             R.id.action_movieDetailFragment_to_personDetailFragment,
-            PersonDetailArgs(personId)
+            PersonDetailArgs(personId),
         )
     }
 
     private fun castSeeAllOnClickListener(castList: List<CastMemberItem>) {
         navigate(
             R.id.action_movieDetailFragment_to_castFragment,
-            CastStateArgs(castList)
+            CastStateArgs(castList),
         )
     }
 
     private fun productionSeeAllOnClickListener(movieDetailItem: MovieDetailItem) {
         navigate(
             R.id.action_movieDetailFragment_to_productionDetailFragment,
-            ProductionDetailStateArgs(movieDetailItem)
+            ProductionDetailStateArgs(movieDetailItem),
         )
     }
 

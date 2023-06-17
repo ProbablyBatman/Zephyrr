@@ -13,7 +13,7 @@ class MovieListMapper
                 overview = result?.overview.orEmpty(),
                 releaseDate = result?.releaseDate.orEmpty(),
                 posterImageUrl = result?.posterPath.orEmpty(),
-                id = result?.id
+                id = result?.id,
             )
         }
         return mappedItems.orEmpty()

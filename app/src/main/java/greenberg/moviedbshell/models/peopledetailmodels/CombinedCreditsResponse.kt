@@ -11,5 +11,5 @@ data class CombinedCreditsResponse(
     val id: Int? = null,
 
     @field:SerializedName("crew")
-    val personCrewResponse: List<PersonCrewResponseItem?>? = null
+    val personCrewResponse: List<PersonCrewResponseItem?>? = null,
 )

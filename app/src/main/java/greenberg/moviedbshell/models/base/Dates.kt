@@ -7,5 +7,5 @@ data class Dates(
     val maximum: String? = null,
 
     @field:SerializedName("minimum")
-    val minimum: String? = null
+    val minimum: String? = null,
 )

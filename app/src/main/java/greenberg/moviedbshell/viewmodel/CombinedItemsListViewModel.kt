@@ -8,9 +8,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrResponse
 import greenberg.moviedbshell.mappers.SearchResultsMapper
-import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.searchmodels.SearchResponse
-import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.PreviewItem
 import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.state.CombinedItemsState
@@ -28,8 +26,8 @@ class CombinedItemsListViewModel
     @Assisted private val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
     // TODO: investigate if search response for this is correct
-    private val mapper: SearchResultsMapper
-): ViewModel() {
+    private val mapper: SearchResultsMapper,
+) : ViewModel() {
 
     private val _combinedItemsState = MutableStateFlow(CombinedItemsState())
     val combinedItemsState: StateFlow<CombinedItemsState> = _combinedItemsState.asStateFlow()
@@ -46,9 +44,11 @@ class CombinedItemsListViewModel
     fun fetchItems() {
         viewModelScope.launch(dispatcher) {
             Timber.d("launching fetchItems")
-            _combinedItemsState.emit(_combinedItemsState.value.copy(
-                isLoading = true
-            ))
+            _combinedItemsState.emit(
+                _combinedItemsState.value.copy(
+                    isLoading = true,
+                ),
+            )
             val previousState = _combinedItemsState.value
             var movieResponse: ZephyrrResponse<SearchResponse>? = null
             var tvResponse: ZephyrrResponse<SearchResponse>? = null
@@ -110,41 +110,49 @@ class CombinedItemsListViewModel
 
             when {
                 movieError == null && tvError == null -> {
-                    _combinedItemsState.emit(previousState.copy(
-                        moviePageNumber = previousState.moviePageNumber + 1,
-                        tvPageNumber = previousState.tvPageNumber + 1,
-                        isLoading = false,
-                        combinedItemList = previousState.combinedItemList + combinedResults,
-                        isMovieMaxPages = isMaxMoviePages,
-                        isTvMaxPages = isMaxTvPages
-                    ))
+                    _combinedItemsState.emit(
+                        previousState.copy(
+                            moviePageNumber = previousState.moviePageNumber + 1,
+                            tvPageNumber = previousState.tvPageNumber + 1,
+                            isLoading = false,
+                            combinedItemList = previousState.combinedItemList + combinedResults,
+                            isMovieMaxPages = isMaxMoviePages,
+                            isTvMaxPages = isMaxTvPages,
+                        ),
+                    )
                 }
                 // TODO: make movie error take the main assumption for now, but fix this in general.
                 // maybe they should be separate?
                 movieError != null && tvError != null -> {
-                    _combinedItemsState.emit(previousState.copy(
-                        isLoading = false,
-                        error = movieError
-                    ))
+                    _combinedItemsState.emit(
+                        previousState.copy(
+                            isLoading = false,
+                            error = movieError,
+                        ),
+                    )
                 }
                 movieError != null -> {
-                    _combinedItemsState.emit(previousState.copy(
-                        tvPageNumber = previousState.tvPageNumber + 1,
-                        combinedItemList = previousState.combinedItemList + combinedResults,
-                        isTvMaxPages = isMaxTvPages,
-                        isLoading = false,
-                        error = movieError
-                    ))
+                    _combinedItemsState.emit(
+                        previousState.copy(
+                            tvPageNumber = previousState.tvPageNumber + 1,
+                            combinedItemList = previousState.combinedItemList + combinedResults,
+                            isTvMaxPages = isMaxTvPages,
+                            isLoading = false,
+                            error = movieError,
+                        ),
+                    )
                 }
                 // tvError isn't null is the only remaining item
                 else -> {
-                    _combinedItemsState.emit(previousState.copy(
-                        moviePageNumber = previousState.moviePageNumber + 1,
-                        combinedItemList = previousState.combinedItemList + combinedResults,
-                        isMovieMaxPages = isMaxMoviePages,
-                        isLoading = false,
-                        error = tvError
-                    ))
+                    _combinedItemsState.emit(
+                        previousState.copy(
+                            moviePageNumber = previousState.moviePageNumber + 1,
+                            combinedItemList = previousState.combinedItemList + combinedResults,
+                            isMovieMaxPages = isMaxMoviePages,
+                            isLoading = false,
+                            error = tvError,
+                        ),
+                    )
                 }
             }
 
@@ -189,5 +197,4 @@ class CombinedItemsListViewModel
             }
         }
     }
-
 }

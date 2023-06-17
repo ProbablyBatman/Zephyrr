@@ -44,5 +44,5 @@ data class PersonDetailResponse(
     val adult: Boolean? = null,
 
     @field:SerializedName("homepage")
-    val homepage: String? = null
+    val homepage: String? = null,
 )

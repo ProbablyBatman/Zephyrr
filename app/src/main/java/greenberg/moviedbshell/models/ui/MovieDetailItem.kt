@@ -22,5 +22,5 @@ data class MovieDetailItem(
     val posterUrls: List<PosterItem>,
     val crewMembers: List<CrewMemberItem>,
     val productionCompanies: List<ProductionCompanyItem>,
-    val productionCountries: List<ProductionCountryItem>
+    val productionCountries: List<ProductionCountryItem>,
 ) : ProductionDetailItem

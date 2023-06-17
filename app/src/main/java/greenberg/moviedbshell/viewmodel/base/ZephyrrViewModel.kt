@@ -1,8 +1,6 @@
 package greenberg.moviedbshell.viewmodel.base
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import greenberg.moviedbshell.state.base.ZephyrrState
 
 abstract class ZephyrrViewModel : ViewModel() {
 

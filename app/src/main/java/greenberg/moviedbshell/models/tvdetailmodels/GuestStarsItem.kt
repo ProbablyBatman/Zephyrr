@@ -34,5 +34,5 @@ data class GuestStarsItem(
     val adult: Boolean? = null,
 
     @field:SerializedName("order")
-    val order: Int? = null
+    val order: Int? = null,
 )

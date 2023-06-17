@@ -38,5 +38,5 @@ data class EpisodesItem(
     val crew: List<CrewResponseItem?>? = null,
 
     @field:SerializedName("guest_stars")
-    val guestStars: List<GuestStarsItem?>? = null
+    val guestStars: List<GuestStarsItem?>? = null,
 )

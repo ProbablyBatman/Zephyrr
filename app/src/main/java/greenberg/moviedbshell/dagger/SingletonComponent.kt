@@ -1,7 +1,5 @@
 package greenberg.moviedbshell.dagger
 
-import dagger.Component
-import dagger.Module
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -17,7 +15,6 @@ import greenberg.moviedbshell.viewmodel.RecentlyReleasedViewModel
 import greenberg.moviedbshell.viewmodel.SearchResultsViewModel
 import greenberg.moviedbshell.viewmodel.SoonTMViewModel
 import greenberg.moviedbshell.viewmodel.TvDetailViewModel
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @EntryPoint

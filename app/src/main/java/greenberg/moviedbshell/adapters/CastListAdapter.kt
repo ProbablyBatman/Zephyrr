@@ -15,7 +15,7 @@ import greenberg.moviedbshell.viewHolders.CastListViewHolder
 
 class CastListAdapter(
     val onClickListener: (Int) -> Unit,
-    val isBubble: Boolean = false
+    val isBubble: Boolean = false,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var castMemberList: List<CastMemberItem> = listOf()
@@ -32,8 +32,8 @@ class CastListAdapter(
             LayoutInflater.from(parent.context).inflate(
                 layout,
                 parent,
-                false
-            )
+                false,
+            ),
         )
     }
 
@@ -59,7 +59,7 @@ class CastListAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.actorImage)

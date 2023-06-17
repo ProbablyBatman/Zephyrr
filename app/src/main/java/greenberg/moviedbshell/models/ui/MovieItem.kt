@@ -9,9 +9,9 @@ data class MovieItem(
     val overview: String,
     val releaseDate: String,
     override val posterImageUrl: String,
-    override val id: Int?
+    override val id: Int?,
 ) : PreviewItem(
     posterImageUrl,
     id,
-    MediaType.MOVIE
+    MediaType.MOVIE,
 )

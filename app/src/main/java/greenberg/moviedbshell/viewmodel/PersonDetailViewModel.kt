@@ -9,9 +9,7 @@ import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrResponse
 import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.state.PersonDetailState
-import greenberg.moviedbshell.view.PersonDetailFragment
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +26,7 @@ class PersonDetailViewModel
     private val _personDetailState = MutableStateFlow(
         PersonDetailState(
             personId = personId,
-        )
+        ),
     )
     val personDetailState: StateFlow<PersonDetailState> = _personDetailState.asStateFlow()
 
@@ -46,18 +44,22 @@ class PersonDetailViewModel
             Timber.d("launching fetchPersonDetail")
             when (val response = tmdbRepository.fetchPersonDetail(this, personId)) {
                 is ZephyrrResponse.Success -> {
-                    _personDetailState.emit(_personDetailState.value.copy(
-                        personDetailItem = response.value,
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _personDetailState.emit(
+                        _personDetailState.value.copy(
+                            personDetailItem = response.value,
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
-                    _personDetailState.emit(_personDetailState.value.copy(
-                        personDetailItem = null,
-                        isLoading = false,
-                        error = response.throwable,
-                    ))
+                    _personDetailState.emit(
+                        _personDetailState.value.copy(
+                            personDetailItem = null,
+                            isLoading = false,
+                            error = response.throwable,
+                        ),
+                    )
                 }
             }
         }
@@ -67,7 +69,7 @@ class PersonDetailViewModel
         fun provideFactory(
             assistedFactory: Factory,
             personId: Int,
-            dispatcher: CoroutineDispatcher
+            dispatcher: CoroutineDispatcher,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(personId, dispatcher) as T

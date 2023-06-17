@@ -23,5 +23,5 @@ data class SeasonsItem(
     val id: Int? = null,
 
     @field:SerializedName("poster_path")
-    val posterPath: String? = null
+    val posterPath: String? = null,
 )

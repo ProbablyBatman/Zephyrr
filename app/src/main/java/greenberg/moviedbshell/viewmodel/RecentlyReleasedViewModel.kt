@@ -7,8 +7,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrResponse
-import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.mappers.MovieListMapper
+import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,7 +22,7 @@ class RecentlyReleasedViewModel
     @Assisted override val movieId: Int,
     @Assisted override val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
-    private val mapper: MovieListMapper
+    private val mapper: MovieListMapper,
 ) : BaseMovieListViewModel<MovieListState>(movieId, dispatcher) {
 
     private val _recentlyReleasedState = MutableStateFlow(MovieListState())
@@ -45,19 +45,23 @@ class RecentlyReleasedViewModel
             when (val response = tmdbRepository.fetchRecentlyReleased(currentPageNumber)) {
                 is ZephyrrResponse.Success -> {
                     val totalPages = response.value.totalPages
-                    _recentlyReleasedState.emit(previousState.copy(
-                        pageNumber = currentPageNumber + 1,
-                        isLoading = false,
-                        movieList = previousState.movieList + mapper.mapToEntity(response.value),
-                        shouldShowMaxPages = totalPages != null && currentPageNumber >= totalPages,
-                    ))
+                    _recentlyReleasedState.emit(
+                        previousState.copy(
+                            pageNumber = currentPageNumber + 1,
+                            isLoading = false,
+                            movieList = previousState.movieList + mapper.mapToEntity(response.value),
+                            shouldShowMaxPages = totalPages != null && currentPageNumber >= totalPages,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
-                    _recentlyReleasedState.emit(previousState.copy(
-                        pageNumber = previousState.pageNumber,
-                        isLoading = false,
-                        error = response.throwable
-                    ))
+                    _recentlyReleasedState.emit(
+                        previousState.copy(
+                            pageNumber = previousState.pageNumber,
+                            isLoading = false,
+                            error = response.throwable,
+                        ),
+                    )
                 }
             }
         }
@@ -68,31 +72,34 @@ class RecentlyReleasedViewModel
             val previousState = _recentlyReleasedState.value
             when (val response = tmdbRepository.fetchRecentlyReleased(1)) {
                 is ZephyrrResponse.Success -> {
-                    _recentlyReleasedState.emit(previousState.copy(
-                        pageNumber = previousState.pageNumber + 1,
-                        movieList = mapper.mapToEntity(response.value),
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _recentlyReleasedState.emit(
+                        previousState.copy(
+                            pageNumber = previousState.pageNumber + 1,
+                            movieList = mapper.mapToEntity(response.value),
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
                     // Assumes the initial list is empty
-                    _recentlyReleasedState.emit(previousState.copy(
-                        pageNumber = 1,
-                        isLoading = false,
-                        error = response.throwable,
-                    ))
+                    _recentlyReleasedState.emit(
+                        previousState.copy(
+                            pageNumber = 1,
+                            isLoading = false,
+                            error = response.throwable,
+                        ),
+                    )
                 }
             }
         }
     }
 
-
     companion object {
         fun provideFactory(
             assistedFactory: Factory,
             movieId: Int,
-            dispatcher: CoroutineDispatcher
+            dispatcher: CoroutineDispatcher,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(movieId, dispatcher) as T

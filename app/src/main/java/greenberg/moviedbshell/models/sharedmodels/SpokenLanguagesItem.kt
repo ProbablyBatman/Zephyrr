@@ -11,5 +11,5 @@ data class SpokenLanguagesItem(
     val iso6391: String? = null,
 
     @field:SerializedName("english_name")
-    val englishName: String? = null
+    val englishName: String? = null,
 )

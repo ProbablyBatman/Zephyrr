@@ -15,7 +15,7 @@ class TvDetailMapper
     private val productionCountryMapper: ProductionCountryMapper,
     private val aggregateCastMapper: AggregateCastMapper,
     private val aggregateCrewMapper: AggregateCrewMapper,
-    private val posterMapper: PosterGalleryMapper
+    private val posterMapper: PosterGalleryMapper,
 ) : Mapper<TvDetailResponseContainer, TvDetailItem> {
     override fun mapToEntity(item: TvDetailResponseContainer?): TvDetailItem {
         val tvDetail = item?.tvShowResponse
@@ -28,7 +28,7 @@ class TvDetailMapper
                 job = "Creator",
                 name = it?.name.orEmpty(),
                 posterUrl = it?.profilePath.orEmpty(),
-                id = it?.id
+                id = it?.id,
             )
             crewMembers.add(0, creator)
         }
@@ -38,7 +38,7 @@ class TvDetailMapper
                 job = "Created By",
                 name = it?.name.orEmpty(),
                 posterUrl = it?.profilePath.orEmpty(),
-                id = it?.id
+                id = it?.id,
             )
         }
         return TvDetailItem(
@@ -66,7 +66,7 @@ class TvDetailMapper
             networks = networksMapper.mapToEntity(tvDetail?.networks),
             productionCompanies = productionCompanyMapper.mapToEntity(tvDetail?.productionCompanies),
             productionCountries = productionCountryMapper.mapToEntity(tvDetail?.productionCountries),
-            posterUrls = posterMapper.mapToEntity(imageGallery)
+            posterUrls = posterMapper.mapToEntity(imageGallery),
         )
     }
 }

@@ -11,7 +11,7 @@ class ProductionCompanyMapper
             ProductionCompanyItem(
                 name = productionCompanyItem?.name.orEmpty(),
                 logoPath = productionCompanyItem?.logoPath.orEmpty(),
-                originCountry = productionCompanyItem?.originCountry.orEmpty()
+                originCountry = productionCompanyItem?.originCountry.orEmpty(),
             )
         }
         return mappedItems.orEmpty()

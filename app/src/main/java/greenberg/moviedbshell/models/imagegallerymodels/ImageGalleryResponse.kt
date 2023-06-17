@@ -11,5 +11,5 @@ data class ImageGalleryResponse(
     val posters: List<PostersItem?>? = null,
 
     @field:SerializedName("id")
-    val id: Int? = null
+    val id: Int? = null,
 )

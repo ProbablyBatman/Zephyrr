@@ -23,5 +23,5 @@ data class CastResponseItem(
     val id: Int? = null,
 
     @field:SerializedName("order")
-    val order: Int? = null
+    val order: Int? = null,
 )

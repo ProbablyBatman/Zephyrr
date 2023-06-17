@@ -20,7 +20,7 @@ class SearchResultsMapper
                         overview = result.overview.orEmpty(),
                         releaseDate = result.releaseDate.orEmpty(),
                         posterImageUrl = result.posterPath.orEmpty(),
-                        id = result.id
+                        id = result.id,
                     )
                 MediaType.TV -> {
                     TvItem(
@@ -28,7 +28,7 @@ class SearchResultsMapper
                         overview = result.overview.orEmpty(),
                         firstAirDate = result.firstAirDate.orEmpty(),
                         posterImageUrl = result.posterPath.orEmpty(),
-                        id = result.id
+                        id = result.id,
                     )
                 }
                 MediaType.PERSON -> {
@@ -36,7 +36,7 @@ class SearchResultsMapper
                         name = result.name.orEmpty(),
                         posterImageUrl = result.profilePath.orEmpty(),
                         knownForItems = knownForMapper.mapToEntity(result.knownFor),
-                        id = result.id
+                        id = result.id,
                     )
                 }
                 else -> PreviewItem(mediaType = MediaType.UNKNOWN)
@@ -53,7 +53,7 @@ class SearchResultsMapper
                 overview = result?.overview.orEmpty(),
                 releaseDate = result?.releaseDate.orEmpty(),
                 posterImageUrl = result?.posterPath.orEmpty(),
-                id = result?.id
+                id = result?.id,
             )
         }
         return mappedItems ?: emptyList()

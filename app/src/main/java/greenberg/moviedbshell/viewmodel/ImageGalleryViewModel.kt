@@ -7,10 +7,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrResponse
-import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.mappers.BackdropGalleryMapper
 import greenberg.moviedbshell.mappers.PosterGalleryMapper
 import greenberg.moviedbshell.models.MediaType
+import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.state.ImageGalleryState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,14 +26,14 @@ class ImageGalleryViewModel
     @Assisted private val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
     private val posterMapper: PosterGalleryMapper,
-    private val backdropMapper: BackdropGalleryMapper
+    private val backdropMapper: BackdropGalleryMapper,
 ) : ViewModel() {
 
     private val _imageGalleryState = MutableStateFlow(
         ImageGalleryState(
             itemId = itemId,
             mediaType = mediaType,
-        )
+        ),
     )
     val imageGalleryState: StateFlow<ImageGalleryState> = _imageGalleryState.asStateFlow()
 
@@ -42,7 +42,7 @@ class ImageGalleryViewModel
         fun create(
             itemId: Int,
             mediaType: MediaType,
-            dispatcher: CoroutineDispatcher
+            dispatcher: CoroutineDispatcher,
         ): ImageGalleryViewModel
     }
 
@@ -66,20 +66,24 @@ class ImageGalleryViewModel
             Timber.d("launching fetchMovieImages")
             when (val response = tmdbRepository.fetchMovieImages(itemId)) {
                 is ZephyrrResponse.Success -> {
-                    _imageGalleryState.emit(_imageGalleryState.value.copy(
-                        posterItems = posterMapper.mapToEntity(response.value),
-                        backdropItems = backdropMapper.mapToEntity(response.value),
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _imageGalleryState.emit(
+                        _imageGalleryState.value.copy(
+                            posterItems = posterMapper.mapToEntity(response.value),
+                            backdropItems = backdropMapper.mapToEntity(response.value),
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
-                    _imageGalleryState.emit(_imageGalleryState.value.copy(
-                        posterItems = emptyList(),
-                        backdropItems = emptyList(),
-                        error = response.throwable,
-                        isLoading = false,
-                    ))
+                    _imageGalleryState.emit(
+                        _imageGalleryState.value.copy(
+                            posterItems = emptyList(),
+                            backdropItems = emptyList(),
+                            error = response.throwable,
+                            isLoading = false,
+                        ),
+                    )
                 }
             }
         }
@@ -90,20 +94,24 @@ class ImageGalleryViewModel
             Timber.d("launching fetchTvImages")
             when (val response = tmdbRepository.fetchTvImages(itemId)) {
                 is ZephyrrResponse.Success -> {
-                    _imageGalleryState.emit(_imageGalleryState.value.copy(
-                        posterItems = posterMapper.mapToEntity(response.value),
-                        backdropItems = backdropMapper.mapToEntity(response.value),
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _imageGalleryState.emit(
+                        _imageGalleryState.value.copy(
+                            posterItems = posterMapper.mapToEntity(response.value),
+                            backdropItems = backdropMapper.mapToEntity(response.value),
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
-                    _imageGalleryState.emit(_imageGalleryState.value.copy(
-                        posterItems = emptyList(),
-                        backdropItems = emptyList(),
-                        error = response.throwable,
-                        isLoading = false,
-                    ))
+                    _imageGalleryState.emit(
+                        _imageGalleryState.value.copy(
+                            posterItems = emptyList(),
+                            backdropItems = emptyList(),
+                            error = response.throwable,
+                            isLoading = false,
+                        ),
+                    )
                 }
             }
         }
@@ -114,7 +122,7 @@ class ImageGalleryViewModel
             assistedFactory: Factory,
             itemId: Int,
             mediaType: MediaType,
-            dispatcher: CoroutineDispatcher
+            dispatcher: CoroutineDispatcher,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(itemId, mediaType, dispatcher) as T

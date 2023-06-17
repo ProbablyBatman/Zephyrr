@@ -20,7 +20,7 @@ class CreditsCastMapper
                         type = Person.CAST,
                         posterImageUrl = castItem.posterPath.orEmpty(),
                         mediaType = castMediaType,
-                        id = castItem.id
+                        id = castItem.id,
                     )
                 }
                 MediaType.TV -> {
@@ -31,7 +31,7 @@ class CreditsCastMapper
                         type = Person.CAST,
                         posterImageUrl = castItem.posterPath.orEmpty(),
                         mediaType = castMediaType,
-                        id = castItem.id
+                        id = castItem.id,
                     )
                 }
                 else -> {
@@ -50,7 +50,7 @@ class CreditsCastMapper
                         type = Person.CREW,
                         posterImageUrl = crewItem.posterPath.orEmpty(),
                         mediaType = crewMediaType,
-                        id = crewItem.id
+                        id = crewItem.id,
                     )
                 }
                 MediaType.TV -> {
@@ -61,7 +61,7 @@ class CreditsCastMapper
                         type = Person.CREW,
                         posterImageUrl = crewItem.posterPath.orEmpty(),
                         mediaType = crewMediaType,
-                        id = crewItem.id
+                        id = crewItem.id,
                     )
                 }
                 else -> {

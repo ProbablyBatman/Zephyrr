@@ -7,5 +7,5 @@ data class ProductionCountriesItem(
     val iso31661: String? = null,
 
     @field:SerializedName("name")
-    val name: String? = null
+    val name: String? = null,
 )

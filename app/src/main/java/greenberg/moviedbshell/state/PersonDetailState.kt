@@ -9,9 +9,9 @@ data class PersonDetailState(
     val personDetailItem: PersonDetailItem? = null,
     val error: Throwable? = null,
     val isLoading: Boolean = true,
-) 
+)
 
 @Parcelize
 data class PersonDetailArgs(
-    val personId: Int
+    val personId: Int,
 ) : Parcelable

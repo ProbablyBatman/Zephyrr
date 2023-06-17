@@ -8,5 +8,5 @@ open class CastMemberItem(
     open val role: String,
     open val name: String,
     open val posterUrl: String,
-    open val id: Int?
+    open val id: Int?,
 ) : Parcelable

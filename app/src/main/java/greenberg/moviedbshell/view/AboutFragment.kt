@@ -32,7 +32,7 @@ class AboutFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         return inflater.inflate(R.layout.about_layout, container, false)
     }
@@ -56,7 +56,7 @@ class AboutFragment : Fragment() {
         setUpLinks()
         aboutMeTextView?.text = resources.getString(
             R.string.about_me,
-            Calendar.getInstance().get(Calendar.YEAR).toString()
+            Calendar.getInstance().get(Calendar.YEAR).toString(),
         )
         versionTextView.text =
             resources.getString(R.string.version_number, BuildConfig.VERSION_NAME)
@@ -72,7 +72,9 @@ class AboutFragment : Fragment() {
                     startActivity(browserIntent)
                 }
             },
-            0, privacyPolicyUrl.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+            0,
+            privacyPolicyUrl.length,
+            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
         privacyPolicyLink?.text = privacySpannableString
         privacyPolicyLink?.movementMethod = LinkMovementMethod.getInstance()
@@ -86,7 +88,9 @@ class AboutFragment : Fragment() {
                     startActivity(browserIntent)
                 }
             },
-            0, termsAndConditionsUrl.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+            0,
+            termsAndConditionsUrl.length,
+            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
         termsAndConditionsLink?.text = termsSpannableString
         termsAndConditionsLink?.movementMethod = LinkMovementMethod.getInstance()
@@ -100,7 +104,9 @@ class AboutFragment : Fragment() {
                     startActivity(browserIntent)
                 }
             },
-            0, duaneUrl.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+            0,
+            duaneUrl.length,
+            SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
         duaneLink.text = duaneSpannableString
         duaneLink.movementMethod = LinkMovementMethod.getInstance()

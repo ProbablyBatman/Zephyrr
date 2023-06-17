@@ -10,7 +10,7 @@ class MovieDetailMapper
     private val crewMemberMapper: CrewMemberMapper,
     private val productionCompanyMapper: ProductionCompanyMapper,
     private val productionCountryMapper: ProductionCountryMapper,
-    private val posterMapper: PosterGalleryMapper
+    private val posterMapper: PosterGalleryMapper,
 ) : Mapper<MovieDetailResponseContainer, MovieDetailItem> {
     override fun mapToEntity(item: MovieDetailResponseContainer?): MovieDetailItem {
         val movieDetail = item?.movieDetailResponse
@@ -35,7 +35,7 @@ class MovieDetailMapper
             crewMembers = crewMemberMapper.mapToEntity(creditsDetail?.crew),
             productionCompanies = productionCompanyMapper.mapToEntity(movieDetail?.productionCompanies),
             productionCountries = productionCountryMapper.mapToEntity(movieDetail?.productionCountries),
-            posterUrls = posterMapper.mapToEntity(imageGallery)
+            posterUrls = posterMapper.mapToEntity(imageGallery),
         )
     }
 }

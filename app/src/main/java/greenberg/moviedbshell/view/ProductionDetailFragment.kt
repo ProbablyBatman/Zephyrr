@@ -34,7 +34,7 @@ class ProductionDetailFragment : BaseFragment() {
     // Hate !! here, but it should always be here since there's no call made
     private val viewModel: ProductionDetailViewModel by viewModels {
         ProductionDetailViewModel.provideFactory(
-            arguments?.extractArguments<ProductionDetailStateArgs>(PAGE_ARGS)?.productionDetailItem!!
+            arguments?.extractArguments<ProductionDetailStateArgs>(PAGE_ARGS)?.productionDetailItem!!,
         )
     }
 
@@ -115,7 +115,7 @@ class ProductionDetailFragment : BaseFragment() {
     private fun onClickListener(personId: Int) {
         navigate(
             R.id.action_productionDetailFragment_to_personDetailFragment,
-            PersonDetailArgs(personId)
+            PersonDetailArgs(personId),
         )
     }
 

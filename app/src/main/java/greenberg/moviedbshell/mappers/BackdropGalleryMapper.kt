@@ -14,7 +14,7 @@ class BackdropGalleryMapper
                 voteAverage = backdrop?.voteAverage ?: 0.0,
                 voteCount = backdrop?.voteCount ?: 0,
                 width = backdrop?.width ?: 0,
-                height = backdrop?.height ?: 0
+                height = backdrop?.height ?: 0,
             )
         } ?: listOf()
     }

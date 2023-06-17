@@ -11,12 +11,12 @@ import greenberg.moviedbshell.models.ui.PersonItem
 
 class MultiSearchQueryItemsAdapter(
     var currentQueries: List<PersonItem> = listOf(),
-    val removeOnClickListener: (Int) -> Unit
+    val removeOnClickListener: (Int) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MultiSearchQueryItemsViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.multi_search_query_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.multi_search_query_item, parent, false),
         )
     }
 

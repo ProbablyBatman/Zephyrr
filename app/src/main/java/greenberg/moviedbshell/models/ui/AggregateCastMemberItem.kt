@@ -10,11 +10,11 @@ class AggregateCastMemberItem(
     val roles: List<RoleItem>,
     override val name: String,
     override val posterUrl: String,
-    override val id: Int?
+    override val id: Int?,
 ) : CastMemberItem(
     // Always assume that a person has a role. Maybe one day this will backfire, but I imagine not.
     roles[0].character,
     name,
     posterUrl,
-    id
+    id,
 )

@@ -6,19 +6,16 @@ import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import greenberg.moviedbshell.mappers.SearchResultsMapper
 import greenberg.moviedbshell.models.ui.PersonItem
-import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.state.MultiSearchState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class MultiSearchViewModel
 @AssistedInject constructor(
-    @Assisted private val dispatcher: CoroutineDispatcher
+    @Assisted private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -35,8 +32,8 @@ class MultiSearchViewModel
         viewModelScope.launch(dispatcher) {
             _multiSearchState.emit(
                 _multiSearchState.value.copy(
-                    currentQuery = updatedQuery
-                )
+                    currentQuery = updatedQuery,
+                ),
             )
         }
     }
@@ -53,8 +50,8 @@ class MultiSearchViewModel
             _multiSearchState.emit(
                 previousState.copy(
                     currentQuery = "",
-                    queries = currentQueries
-                )
+                    queries = currentQueries,
+                ),
             )
         }
     }
@@ -64,8 +61,8 @@ class MultiSearchViewModel
             currentQueries.removeAt(position)
             _multiSearchState.emit(
                 _multiSearchState.value.copy(
-                    queries = currentQueries
-                )
+                    queries = currentQueries,
+                ),
             )
         }
     }

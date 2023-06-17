@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class CrewViewModel(
-    crewMemberItems: List<CrewMemberItem>
+    crewMemberItems: List<CrewMemberItem>,
 ) : ViewModel() {
 
     private val _crewMemberState = MutableStateFlow(CrewState(crewMemberItems))

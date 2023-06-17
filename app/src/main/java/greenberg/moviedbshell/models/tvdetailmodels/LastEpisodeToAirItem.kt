@@ -32,5 +32,5 @@ data class LastEpisodeToAirItem(
     val stillPath: String? = null,
 
     @field:SerializedName("vote_count")
-    val voteCount: Int? = null
+    val voteCount: Int? = null,
 )

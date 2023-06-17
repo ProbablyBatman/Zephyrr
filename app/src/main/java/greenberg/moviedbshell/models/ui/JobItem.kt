@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class JobItem(
     val job: String,
-    val episodeCount: Int
+    val episodeCount: Int,
 ) : Parcelable

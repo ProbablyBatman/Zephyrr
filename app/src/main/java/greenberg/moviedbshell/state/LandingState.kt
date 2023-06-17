@@ -3,7 +3,7 @@ package greenberg.moviedbshell.state
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.TvItem
 
-//TODO: file rename
+// TODO: file rename
 data class MovieLandingState(
     val response: List<MovieItem> = emptyList(),
     val error: Throwable? = null,

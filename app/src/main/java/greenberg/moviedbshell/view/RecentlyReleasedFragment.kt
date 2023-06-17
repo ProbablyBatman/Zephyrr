@@ -29,7 +29,7 @@ class RecentlyReleasedFragment : BaseMovieListFragment<RecentlyReleasedViewModel
         RecentlyReleasedViewModel.provideFactory(
             recentReleasedViewModelFactory,
             arguments?.extractArguments<MovieDetailArgs>(PAGE_ARGS)?.movieId ?: -1,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -94,7 +94,7 @@ class RecentlyReleasedFragment : BaseMovieListFragment<RecentlyReleasedViewModel
     override fun onClickListener(movieId: Int) {
         navigate(
             R.id.action_recentlyReleasedFragment_to_movieDetailFragment,
-            MovieDetailArgs(movieId)
+            MovieDetailArgs(movieId),
         )
     }
 

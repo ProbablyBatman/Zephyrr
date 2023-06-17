@@ -14,7 +14,6 @@ import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.state.base.BaseMovieListState
 import greenberg.moviedbshell.viewmodel.PopularMoviesViewModel
-import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -30,7 +29,7 @@ class PopularMoviesFragment : BaseMovieListFragment<PopularMoviesViewModel, Movi
         PopularMoviesViewModel.provideFactory(
             popularMoviesViewModelFactory,
             arguments?.extractArguments<MovieDetailArgs>(PAGE_ARGS)?.movieId ?: -1,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -95,7 +94,7 @@ class PopularMoviesFragment : BaseMovieListFragment<PopularMoviesViewModel, Movi
     override fun onClickListener(movieId: Int) {
         navigate(
             R.id.action_popularMoviesFragment_to_movieDetailFragment,
-            MovieDetailArgs(movieId)
+            MovieDetailArgs(movieId),
         )
     }
 

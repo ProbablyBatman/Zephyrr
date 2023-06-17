@@ -19,7 +19,7 @@ class KnownForMapper
                         overview = knownForItem.overview.orEmpty(),
                         releaseDate = knownForItem.releaseDate.orEmpty(),
                         posterImageUrl = knownForItem.posterPath.orEmpty(),
-                        id = knownForItem.id
+                        id = knownForItem.id,
                     )
                 MediaType.TV -> {
                     TvItem(
@@ -27,7 +27,7 @@ class KnownForMapper
                         overview = knownForItem.overview.orEmpty(),
                         firstAirDate = knownForItem.firstAirDate.orEmpty(),
                         posterImageUrl = knownForItem.posterPath.orEmpty(),
-                        id = knownForItem.id
+                        id = knownForItem.id,
                     )
                 }
                 else -> PreviewItem(mediaType = MediaType.UNKNOWN)

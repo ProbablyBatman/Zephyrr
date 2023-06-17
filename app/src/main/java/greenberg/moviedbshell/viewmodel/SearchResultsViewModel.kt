@@ -7,10 +7,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrResponse
-import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.mappers.SearchResultsMapper
+import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.state.SearchResultsState
-import greenberg.moviedbshell.view.SearchResultsFragment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,14 +21,13 @@ class SearchResultsViewModel
     @Assisted private val query: String,
     @Assisted private val dispatcher: CoroutineDispatcher,
     private val tmdbRepository: TmdbRepository,
-    private val mapper: SearchResultsMapper
+    private val mapper: SearchResultsMapper,
 ) : ViewModel() {
 
     private val _searchResultState = MutableStateFlow(
-        SearchResultsState(query)
+        SearchResultsState(query),
     )
     val searchResultState = _searchResultState.asStateFlow()
-
 
     @AssistedFactory
     interface Factory {
@@ -44,28 +42,34 @@ class SearchResultsViewModel
     fun fetchSearchResults() {
         viewModelScope.launch(dispatcher) {
             Timber.d("launching fetchSearchResults")
-            _searchResultState.emit(_searchResultState.value.copy(
-                isLoading = true
-            ))
+            _searchResultState.emit(
+                _searchResultState.value.copy(
+                    isLoading = true,
+                ),
+            )
             val previousState = _searchResultState.value
             when (val response = tmdbRepository.fetchSearchMulti(query, previousState.pageNumber)) {
                 is ZephyrrResponse.Success -> {
                     Timber.d("fetchSearchResults success:$response")
-                    _searchResultState.emit(_searchResultState.value.copy(
-                        searchResults = previousState.searchResults + mapper.mapToEntity(response.value),
-                        pageNumber = previousState.pageNumber + 1,
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _searchResultState.emit(
+                        _searchResultState.value.copy(
+                            searchResults = previousState.searchResults + mapper.mapToEntity(response.value),
+                            pageNumber = previousState.pageNumber + 1,
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
                     Timber.d("fetchSearchResults failure:$response")
                     // TODO: do I copy the existing response if the new call fails?
                     // Retryable errors?
-                    _searchResultState.emit(_searchResultState.value.copy(
-                        error = response.throwable,
-                        isLoading = false
-                    ))
+                    _searchResultState.emit(
+                        _searchResultState.value.copy(
+                            error = response.throwable,
+                            isLoading = false,
+                        ),
+                    )
                 }
             }
         }

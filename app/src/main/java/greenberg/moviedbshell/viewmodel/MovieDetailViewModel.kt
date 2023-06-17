@@ -20,13 +20,13 @@ class MovieDetailViewModel
 @AssistedInject constructor(
     @Assisted private val movieId: Int,
     @Assisted private val dispatcher: CoroutineDispatcher,
-    private val tmdbRepository: TmdbRepository
+    private val tmdbRepository: TmdbRepository,
 ) : ViewModel() {
 
     private val _movieDetailState = MutableStateFlow(
         MovieDetailState(
             movieId = movieId,
-        )
+        ),
     )
     val movieDetailState: StateFlow<MovieDetailState> = _movieDetailState.asStateFlow()
 
@@ -44,18 +44,22 @@ class MovieDetailViewModel
             Timber.d("launching fetchMovieDetail")
             when (val response = tmdbRepository.fetchMovieDetail(this, movieId)) {
                 is ZephyrrResponse.Success -> {
-                    _movieDetailState.emit(_movieDetailState.value.copy(
-                        movieDetailItem = response.value,
-                        isLoading = false,
-                        error = null
-                    ))
+                    _movieDetailState.emit(
+                        _movieDetailState.value.copy(
+                            movieDetailItem = response.value,
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
-                    _movieDetailState.emit(_movieDetailState.value.copy(
-                        movieDetailItem = null,
-                        isLoading = false,
-                        error = response.throwable,
-                    ))
+                    _movieDetailState.emit(
+                        _movieDetailState.value.copy(
+                            movieDetailItem = null,
+                            isLoading = false,
+                            error = response.throwable,
+                        ),
+                    )
                 }
             }
         }
@@ -65,7 +69,7 @@ class MovieDetailViewModel
         fun provideFactory(
             assistedFactory: Factory,
             movieId: Int,
-            dispatcher: CoroutineDispatcher
+            dispatcher: CoroutineDispatcher,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(movieId, dispatcher) as T

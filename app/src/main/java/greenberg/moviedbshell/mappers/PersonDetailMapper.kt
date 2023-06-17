@@ -16,7 +16,7 @@ class PersonDetailMapper
             placeOfBirth = personDetailResponse?.placeOfBirth.orEmpty(),
             biography = personDetailResponse?.biography.orEmpty(),
             posterImageUrl = personDetailResponse?.profilePath.orEmpty(),
-            combinedCredits = creditMapper.mapToEntity(creditsResponse)
+            combinedCredits = creditMapper.mapToEntity(creditsResponse),
         )
     }
 }

@@ -8,14 +8,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import greenberg.moviedbshell.R
-import greenberg.moviedbshell.ZephyrrApplication
 import greenberg.moviedbshell.base.BaseMovieListFragment
 import greenberg.moviedbshell.extensions.extractArguments
 import greenberg.moviedbshell.state.MovieDetailArgs
 import greenberg.moviedbshell.state.MovieListState
 import greenberg.moviedbshell.state.base.BaseMovieListState
 import greenberg.moviedbshell.viewmodel.SoonTMViewModel
-import greenberg.moviedbshell.viewmodel.base.BaseMovieListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,7 +29,7 @@ class SoonTMFragment : BaseMovieListFragment<SoonTMViewModel, MovieListState>() 
         SoonTMViewModel.provideFactory(
             soonTMViewModelFactory,
             arguments?.extractArguments<MovieDetailArgs>(PAGE_ARGS)?.movieId ?: -1,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -96,7 +94,7 @@ class SoonTMFragment : BaseMovieListFragment<SoonTMViewModel, MovieListState>() 
     override fun onClickListener(movieId: Int) {
         navigate(
             R.id.action_soonTMFragment_to_movieDetailFragment,
-            MovieDetailArgs(movieId)
+            MovieDetailArgs(movieId),
         )
     }
 

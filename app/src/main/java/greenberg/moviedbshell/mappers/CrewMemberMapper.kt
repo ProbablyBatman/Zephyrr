@@ -14,7 +14,7 @@ class CrewMemberMapper
                 job = crewResponseItem?.job.orEmpty(),
                 name = crewResponseItem?.name.orEmpty(),
                 posterUrl = crewResponseItem?.profilePath.orEmpty(),
-                id = crewResponseItem?.id
+                id = crewResponseItem?.id,
             )
         }
         // TODO: investigate the actual feasibility of this. My only real use case is a Tarantino movie
@@ -32,7 +32,7 @@ class CrewMemberMapper
                         crewItem.job,
                         crewItem.name,
                         crewItem.posterUrl,
-                        crewItem.id
+                        crewItem.id,
                     )
                 // Append them to the new list
                 filteredItemsByName.forEach {

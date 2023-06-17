@@ -13,7 +13,6 @@ import com.bumptech.glide.request.RequestOptions
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.extensions.processAsReleaseDate
 import greenberg.moviedbshell.extensions.processKnownForItems
-import greenberg.moviedbshell.models.MediaType
 import greenberg.moviedbshell.models.ui.MovieItem
 import greenberg.moviedbshell.models.ui.PersonItem
 import greenberg.moviedbshell.models.ui.PreviewItem
@@ -22,7 +21,7 @@ import greenberg.moviedbshell.viewHolders.SearchResultsViewHolder
 
 class SearchResultsAdapter(
     var searchResults: List<PreviewItem> = listOf(),
-    val onClickListener: (PreviewItem) -> Unit
+    val onClickListener: (PreviewItem) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -85,14 +84,14 @@ class SearchResultsAdapter(
                 .load(
                     cardItemPosterView.context.getString(
                         R.string.poster_url_substitution,
-                        posterImageUrl
-                    )
+                        posterImageUrl,
+                    ),
                 )
                 .apply(
                     RequestOptions()
                         .placeholder(ColorDrawable(Color.LTGRAY))
                         .fallback(ColorDrawable(Color.LTGRAY))
-                        .centerCrop()
+                        .centerCrop(),
                 )
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(cardItemPosterView)

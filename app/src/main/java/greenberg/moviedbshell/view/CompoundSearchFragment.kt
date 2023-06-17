@@ -7,16 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -44,7 +40,7 @@ class CompoundSearchFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent {
@@ -60,7 +56,7 @@ class CompoundSearchFragment : BaseFragment() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(60.dp),
         ) {
             TextField(
                 modifier = Modifier
@@ -73,7 +69,7 @@ class CompoundSearchFragment : BaseFragment() {
                     // Update viewmodel with search query
                 },
                 singleLine = true,
-                label = { Text("Enter your queries one at a time") }
+                label = { Text("Enter your queries one at a time") },
             )
             Button(
                 modifier = Modifier
@@ -83,7 +79,8 @@ class CompoundSearchFragment : BaseFragment() {
                     .padding(5.dp),
                 onClick = {
                     // update viewmodel to capture query
-            }) {
+                },
+            ) {
                 Text("Add")
             }
         }

@@ -80,5 +80,5 @@ data class MovieDetailResponse(
     val homepage: String? = null,
 
     @field:SerializedName("status")
-    val status: String? = null
+    val status: String? = null,
 )

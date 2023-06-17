@@ -10,5 +10,5 @@ data class AggregateRolesResponseItem(
     val episodeCount: Int? = null,
 
     @field:SerializedName("credit_id")
-    val creditId: String? = null
+    val creditId: String? = null,
 )

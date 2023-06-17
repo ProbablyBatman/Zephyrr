@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 
 abstract class BaseMovieListViewModel<T : BaseMovieListState>(
     protected open val movieId: Int,
-    protected open val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    protected open val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
     interface Factory

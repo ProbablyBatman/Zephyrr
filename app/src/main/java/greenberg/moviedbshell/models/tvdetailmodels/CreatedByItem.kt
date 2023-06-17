@@ -19,5 +19,5 @@ data class CreatedByItem(
     val profilePath: String? = null,
 
     @field:SerializedName("id")
-    val id: Int? = null
+    val id: Int? = null,
 )

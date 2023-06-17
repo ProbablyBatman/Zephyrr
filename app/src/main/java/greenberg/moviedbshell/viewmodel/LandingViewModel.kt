@@ -7,14 +7,12 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrResponse
-import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.mappers.MovieListMapper
 import greenberg.moviedbshell.mappers.TvListMapper
+import greenberg.moviedbshell.repository.TmdbRepository
 import greenberg.moviedbshell.state.MovieLandingState
 import greenberg.moviedbshell.state.TvLandingState
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,20 +66,24 @@ class LandingViewModel
             when (val response = tmdbRepository.fetchRecentlyReleased(1)) {
                 is ZephyrrResponse.Success -> {
                     Timber.d("getRecentlyReleased success:$response")
-                    _recentlyReleasedLandingState.emit(_recentlyReleasedLandingState.value.copy(
-                        response = movieListMapper.mapToEntity(response.value),
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _recentlyReleasedLandingState.emit(
+                        _recentlyReleasedLandingState.value.copy(
+                            response = movieListMapper.mapToEntity(response.value),
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
                     Timber.d("getRecentlyReleased failure:$response")
                     // TODO: do I copy the existing response if the new call fails?
                     // Retryable errors?
-                    _recentlyReleasedLandingState.emit(_recentlyReleasedLandingState.value.copy(
-                        error = response.throwable,
-                        isLoading = false
-                    ))
+                    _recentlyReleasedLandingState.emit(
+                        _recentlyReleasedLandingState.value.copy(
+                            error = response.throwable,
+                            isLoading = false,
+                        ),
+                    )
                 }
             }
         }
@@ -93,20 +95,24 @@ class LandingViewModel
             when (val response = tmdbRepository.fetchPopularMovies(1)) {
                 is ZephyrrResponse.Success -> {
                     Timber.d("getPopularMovies success:$response")
-                    _popularMoviesLandingState.emit(_popularMoviesLandingState.value.copy(
-                        response = movieListMapper.mapToEntity(response.value),
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _popularMoviesLandingState.emit(
+                        _popularMoviesLandingState.value.copy(
+                            response = movieListMapper.mapToEntity(response.value),
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
                     Timber.d("getPopularMovies failure:$response")
                     // TODO: do I copy the existing response if the new call fails?
                     // Retryable errors?
-                    _popularMoviesLandingState.emit(_popularMoviesLandingState.value.copy(
-                        error = response.throwable,
-                        isLoading = false
-                    ))
+                    _popularMoviesLandingState.emit(
+                        _popularMoviesLandingState.value.copy(
+                            error = response.throwable,
+                            isLoading = false,
+                        ),
+                    )
                 }
             }
         }
@@ -118,20 +124,24 @@ class LandingViewModel
             when (val response = tmdbRepository.fetchSoonTM(1)) {
                 is ZephyrrResponse.Success -> {
                     Timber.d("getSoonTM success:$response")
-                    _soonTMLandingState.emit(_soonTMLandingState.value.copy(
-                        response = movieListMapper.mapToEntity(response.value),
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _soonTMLandingState.emit(
+                        _soonTMLandingState.value.copy(
+                            response = movieListMapper.mapToEntity(response.value),
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
                     Timber.d("getSoonTM failure:$response")
                     // TODO: do I copy the existing response if the new call fails?
                     // Retryable errors?
-                    _soonTMLandingState.emit(_soonTMLandingState.value.copy(
-                        error = response.throwable,
-                        isLoading = false
-                    ))
+                    _soonTMLandingState.emit(
+                        _soonTMLandingState.value.copy(
+                            error = response.throwable,
+                            isLoading = false,
+                        ),
+                    )
                 }
             }
         }
@@ -143,20 +153,24 @@ class LandingViewModel
             when (val response = tmdbRepository.fetchPopularTv(1)) {
                 is ZephyrrResponse.Success -> {
                     Timber.d("getPopularTv success:$response")
-                    _popularTvLandingState.emit(_popularTvLandingState.value.copy(
-                        response = tvListMapper.mapToEntity(response.value),
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _popularTvLandingState.emit(
+                        _popularTvLandingState.value.copy(
+                            response = tvListMapper.mapToEntity(response.value),
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
                     Timber.d("getSoonTM failure:$response")
                     // TODO: do I copy the existing response if the new call fails?
                     // Retryable errors?
-                    _popularTvLandingState.emit(_popularTvLandingState.value.copy(
-                        error = response.throwable,
-                        isLoading = false
-                    ))
+                    _popularTvLandingState.emit(
+                        _popularTvLandingState.value.copy(
+                            error = response.throwable,
+                            isLoading = false,
+                        ),
+                    )
                 }
             }
         }
@@ -168,20 +182,24 @@ class LandingViewModel
             when (val response = tmdbRepository.fetchTopRatedTv(1)) {
                 is ZephyrrResponse.Success -> {
                     Timber.d("getTopRatedTv success:$response")
-                    _topRatedTvLandingState.emit(_topRatedTvLandingState.value.copy(
-                        response = tvListMapper.mapToEntity(response.value),
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _topRatedTvLandingState.emit(
+                        _topRatedTvLandingState.value.copy(
+                            response = tvListMapper.mapToEntity(response.value),
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
                     Timber.d("getSoonTM failure:$response")
                     // TODO: do I copy the existing response if the new call fails?
                     // Retryable errors?
-                    _topRatedTvLandingState.emit(_topRatedTvLandingState.value.copy(
-                        error = response.throwable,
-                        isLoading = false
-                    ))
+                    _topRatedTvLandingState.emit(
+                        _topRatedTvLandingState.value.copy(
+                            error = response.throwable,
+                            isLoading = false,
+                        ),
+                    )
                 }
             }
         }

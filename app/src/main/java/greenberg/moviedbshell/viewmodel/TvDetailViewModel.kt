@@ -8,9 +8,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import greenberg.moviedbshell.base.ZephyrrResponse
 import greenberg.moviedbshell.repository.TmdbRepository
-import greenberg.moviedbshell.state.MovieDetailState
 import greenberg.moviedbshell.state.TvDetailState
-import greenberg.moviedbshell.view.TvDetailFragment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +26,7 @@ class TvDetailViewModel
     private val _tvDetailState = MutableStateFlow(
         TvDetailState(
             tvId = tvId,
-        )
+        ),
     )
     val tvDetailState: StateFlow<TvDetailState> = _tvDetailState.asStateFlow()
 
@@ -46,18 +44,22 @@ class TvDetailViewModel
             Timber.d("launching fetchTvDetail")
             when (val response = tmdbRepository.fetchTvDetail(this, tvId)) {
                 is ZephyrrResponse.Success -> {
-                    _tvDetailState.emit(_tvDetailState.value.copy(
-                        tvDetailItem = response.value,
-                        isLoading = false,
-                        error = null,
-                    ))
+                    _tvDetailState.emit(
+                        _tvDetailState.value.copy(
+                            tvDetailItem = response.value,
+                            isLoading = false,
+                            error = null,
+                        ),
+                    )
                 }
                 is ZephyrrResponse.Failure -> {
-                    _tvDetailState.emit(_tvDetailState.value.copy(
-                        tvDetailItem = null,
-                        isLoading = false,
-                        error = response.throwable,
-                    ))
+                    _tvDetailState.emit(
+                        _tvDetailState.value.copy(
+                            tvDetailItem = null,
+                            isLoading = false,
+                            error = response.throwable,
+                        ),
+                    )
                 }
             }
         }
@@ -67,7 +69,7 @@ class TvDetailViewModel
         fun provideFactory(
             assistedFactory: TvDetailViewModel.Factory,
             tvId: Int,
-            dispatcher: CoroutineDispatcher
+            dispatcher: CoroutineDispatcher,
         ) = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(tvId, dispatcher) as T

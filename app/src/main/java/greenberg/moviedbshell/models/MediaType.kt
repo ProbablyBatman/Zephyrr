@@ -5,6 +5,5 @@ enum class MediaType {
     PERSON,
     MOVIE,
     TV,
-    UNKNOWN
-    ;
+    UNKNOWN,
 }

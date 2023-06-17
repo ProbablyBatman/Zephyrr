@@ -14,7 +14,7 @@ import greenberg.moviedbshell.viewHolders.CrewListViewHolder
 
 class CrewListAdapter(
     private var crewMemberList: List<CrewMemberItem> = listOf(),
-    val onClickListener: (Int) -> Unit
+    val onClickListener: (Int) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -38,7 +38,7 @@ class CrewListAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.crewImage)

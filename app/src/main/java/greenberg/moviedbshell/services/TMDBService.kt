@@ -52,10 +52,10 @@ interface TMDBService {
     suspend fun querySearchPerson(@Query("query") query: String, @Query("page") page: Int): SearchResponse
 
     @GET("discover/movie")
-    suspend fun queryMovieDiscover(@Query("page") page: Int, @Query("with_cast", encoded = true) castList: String) : SearchResponse
+    suspend fun queryMovieDiscover(@Query("page") page: Int, @Query("with_cast", encoded = true) castList: String): SearchResponse
 
     @GET("discover/tv")
-    suspend fun queryTvDiscover(@Query("page") page: Int, @Query("with_cast", encoded = true) castList: String) : SearchResponse
+    suspend fun queryTvDiscover(@Query("page") page: Int, @Query("with_cast", encoded = true) castList: String): SearchResponse
 
     /**
      * This is implemented for now only against English releases. It is probably a bit complex to go global.
@@ -63,27 +63,27 @@ interface TMDBService {
     @GET("movie/now_playing")
     suspend fun queryRecentlyReleased(
         @Query("page") page: Int,
-        @Query("language") language: String = "en-US"
+        @Query("language") language: String = "en-US",
     ): MovieListResponse
 
     @GET("movie/upcoming")
     suspend fun querySoonTM(
         @Query("page") page: Int,
         @Query("language") language: String = "en-US",
-        @Query("region") region: String = "US"
+        @Query("region") region: String = "US",
     ): MovieListResponse
 
     @GET("tv/popular")
     suspend fun queryPopularTv(
         @Query("page") page: Int,
         @Query("language") language: String = "en-US",
-        @Query("region") region: String = "US"
+        @Query("region") region: String = "US",
     ): TvListResponse
 
     @GET("tv/top_rated")
     suspend fun queryTopRatedTv(
         @Query("page") page: Int,
         @Query("language") language: String = "en-US",
-        @Query("region") region: String = "US"
+        @Query("region") region: String = "US",
     ): TvListResponse
 }

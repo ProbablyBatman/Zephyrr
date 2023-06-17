@@ -39,7 +39,7 @@ import javax.inject.Inject
  * 1. Generic movie list fragment
  * 2. Generic tv list fragment
  * 3. combined movie and tv list fragment
- * 
+ *
  * Until that's fixed, this copies a lot of code from [greenberg.moviedbshell.base.BaseMovieListFragment]
  */
 @AndroidEntryPoint
@@ -55,7 +55,7 @@ class CombinedItemsListFragment : BaseFragment() {
         CombinedItemsListViewModel.provideFactory(
             combinedItemsViewModelFactory,
             arguments?.extractArguments<CombinedItemsArgs>(PAGE_ARGS)?.ids ?: emptyList(),
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -192,13 +192,13 @@ class CombinedItemsListFragment : BaseFragment() {
             MediaType.MOVIE -> {
                 navigate(
                     R.id.action_combinedItemsListFragment_to_movieDetailFragment,
-                    MovieDetailArgs(itemId)
+                    MovieDetailArgs(itemId),
                 )
             }
             MediaType.TV -> {
                 navigate(
                     R.id.action_combinedItemsListFragment_to_tvDetailFragment,
-                    TvDetailArgs(itemId)
+                    TvDetailArgs(itemId),
                 )
             }
             MediaType.PERSON -> {
@@ -280,11 +280,14 @@ class CombinedItemsListFragment : BaseFragment() {
     private fun rerunAnim(isGrid: Boolean) {
         // TODO: why are these the same
         // Also why does the animation run like this
-        itemRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(requireContext(), if (isGrid) {
-            R.anim.recycler_list_fall_down_anim
-        } else {
-            R.anim.recycler_list_fall_down_anim
-        })
+        itemRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(
+            requireContext(),
+            if (isGrid) {
+                R.anim.recycler_list_fall_down_anim
+            } else {
+                R.anim.recycler_list_fall_down_anim
+            },
+        )
         combinedItemsListAdapter.notifyItemRangeChanged(0, combinedItemsListAdapter.itemCount)
         itemRecycler.scheduleLayoutAnimation()
     }

@@ -1,6 +1,5 @@
 package greenberg.moviedbshell.state.base
 
-import greenberg.moviedbshell.models.movielistmodels.MovieListResponse
 import greenberg.moviedbshell.models.ui.MovieItem
 
 abstract class BaseMovieListState(

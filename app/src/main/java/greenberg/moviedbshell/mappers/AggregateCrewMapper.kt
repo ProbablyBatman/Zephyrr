@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class AggregateCrewMapper
 @Inject constructor(
-    private val jobsMapper: JobsMapper
+    private val jobsMapper: JobsMapper,
 ) : Mapper<List<AggregateCrewResponseItem?>?, List<AggregateCrewMemberItem>> {
     override fun mapToEntity(item: List<AggregateCrewResponseItem?>?): List<AggregateCrewMemberItem> {
         val mappedItems = item?.map { crewResponseItem ->
@@ -16,7 +16,7 @@ class AggregateCrewMapper
                 totalEpisodeCount = crewResponseItem?.totalEpisodeCount ?: -1,
                 posterUrl = crewResponseItem?.profilePath.orEmpty(),
                 jobs = jobsMapper.mapToEntity(crewResponseItem?.jobs),
-                id = crewResponseItem?.id
+                id = crewResponseItem?.id,
             )
         }
         return mappedItems ?: emptyList()

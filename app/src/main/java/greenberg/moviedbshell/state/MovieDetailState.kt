@@ -13,5 +13,5 @@ data class MovieDetailState(
 
 @Parcelize
 data class MovieDetailArgs(
-    val movieId: Int
+    val movieId: Int,
 ) : Parcelable

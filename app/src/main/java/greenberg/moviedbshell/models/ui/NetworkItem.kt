@@ -5,5 +5,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class NetworkItem(
-    val name: String
+    val name: String,
 ) : Parcelable

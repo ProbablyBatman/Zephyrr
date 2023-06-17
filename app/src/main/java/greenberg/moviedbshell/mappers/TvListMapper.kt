@@ -5,7 +5,8 @@ import greenberg.moviedbshell.models.ui.TvItem
 import javax.inject.Inject
 
 class TvListMapper
-@Inject() constructor() : Mapper<TvListResponse, List<TvItem>> {
+@Inject()
+constructor() : Mapper<TvListResponse, List<TvItem>> {
     override fun mapToEntity(item: TvListResponse?): List<TvItem> {
         val mappedItems = item?.results?.map { result ->
             TvItem(
@@ -13,7 +14,7 @@ class TvListMapper
                 overview = result?.overview.orEmpty(),
                 firstAirDate = result?.firstAirDate.orEmpty(),
                 posterImageUrl = result?.posterPath.orEmpty(),
-                id = result?.id
+                id = result?.id,
             )
         }
         return mappedItems.orEmpty()

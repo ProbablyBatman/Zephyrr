@@ -10,7 +10,7 @@ class RolesMapper
         val mappedItems = item?.map {
             RoleItem(
                 character = it?.character.orEmpty(),
-                episodeCount = it?.episodeCount ?: -1
+                episodeCount = it?.episodeCount ?: -1,
             )
         }
         // Sort so highest number of episode role is always first

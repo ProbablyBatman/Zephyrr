@@ -13,7 +13,7 @@ import greenberg.moviedbshell.models.ui.PosterItem
 import greenberg.moviedbshell.viewHolders.PosterListViewHolder
 
 class PosterListAdapter(
-    var posterItems: List<PosterItem> = emptyList()
+    var posterItems: List<PosterItem> = emptyList(),
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PosterListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.poster_list_item, parent, false))
@@ -32,7 +32,7 @@ class PosterListAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.poster)

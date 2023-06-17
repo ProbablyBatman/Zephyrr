@@ -67,5 +67,5 @@ data class SearchResultsItem(
     val knownFor: List<KnownForItem?>? = null,
 
     @field:SerializedName("profile_path")
-    val profilePath: String? = null
+    val profilePath: String? = null,
 )

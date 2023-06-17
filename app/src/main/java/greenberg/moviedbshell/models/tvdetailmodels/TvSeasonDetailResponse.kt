@@ -25,5 +25,5 @@ data class TvSeasonDetailResponse(
     val episodes: List<EpisodesItem?>? = null,
 
     @field:SerializedName("poster_path")
-    val posterPath: String? = null
+    val posterPath: String? = null,
 )

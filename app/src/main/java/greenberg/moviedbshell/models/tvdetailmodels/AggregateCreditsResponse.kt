@@ -10,5 +10,5 @@ data class AggregateCreditsResponse(
     val id: Int? = null,
 
     @field:SerializedName("crew")
-    val crew: List<AggregateCrewResponseItem?>? = null
+    val crew: List<AggregateCrewResponseItem?>? = null,
 )

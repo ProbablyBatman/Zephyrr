@@ -42,8 +42,8 @@ class TmdbRepository
             MovieDetailResponseContainer(
                 details,
                 credits,
-                images
-            )
+                images,
+            ),
         )
     }
 
@@ -57,8 +57,8 @@ class TmdbRepository
                 MovieDetailResponseContainer(
                     details.await(),
                     credits.await(),
-                    images.await()
-                )
+                    images.await(),
+                ),
             )
         }
     }
@@ -73,8 +73,8 @@ class TmdbRepository
                 details,
                 credits,
                 aggregateCredits,
-                images
-            )
+                images,
+            ),
         )
     }
 
@@ -89,8 +89,8 @@ class TmdbRepository
                     details.await(),
                     credits.await(),
                     aggregateCredits.await(),
-                    images.await()
-                )
+                    images.await(),
+                ),
             )
         }
     }
@@ -102,8 +102,8 @@ class TmdbRepository
             personDetailMapper.mapToEntity(
                 PersonDetailResponseContainer(
                     details.await(),
-                    credits.await()
-                )
+                    credits.await(),
+                ),
             )
         }
     }
@@ -113,15 +113,15 @@ class TmdbRepository
             { tmdbService.queryTvDetail(id) },
             { tmdbService.queryTvCredits(id) },
             { tmdbService.queryTvAggregateCredits(id) },
-            { tmdbService.queryTvImages(id) }
+            { tmdbService.queryTvImages(id) },
         ) {
             tvDetailMapper.mapToEntity(
                 TvDetailResponseContainer(
                     it.component1() as TvShowResponse,
                     it.component2() as CreditsResponse,
                     it.component3() as AggregateCreditsResponse,
-                    it.component4() as ImageGalleryResponse
-                )
+                    it.component4() as ImageGalleryResponse,
+                ),
             )
         }
 
@@ -133,7 +133,7 @@ class TmdbRepository
 
             MultiSearchResponseContainer(
                 movies.await(),
-                shows.await()
+                shows.await(),
             )
         }
     }

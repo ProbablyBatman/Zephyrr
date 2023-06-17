@@ -6,9 +6,9 @@ data class PersonItem(
     val name: String,
     override val posterImageUrl: String,
     val knownForItems: List<PreviewItem>,
-    override val id: Int?
+    override val id: Int?,
 ) : PreviewItem(
     posterImageUrl,
     id,
-    MediaType.PERSON
+    MediaType.PERSON,
 )

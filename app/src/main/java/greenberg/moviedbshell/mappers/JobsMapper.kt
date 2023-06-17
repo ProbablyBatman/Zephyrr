@@ -10,7 +10,7 @@ class JobsMapper
         val mappedItems = item?.map {
             JobItem(
                 job = it?.job.orEmpty(),
-                episodeCount = it?.episodeCount ?: -1
+                episodeCount = it?.episodeCount ?: -1,
             )
         }
         // Sort so highest number of episode role is always first

@@ -5,10 +5,10 @@ import greenberg.moviedbshell.models.ui.ProductionDetailItem
 import kotlinx.parcelize.Parcelize
 
 data class ProductionDetailState(
-    val productionDetailItem: ProductionDetailItem
+    val productionDetailItem: ProductionDetailItem,
 )
 
 @Parcelize
 data class ProductionDetailStateArgs(
-    val productionDetailItem: ProductionDetailItem
+    val productionDetailItem: ProductionDetailItem,
 ) : Parcelable

@@ -10,5 +10,5 @@ data class AggregateJobsResponseItem(
     val creditId: String? = null,
 
     @field:SerializedName("job")
-    val job: String? = null
+    val job: String? = null,
 )

@@ -7,5 +7,5 @@ data class PersonDetailItem(
     val placeOfBirth: String,
     val biography: String,
     val posterImageUrl: String,
-    val combinedCredits: List<CreditsDetailItem>
+    val combinedCredits: List<CreditsDetailItem>,
 )

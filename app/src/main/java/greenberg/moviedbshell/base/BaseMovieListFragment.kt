@@ -111,11 +111,14 @@ abstract class BaseMovieListFragment<T : BaseMovieListViewModel<S>, S : BaseMovi
 
     private fun rerunAnim(isGrid: Boolean) {
         // TODO: why are these the same
-        movieRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(requireContext(), if (isGrid) {
-            R.anim.recycler_list_fall_down_anim
-        } else {
-            R.anim.recycler_list_fall_down_anim
-        })
+        movieRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(
+            requireContext(),
+            if (isGrid) {
+                R.anim.recycler_list_fall_down_anim
+            } else {
+                R.anim.recycler_list_fall_down_anim
+            },
+        )
         movieListAdapter.notifyItemRangeChanged(0, movieListAdapter.itemCount)
         movieRecycler.scheduleLayoutAnimation()
     }

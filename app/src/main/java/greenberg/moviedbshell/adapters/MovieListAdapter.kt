@@ -15,7 +15,7 @@ import greenberg.moviedbshell.viewHolders.MovieListViewHolder
 
 class MovieListAdapter(
     var items: List<MovieItem> = emptyList(),
-    val onClickListener: (Int) -> Unit
+    val onClickListener: (Int) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var currentViewType = ViewType.VIEW_TYPE_GRID
@@ -65,7 +65,7 @@ class MovieListAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.poster)
@@ -85,7 +85,7 @@ class MovieListAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.poster)

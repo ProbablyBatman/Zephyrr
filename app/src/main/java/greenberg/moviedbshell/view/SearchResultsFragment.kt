@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -53,7 +51,7 @@ class SearchResultsFragment : BaseFragment() {
         SearchResultsViewModel.provideFactory(
             searchResultsViewModelFactory,
             arguments.extractArguments<SearchResultsArgs>(PAGE_ARGS)?.query ?: "",
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -62,7 +60,7 @@ class SearchResultsFragment : BaseFragment() {
     private val multiSearchViewModel: MultiSearchViewModel by navGraphViewModels(R.id.nav_graph) {
         MultiSearchViewModel.provideFactory(
             multiSearchViewModelFactory,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -75,7 +73,7 @@ class SearchResultsFragment : BaseFragment() {
     private lateinit var searchResultsAdapter: SearchResultsAdapter
     private lateinit var searchLoadingBar: ProgressBar
     private lateinit var searchQueryDisplay: TextView
-    private var loadingSnackbar: Snackbar?  = null
+    private var loadingSnackbar: Snackbar? = null
     private lateinit var zephyrrSearchView: SearchView
     private var maxPagesSnackbar: Snackbar? = null
     private lateinit var emptyStateText: TextView
@@ -216,7 +214,7 @@ class SearchResultsFragment : BaseFragment() {
         maxPagesSnackbar = Snackbar.make(
             searchResultsRecycler,
             getString(R.string.generic_max_pages_text),
-            Snackbar.LENGTH_INDEFINITE
+            Snackbar.LENGTH_INDEFINITE,
         )
             .setAction(getString(R.string.dismiss)) { maxPagesSnackbar?.dismiss() }
         if (maxPagesSnackbar?.isShown == false) {
@@ -279,19 +277,19 @@ class SearchResultsFragment : BaseFragment() {
             MediaType.MOVIE -> {
                 navigate(
                     R.id.action_searchResultsFragment_to_movieDetailFragment,
-                    MovieDetailArgs(itemId)
+                    MovieDetailArgs(itemId),
                 )
             }
             MediaType.TV -> {
                 navigate(
                     R.id.action_searchResultsFragment_to_tvDetailFragment,
-                    TvDetailArgs(itemId)
+                    TvDetailArgs(itemId),
                 )
             }
             MediaType.PERSON -> {
                 navigate(
                     R.id.action_searchResultsFragment_to_personDetailFragment,
-                    PersonDetailArgs(itemId)
+                    PersonDetailArgs(itemId),
                 )
             }
             MediaType.UNKNOWN -> {

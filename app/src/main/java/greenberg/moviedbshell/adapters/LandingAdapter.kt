@@ -14,7 +14,7 @@ import greenberg.moviedbshell.viewHolders.LandingViewHolder
 
 class LandingAdapter(
     private var items: List<PreviewItem> = emptyList(),
-    val posterClickListener: (Int) -> Unit
+    val posterClickListener: (Int) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -27,7 +27,7 @@ class LandingAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.poster)

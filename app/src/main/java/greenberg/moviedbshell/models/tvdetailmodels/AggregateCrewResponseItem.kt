@@ -34,5 +34,5 @@ data class AggregateCrewResponseItem(
     val adult: Boolean? = null,
 
     @field:SerializedName("department")
-    val department: String? = null
+    val department: String? = null,
 )

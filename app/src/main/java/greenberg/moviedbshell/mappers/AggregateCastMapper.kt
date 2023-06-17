@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class AggregateCastMapper
 @Inject constructor(
-    private val rolesMapper: RolesMapper
+    private val rolesMapper: RolesMapper,
 ) : Mapper<List<AggregateCastResponseItem?>?, List<AggregateCastMemberItem>> {
     override fun mapToEntity(item: List<AggregateCastResponseItem?>?): List<AggregateCastMemberItem> {
         val mappedItems = item?.map { castResponseItem ->
@@ -17,7 +17,7 @@ class AggregateCastMapper
                 totalEpisodeCount = castResponseItem?.totalEpisodeCount ?: -1,
                 posterUrl = castResponseItem?.profilePath.orEmpty(),
                 roles = rolesMapper.mapToEntity(castResponseItem?.roles),
-                id = castResponseItem?.id
+                id = castResponseItem?.id,
             )
         }
         return mappedItems ?: emptyList()

@@ -9,7 +9,7 @@ import greenberg.moviedbshell.viewHolders.ProductionDetailCrewListViewHolder
 
 class ProductionDetailAdapter(
     var crewMemberList: List<CrewMemberItem> = listOf(),
-    val onClickListener: (Int) -> Unit
+    val onClickListener: (Int) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

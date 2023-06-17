@@ -28,5 +28,5 @@ data class TvDetailItem(
     val createdBy: List<CrewMemberItem>,
     val crewMembers: List<CrewMemberItem>,
     val productionCompanies: List<ProductionCompanyItem>,
-    val productionCountries: List<ProductionCountryItem>
+    val productionCountries: List<ProductionCountryItem>,
 ) : ProductionDetailItem

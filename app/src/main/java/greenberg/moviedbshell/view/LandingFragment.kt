@@ -90,7 +90,7 @@ class LandingFragment : BaseFragment() {
         // TODO: Add single row retries
 //        errorContainer = view.findViewById(R.id.landing_row_error_container)
 //        errorContainer.setOnClickListener {
-////            viewModel.retryLandingPageLists()
+// //            viewModel.retryLandingPageLists()
 //        }
 
         recentlyReleasedLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -307,14 +307,14 @@ class LandingFragment : BaseFragment() {
     private fun movieOnClickListener(movieId: Int) {
         navigate(
             R.id.action_landingFragment_to_movieDetailFragment,
-            MovieDetailArgs(movieId)
+            MovieDetailArgs(movieId),
         )
     }
 
     private fun tvOnClickListener(tvId: Int) {
         navigate(
             R.id.action_landingFragment_to_tvDetailFragment,
-            TvDetailArgs(tvId)
+            TvDetailArgs(tvId),
         )
     }
 

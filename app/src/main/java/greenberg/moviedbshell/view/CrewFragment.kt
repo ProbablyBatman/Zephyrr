@@ -14,7 +14,6 @@ import greenberg.moviedbshell.R
 import greenberg.moviedbshell.adapters.CrewListAdapter
 import greenberg.moviedbshell.base.BaseFragment
 import greenberg.moviedbshell.extensions.extractArguments
-import greenberg.moviedbshell.state.CastStateArgs
 import greenberg.moviedbshell.state.CrewState
 import greenberg.moviedbshell.state.CrewStateArgs
 import greenberg.moviedbshell.state.PersonDetailArgs
@@ -68,7 +67,7 @@ class CrewFragment : BaseFragment() {
     private fun onClickListener(personId: Int) {
         navigate(
             R.id.action_crewFragment_to_personDetailFragment,
-            PersonDetailArgs(personId)
+            PersonDetailArgs(personId),
         )
     }
 

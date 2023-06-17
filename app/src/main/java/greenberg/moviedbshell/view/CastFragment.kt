@@ -68,7 +68,7 @@ class CastFragment : BaseFragment() {
     private fun onClickListener(personId: Int) {
         navigate(
             R.id.action_castFragment_to_personDetailFragment,
-            PersonDetailArgs(personId)
+            PersonDetailArgs(personId),
         )
     }
 

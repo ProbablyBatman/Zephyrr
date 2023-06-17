@@ -7,7 +7,7 @@ import javax.inject.Inject
 class LandingMapper
 @Inject constructor(
     private val movieListMapper: MovieListMapper,
-    private val tvListMapper: TvListMapper
+    private val tvListMapper: TvListMapper,
 ) : Mapper<LandingContainer, LandingItem> {
     override fun mapToEntity(item: LandingContainer?): LandingItem =
         LandingItem(
@@ -15,6 +15,6 @@ class LandingMapper
             movieListMapper.mapToEntity(item?.popularMovieResponse),
             movieListMapper.mapToEntity(item?.soonTMResponse),
             tvListMapper.mapToEntity(item?.popularTvResponse),
-            tvListMapper.mapToEntity(item?.topRatedTvResponse)
+            tvListMapper.mapToEntity(item?.topRatedTvResponse),
         )
 }

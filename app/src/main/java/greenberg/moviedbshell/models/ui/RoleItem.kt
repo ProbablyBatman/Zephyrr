@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class RoleItem(
     val character: String,
-    val episodeCount: Int
+    val episodeCount: Int,
 ) : Parcelable

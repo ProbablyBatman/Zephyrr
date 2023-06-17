@@ -52,7 +52,7 @@ class PersonDetailFragment : BaseFragment() {
         PersonDetailViewModel.provideFactory(
             personDetailViewModelFactory,
             arguments?.extractArguments<PersonDetailArgs>(PAGE_ARGS)?.personId ?: -1,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -78,7 +78,6 @@ class PersonDetailFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -147,7 +146,7 @@ class PersonDetailFragment : BaseFragment() {
         if (personDetailItem.posterImageUrl.isNotEmpty()) {
             val validUrl = resources.getString(
                 R.string.poster_url_substitution,
-                personDetailItem.posterImageUrl
+                personDetailItem.posterImageUrl,
             )
             Glide.with(this)
                 .load(validUrl)
@@ -155,7 +154,7 @@ class PersonDetailFragment : BaseFragment() {
                     RequestOptions()
                         .placeholder(ColorDrawable(Color.LTGRAY))
                         .fallback(ColorDrawable(Color.LTGRAY))
-                        .centerCrop()
+                        .centerCrop(),
                 )
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(posterImageView)
@@ -166,12 +165,12 @@ class PersonDetailFragment : BaseFragment() {
             personDetailItem.deathday.isNotEmpty() -> {
                 birthday.text = resources.getString(
                     R.string.birthday_no_age_substitution,
-                    personDetailItem.birthday.processDate()
+                    personDetailItem.birthday.processDate(),
                 )
                 deathday.text = resources.getString(
                     R.string.day_and_age_substitution,
                     personDetailItem.deathday.processDate(),
-                    processAge(personDetailItem.birthday, personDetailItem.deathday)
+                    processAge(personDetailItem.birthday, personDetailItem.deathday),
                 )
                 deathday.visibility = View.VISIBLE
                 deathdayTitle.visibility = View.VISIBLE
@@ -180,7 +179,7 @@ class PersonDetailFragment : BaseFragment() {
                 birthday.text = resources.getString(
                     R.string.day_and_age_substitution,
                     personDetailItem.birthday.processDate(),
-                    processAge(personDetailItem.birthday)
+                    processAge(personDetailItem.birthday),
                 )
             }
             else -> {
@@ -265,13 +264,13 @@ class PersonDetailFragment : BaseFragment() {
             MediaType.MOVIE -> {
                 navigate(
                     R.id.action_personDetailFragment_to_movieDetailFragment,
-                    MovieDetailArgs(itemId)
+                    MovieDetailArgs(itemId),
                 )
             }
             MediaType.TV -> {
                 navigate(
                     R.id.action_personDetailFragment_to_tvDetailFragment,
-                    TvDetailArgs(itemId)
+                    TvDetailArgs(itemId),
                 )
             }
 

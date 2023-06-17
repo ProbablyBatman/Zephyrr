@@ -14,7 +14,7 @@ class PosterGalleryMapper
                 voteAverage = poster?.voteAverage ?: 0.0,
                 voteCount = poster?.voteCount ?: 0,
                 width = poster?.width ?: 0,
-                height = poster?.height ?: 0
+                height = poster?.height ?: 0,
             )
         } ?: listOf()
     }

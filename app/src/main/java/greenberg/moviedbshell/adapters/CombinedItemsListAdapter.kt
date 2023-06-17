@@ -19,7 +19,7 @@ import greenberg.moviedbshell.viewHolders.MovieListViewHolder
 // TODO: just keep using the movie one for now, but update this to be renamed and agnostic later
 class CombinedItemsListAdapter(
     var items: List<PreviewItem> = emptyList(),
-    val onClickListener: (Int, MediaType) -> Unit
+    val onClickListener: (Int, MediaType) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var currentViewType = ViewType.VIEW_TYPE_GRID
@@ -69,7 +69,7 @@ class CombinedItemsListAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.poster)
@@ -98,7 +98,7 @@ class CombinedItemsListAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.poster)

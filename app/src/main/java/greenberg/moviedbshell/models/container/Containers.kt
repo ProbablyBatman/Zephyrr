@@ -22,7 +22,7 @@ import greenberg.moviedbshell.models.tvlistmodels.TvListResponse
 data class MovieDetailResponseContainer(
     val movieDetailResponse: MovieDetailResponse,
     val creditsResponse: CreditsResponse,
-    val posterResponse: ImageGalleryResponse
+    val posterResponse: ImageGalleryResponse,
 )
 
 /*
@@ -38,7 +38,7 @@ data class LandingContainer(
     val popularMovieResponse: MovieListResponse,
     val soonTMResponse: MovieListResponse,
     val popularTvResponse: TvListResponse,
-    val topRatedTvResponse: TvListResponse
+    val topRatedTvResponse: TvListResponse,
 )
 
 /*
@@ -51,7 +51,7 @@ data class LandingContainer(
  */
 data class PersonDetailResponseContainer(
     val personDetailResponse: PersonDetailResponse,
-    val creditsResponse: CombinedCreditsResponse
+    val creditsResponse: CombinedCreditsResponse,
 )
 
 /*
@@ -66,10 +66,10 @@ data class TvDetailResponseContainer(
     val tvShowResponse: TvShowResponse,
     val creditsResponse: CreditsResponse,
     val aggregateCreditsResponse: AggregateCreditsResponse,
-    val posterResponse: ImageGalleryResponse
+    val posterResponse: ImageGalleryResponse,
 )
 
 data class MultiSearchResponseContainer(
     val movieResponse: SearchResponse,
-    val tvResponse: SearchResponse
+    val tvResponse: SearchResponse,
 )

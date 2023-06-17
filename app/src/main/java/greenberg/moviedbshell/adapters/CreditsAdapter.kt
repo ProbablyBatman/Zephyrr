@@ -16,7 +16,7 @@ import greenberg.moviedbshell.viewHolders.CreditsViewHolder
 
 class CreditsAdapter(
     var creditsList: List<CreditsDetailItem> = listOf(),
-    val onClickListener: (Int, MediaType) -> Unit
+    val onClickListener: (Int, MediaType) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CreditsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.credit_list_card, parent, false))
@@ -35,7 +35,7 @@ class CreditsAdapter(
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(holder.actorImage)
@@ -46,7 +46,7 @@ class CreditsAdapter(
             holder.cardView.setOnClickListener {
                 onClickListener(
                     currentItem.id ?: -1,
-                    currentItem.mediaType
+                    currentItem.mediaType,
                 )
             }
         }

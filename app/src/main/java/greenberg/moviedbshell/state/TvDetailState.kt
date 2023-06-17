@@ -13,5 +13,5 @@ data class TvDetailState(
 
 @Parcelize
 data class TvDetailArgs(
-    val tvId: Int
+    val tvId: Int,
 ) : Parcelable

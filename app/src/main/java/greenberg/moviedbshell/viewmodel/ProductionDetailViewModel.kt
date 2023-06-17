@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ProductionDetailViewModel(
-    productionDetailItem: ProductionDetailItem
+    productionDetailItem: ProductionDetailItem,
 ) : ViewModel() {
 
     private val _productionDetailState = MutableStateFlow(ProductionDetailState(productionDetailItem))

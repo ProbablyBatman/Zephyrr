@@ -7,7 +7,7 @@ class DebuggingTree : Timber.DebugTree() {
         return String.format(
             "sag:%s:%s",
             super.createStackElementTag(element),
-            element.lineNumber
+            element.lineNumber,
         )
     }
 }

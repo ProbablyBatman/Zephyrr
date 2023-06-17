@@ -14,5 +14,5 @@ data class NetworksItem(
     val id: Int? = null,
 
     @field:SerializedName("origin_country")
-    val originCountry: String? = null
+    val originCountry: String? = null,
 )

@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
-import greenberg.moviedbshell.dagger.ApplicationModule
 import greenberg.moviedbshell.dagger.SingletonComponent
 import greenberg.moviedbshell.logging.DebuggingTree
 import greenberg.moviedbshell.logging.NoLogTree
@@ -39,7 +38,7 @@ class ZephyrrApplication : Application() {
         Timber.d("$nightMode Status update")
         retrieveSharedPreferences().edit().putBoolean(NIGHT_MODE, nightMode).apply()
         AppCompatDelegate.setDefaultNightMode(
-            if (nightMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            if (nightMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO,
         )
     }
 

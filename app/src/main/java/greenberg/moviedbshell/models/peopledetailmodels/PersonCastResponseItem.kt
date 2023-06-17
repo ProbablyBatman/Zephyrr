@@ -68,5 +68,5 @@ data class PersonCastResponseItem(
     val originalName: String? = null,
 
     @field:SerializedName("name")
-    val name: String? = null
+    val name: String? = null,
 )

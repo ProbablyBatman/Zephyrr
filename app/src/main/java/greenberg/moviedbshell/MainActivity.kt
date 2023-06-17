@@ -70,7 +70,7 @@ class MainActivity : BaseActivity() {
                                 putParcelable(PAGE_ARGS, SearchResultsArgs(query))
                             },
                             NavOptions.Builder().setPopUpTo(R.id.searchResultsFragment, true)
-                                .build()
+                                .build(),
                         )
                     }
                     return true

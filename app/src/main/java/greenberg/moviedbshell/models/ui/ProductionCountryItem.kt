@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ProductionCountryItem(
-    val name: String
+    val name: String,
 ) : Parcelable {
     companion object {
         fun generateDummy() = ProductionCountryItem("Unknown")

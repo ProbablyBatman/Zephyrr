@@ -9,10 +9,10 @@ class AggregateCrewMemberItem(
     val jobs: List<JobItem>,
     override val name: String,
     override val posterUrl: String,
-    override val id: Int?
+    override val id: Int?,
 ) : CrewMemberItem(
     jobs[0].job,
     name,
     posterUrl,
-    id
+    id,
 )

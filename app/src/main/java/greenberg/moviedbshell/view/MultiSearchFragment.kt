@@ -41,7 +41,7 @@ class MultiSearchFragment : BaseFragment() {
     private val viewModel: MultiSearchViewModel by navGraphViewModels(R.id.nav_graph) {
         MultiSearchViewModel.provideFactory(
             multiSearchViewModelFactory,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -50,6 +50,7 @@ class MultiSearchFragment : BaseFragment() {
     private lateinit var multiSearchQueryItemsRecycler: RecyclerView
     private lateinit var multiSearchQueryItemsAdapter: MultiSearchQueryItemsAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
+
     // TODO: this name sucks so much lmao
     private lateinit var multiSearchSearchButton: Button
 
@@ -83,8 +84,8 @@ class MultiSearchFragment : BaseFragment() {
                 R.id.action_multiSearchFragment_to_searchResultsFragment,
                 SearchResultsArgs(
                     query = multiSearchInput.text.toString(),
-                    usingMultiSearch = true
-                )
+                    usingMultiSearch = true,
+                ),
             )
         }
 
@@ -94,8 +95,8 @@ class MultiSearchFragment : BaseFragment() {
                 R.id.action_multiSearchFragment_to_combinedItemsListFragment,
                 CombinedItemsArgs(
                     viewModel.multiSearchState.value.queries.mapNotNull { it.id },
-                    PAGE_TITLE
-                )
+                    PAGE_TITLE,
+                ),
             )
         }
 

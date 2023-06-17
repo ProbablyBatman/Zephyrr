@@ -40,5 +40,5 @@ data class TvListResponseItem(
     val id: Int? = null,
 
     @field:SerializedName("vote_count")
-    val voteCount: Int? = null
+    val voteCount: Int? = null,
 )

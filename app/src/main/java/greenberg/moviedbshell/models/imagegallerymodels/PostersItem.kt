@@ -22,5 +22,5 @@ data class PostersItem(
     val voteCount: Int? = null,
 
     @field:SerializedName("height")
-    val height: Int? = null
+    val height: Int? = null,
 )

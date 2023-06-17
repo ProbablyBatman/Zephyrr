@@ -12,7 +12,7 @@ class CastMemberMapper
                 role = castResponseItem?.character.orEmpty(),
                 name = castResponseItem?.name.orEmpty(),
                 posterUrl = castResponseItem?.profilePath.orEmpty(),
-                id = castResponseItem?.id
+                id = castResponseItem?.id,
             )
         }
         return mappedItems ?: emptyList()

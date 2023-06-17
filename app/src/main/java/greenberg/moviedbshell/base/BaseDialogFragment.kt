@@ -3,7 +3,6 @@ package greenberg.moviedbshell.base
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
-import java.util.UUID
 
 abstract class BaseDialogFragment : DialogFragment() {
     private lateinit var backdropViewUUID: String
@@ -50,8 +49,4 @@ abstract class BaseDialogFragment : DialogFragment() {
 
     abstract fun log(message: String)
     abstract fun log(exception: Throwable)
-
-    companion object {
-        private const val DIALOG_KEY = "DIALOG_KEY"
-    }
 }

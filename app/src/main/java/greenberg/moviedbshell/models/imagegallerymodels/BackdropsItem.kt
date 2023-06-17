@@ -22,5 +22,5 @@ data class BackdropsItem(
     val voteCount: Int? = null,
 
     @field:SerializedName("height")
-    val height: Int? = null
+    val height: Int? = null,
 )

@@ -10,5 +10,5 @@ data class PosterItem(
     val voteAverage: Double,
     val voteCount: Int,
     val width: Int,
-    val height: Int
+    val height: Int,
 ) : Parcelable

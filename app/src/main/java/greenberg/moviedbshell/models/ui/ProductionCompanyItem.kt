@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class ProductionCompanyItem(
     val logoPath: String,
     val name: String,
-    val originCountry: String
+    val originCountry: String,
 ) : Parcelable {
     companion object {
         fun generateDummy() = ProductionCompanyItem("", "Unknown", "")

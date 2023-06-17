@@ -64,7 +64,7 @@ class TvDetailFragment : BaseFragment() {
         TvDetailViewModel.provideFactory(
             tvDetailViewModelFactory,
             arguments?.extractArguments<TvDetailArgs>(PAGE_ARGS)?.tvId ?: -1,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -233,7 +233,7 @@ class TvDetailFragment : BaseFragment() {
                         RequestOptions()
                             .placeholder(ColorDrawable(Color.LTGRAY))
                             .fallback(ColorDrawable(Color.LTGRAY))
-                            .centerCrop()
+                            .centerCrop(),
                     )
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(backgroundImageView)
@@ -374,21 +374,21 @@ class TvDetailFragment : BaseFragment() {
     private fun onClickListener(personId: Int) {
         navigate(
             R.id.action_tvDetailFragment_to_personDetailFragment,
-            PersonDetailArgs(personId)
+            PersonDetailArgs(personId),
         )
     }
 
     private fun castSeeAllOnClickListener(castList: List<AggregateCastMemberItem>) {
         navigate(
             R.id.action_tvDetailFragment_to_castFragment,
-            CastStateArgs(castList)
+            CastStateArgs(castList),
         )
     }
 
     private fun productionSeeAllOnClickListener(tvDetailItem: TvDetailItem) {
         navigate(
             R.id.action_tvDetailFragment_to_productionDetailFragment,
-            ProductionDetailStateArgs(tvDetailItem)
+            ProductionDetailStateArgs(tvDetailItem),
         )
     }
 

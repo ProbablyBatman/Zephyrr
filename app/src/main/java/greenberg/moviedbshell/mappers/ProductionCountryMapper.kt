@@ -9,7 +9,7 @@ class ProductionCountryMapper
     override fun mapToEntity(item: List<ProductionCountriesItem?>?): List<ProductionCountryItem> {
         val mappedItems = item?.map { productionCountry ->
             ProductionCountryItem(
-                name = productionCountry?.name.orEmpty()
+                name = productionCountry?.name.orEmpty(),
             )
         }
         return mappedItems.orEmpty()

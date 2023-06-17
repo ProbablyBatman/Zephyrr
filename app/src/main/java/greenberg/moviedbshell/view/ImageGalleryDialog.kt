@@ -59,7 +59,7 @@ class ImageGalleryDialog : BaseDialogFragment() {
             imageGalleryViewModelFactory,
             arguments?.extractArguments<PosterImageGalleryArgs>(PAGE_ARGS)?.itemId ?: -1,
             arguments?.extractArguments<PosterImageGalleryArgs>(PAGE_ARGS)?.mediaType ?: MediaType.UNKNOWN,
-            Dispatchers.IO
+            Dispatchers.IO,
         )
     }
 
@@ -151,6 +151,10 @@ class ImageGalleryDialog : BaseDialogFragment() {
             when (bottomSheetBehavior.state) {
                 BottomSheetBehavior.STATE_EXPANDED -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 BottomSheetBehavior.STATE_COLLAPSED -> bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                else -> {
+                    // no-op
+                    // For now, ignore anything that isn't just those two states.
+                }
             }
         }
 
@@ -171,7 +175,7 @@ class ImageGalleryDialog : BaseDialogFragment() {
                     // TODO: revisit if this should be here because it feels like it shouldn't
                     if (ContextCompat.checkSelfPermission(
                             this@ImageGalleryDialog.requireContext(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         startDownload()
