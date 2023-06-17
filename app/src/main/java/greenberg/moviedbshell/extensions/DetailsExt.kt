@@ -14,7 +14,7 @@ import java.util.Locale
 
 fun Context.processRatingInfo(voteAverage: Double, voteCount: Int): String {
     val formattedAverage: String = formatRatings(voteAverage)
-    return this.getString(R.string.user_rating_substitution, formattedAverage, voteCount)
+    return this.resources.getQuantityString(R.plurals.user_rating_substitution, voteCount, formattedAverage, voteCount)
 }
 
 // TODO: it's probably still worth looking into if there's a better way to do this

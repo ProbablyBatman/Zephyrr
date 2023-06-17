@@ -167,8 +167,9 @@ class PersonDetailFragment : BaseFragment() {
                     R.string.birthday_no_age_substitution,
                     personDetailItem.birthday.processDate(),
                 )
-                deathday.text = resources.getString(
-                    R.string.day_and_age_substitution,
+                deathday.text = resources.getQuantityString(
+                    R.plurals.day_and_age_substitution,
+                    processAge(personDetailItem.birthday, personDetailItem.deathday),
                     personDetailItem.deathday.processDate(),
                     processAge(personDetailItem.birthday, personDetailItem.deathday),
                 )
@@ -176,8 +177,9 @@ class PersonDetailFragment : BaseFragment() {
                 deathdayTitle.visibility = View.VISIBLE
             }
             personDetailItem.birthday.isNotEmpty() -> {
-                birthday.text = resources.getString(
-                    R.string.day_and_age_substitution,
+                birthday.text = resources.getQuantityString(
+                    R.plurals.day_and_age_substitution,
+                    processAge(personDetailItem.birthday),
                     personDetailItem.birthday.processDate(),
                     processAge(personDetailItem.birthday),
                 )
