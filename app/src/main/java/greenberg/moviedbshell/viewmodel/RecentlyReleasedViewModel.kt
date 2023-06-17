@@ -42,7 +42,7 @@ class RecentlyReleasedViewModel
             val currentPageNumber = _recentlyReleasedState.value.pageNumber
             val previousState = _recentlyReleasedState.value
             _recentlyReleasedState.emit(previousState.copy(isLoading = true))
-            when (val response = tmdbRepository.fetchPopularMovies(currentPageNumber)) {
+            when (val response = tmdbRepository.fetchRecentlyReleased(currentPageNumber)) {
                 is ZephyrrResponse.Success -> {
                     val totalPages = response.value.totalPages
                     _recentlyReleasedState.emit(previousState.copy(
@@ -66,7 +66,7 @@ class RecentlyReleasedViewModel
     private fun fetchFirstPage() {
         viewModelScope.launch(dispatcher) {
             val previousState = _recentlyReleasedState.value
-            when (val response = tmdbRepository.fetchPopularMovies(1)) {
+            when (val response = tmdbRepository.fetchRecentlyReleased(1)) {
                 is ZephyrrResponse.Success -> {
                     _recentlyReleasedState.emit(previousState.copy(
                         pageNumber = previousState.pageNumber + 1,

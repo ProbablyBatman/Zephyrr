@@ -31,12 +31,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LandingFragment : BaseFragment() {
 
-    // TODO: INVESTIGATE REPLACING THIS WITH LATEINIT VAR INJECT
-//    val landingViewModelFactory by lazy {
-//        (activity?.application as ZephyrrApplication).component.landingViewModelFactory
-//    }
-
-//    private val viewModel: LandingViewModel by viewModels { landingViewModelFactory.create(Dispatchers.IO) }
     @Inject
     lateinit var landingViewModelFactory: LandingViewModel.Factory
 

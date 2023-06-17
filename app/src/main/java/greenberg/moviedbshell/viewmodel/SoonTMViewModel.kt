@@ -44,7 +44,7 @@ class SoonTMViewModel
             val currentPageNumber = _soonTMState.value.pageNumber
             val previousState = _soonTMState.value
             _soonTMState.emit(previousState.copy(isLoading = true))
-            when (val response = tmdbRepository.fetchPopularMovies(currentPageNumber)) {
+            when (val response = tmdbRepository.fetchSoonTM(currentPageNumber)) {
                 is ZephyrrResponse.Success -> {
                     val totalPages = response.value.totalPages
                     _soonTMState.emit(previousState.copy(
@@ -68,7 +68,7 @@ class SoonTMViewModel
     private fun fetchFirstPage() {
         viewModelScope.launch(dispatcher) {
             val previousState = _soonTMState.value
-            when (val response = tmdbRepository.fetchPopularMovies(1)) {
+            when (val response = tmdbRepository.fetchSoonTM(1)) {
                 is ZephyrrResponse.Success -> {
                     _soonTMState.emit(previousState.copy(
                         pageNumber = previousState.pageNumber + 1,
