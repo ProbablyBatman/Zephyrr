@@ -75,6 +75,7 @@ class MovieDetailFragment : BaseFragment() {
     private lateinit var posterGalleryContainer: ConstraintLayout
     private lateinit var backdropImageView: ImageView
     private lateinit var backdropImageContainer: FrameLayout
+    private lateinit var overviewTitle: TextView
     private lateinit var titleBar: TextView
     private lateinit var scrollView: NestedScrollView
     private lateinit var castContainer: ConstraintLayout
@@ -127,6 +128,7 @@ class MovieDetailFragment : BaseFragment() {
         // more than half of these could disappear in the current state, but the idea is that if
         // some of these movies lack any of this data, I want to selectively remove views from visibility
         progressBar = view.findViewById(R.id.movie_detail_progress_bar)
+        overviewTitle = view.findViewById(R.id.overview_row_title)
         backdropImageContainer = view.findViewById(R.id.movie_detail_background_image_container)
         posterGalleryContainer = view.findViewById(R.id.poster_gallery_container)
         titleBar = view.findViewById(R.id.movie_detail_title)
@@ -224,7 +226,7 @@ class MovieDetailFragment : BaseFragment() {
         showAllViews()
         showErrorState()
         errorRetryButton.setOnClickListener {
-            viewModel.fetchMovieDetail()
+            viewModel.retryFetch()
             hideErrorState()
         }
     }
@@ -335,6 +337,7 @@ class MovieDetailFragment : BaseFragment() {
     private fun hideContent() {
         backdropImageContainer.visibility = View.GONE
         genreChipGroup.visibility = View.GONE
+        overviewTitle.visibility = View.GONE
         overviewTextView.visibility = View.GONE
         castContainer.visibility = View.GONE
         productionRowTitle.visibility = View.GONE
@@ -364,6 +367,7 @@ class MovieDetailFragment : BaseFragment() {
     private fun showContent() {
         backdropImageContainer.visibility = View.VISIBLE
         genreChipGroup.visibility = View.VISIBLE
+        overviewTitle.visibility = View.VISIBLE
         overviewTextView.visibility = View.VISIBLE
         castContainer.visibility = View.VISIBLE
         productionRowTitle.visibility = View.VISIBLE

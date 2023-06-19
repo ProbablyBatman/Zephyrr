@@ -8,6 +8,8 @@ import dagger.hilt.components.SingletonComponent
 import greenberg.moviedbshell.BuildConfig
 import greenberg.moviedbshell.R
 import greenberg.moviedbshell.services.TMDBService
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -69,4 +71,8 @@ class ServicesModule {
                 }
             }.build()
     }
+
+    @Provides
+    @Singleton
+    fun provideDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

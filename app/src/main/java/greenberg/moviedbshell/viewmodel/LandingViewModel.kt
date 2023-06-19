@@ -206,31 +206,56 @@ class LandingViewModel
     }
 
     fun retryRecentlyReleased() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
+            _recentlyReleasedLandingState.emit(
+                _recentlyReleasedLandingState.value.copy(
+                    isLoading = true
+                )
+            )
             getRecentlyReleased()
         }
     }
 
     fun retryPopularMovies() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
+            _popularMoviesLandingState.emit(
+                _popularMoviesLandingState.value.copy(
+                    isLoading = true
+                )
+            )
             getPopularMovies()
         }
     }
 
     fun retrySoonTM() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
+            _soonTMLandingState.emit(
+                _soonTMLandingState.value.copy(
+                    isLoading = true
+                )
+            )
             getSoonTM()
         }
     }
 
     fun retryPopularTv() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
+            _popularTvLandingState.emit(
+                _popularTvLandingState.value.copy(
+                    isLoading = true
+                )
+            )
             getPopularTv()
         }
     }
 
     fun retryTopRatedTv() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
+            _topRatedTvLandingState.emit(
+                _topRatedTvLandingState.value.copy(
+                    isLoading = true
+                )
+            )
             getTopRatedTv()
         }
     }

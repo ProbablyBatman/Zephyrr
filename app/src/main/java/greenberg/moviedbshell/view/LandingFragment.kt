@@ -41,18 +41,23 @@ class LandingFragment : BaseFragment() {
     private lateinit var recentlyReleasedRecycler: RecyclerView
     private lateinit var recentlyReleasedLayoutManager: LinearLayoutManager
     private lateinit var recentlyReleasedAdapter: LandingAdapter
+    private lateinit var recentlyReleasedErrorContainer: ConstraintLayout
     private lateinit var popularMovieRecycler: RecyclerView
     private lateinit var popularMovieLayoutManager: LinearLayoutManager
     private lateinit var popularMovieAdapter: LandingAdapter
+    private lateinit var popularMovieErrorContainer: ConstraintLayout
     private lateinit var soonTMRecycler: RecyclerView
     private lateinit var soonTMLayoutManager: LinearLayoutManager
     private lateinit var soonTMAdapter: LandingAdapter
+    private lateinit var soonTMErrorContainer: ConstraintLayout
     private lateinit var popularTvRecycler: RecyclerView
     private lateinit var popularTvLayoutManager: LinearLayoutManager
     private lateinit var popularTvAdapter: LandingAdapter
+    private lateinit var popularTvErrorContainer: ConstraintLayout
     private lateinit var topRatedTvRecycler: RecyclerView
     private lateinit var topRatedTvLayoutManager: LinearLayoutManager
     private lateinit var topRatedTvAdapter: LandingAdapter
+    private lateinit var topRatedTvErrorContainer: ConstraintLayout
     private lateinit var recentlyReleasedSeeAllButton: Button
     private lateinit var recentlyReleasedContainer: View
     private lateinit var recentlyReleasedLoadingBar: ProgressBar
@@ -68,7 +73,6 @@ class LandingFragment : BaseFragment() {
     private lateinit var topRatedTvSeeAllButton: Button
     private lateinit var topRatedTvContainer: View
     private lateinit var topRatedTvLoadingBar: ProgressBar
-    private lateinit var errorContainer: View
     private lateinit var contentContainer: ScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,11 +91,6 @@ class LandingFragment : BaseFragment() {
         soonTMRecycler = view.findViewById(R.id.soon_tm_recycler)
         popularTvRecycler = view.findViewById(R.id.popular_tv_recycler)
         topRatedTvRecycler = view.findViewById(R.id.top_rated_tv_recycler)
-        // TODO: Add single row retries
-//        errorContainer = view.findViewById(R.id.landing_row_error_container)
-//        errorContainer.setOnClickListener {
-// //            viewModel.retryLandingPageLists()
-//        }
 
         recentlyReleasedLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         popularMovieLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -126,29 +125,53 @@ class LandingFragment : BaseFragment() {
         recentlyReleasedSeeAllButton.setOnClickListener {
             navigate(R.id.action_landingFragment_to_recentlyReleasedFragment)
         }
+        recentlyReleasedErrorContainer = view.findViewById(R.id.recently_released_landing_row_error_container)
+        recentlyReleasedErrorContainer.setOnClickListener {
+            viewModel.retryRecentlyReleased()
+        }
+
         popularMovieContainer = view.findViewById(R.id.popular_movie_container)
         popularMovieLoadingBar = view.findViewById(R.id.popular_movie_progress_bar)
         popularMovieSeeAllButton = view.findViewById(R.id.popular_see_all_button)
         popularMovieSeeAllButton.setOnClickListener {
             navigate(R.id.action_landingFragment_to_popularMovieFragment)
         }
+        popularMovieErrorContainer = view.findViewById(R.id.popular_movie_landing_row_error_container)
+        popularMovieErrorContainer.setOnClickListener {
+            viewModel.retryPopularMovies()
+        }
+
         soonTMContainer = view.findViewById(R.id.soon_tm_container)
         soonTMLoadingBar = view.findViewById(R.id.soon_tm_progress_bar)
         soonTMSeeAllButton = view.findViewById(R.id.soon_tm_see_all_button)
         soonTMSeeAllButton.setOnClickListener {
             navigate(R.id.action_landingFragment_to_soonTMFragment)
         }
+        soonTMErrorContainer = view.findViewById(R.id.soon_tm_landing_row_error_container)
+        soonTMErrorContainer.setOnClickListener {
+            viewModel.retrySoonTM()
+        }
+
         popularTvContainer = view.findViewById(R.id.popular_tv_container)
         popularTvLoadingBar = view.findViewById(R.id.popular_tv_progress_bar)
         popularTvSeeAllButton = view.findViewById(R.id.popular_tv_see_all_button)
         popularTvSeeAllButton.setOnClickListener {
             // TODO
         }
+        popularTvErrorContainer = view.findViewById(R.id.popular_tv_landing_row_error_container)
+        popularTvErrorContainer.setOnClickListener {
+            viewModel.retryPopularTv()
+        }
+
         topRatedTvContainer = view.findViewById(R.id.top_rated_tv_container)
         topRatedTvLoadingBar = view.findViewById(R.id.top_rated_tv_progress_bar)
         topRatedTvSeeAllButton = view.findViewById(R.id.top_rated_tv_see_all_button)
         topRatedTvSeeAllButton.setOnClickListener {
             // TODO
+        }
+        topRatedTvErrorContainer = view.findViewById(R.id.top_rated_tv_landing_row_error_container)
+        topRatedTvErrorContainer.setOnClickListener {
+            viewModel.retryTopRatedTv()
         }
 
         registerObservers()
@@ -197,9 +220,12 @@ class LandingFragment : BaseFragment() {
                 setContainerParamsLoading(popularMovieContainer)
                 popularMovieLoadingBar.visibility = View.VISIBLE
                 popularMovieRecycler.visibility = View.GONE
+                popularMovieErrorContainer.visibility = View.GONE
             }
             state.error != null -> {
-                // TODO: display error
+                popularMovieLoadingBar.visibility = View.GONE
+                popularMovieRecycler.visibility = View.GONE
+                popularMovieErrorContainer.visibility = View.VISIBLE
             }
             else -> {
                 setContainerParamsNormal(popularMovieContainer)
@@ -217,9 +243,12 @@ class LandingFragment : BaseFragment() {
                 setContainerParamsLoading(recentlyReleasedContainer)
                 recentlyReleasedLoadingBar.visibility = View.VISIBLE
                 recentlyReleasedRecycler.visibility = View.GONE
+                recentlyReleasedErrorContainer.visibility = View.GONE
             }
             state.error != null -> {
-                // TODO: display error
+                recentlyReleasedLoadingBar.visibility = View.GONE
+                recentlyReleasedRecycler.visibility = View.GONE
+                recentlyReleasedErrorContainer.visibility = View.VISIBLE
             }
             else -> {
                 setContainerParamsNormal(recentlyReleasedContainer)
@@ -237,9 +266,12 @@ class LandingFragment : BaseFragment() {
                 setContainerParamsLoading(soonTMContainer)
                 soonTMLoadingBar.visibility = View.VISIBLE
                 soonTMRecycler.visibility = View.GONE
+                soonTMErrorContainer.visibility = View.GONE
             }
             state.error != null -> {
-                // TODO: display error
+                soonTMLoadingBar.visibility = View.GONE
+                soonTMRecycler.visibility = View.GONE
+                soonTMErrorContainer.visibility = View.VISIBLE
             }
             else -> {
                 setContainerParamsNormal(soonTMContainer)
@@ -257,9 +289,12 @@ class LandingFragment : BaseFragment() {
                 setContainerParamsLoading(popularTvContainer)
                 popularTvLoadingBar.visibility = View.VISIBLE
                 popularTvRecycler.visibility = View.GONE
+                popularTvErrorContainer.visibility = View.GONE
             }
             state.error != null -> {
-                // TODO: display error
+                popularTvLoadingBar.visibility = View.GONE
+                popularTvRecycler.visibility = View.GONE
+                popularTvErrorContainer.visibility = View.VISIBLE
             }
             else -> {
                 setContainerParamsNormal(popularTvContainer)
@@ -277,9 +312,12 @@ class LandingFragment : BaseFragment() {
                 setContainerParamsLoading(topRatedTvContainer)
                 topRatedTvLoadingBar.visibility = View.VISIBLE
                 topRatedTvRecycler.visibility = View.GONE
+                topRatedTvErrorContainer.visibility = View.GONE
             }
             state.error != null -> {
-                // TODO: display error
+                topRatedTvLoadingBar.visibility = View.GONE
+                topRatedTvRecycler.visibility = View.GONE
+                topRatedTvErrorContainer.visibility = View.VISIBLE
             }
             else -> {
                 setContainerParamsNormal(topRatedTvContainer)

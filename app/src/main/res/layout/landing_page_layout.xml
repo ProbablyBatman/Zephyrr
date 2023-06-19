@@ -16,14 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include
-                layout="@layout/landing_row_error_layout"
-                android:id="@+id/landing_row_error_container"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:visibility="gone"/>
+<!--            <include-->
+<!--                layout="@layout/landing_row_error_layout"-->
+<!--                android:id="@+id/landing_row_error_container"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:visibility="gone"/>-->
 
             <FrameLayout
                 android:id="@+id/recently_released_container"
@@ -39,6 +39,15 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+                    <include
+                        layout="@layout/landing_row_error_layout"
+                        android:id="@+id/recently_released_landing_row_error_container"
+                        app:layout_constraintTop_toBottomOf="@id/recently_released_row_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:visibility="gone"/>
 
                     <ProgressBar
                         android:id="@+id/recently_released_progress_bar"
@@ -104,6 +113,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <include
+                        layout="@layout/landing_row_error_layout"
+                        android:id="@+id/popular_movie_landing_row_error_container"
+                        app:layout_constraintTop_toBottomOf="@id/popular_movie_row_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:visibility="gone"/>
+
                     <ProgressBar
                         android:id="@+id/popular_movie_progress_bar"
                         style="?android:attr/progressBarStyle"
@@ -167,6 +185,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <include
+                        layout="@layout/landing_row_error_layout"
+                        android:id="@+id/soon_tm_landing_row_error_container"
+                        app:layout_constraintTop_toBottomOf="@id/soon_tm_row_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:visibility="gone"/>
+
                     <ProgressBar
                         android:id="@+id/soon_tm_progress_bar"
                         style="?android:attr/progressBarStyle"
@@ -189,8 +216,7 @@
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/soon_tm_recycler"/>
+                        app:layout_constraintStart_toStartOf="parent"/>
 
                     <Button
                         android:id="@+id/soon_tm_see_all_button"
@@ -201,7 +227,6 @@
                         android:textColor="@android:color/white"
                         android:text="@string/see_all_button"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/soon_tm_recycler"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -231,6 +256,15 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+                    <include
+                        layout="@layout/landing_row_error_layout"
+                        android:id="@+id/popular_tv_landing_row_error_container"
+                        app:layout_constraintTop_toBottomOf="@id/popular_tv_row_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:visibility="gone"/>
 
                     <ProgressBar
                         android:id="@+id/popular_tv_progress_bar"
@@ -295,6 +329,15 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+                    <include
+                        layout="@layout/landing_row_error_layout"
+                        android:id="@+id/top_rated_tv_landing_row_error_container"
+                        app:layout_constraintTop_toBottomOf="@id/top_rated_tv_row_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:visibility="gone"/>
 
                     <ProgressBar
                         android:id="@+id/top_rated_tv_progress_bar"

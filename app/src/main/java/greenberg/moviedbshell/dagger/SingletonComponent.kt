@@ -19,16 +19,16 @@ import greenberg.moviedbshell.viewmodel.TvDetailViewModel
 @InstallIn(SingletonComponent::class)
 @EntryPoint
 interface SingletonComponent {
-    val popularViewModelFactory: PopularMoviesViewModel.Factory
-    val movieDetailViewModelFactory: MovieDetailViewModel.Factory
-    val personDetailViewModelFactory: PersonDetailViewModel.Factory
-    val tvDetailViewModelFactory: TvDetailViewModel.Factory
-    val searchResultsViewModelFactory: SearchResultsViewModel.Factory
-    val landingViewModelFactory: LandingViewModel.Factory
-    val recentlyReleasedViewModelFactory: RecentlyReleasedViewModel.Factory
-    val soonTMViewModelFactory: SoonTMViewModel.Factory
-    val imageGalleryViewModelFactory: ImageGalleryViewModel.Factory
-    fun inject(fragment: RecentlyReleasedFragment)
-    fun inject(fragment: SoonTMFragment)
-    fun inject(fragment: PopularMoviesFragment)
+//    val popularViewModelFactory: PopularMoviesViewModel.Factory
+//    val movieDetailViewModelFactory: MovieDetailViewModel.Factory
+//    val personDetailViewModelFactory: PersonDetailViewModel.Factory
+//    val tvDetailViewModelFactory: TvDetailViewModel.Factory
+//    val searchResultsViewModelFactory: SearchResultsViewModel.Factory
+//    val landingViewModelFactory: LandingViewModel.Factory
+//    val recentlyReleasedViewModelFactory: RecentlyReleasedViewModel.Factory
+//    val soonTMViewModelFactory: SoonTMViewModel.Factory
+//    val imageGalleryViewModelFactory: ImageGalleryViewModel.Factory
+//    fun inject(fragment: RecentlyReleasedFragment)
+//    fun inject(fragment: SoonTMFragment)
+//    fun inject(fragment: PopularMoviesFragment)
 }

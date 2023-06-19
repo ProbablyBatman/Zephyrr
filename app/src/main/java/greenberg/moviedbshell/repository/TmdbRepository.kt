@@ -17,49 +17,60 @@ import greenberg.moviedbshell.models.ui.MovieDetailItem
 import greenberg.moviedbshell.models.ui.PersonDetailItem
 import greenberg.moviedbshell.models.ui.TvDetailItem
 import greenberg.moviedbshell.services.TMDBService
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class TmdbRepository
 @Inject constructor(
+    private val dispatcher: CoroutineDispatcher,
     private val tmdbService: TMDBService,
     private val movieDetailMapper: MovieDetailMapper,
     private val tvDetailMapper: TvDetailMapper,
     private val personDetailMapper: PersonDetailMapper,
 ) {
 
-    // Propagates errors up through the .execute on the suspend block
-    suspend fun fetchMovieDetail(id: Int): MovieDetailItem {
-        val details = tmdbService.queryMovieDetail(id)
-        val credits = tmdbService.queryMovieCredits(id)
-        val images = tmdbService.queryMovieImages(id)
-        return movieDetailMapper.mapToEntity(
-            MovieDetailResponseContainer(
-                details,
-                credits,
-                images,
-            ),
-        )
+    // TODO: investigate if this fetch is doing what I think
+    suspend fun fetchMovieDetail(id: Int): ZephyrrResponse<MovieDetailItem> {
+        return safeFetch {
+            withContext(dispatcher) {
+                val details = async { tmdbService.queryMovieDetail(id) }
+                val credits = async { tmdbService.queryMovieCredits(id) }
+                val images = async { tmdbService.queryMovieImages(id) }
+                movieDetailMapper.mapToEntity(
+                    MovieDetailResponseContainer(
+                        details.await(),
+                        credits.await(),
+                        images.await(),
+                    ),
+                )
+            }
+        }
     }
 
-    // TODO: investigate if this fetch is doing what I think
-    suspend fun fetchMovieDetail(scope: CoroutineScope, id: Int): ZephyrrResponse<MovieDetailItem> {
+    suspend fun fetchMovieDetail(dispatcher: CoroutineDispatcher, id: Int): ZephyrrResponse<MovieDetailItem> {
         return safeFetch {
-            val details = scope.async { tmdbService.queryMovieDetail(id) }
-            val credits = scope.async { tmdbService.queryMovieCredits(id) }
-            val images = scope.async { tmdbService.queryMovieImages(id) }
-            movieDetailMapper.mapToEntity(
-                MovieDetailResponseContainer(
-                    details.await(),
-                    credits.await(),
-                    images.await(),
-                ),
-            )
+            withContext(dispatcher) {
+                val details = async { tmdbService.queryMovieDetail(id) }
+                val credits = async { tmdbService.queryMovieCredits(id) }
+                val images = async { tmdbService.queryMovieImages(id) }
+                movieDetailMapper.mapToEntity(
+                    MovieDetailResponseContainer(
+                        details.await(),
+                        credits.await(),
+                        images.await(),
+                    ),
+                )
+            }
         }
     }
 
